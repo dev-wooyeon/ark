@@ -6,23 +6,22 @@
 
 .header {
   max-width: 800px;
-  margin: 0 auto var(--space-12);
+  margin: 0 auto var(--space-16);
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--border);
 }
 
 .backLink {
   display: inline-block;
-  color: var(--text-secondary);
-  text-decoration: underline;
-  text-decoration-color: var(--text-secondary);
-  text-underline-offset: 4px;
-  font-size: var(--text-lg);
-  margin-bottom: var(--space-6);
-  transition: all 0.3s;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: var(--space-8);
+  transition: color 0.2s;
 }
 
 .backLink:hover {
-  color: var(--text-primary);
-  text-decoration-color: var(--accent-primary);
+  color: var(--accent-primary);
 }
 
 .title {
@@ -30,6 +29,7 @@
   font-weight: var(--font-bold);
   color: var(--text-primary);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .main {
@@ -113,6 +113,11 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--space-4);
+  }
+
+  .header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-10);
   }
 
   .title {

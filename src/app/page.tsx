@@ -11,10 +11,10 @@ export default function Home() {
         </div>
 
         <div className={styles.introduction}>
-          <a href="https://981park.com" target="_blank" rel="noopener noreferrer" className={styles.bio}>
+          <p className={styles.bio}>
             Make systems with data,<br />
-            currently working @9.81park
-          </a>
+            currently working <a href="https://981park.com" target="_blank" rel="noopener noreferrer" className={styles.bioLink}>@9.81park</a>
+          </p>
         </div>
 
         <nav className={styles.navigation}>

@@ -36,9 +36,9 @@
   font-size: 80px;
   font-weight: 800;
   /* Bold/Black for stronger impact */
-  color: var(--color-gray-900);
-  letter-spacing: -0.04em;
-  /* Tight tracking typical of Geist/Inter display */
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  /* Consistent with other page titles */
   margin: 0;
   line-height: 1;
 }
@@ -52,22 +52,29 @@
 
 .bio {
   font-family: var(--font-sans);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--color-blue-600);
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
 }
 
-.bio:hover {
-  border-bottom-color: var(--color-blue-600);
+.bioLink {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--text-primary);
+  text-underline-offset: 3px;
+  transition: all 0.2s;
+}
+
+.bioLink:hover {
+  color: var(--accent-primary);
+  text-decoration-color: var(--accent-primary);
 }
 
 .description {
   font-family: var(--font-sans);
-  font-size: var(--text-lg);
-  color: var(--color-gray-500);
+  font-size: 15px;
+  color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
   word-break: keep-all;
@@ -85,7 +92,7 @@
   font-size: 32px;
   /* Prominent size */
   font-weight: 800;
-  color: var(--color-gray-900);
+  color: var(--text-primary);
   text-decoration: none;
   position: relative;
   transition: color 0.2s ease;
@@ -99,18 +106,18 @@
   bottom: -4px;
   width: 100%;
   height: 4px;
-  background-color: var(--color-gray-900);
+  background-color: var(--text-primary);
   transform: scaleX(1);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
 }
 
 .navLink:hover {
-  color: var(--color-blue-600);
+  color: var(--text-primary);
 }
 
 .navLink:hover::after {
-  background-color: var(--color-blue-600);
+  background-color: var(--text-primary);
 }
 
 @keyframes fadeIn {
@@ -141,11 +148,11 @@
   }
 
   .bio {
-    font-size: var(--text-lg);
+    font-size: 14px;
   }
 
   .description {
-    font-size: var(--text-base);
+    font-size: 14px;
   }
 
   .navLink {

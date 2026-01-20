@@ -7,12 +7,12 @@
     padding: var(--space-4) 0;
     border-bottom: 1px solid var(--border);
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: all 0.2s;
     color: inherit;
 }
 
-.item:hover {
-    opacity: 0.7;
+.item:hover .title {
+    color: var(--accent-primary);
 }
 
 .date {
@@ -25,11 +25,12 @@
     font-family: var(--font-sans);
     font-size: var(--text-lg);
     font-weight: 600;
-    color: var(--color-gray-900);
+    color: var(--text-primary);
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: color 0.2s;
 }
 
 .readingTime {
