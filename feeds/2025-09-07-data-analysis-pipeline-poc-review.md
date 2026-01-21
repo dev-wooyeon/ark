@@ -3,7 +3,7 @@ title: "데이터 분석 파이프라인 구축 PoC 회고"
 description: "데이터 분석 파이프라인을 구축하였고 이를 발판으로 성장하기 위한 방법을 생각해본다."
 date: "2025-09-07"  # 실제 작성일로 변경
 category: "Dev"
-tags: ["Career", "Data Engineering", "Work"]
+tags: ["Project", "Engineering", "Review"]
 readingTime: 3  # 콘텐츠 길이에 따라 조정
 featured: false
 ---

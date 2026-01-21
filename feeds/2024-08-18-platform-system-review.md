@@ -1,4 +1,12 @@
-# 글로벌 플랫폼 시스템으로 재설계했던 회고
+---
+title: "ioT 시스템을 글로벌 플랫폼으로 도약하기 위한 회고"
+description: "ioT 시스템을 글로벌 플랫폼으로 전환하기 위해 고민했던 흔적을 남긴다."
+date: "2024-08-18"  # 실제 작성일로 변경
+category: "Dev"
+tags: ["Project", "Engineering", "Review"]
+readingTime: 3  # 콘텐츠 길이에 따라 조정
+featured: false
+---
 
 ## 1. 왜 이 문제를 해결해야 했는가
 
