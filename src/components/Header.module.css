@@ -1,6 +1,6 @@
 .header {
   position: sticky;
-  top: 0;
+  top: 28px; /* 프로그레스바 높이만큼 */
   width: 100%;
   padding: var(--space-4) var(--space-8);
   background: rgba(234, 235, 234, 0.8);
@@ -47,6 +47,7 @@
 
 @media (max-width: 768px) {
   .header {
+    top: 26px; /* 모바일 프로그레스바 높이 */
     padding: var(--space-4);
   }
 

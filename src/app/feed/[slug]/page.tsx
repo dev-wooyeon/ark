@@ -1,5 +1,6 @@
 import { getFeedData, getAllFeedSlugs, parseHeadingsFromHtml } from '@/lib/feeds';
-import TableOfContents from '@/components/TableOfContents';
+import InlineTableOfContents from '@/components/InlineTableOfContents';
+import ReadingProgress from '@/components/ReadingProgress';
 import styles from './feed.module.css';
 
 export async function generateStaticParams() {
@@ -13,6 +14,9 @@ export default async function Feed({ params }: { params: { slug: string } }) {
 
     return (
         <>
+            {/* 스크롤 진행률 표시 */}
+            <ReadingProgress />
+
             <article className={styles.article}>
                 <a href="/feed" className={styles.backLink}>
                     ← Feed
@@ -32,12 +36,15 @@ export default async function Feed({ params }: { params: { slug: string } }) {
                         )}
                     </div>
                 </header>
+
+                {/* 본문 상단 인라인 목차 - 모바일에서도 표시 */}
+                <InlineTableOfContents tocItems={tocItems} />
+
                 <div
                     className={styles.content}
                     dangerouslySetInnerHTML={{ __html: feedData.contentHtml }}
                 />
             </article>
-            <TableOfContents tocItems={tocItems} />
         </>
     );
 }
