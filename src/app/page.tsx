@@ -14,7 +14,7 @@ export default function Home() {
         <div className={styles.introduction}>
           <p className={styles.bio}>
             <TypingAnimation
-              texts={['Make Data, System, Createive Things. Currently working as a Software Engineer @9.81park']}
+              texts={['Make Data, System, Creative Things. Currently working as a Software Engineer @9.81park']}
               speed={20}
               linkPatterns={[{ pattern: '@9.81park', url: 'https://981park.com' }]}
             />
