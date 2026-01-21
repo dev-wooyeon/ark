@@ -1,5 +1,5 @@
-// Post Types
-export interface Post {
+// Feed Types
+export interface Feed {
   slug: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ export interface Post {
   content: string;
 }
 
-export interface PostData {
+export interface FeedData {
   slug: string;
   title: string;
   description: string;

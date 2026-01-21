@@ -43,7 +43,7 @@ function AnimatedSphere() {
   return (
     <Sphere ref={meshRef} args={[1, 100, 100]} scale={3.5} position={[0, 0, 0]}>
       <MeshDistortMaterial
-        color="#2D7A6F"
+        color="#2563EB"
         attach="material"
         distort={0.5}
         speed={1.5}
@@ -66,7 +66,7 @@ export default function HeroScene() {
     >
       <ambientLight intensity={0.6} />
       <directionalLight position={[10, 10, 5]} intensity={1.2} />
-      <directionalLight position={[-10, -10, -5]} intensity={0.7} color="#A8D5D0" />
+      <directionalLight position={[-10, -10, -5]} intensity={0.7} color="#60A5FA" />
       <pointLight position={[0, 0, 3]} intensity={0.5} color="#ffffff" />
       <AnimatedSphere />
     </Canvas>

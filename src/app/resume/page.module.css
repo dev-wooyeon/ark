@@ -27,7 +27,7 @@
 .title {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(2.5rem, 6vw, 3.5rem);
-  font-weight: 700;
+  font-weight: var(--font-bold);
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.02em;
@@ -92,10 +92,8 @@
 .workSection {
   display: grid;
   grid-template-columns: 200px 1fr;
-  gap: var(--space-12);
-  margin-bottom: var(--space-12);
-  padding-bottom: var(--space-12);
-  border-bottom: 1px solid var(--border);
+  gap: var(--space-10);
+  /* border-bottom: 1px solid var(--border); */
 }
 
 .workSection:last-child {
@@ -230,19 +228,20 @@
   }
 
   .workSection {
-    grid-template-columns: 180px 1fr;
+    display: grid;
+    grid-template-columns: 200px 1fr;
     gap: var(--space-12);
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .container {
-    padding: var(--space-6) var(--space-4);
+    /* margin-top: var(--space-24);
+    margin-bottom: var(--space-24);
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+    border-bottom: 1px solid var(--border); */
   }
 
-  .header {
-    margin-bottom: var(--space-12);
+  .workSection:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 
   .title {
@@ -271,7 +270,7 @@
   .workSection {
     grid-template-columns: 1fr;
     gap: var(--space-8);
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--space-24);
     padding-bottom: var(--space-10);
   }
 

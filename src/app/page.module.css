@@ -33,14 +33,23 @@
 
 .siteName {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 48px;
-  font-weight: 700;
-  /* Minimal trend - lighter weight */
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-  /* Consistent with other page titles */
+
+  /* Tailwind text-[6rem] */
+  font-size: 6rem;
+
+  /* Tailwind leading-[1.2] */
+  line-height: 1.15;
+
+  /* Tailwind tracking-tighter */
+  letter-spacing: -0.05em;
+
+  /* Tailwind 기본 인상에 가까운 weight */
+  font-weight: 200;
+
+  /* color: var(--color-gray-900); */
+
   margin: 0;
-  line-height: 1.1;
+  display: flex;
 }
 
 .introduction {
@@ -52,7 +61,7 @@
 
 .bio {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
@@ -89,10 +98,10 @@
 }
 
 .navLink {
-  font-family: var(--font-sans);
-  font-size: 20px;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 18px;
   /* Minimal trend - reduced size */
-  font-weight: 600;
+  font-weight: 400;
   color: var(--text-primary);
   text-decoration: none;
   position: relative;
@@ -100,7 +109,7 @@
 }
 
 /* Underline effect */
-.navLink::after {
+/* .navLink::after {
   content: '';
   position: absolute;
   left: 0;
@@ -111,7 +120,7 @@
   transform: scaleX(1);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-}
+} */
 
 .navLink:hover {
   color: var(--text-primary);
@@ -137,15 +146,19 @@
   from {
     width: 0;
   }
+
   to {
     width: 100%;
   }
 }
 
 @keyframes blink-caret {
-  from, to {
+
+  from,
+  to {
     border-color: transparent;
   }
+
   50% {
     border-color: var(--text-primary);
   }
@@ -159,11 +172,11 @@
   }
 
   .siteName {
-    font-size: 32px;
+    font-size: 96px;
   }
 
   .flag {
-    font-size: 2rem;
+    font-size: 3rem;
   }
 
   .bio {

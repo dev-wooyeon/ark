@@ -44,7 +44,7 @@ npm run lint
 - Framer Motion (React animations)
 
 **Content Management:**
-- Markdown posts in `/posts` directory
+- Markdown feeds in `/feeds` directory
 - gray-matter for frontmatter parsing
 - remark + remark-gfm for Markdown to HTML conversion
 - rehype-highlight for syntax highlighting
@@ -69,9 +69,9 @@ eunu.log/
 │   ├── app/              # Next.js App Router pages
 │   │   ├── layout.tsx    # Root layout with metadata and Geist fonts
 │   │   ├── page.tsx      # Home page with navigation
-│   │   ├── posts/        # Blog post pages
-│   │   │   ├── page.tsx           # Post list page
-│   │   │   └── [slug]/page.tsx    # Dynamic post detail pages
+│   │   ├── feeds/        # Blog feed pages
+│   │   │   ├── page.tsx           # Feed list page
+│   │   │   └── [slug]/page.tsx    # Dynamic feed detail pages
 │   │   ├── resume/       # Resume page
 │   │   ├── samples/      # Sample/demo pages
 │   │   ├── color-samples/  # Color palette testing page
@@ -79,23 +79,23 @@ eunu.log/
 │   ├── components/       # React components
 │   │   ├── Header.tsx
 │   │   ├── Footer.tsx
-│   │   ├── PostCard.tsx       # Card component for post previews
-│   │   ├── PostList.tsx       # List container for posts
-│   │   ├── PostListItem.tsx   # Individual post list item
+│   │   ├── FeedCard.tsx       # Card component for feed previews
+│   │   ├── FeedList.tsx       # List container for feeds
+│   │   ├── FeedListItem.tsx   # Individual feed list item
 │   │   ├── TableOfContents.tsx  # Interactive TOC with scroll tracking
 │   │   └── animations/    # Animation components
 │   │       ├── HeroScene.tsx         # 3D sphere with mouse tracking
 │   │       └── TextParticleScene.tsx # Text particle explosion effect
 │   ├── lib/             # Utility functions
-│   │   └── posts.ts     # Post fetching, parsing, and TOC generation
+│   │   └── feeds.ts     # Feed fetching, parsing, and TOC generation
 │   ├── styles/          # Global styles
 │   │   ├── globals.css  # Global CSS imports and base styles
 │   │   └── variables.css # CSS custom properties (design tokens)
 │   ├── types/           # TypeScript type definitions
 │   │   └── index.ts     # Post, Project, NavItem types
 │   └── hooks/           # Custom React hooks (planned)
-├── posts/               # Markdown blog posts
-│   └── *.md            # Individual post files
+├── feeds/               # Markdown blog feeds
+│   └── *.md            # Individual feed files
 ├── public/              # Static assets
 └── docs/                # Project documentation
     └── PRD.md          # Detailed product requirements
@@ -104,8 +104,8 @@ eunu.log/
 ### Key Design Patterns
 
 **Server-Side Generation:**
-- Post list and detail pages use Next.js SSG with `generateStaticParams`
-- Posts are read from filesystem at build time using `fs` module
+- Feed list and detail pages use Next.js SSG with `generateStaticParams`
+- Feeds are read from filesystem at build time using `fs` module
 - HTML is pre-rendered for optimal performance and SEO
 
 **Client-Side 3D Rendering:**
@@ -129,7 +129,7 @@ All colors are defined as CSS variables in `src/styles/variables.css`:
 
 **TypeScript Types:**
 Core types are centralized in `src/types/index.ts`:
-- `Post` and `PostData` for blog content
+- `Post` and `FeedData` for blog content
 - `Project` for portfolio items
 - `NavItem` and `SocialLink` for navigation
 
@@ -186,13 +186,13 @@ The project features two main 3D animation components:
 
 ## Content Management
 
-### Blog Post Structure
+### Blog Feed Structure
 
-Posts are stored as Markdown files in `/posts/` directory with YAML frontmatter:
+Feeds are stored as Markdown files in `/feeds/` directory with YAML frontmatter:
 
 ```yaml
 ---
-title: "Post Title"
+title: "Feed Title"
 description: "Short description"
 date: "2025-01-20"
 updated: "2025-01-20"  # Optional
@@ -212,22 +212,22 @@ const example = "code";
 \`\`\`
 ```
 
-### Post Processing Pipeline
+### Feed Processing Pipeline
 
-**Location:** `src/lib/posts.ts`
+**Location:** `src/lib/feeds.ts`
 
-The post processing pipeline includes these key functions:
+The feed processing pipeline includes these key functions:
 
-1. **`getSortedPostsData()`** - Fetches all posts and sorts by date
-   - Reads all .md files from /posts directory
+1. **`getSortedFeedsData()`** - Fetches all feeds and sorts by date
+   - Reads all .md files from /feeds directory
    - Parses frontmatter with gray-matter
-   - Returns array of PostData objects sorted newest first
+   - Returns array of FeedData objects sorted newest first
 
-2. **`getAllPostSlugs()`** - Gets all post slugs for static generation
+2. **`getAllFeedSlugs()`** - Gets all feed slugs for static generation
    - Used by `generateStaticParams` in Next.js 14+ App Router
    - Returns array of slug parameters for pre-rendering
 
-3. **`getPostData(slug)`** - Fetches and processes a single post
+3. **`getFeedData(slug)`** - Fetches and processes a single post
    - Parses frontmatter metadata
    - Converts Markdown to HTML using remark pipeline:
      - `remark` - Markdown processor
@@ -235,7 +235,7 @@ The post processing pipeline includes these key functions:
      - `remark-rehype` - Converts Markdown AST to HTML AST
      - `rehype-highlight` - Syntax highlighting with highlight.js
      - `rehype-stringify` - Converts HTML AST to string
-   - Returns post metadata + HTML content
+   - Returns feed metadata + HTML content
 
 4. **`parseHeadingsFromHtml(htmlContent)`** - Generates table of contents
    - Parses HTML with cheerio to extract h1-h6 elements
@@ -306,9 +306,9 @@ Based on PRD requirements:
 - Consider performance impact of particle count and geometry complexity
 
 **For Blog Features:**
-- Add new post types to `src/types/index.ts`
-- Update Post interface if adding metadata fields
-- Add processing logic to `src/lib/posts.ts` if needed
+- Add new feed types to `src/types/index.ts`
+- Update Feed interface if adding metadata fields
+- Add processing logic to `src/lib/feeds.ts` if needed
 - Consider creating utility functions in `src/lib/` for complex operations
 
 **For Utility Functions:**
@@ -359,9 +359,9 @@ The project targets mobile-first responsive design. Test across:
 5. Export statement
 
 **File Naming:**
-- Components: PascalCase (e.g., `PostCard.tsx`)
-- Utilities: camelCase (e.g., `posts.ts`)
-- CSS Modules: Component name + `.module.css` (e.g., `PostCard.module.css`)
+- Components: PascalCase (e.g., `FeedCard.tsx`)
+- Utilities: camelCase (e.g., `feeds.ts`)
+- CSS Modules: Component name + `.module.css` (e.g., `FeedCard.module.css`)
 - Types: camelCase (e.g., `index.ts` in types folder)
 
 ## Important Files Reference
@@ -376,7 +376,7 @@ The project targets mobile-first responsive design. Test across:
 - `src/styles/globals.css` - Global styles and resets
 
 ### Content & Utilities
-- `src/lib/posts.ts` - Post fetching, parsing, and TOC generation utilities
+- `src/lib/feeds.ts` - Feed fetching, parsing, and TOC generation utilities
 - `src/types/index.ts` - TypeScript type definitions for Post, Project, etc.
 
 ### Key Components
@@ -386,8 +386,8 @@ The project targets mobile-first responsive design. Test across:
 
 ### Pages
 - `src/app/page.tsx` - Home page with site introduction
-- `src/app/posts/page.tsx` - Post list page
-- `src/app/posts/[slug]/page.tsx` - Post detail page with TOC
+- `src/app/feeds/page.tsx` - Feed list page
+- `src/app/feeds/[slug]/page.tsx` - Feed detail page with TOC
 - `src/app/layout.tsx` - Root layout with Geist fonts and metadata
 
 ### Documentation
@@ -410,11 +410,11 @@ These pages are useful for:
 ## Common Tasks
 
 ### Adding a New Blog Post
-1. Create a new `.md` file in `/posts/` directory
+1. Create a new `.md` file in `/feeds/` directory
 2. Add frontmatter with required fields (title, description, date, category)
 3. Write content in Markdown with GitHub Flavored Markdown support
 4. Run `npm run dev` to preview
-5. Post will automatically appear in post list and have its own detail page
+5. Feed will automatically appear in feed list and have its own detail page
 
 ### Creating a New Animation
 1. Create component in `src/components/animations/`
@@ -451,13 +451,13 @@ const HeroScene = dynamic(
 );
 ```
 
-**Post Fetching:**
+**Feed Fetching:**
 ```typescript
-import { getSortedPostsData, getPostData } from '@/lib/posts';
+import { getSortedFeedsData, getFeedData } from '@/lib/feeds';
 
 // In page component
-const posts = getSortedPostsData(); // All posts
-const post = await getPostData(slug); // Single post
+const feeds = getSortedFeedsData(); // All feeds
+const feed = await getFeedData(slug); // Single post
 ```
 
 **CSS Variable Usage:**

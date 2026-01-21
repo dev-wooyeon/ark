@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TypingAnimation from '@/components/TypingAnimation';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -7,19 +8,22 @@ export default function Home() {
       <main className={styles.content}>
         <div className={styles.header}>
           <span className={styles.flag}>🇰🇷</span>
-          <h1 className={styles.siteName}>eunu.log</h1>
+          <h1 className={styles.siteName}>enun.log</h1>
         </div>
 
         <div className={styles.introduction}>
           <p className={styles.bio}>
-            Make systems with data,<br />
-            currently working <a href="https://981park.com" target="_blank" rel="noopener noreferrer" className={styles.bioLink}>@9.81park</a>
+            <TypingAnimation
+              texts={['Make Data, System, Createive Things. Currently working as a Software Engineer @9.81park']}
+              speed={20}
+              linkPatterns={[{ pattern: '@9.81park', url: 'https://981park.com' }]}
+            />
           </p>
         </div>
 
         <nav className={styles.navigation}>
-          <Link href="/posts" className={styles.navLink}>
-            Feeds
+          <Link href="/feed" className={styles.navLink}>
+            Feed
           </Link>
           <Link href="/resume" className={styles.navLink}>
             Resume

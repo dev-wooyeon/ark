@@ -75,6 +75,7 @@ export default function Resume() {
           </div>
         </section>
 
+        <hr />
         {/* Work Experience - Monolith */}
         <section className={styles.workSection}>
           <div className={styles.workLeft}>
@@ -113,6 +114,7 @@ export default function Resume() {
           </div>
         </section>
 
+        <hr />
         {/* Work Experience - Eximbay */}
         <section className={styles.workSection}>
           <div className={styles.workLeft}>
@@ -175,6 +177,6 @@ export default function Resume() {
           </div>
         </section>
       </main>
-    </div>
+    </div >
   );
 }

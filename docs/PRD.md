@@ -30,17 +30,17 @@ blog.com/
 │  ├─ Featured Posts (카드 호버)
 │  └─ CTA
 │
-├─ /posts (포스트 목록)
+├─ /feeds (피드 목록)
 │  ├─ 필터링 (카테고리: Dev, Life)
 │  ├─ 검색
-│  └─ 포스트 카드 그리드
+│  └─ 피드 카드 그리드
 │
-├─ /posts/:slug (포스트 상세)
+├─ /feeds/:slug (피드 상세)
 │  ├─ 헤더 (스크롤 트리거)
 │  ├─ 목차 (Sticky)
 │  ├─ 본문 (마크다운 + 마이크로 인터랙션)
 │  ├─ 코드 블록 (구문 강조 + 복사)
-│  └─ 관련 포스트
+│  └─ 관련 피드
 │
 ├─ /projects (프로젝트)
 │  ├─ 프로젝트 카드 (3D 호버)
@@ -60,41 +60,45 @@ blog.com/
 ### Palette Definition
 ```css
 /* Primary Colors */
---bg-primary: ##eaebea;           /* 따뜻한 흰색 (배경) */
---text-primary: #1B4D3E;         /* 딥그린 (주 텍스트) */
---text-secondary: #5A7A75;       /* 중간 그린-회색 (보조 텍스트) */
---text-tertiary: #8A9A95;        /* 연한 그린-회색 (메타 정보) */
+--bg-primary: #eaebea;            /* 신문색 베이지 (배경) */
+--text-primary: #1a1a1a;          /* 부드러운 검정 (주 텍스트) */
+--text-secondary: #4a4a4a;        /* 미디엄 그레이 (보조 텍스트) */
+--text-tertiary: #6a6a6a;         /* 라이트 그레이 (메타 정보) */
 
 /* Accent Colors */
---accent-primary: #2D7A6F;       /* 포인트 그린 (버튼, 링크) */
---accent-secondary: #A8D5D0;     /* 연한 그린 (호버) */
---accent-tertiary: #E8F0ED;      /* 매우 연한 그린 (배경 강조) */
+--accent-primary: #0066CC;        /* 클래식 블루 (버튼, 링크) */
+--accent-secondary: #004499;      /* 어두운 블루 (호버) */
+--accent-tertiary: #E6F0FA;       /* 매우 연한 블루 (배경 강조) */
 
 /* Code & Technical */
---bg-code: #1B4D3E;              /* 코드 배경: 딥그린 */
---text-code: #D4E8E5;            /* 코드 텍스트: 밝은 그린-흰색 */
---keyword: #4FA399;              /* 키워드: 그린 */
---string: #7FB3A8;               /* 문자열: 따뜻한 그린 */
---number: #A8D5D0;               /* 숫자: 연한 그린 */
---comment: #5A7A75;              /* 주석: 중간 그린 */
+--bg-code: #f8f9fa;               /* 코드 배경: 라이트 그레이 */
+--text-code: #1a1a1a;             /* 코드 텍스트: 검정색 */
+--keyword: #2563EB;               /* 키워드: 블루 */
+--string: #7C3AED;                /* 문자열: 퍼플 */
+--number: #DC2626;                /* 숫자: 레드 */
+--comment: #6B7280;               /* 주석: 그레이 */
 
 /* Feedback */
---success: #10B981;              /* 성공 (초록색) */
---warning: #F59E0B;              /* 경고 (주황색) */
+--success: #2563EB;               /* 성공 (블루) */
+--warning: #F59E0B;               /* 경고 (주황색) */
 --error: #EF4444;                /* 에러 (빨강색) */
 --info: #3B82F6;                 /* 정보 (파랑색) */
 
 /* Neutral */
---border: #E5EAE8;               /* 테두리: 매우 연한 그린 */
---shadow: rgba(27, 77, 62, 0.1); /* 그림자: 딥그린 + 투명도 */
---overlay: rgba(27, 77, 62, 0.05); /* 오버레이 */
+--border: #E5E7EB;               /* 테두리: 라이트 그레이 */
+--shadow: rgba(0, 0, 0, 0.1);   /* 그림자: 블랙 + 투명도 */
+--overlay: rgba(0, 0, 0, 0.05); /* 오버레이 */
 
-/* Dark Mode (선택) */
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
-  --bg-primary: #0F2D26;
-  --text-primary: #E8F0ED;
-  --text-secondary: #A8D5D0;
-  --accent-primary: #4FA399;
+  --bg-primary: #1a1a1a;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --accent-primary: #4A9EFF;
+  --bg-code: #2a2a2a;
+  --text-code: #F9FAFB;
+  --border: #404040;
+  --accent-tertiary: rgba(74, 158, 255, 0.1);
 }
 ```
 
@@ -155,7 +159,7 @@ blog.com/
 #### Featured Posts
 ```
 ┌──────────────────────────────────────┐
-│  [최신 포스트 3개 카드 레이아웃]    │
+│  [최신 피드 3개 카드 레이아웃]    │
 │                                      │
 │  Post 1       Post 2       Post 3    │
 │  [Card]       [Card]       [Card]    │
@@ -171,7 +175,7 @@ blog.com/
 
 ---
 
-### 4.2 포스트 목록 페이지 (/posts)
+### 4.2 피드 목록 페이지 (/feeds)
 
 #### 필터 + 검색
 ```
@@ -199,12 +203,12 @@ blog.com/
 
 ---
 
-### 4.3 포스트 상세 페이지 (/posts/:slug)
+### 4.3 피드 상세 페이지 (/feeds/:slug)
 
 #### Post Header
 ```
 ┌──────────────────────────────────────┐
-│  /posts/                             │ (Breadcrumb)
+│  /feeds/                             │ (Breadcrumb)
 │                                      │
 │  [히어로 이미지 - 스크롤 시 떠오름] │
 │                                      │
@@ -244,7 +248,7 @@ blog.com/
 #### Post Footer
 ```
 ┌──────────────────────────────────────┐
-│  [관련 포스트 3개]                  │
+│  [관련 피드 3개]                  │
 │  카드: 호버 시 색 변경              │
 │                                      │
 │  [댓글 섹션 (또는 평가)]            │
@@ -296,8 +300,8 @@ blog.com/
 
 | 요소 | 트리거 | 효과 | 지속시간 | 이징 |
 |------|--------|------|---------|------|
-| 포스트 제목 | 스크롤 진입 | 페이드인 + Y축 -30px | 0.6s | easeOut |
-| 포스트 이미지 | 스크롤 진행 | 블러 0px → 10px | 스크롤 연동 | linear |
+| 피드 제목 | 스크롤 진입 | 페이드인 + Y축 -30px | 0.6s | easeOut |
+| 피드 이미지 | 스크롤 진행 | 블러 0px → 10px | 스크롤 연동 | linear |
 | 카드 | 호버 | translateY -8px | 0.3s | easeOut |
 | 버튼 | 클릭 | 물결 효과 | 0.6s | easeInOut |
 
@@ -351,7 +355,7 @@ Animation:
 - Typed.js (타이핑 효과)
 
 Content:
-- Markdown (포스트 작성)
+- Markdown (피드 작성)
 - MDX (React 컴포넌트 포함)
 - gray-matter (메타데이터 파싱)
 
@@ -382,8 +386,8 @@ Build & Deploy:
 ```
 □ 프로젝트 구조 설정
 □ 컬러 팔레트 CSS 변수 정의
-□ 기본 페이지 레이아웃 (홈, 포스트 목록, 포스트 상세)
-□ 마크다운 포스트 렌더링
+□ 기본 페이지 레이아웃 (홈, 피드 목록, 피드 상세)
+□ 마크다운 피드 렌더링
 □ 기본 필터링
 □ Vercel 배포
 
@@ -478,10 +482,10 @@ Output: 완전한 프로덕션 블로그
 
 ### Shadow
 ```css
---shadow-sm: 0 1px 2px rgba(27, 77, 62, 0.05);
---shadow-md: 0 4px 6px rgba(27, 77, 62, 0.1);
---shadow-lg: 0 10px 15px rgba(27, 77, 62, 0.1);
---shadow-xl: 0 20px 25px rgba(27, 77, 62, 0.15);
+--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
 ```
 
 ---
@@ -544,7 +548,7 @@ Tools:
 KPIs:
 - 페이지 뷰
 - 평균 체류 시간
-- 포스트 읽기 완료율
+- 피드 읽기 완료율
 - 구독 전환율
 - 재방문율
 ```
@@ -553,7 +557,7 @@ KPIs:
 
 ## 13. 콘텐츠 관리
 
-### 포스트 메타데이터 (Front Matter)
+### 피드 메타데이터 (Front Matter)
 ```yaml
 ---
 title: "Three.js로 만드는 상호작용 경험"
@@ -568,7 +572,7 @@ featured: true
 ---
 ```
 
-### 포스트 구조
+### 피드 구조
 ```markdown
 # 제목
 
@@ -594,7 +598,7 @@ featured: true
 ## 14. 예외 처리 & 에러 페이지
 ```
 Pages:
-- 404: 포스트 없음
+- 404: 피드 없음
 - 500: 서버 에러
 - Offline: 네트워크 끊김
 
@@ -602,7 +606,7 @@ Design:
 - 일관된 스타일
 - 홈으로 돌아가기 버튼
 - 검색 기능
-- 추천 포스트
+- 추천 피드
 ```
 
 ---
@@ -615,7 +619,7 @@ Version Control:
 - PR 기반 코드 리뷰
 
 Backup:
-- 포스트: GitHub에 저장
+- 피드: GitHub에 저장
 - 데이터: 월 1회 백업
 - 데이터베이스: 자동 백업 (필요시)
 ```
@@ -632,7 +636,7 @@ Technical:
 
 User Engagement:
 ✅ 평균 체류 시간: 3분 이상
-✅ 포스트 읽기 완료율: 70% 이상
+✅ 피드 읽기 완료율: 70% 이상
 ✅ 재방문율: 40% 이상
 ✅ 소셜 공유: 월 10회 이상
 
@@ -661,12 +665,12 @@ Rollback:
 ### 유지보수
 ```
 주간:
-- 포스트 발행
+- 피드 발행
 - 댓글 모니터링
 
 월간:
 - 성능 리뷰
-- 오래된 포스트 업데이트
+- 오래된 피드 업데이트
 - 의존성 업데이트
 
 분기:
@@ -696,12 +700,12 @@ tech-blog/
 │  ├─ images/
 │  ├─ fonts/
 │  │  └─ JetBrainsMono-*.woff2
-│  └─ posts/
+│  └─ feeds/
 │
 ├─ src/
 │  ├─ pages/
 │  │  ├─ index.tsx
-│  │  ├─ posts/
+│  │  ├─ feeds/
 │  │  │  ├─ index.tsx
 │  │  │  └─ [slug].tsx
 │  │  ├─ projects/
@@ -726,7 +730,7 @@ tech-blog/
 │  │  └─ [component].module.css
 │  │
 │  ├─ lib/
-│  │  ├─ posts.ts (포스트 읽기)
+│  │  ├─ posts.ts (피드 읽기)
 │  │  ├─ analytics.ts
 │  │  └─ utils.ts
 │  │
@@ -737,7 +741,7 @@ tech-blog/
 │     ├─ useScrollAnimation.ts
 │     └─ useMousePosition.ts
 │
-├─ posts/ (마크다운)
+├─ feeds/ (마크다운)
 │  ├─ 2025-01-20-first-post.md
 │  └─ ...
 │
@@ -780,7 +784,7 @@ SEO:
 □ robots.txt 설정
 
 콘텐츠:
-□ 초기 포스트 5개 이상
+□ 초기 피드 5개 이상
 □ About 페이지 작성
 □ 프로젝트 설명 완성
 

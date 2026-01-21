@@ -36,7 +36,7 @@ eunu.log/
 │  ├─ lib/              # 유틸리티 함수
 │  ├─ types/            # TypeScript 타입
 │  └─ hooks/            # Custom Hooks
-├─ posts/               # 마크다운 포스트
+├─ feeds/               # 마크다운 피드
 ├─ public/              # 정적 파일
 └─ docs/                # 문서
 ```
@@ -70,7 +70,7 @@ npm run start
 - [x] 프로젝트 구조 설정
 - [x] 컬러 팔레트 CSS 변수 정의
 - [/] 기본 페이지 레이아웃 (사용자 디자인 유지하며 통합 필요)
-- [x] 마크다운 포스트 렌더링 (로직 구현 완료)
+- [x] 마크다운 피드 렌더링 (로직 구현 완료)
 - [ ] Vercel 배포
 
 ### Phase 2: 애니메이션 기본

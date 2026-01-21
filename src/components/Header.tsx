@@ -12,8 +12,8 @@ export default function Header() {
         </Link>
         <ul className={styles.navList}>
           <li>
-            <Link href="/posts" className={styles.navLink}>
-              Feeds
+            <Link href="/feed" className={styles.navLink}>
+              Feed
             </Link>
           </li>
           <li>

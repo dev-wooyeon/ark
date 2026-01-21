@@ -204,8 +204,8 @@ function TextParticles() {
     <instancedMesh ref={meshRef} args={[undefined, undefined, particles.length]}>
       <sphereGeometry args={[0.02, 8, 8]} />
       <meshStandardMaterial
-        color="#2D7A6F"
-        emissive="#1B4D3E"
+        color="#2563EB"
+        emissive="#1E40AF"
         emissiveIntensity={0.3}
         roughness={0.3}
         metalness={0.8}
@@ -226,7 +226,7 @@ export default function TextParticleScene() {
     >
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#A8D5D0" />
+      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#60A5FA" />
       <pointLight position={[0, 0, 5]} intensity={0.8} color="#ffffff" />
       <TextParticles />
     </Canvas>

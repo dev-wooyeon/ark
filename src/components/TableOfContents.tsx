@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TocItem } from '@/lib/posts';
+import { TocItem } from '@/lib/feeds';
 import styles from './TableOfContents.module.css';
 
 interface TableOfContentsProps {
