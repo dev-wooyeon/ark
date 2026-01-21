@@ -4,7 +4,7 @@ description: "페어 프로그래밍에 대한 고찰"
 date: "2026-01-08"
 category: "Life"
 tags: ["페어 프로그래밍"]
-readingTime: 5
+readingTime: 3
 featured: true
 ---
 
