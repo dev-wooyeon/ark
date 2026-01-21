@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import ThemeToggle from '@/components/ThemeToggle';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -28,10 +26,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
-        <ThemeProvider>
-          <ThemeToggle />
-          <main>{children}</main>
-        </ThemeProvider>
+        <main>{children}</main>
       </body>
     </html>
   );

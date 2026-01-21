@@ -5,37 +5,55 @@
     width: 100%;
 }
 
-.filters {
+.filterSection {
     display: flex;
+    align-items: center;
     gap: var(--space-4);
 }
 
-.filterButton {
-    background: none;
+.filterLabel {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-tertiary);
+}
+
+.segmentedControl {
+    display: inline-flex;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.segment {
+    background: transparent;
     border: none;
     font-family: var(--font-sans);
-    font-size: 20px;
-    /* Resume .company와 일치 */
-    font-weight: 700;
-    color: var(--text-tertiary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: 0;
-    transition: color 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-.filterButton:hover {
+.segment:hover {
     color: var(--text-primary);
+    background: var(--accent-tertiary);
 }
 
-.filterButton.active {
-    color: var(--text-primary);
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 6px;
-    text-decoration-color: var(--accent-primary);
+.segment.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.segment.active:hover {
+    background: var(--accent-secondary);
+    color: #ffffff;
 }
 
 .list {
@@ -49,4 +67,20 @@
     color: var(--text-tertiary);
     padding: var(--space-8) 0;
     text-align: center;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+    .filterSection {
+        gap: var(--space-3);
+    }
+
+    .filterLabel {
+        font-size: var(--text-xs);
+    }
+
+    .segment {
+        font-size: var(--text-xs);
+        padding: var(--space-1) var(--space-3);
+    }
 }

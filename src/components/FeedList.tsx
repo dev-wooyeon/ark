@@ -22,19 +22,28 @@ export default function FeedList({ feed }: FeedListProps) {
 
     return (
         <div className={styles.container}>
-            <div className={styles.filters}>
-                <button
-                    className={`${styles.filterButton} ${activeFilter === 'Dev' ? styles.active : ''}`}
-                    onClick={() => setActiveFilter(activeFilter === 'Dev' ? 'All' : 'Dev')}
-                >
-                    <span className={styles.checkbox}>{activeFilter === 'Dev' ? '☑' : '☐'}</span> Dev
-                </button>
-                <button
-                    className={`${styles.filterButton} ${activeFilter === 'Life' ? styles.active : ''}`}
-                    onClick={() => setActiveFilter(activeFilter === 'Life' ? 'All' : 'Life')}
-                >
-                    <span className={styles.checkbox}>{activeFilter === 'Life' ? '☑' : '☐'}</span> Life
-                </button>
+            <div className={styles.filterSection}>
+                <span className={styles.filterLabel}>Filter:</span>
+                <div className={styles.segmentedControl}>
+                    <button
+                        className={`${styles.segment} ${activeFilter === 'Dev' ? styles.active : ''}`}
+                        onClick={() => setActiveFilter('Dev')}
+                    >
+                        Dev
+                    </button>
+                    <button
+                        className={`${styles.segment} ${activeFilter === 'Life' ? styles.active : ''}`}
+                        onClick={() => setActiveFilter('Life')}
+                    >
+                        Life
+                    </button>
+                    <button
+                        className={styles.segment}
+                        onClick={() => setActiveFilter('All')}
+                    >
+                        Clear
+                    </button>
+                </div>
             </div>
 
             <div className={styles.list}>
