@@ -156,35 +156,24 @@ table {
   border-collapse: collapse;
   margin-bottom: var(--space-6);
   font-size: var(--text-sm);
-  border: 1px solid #cccccc;
-  background-color: #ffffff;
 }
 
 th,
 td {
   padding: var(--space-3) var(--space-4);
   text-align: left;
-  border: 1px solid #cccccc;
-  background-color: #ffffff;
+  color: var(--text-primary);
+  background-color: var(--bg-code);
 }
 
 th {
   font-weight: var(--font-semibold);
-  background-color: #f8f9fa !important;
+  background-color: var(--th-bg-code);
   color: var(--text-primary);
-  border-bottom: 2px solid #cccccc;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-tbody tr:hover {
-  background-color: #f0f8ff;
-}
-
-/* 다크모드 테이블 스타일링 */
-@media (prefers-color-scheme: dark) {
+/* 라이트모드 테이블 스타일링 */
+[data-theme="light"] {
   table {
     border: 1px solid var(--border);
   }
@@ -195,19 +184,31 @@ tbody tr:hover {
   }
 
   th {
-    background-color: #333333;
-    color: var(--text-primary);
+    border-bottom: 2px solid var(--border);
+  }
+}
+
+/* 다크모드 테이블 스타일링 */
+[data-theme="dark"] {
+  table {
+    border: 1px solid var(--border);
   }
 
-  tbody tr:hover {
-    background-color: #333333;
+  th,
+  td {
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background-color: var(--bg-code);
+    color: var(--text-primary);
   }
 }
 
 /* ===== Horizontal Rule ===== */
 hr {
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--hr-bg-code);
   margin: var(--space-8) 0;
 }
 

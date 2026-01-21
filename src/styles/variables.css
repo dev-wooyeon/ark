@@ -18,22 +18,26 @@
   /* 매우 연한 블루 (배경 강조) */
 
   /* ===== Code & Technical ===== */
-  --bg-code: #f8f9fa;
+  --bg-code: #ffffff;
+  /* 테이블 헤더 배경: 화이트 */
+  --th-bg-code: #dedede;
+  /* hr 배경 */
+  --hr-bg-code: #160D08;
   /* 코드 배경: 라이트 그레이 */
   --text-code: #1a1a1a;
   /* 코드 텍스트: 검정색 */
-  --keyword: #4FA399;
-  /* 키워드: 그린 */
-  --string: #7FB3A8;
-  /* 문자열: 따뜻한 그린 */
-  --number: #A8D5D0;
-  /* 숫자: 연한 그린 */
-  --comment: #5A7A75;
-  /* 주석: 중간 그린 */
+  --keyword: #2563EB;
+  /* 키워드: 블루 */
+  --string: #7C3AED;
+  /* 문자열: 퍼플 */
+  --number: #DC2626;
+  /* 숫자: 레드 */
+  --comment: #6B7280;
+  /* 주석: 그레이 */
 
   /* ===== Feedback ===== */
-  --success: #10B981;
-  /* 성공 (초록색) */
+  --success: #2563EB;
+  /* 성공 (블루) */
   --warning: #F59E0B;
   /* 경고 (주황색) */
   --error: #EF4444;
@@ -42,18 +46,20 @@
   /* 정보 (파랑색) */
 
   /* ===== Neutral ===== */
-  --border: #E5EAE8;
-  /* 테두리: 매우 연한 그린 */
-  --shadow: rgba(27, 77, 62, 0.1);
-  /* 그림자: 딥그린 + 투명도 */
-  --overlay: rgba(27, 77, 62, 0.05);
+  --border: #E5E7EB;
+  /* 테두리: 라이트 그레이 */
+  --shadow: rgba(0, 0, 0, 0.1);
+  /* 그림자: 블랙 + 투명도 */
+  --overlay: rgba(0, 0, 0, 0.05);
   /* 오버레이 */
 
   /* ===== Fonts ===== */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, monospace;
   --default-font-family: var(--font-sans);
   --default-mono-font-family: var(--font-mono);
+  --common-font-family: var(--font-jetbrains-mono);
 
   --text-xs: 0.75rem;
   /* 12px */
@@ -107,26 +113,25 @@
   --radius-full: 9999px;
 
   /* ===== Shadow ===== */
-  --shadow-sm: 0 1px 2px rgba(27, 77, 62, 0.05);
-  --shadow-md: 0 4px 6px rgba(27, 77, 62, 0.1);
-  --shadow-lg: 0 10px 15px rgba(27, 77, 62, 0.1);
-  --shadow-xl: 0 20px 25px rgba(27, 77, 62, 0.15);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* ===== Dark Mode ===== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #1a1a1a;
-    --text-primary: #E8F0ED;
-    --text-secondary: #A8D5D0;
-    --accent-primary: #4A9EFF;
-    --bg-code: #2a2a2a;
-    /* 다크모드 코드 배경 */
-    --text-code: #E8F0ED;
-    /* 다크모드 코드 텍스트 */
-    --border: #404040;
-    /* 다크모드 테두리 */
-    --accent-tertiary: rgba(74, 158, 255, 0.1);
-    /* 다크모드 배경 강조 */
-  }
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-tertiary: #9CA3AF;
+  --accent-primary: #4A9EFF;
+  --bg-code: #353535;
+  /* 다크모드 코드 배경 */
+  --text-code: #F9FAFB;
+  /* 다크모드 코드 텍스트 */
+  --border: #404040;
+  /* 다크모드 테두리 */
+  --accent-tertiary: rgba(74, 158, 255, 0.1);
+  /* 다크모드 배경 강조 */
 }
