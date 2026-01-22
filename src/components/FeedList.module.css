@@ -1,7 +1,6 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-12);
     width: 100%;
 }
 
@@ -69,6 +68,40 @@
     text-align: center;
 }
 
+/* 표 헤더 스타일링 */
+.tableHeader {
+    display: grid;
+    grid-template-columns: 120px 1fr 100px;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    background: var(--bg-primary);
+    border-bottom: 2px solid var(--border);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.headerDate {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+}
+
+.headerTitle {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+}
+
+.headerReadingTime {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    text-align: right;
+}
+
 /* 모바일 최적화 */
 @media (max-width: 768px) {
     .filterSection {
@@ -82,5 +115,10 @@
     .segment {
         font-size: var(--text-xs);
         padding: var(--space-1) var(--space-3);
+    }
+
+    /* 모바일에서는 표 헤더 숨기기 */
+    .tableHeader {
+        display: none;
     }
 }

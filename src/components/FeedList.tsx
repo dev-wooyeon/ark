@@ -46,6 +46,19 @@ export default function FeedList({ feed }: FeedListProps) {
                 </div>
             </div>
 
+
+            <div className={styles.tableHeader}>
+                <div className={styles.headerDate}>
+                    Date /
+                </div>
+                <div className={styles.headerTitle}>
+                    Title /
+                </div>
+                <div className={styles.headerReadingTime}>
+                    Time /
+                </div>
+            </div>
+
             <div className={styles.list}>
                 {filteredFeed.length > 0 ? (
                     filteredFeed.map((feed) => (
