@@ -1,5 +1,5 @@
 // Feed Types
-export interface Feed {
+export interface BaseFeed {
   slug: string;
   title: string;
   description: string;
@@ -8,13 +8,20 @@ export interface Feed {
   category: string;
   tags?: string[];
   image?: string;
-  readingTime: number;
-  featured: boolean;
-  content: string;
+  readingTime?: number;
+  featured?: boolean;
 }
 
-export interface FeedData {
-  slug: string;
+// 목록 표시용 (메타데이터만)
+export type FeedData = BaseFeed;
+
+// 전체 콘텐츠 포함 (상세 페이지용)
+export interface Feed extends BaseFeed {
+  contentHtml: string;
+}
+
+// Gray matter frontmatter 타입
+export interface FeedFrontmatter {
   title: string;
   description: string;
   date: string;
