@@ -61,8 +61,8 @@
 }
 
 .content {
-    line-height: 1.8;
-    font-size: var(--text-sm);
+    line-height: 1.7;
+    font-size: clamp(1rem, 2vw, 1.125rem);
     color: var(--text-primary);
     max-width: 100%;
     overflow-wrap: break-word;

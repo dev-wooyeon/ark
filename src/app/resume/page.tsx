@@ -15,22 +15,22 @@ export default function Resume() {
         {/* Personal Info Grid */}
         <section className={styles.infoGrid}>
           <div className={styles.infoItem}>
-            <div className={styles.infoLabel}>ID</div>
+            <div className={styles.infoLabel}>ID / </div>
             <div className={styles.infoValue}>
               박은우<br />
               <span className={styles.birthDate}>1996.07.20</span>
             </div>
           </div>
           <div className={styles.infoItem}>
-            <div className={styles.infoLabel}>Position</div>
+            <div className={styles.infoLabel}>Position / </div>
             <div className={styles.infoValue}>Software Engineer</div>
           </div>
           <div className={styles.infoItem}>
-            <div className={styles.infoLabel}>Keyword</div>
+            <div className={styles.infoLabel}>Keyword / </div>
             <div className={styles.infoValue}>Data, Automation</div>
           </div>
           <div className={styles.infoItem}>
-            <div className={styles.infoLabel}>Contact</div>
+            <div className={styles.infoLabel}>Contact / </div>
             <div className={styles.infoValue}>
               <a href="mailto:une@kakao.com" className={styles.link}>
                 une@kakao.com

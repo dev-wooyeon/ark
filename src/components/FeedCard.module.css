@@ -34,7 +34,7 @@
 }
 
 .description {
-    font-size: var(--text-sm);
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: var(--space-6);

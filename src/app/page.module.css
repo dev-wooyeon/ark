@@ -47,7 +47,6 @@
   font-weight: 200;
 
   /* color: var(--color-gray-900); */
-
   margin: 0;
   display: flex;
 }
@@ -61,7 +60,7 @@
 
 .bio {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: clamp(1.125rem, 2.5vw, 1.25rem);
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
@@ -83,7 +82,7 @@
 
 .description {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: clamp(0.9375rem, 1.8vw, 1rem);
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
@@ -99,7 +98,7 @@
 
 .navLink {
   font-family: var(--font-jetbrains-mono);
-  font-size: 18px;
+  font-size: 22px;
   /* Minimal trend - reduced size */
   font-weight: 400;
   color: var(--text-primary);
@@ -179,16 +178,8 @@
     font-size: 3rem;
   }
 
-  .bio {
-    font-size: 14px;
-  }
-
-  .description {
-    font-size: 14px;
-  }
-
   .navLink {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .navLink::after {

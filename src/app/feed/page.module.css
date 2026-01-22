@@ -6,8 +6,8 @@
 
 .header {
   max-width: 800px;
-  margin: 0 auto var(--space-16);
-  padding-bottom: var(--space-12);
+  margin: 0 auto 0;
+  padding-bottom: var(--space-8);
 }
 
 .backLink {
@@ -24,7 +24,7 @@
 }
 
 .title {
-  font-family: var(--common-font-family);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   font-weight: var(--font-bold);
   color: var(--text-primary);

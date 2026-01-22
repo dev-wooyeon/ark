@@ -6,7 +6,6 @@ import '@/styles/globals.css';
 export const metadata: Metadata = {
   title: 'eunu.log',
   description: 'Personal blog',
-  keywords: ['Frontend', 'React', 'Next.js', 'TypeScript', 'Tech Blog'],
   authors: [{ name: 'Eunu' }],
   openGraph: {
     type: 'website',
