@@ -1,6 +1,7 @@
 import { getFeedData, getAllFeedSlugs, parseHeadingsFromHtml } from '@/lib/feeds';
 import InlineTableOfContents from '@/components/InlineTableOfContents';
 import ReadingProgress from '@/components/ReadingProgress';
+import { notFound } from 'next/navigation';
 import styles from './feed.module.css';
 
 export async function generateStaticParams() {
@@ -10,6 +11,12 @@ export async function generateStaticParams() {
 
 export default async function Feed({ params }: { params: { slug: string } }) {
     const feedData = await getFeedData(params.slug);
+
+    // 피드 데이터를 찾을 수 없는 경우 404 페이지 표시
+    if (!feedData) {
+        notFound();
+    }
+
     const tocItems = parseHeadingsFromHtml(feedData.contentHtml);
 
     return (
