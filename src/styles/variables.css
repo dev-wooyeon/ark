@@ -14,16 +14,15 @@
   /* 클래식 블루 (버튼, 링크) */
   --accent-secondary: #004499;
   /* 어두운 블루 (호버) */
-  --accent-tertiary: #E6F0FA;
-  /* 매우 연한 블루 (배경 강조) */
+  --accent-tertiary: #F0F4F8;
+  /* 매우 연한 그레이 블루 (배경 강조) */
 
   /* ===== Code & Technical ===== */
   --bg-code: #ffffff;
   /* 테이블 헤더 배경: 화이트 */
   --th-bg-code: #dedede;
-  /* hr 배경 */
-  --hr-bg-code: #160D08;
-  /* 코드 배경: 라이트 그레이 */
+  /* hr 배경: 부드러운 그레이 */
+  --hr-bg-code: #0000000f;
   --text-code: #1a1a1a;
   /* 코드 텍스트: 검정색 */
   --keyword: #2563EB;
