@@ -62,13 +62,13 @@ export default function Resume() {
                     GitHub
                   </a>
                   {' · '}
-                  <a href="https://github.com/dev-wooyeon/ctr-pipeline" target="_blank" rel="noopener noreferrer" className={styles.projectLink}>
+                  <Link href="/feed/2025-12-02-make-ctr-pipeline" className={styles.projectLink}>
                     시스템 구축기
-                  </a>
+                  </Link>
                   {' · '}
-                  <a href="https://github.com/dev-wooyeon/ctr-pipeline" target="_blank" rel="noopener noreferrer" className={styles.projectLink}>
+                  <Link href="/feed/2025-12-10-macbook-air-m1-life" className={styles.projectLink}>
                     성능개선기
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </article>
