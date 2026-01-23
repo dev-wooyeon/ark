@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://eunu.log'),
   title: 'eunu.log',
   description: 'Personal blog',
   authors: [{ name: 'Eunu' }],
