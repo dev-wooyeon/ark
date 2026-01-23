@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import '@/styles/globals.css';
@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     description: 'Personal blog',
     siteName: 'eunu.log',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#eaebea',
 };
 
 export default function RootLayout({

@@ -90,9 +90,13 @@
     color: var(--text-primary);
 }
 
-/* .content p {
+.content p {
     margin-bottom: 1em;
-} */
+}
+
+.content blockquote p {
+    margin-bottom: auto;
+}
 
 .content img {
     max-width: 100%;
