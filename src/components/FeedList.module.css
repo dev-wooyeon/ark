@@ -62,10 +62,64 @@
 }
 
 .empty {
-    font-family: var(--font-mono);
-    color: var(--text-tertiary);
-    padding: var(--space-8) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-16) 0;
     text-align: center;
+}
+
+.emptyIcon {
+    font-size: 2rem;
+    color: var(--text-tertiary);
+    opacity: 0.5;
+}
+
+.emptyText {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+}
+
+/* Skeleton styles */
+.skeletonSegment {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.skeletonItem {
+    display: grid;
+    grid-template-columns: 120px 1fr 100px;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.skeletonDate {
+    height: 14px;
+    width: 80px;
+    background: var(--text-tertiary);
+    opacity: 0.15;
+    border-radius: 4px;
+}
+
+.skeletonTitle {
+    height: 20px;
+    width: 60%;
+    background: var(--text-tertiary);
+    opacity: 0.15;
+    border-radius: 4px;
+}
+
+.skeletonTime {
+    height: 12px;
+    width: 60px;
+    background: var(--text-tertiary);
+    opacity: 0.15;
+    border-radius: 4px;
+    margin-left: auto;
 }
 
 /* 표 헤더 스타일링 */
@@ -120,5 +174,19 @@
     /* 모바일에서는 표 헤더 숨기기 */
     .tableHeader {
         display: none;
+    }
+
+    .skeletonItem {
+        grid-template-columns: 1fr;
+        gap: var(--space-2);
+    }
+
+    .skeletonTitle {
+        order: -1;
+        width: 80%;
+    }
+
+    .skeletonTime {
+        margin-left: 0;
     }
 }
