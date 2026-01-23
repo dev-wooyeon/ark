@@ -16,7 +16,7 @@
   gap: var(--space-8);
   width: 100%;
   max-width: 800px;
-  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Animation handled by Framer Motion */
 }
 
 .header {
@@ -49,6 +49,8 @@
   /* color: var(--color-gray-900); */
   margin: 0;
   display: flex;
+
+  color: var(--text-primary);
 }
 
 .introduction {
@@ -64,7 +66,7 @@
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
-  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Animation handled by Framer Motion */
 }
 
 .bioLink {
@@ -97,49 +99,25 @@
 }
 
 .navLink {
-  font-family: var(--font-jetbrains-mono);
+  font-family: var(--font-sans);
   font-size: 22px;
-  /* Minimal trend - reduced size */
   font-weight: 400;
   color: var(--text-primary);
   text-decoration: none;
   position: relative;
-  transition: color 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.33, 1, 0.68, 1),
+              color 0.2s ease;
 }
-
-/* Underline effect */
-/* .navLink::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 2px;
-  background-color: var(--text-primary);
-  transform: scaleX(1);
-  transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-} */
 
 .navLink:hover {
-  color: var(--text-primary);
+  transform: translateY(-2px);
+  color: var(--accent-primary);
 }
 
-.navLink:hover::after {
-  background-color: var(--text-primary);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Animation handled by Framer Motion */
+/* @keyframes fadeIn removed */
 
 @keyframes typing {
   from {
@@ -180,9 +158,5 @@
 
   .navLink {
     font-size: 20px;
-  }
-
-  .navLink::after {
-    height: 2px;
   }
 }
