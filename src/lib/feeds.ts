@@ -2,13 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { FeedData, Feed, FeedFrontmatter } from '@/types';
-import { remark } from 'remark';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
-import remarkRehype from 'remark-rehype';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeStringify from 'rehype-stringify';
-import * as cheerio from 'cheerio';
+import { markdownToHtml } from './markdown';
 
 const feedsDirectory = path.join(process.cwd(), 'feeds');
 
@@ -41,13 +35,13 @@ function safeExists(path: string): boolean {
 }
 
 // 프론트매터 유효성 검증 함수
-function validateFeedFrontmatter(data: any, slug: string): FeedFrontmatter | null {
+function validateFeedFrontmatter(data: unknown, slug: string): FeedFrontmatter | null {
     if (!data || typeof data !== 'object') {
         console.error(`Invalid frontmatter for ${slug}: not an object`);
         return null;
     }
 
-    const { title, description, date, category } = data;
+    const { title, description, date, category, tags, image, readingTime, featured, updated } = data as Record<string, unknown>;
 
     if (!title || typeof title !== 'string') {
         console.error(`Invalid title for ${slug}: ${title}`);
@@ -74,11 +68,11 @@ function validateFeedFrontmatter(data: any, slug: string): FeedFrontmatter | nul
         description,
         date,
         category,
-        tags: Array.isArray(data.tags) ? data.tags : undefined,
-        image: typeof data.image === 'string' ? data.image : undefined,
-        readingTime: typeof data.readingTime === 'number' ? data.readingTime : undefined,
-        featured: typeof data.featured === 'boolean' ? data.featured : undefined,
-        updated: typeof data.updated === 'string' ? data.updated : undefined,
+        tags: Array.isArray(tags) ? tags.filter((tag): tag is string => typeof tag === 'string') : undefined,
+        image: typeof image === 'string' ? image : undefined,
+        readingTime: typeof readingTime === 'number' ? readingTime : undefined,
+        featured: typeof featured === 'boolean' ? featured : undefined,
+        updated: typeof updated === 'string' ? updated : undefined,
     };
 }
 
@@ -185,15 +179,7 @@ export async function getFeedData(slug: string): Promise<Feed | null> {
         }
 
         // Use remark to convert markdown into HTML string
-        const processedContent = await remark()
-            .use(remarkGfm)
-            .use(remarkBreaks)
-            .use(remarkRehype)
-            .use(rehypeHighlight)
-            .use(rehypeStringify)
-            .process(matterResult.content);
-
-        const contentHtml = processedContent.toString();
+        const contentHtml = await markdownToHtml(matterResult.content);
 
         // Combine the data with the slug and contentHtml
         return {
@@ -213,78 +199,4 @@ export interface TocItem {
     text: string;
     level: number;
     children?: TocItem[];
-}
-
-// HTML에서 헤딩들을 파싱해서 목차 데이터 생성
-export function parseHeadingsFromHtml(htmlContent: string): TocItem[] {
-    try {
-        if (!htmlContent || typeof htmlContent !== 'string') {
-            console.warn('Invalid HTML content for TOC parsing');
-            return [];
-        }
-
-        const $ = cheerio.load(htmlContent);
-        const headings = $('h1, h2, h3, h4, h5, h6');
-
-        const tocItems: TocItem[] = [];
-        const stack: TocItem[] = [];
-
-        headings.each((_, element) => {
-            try {
-                const heading = $(element);
-                const level = parseInt(element.name.charAt(1));
-
-                if (isNaN(level) || level < 1 || level > 6) {
-                    console.warn(`Invalid heading level: ${element.name}`);
-                    return;
-                }
-
-                const text = heading.text().trim();
-                if (!text) {
-                    return; // 빈 헤딩은 무시
-                }
-
-                const id = heading.attr('id') || generateHeadingId(text);
-
-                const tocItem: TocItem = {
-                    id,
-                    text,
-                    level,
-                    children: []
-                };
-
-                // 스택을 이용해 계층 구조 생성
-                while (stack.length > 0 && stack[stack.length - 1].level >= level) {
-                    stack.pop();
-                }
-
-                if (stack.length === 0) {
-                    tocItems.push(tocItem);
-                } else {
-                    const parent = stack[stack.length - 1];
-                    parent.children = parent.children || [];
-                    parent.children.push(tocItem);
-                }
-
-                stack.push(tocItem);
-            } catch (error) {
-                console.error(`Error processing heading element:`, error);
-            }
-        });
-
-        return tocItems;
-    } catch (error) {
-        console.error('Error parsing HTML for TOC:', error);
-        return [];
-    }
-}
-
-// 헤딩 텍스트를 ID로 변환하는 함수
-function generateHeadingId(text: string): string {
-    return text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '') // 특수문자 제거
-        .replace(/\s+/g, '-') // 공백을 하이픈으로
-        .replace(/-+/g, '-') // 연속된 하이픈 하나로
-        .trim();
 }

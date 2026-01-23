@@ -1,44 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense } from 'react';
 import { FeedData } from '@/types';
 import FeedListItem from './FeedListItem';
 import styles from './FeedList.module.css';
+import { useFeedFilter, FilterType } from '@/hooks/useFeedFilter';
 
 interface FeedListProps {
     feed: FeedData[];
 }
 
-type FilterType = 'All' | 'Dev' | 'Life';
-
-export default function FeedList({ feed }: FeedListProps) {
-    const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-
-    const filteredFeed = feed.filter((feed) => {
-        if (activeFilter === 'All') return true;
-        // Filter by category (case-insensitive)
-        return feed.category?.toLowerCase() === activeFilter.toLowerCase();
-    });
+function FeedListContent({ feed }: FeedListProps) {
+    const { activeFilter, setActiveFilter, filteredFeed } = useFeedFilter(feed);
 
     return (
         <div className={styles.container}>
             <div className={styles.filterSection}>
                 <span className={styles.filterLabel}>Filter:</span>
                 <div className={styles.segmentedControl}>
+                    {(['Dev', 'Life'] as FilterType[]).map((filter) => (
+                        <button
+                            key={filter}
+                            className={`${styles.segment} ${activeFilter === filter ? styles.active : ''}`}
+                            onClick={() => setActiveFilter(filter)}
+                        >
+                            {filter}
+                        </button>
+                    ))}
                     <button
-                        className={`${styles.segment} ${activeFilter === 'Dev' ? styles.active : ''}`}
-                        onClick={() => setActiveFilter('Dev')}
-                    >
-                        Dev
-                    </button>
-                    <button
-                        className={`${styles.segment} ${activeFilter === 'Life' ? styles.active : ''}`}
-                        onClick={() => setActiveFilter('Life')}
-                    >
-                        Life
-                    </button>
-                    <button
-                        className={styles.segment}
+                        className={`${styles.segment} ${activeFilter === 'All' ? styles.active : ''}`}
                         onClick={() => setActiveFilter('All')}
                     >
                         Clear
@@ -71,3 +61,12 @@ export default function FeedList({ feed }: FeedListProps) {
         </div>
     );
 }
+
+export default function FeedList(props: FeedListProps) {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <FeedListContent {...props} />
+        </Suspense>
+    );
+}
+

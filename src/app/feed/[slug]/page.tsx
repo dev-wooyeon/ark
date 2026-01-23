@@ -1,12 +1,39 @@
-import { getFeedData, getAllFeedSlugs, parseHeadingsFromHtml } from '@/lib/feeds';
+import { getFeedData, getAllFeedSlugs } from '@/lib/feeds';
+import { parseHeadingsFromHtml } from '@/lib/markdown';
 import InlineTableOfContents from '@/components/InlineTableOfContents';
 import ReadingProgress from '@/components/ReadingProgress';
 import { notFound } from 'next/navigation';
 import styles from './feed.module.css';
 
+import { Metadata } from 'next';
+
 export async function generateStaticParams() {
     const slugs = getAllFeedSlugs();
     return slugs;
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+    const feedData = await getFeedData(params.slug);
+
+    if (!feedData) {
+        return {
+            title: 'Post Not Found',
+        };
+    }
+
+    return {
+        title: feedData.title,
+        description: feedData.description,
+        openGraph: {
+            title: feedData.title,
+            description: feedData.description,
+            type: 'article',
+            publishedTime: feedData.date,
+            authors: ['Eunu'],
+            tags: feedData.tags,
+            images: feedData.image ? [feedData.image] : [],
+        },
+    };
 }
 
 export default async function Feed({ params }: { params: { slug: string } }) {

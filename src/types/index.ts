@@ -1,26 +1,7 @@
 // Feed Types
-export interface BaseFeed {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  updated?: string;
-  category: string;
-  tags?: string[];
-  image?: string;
-  readingTime?: number;
-  featured?: boolean;
-}
+// Feed Types
 
-// 목록 표시용 (메타데이터만)
-export type FeedData = BaseFeed;
-
-// 전체 콘텐츠 포함 (상세 페이지용)
-export interface Feed extends BaseFeed {
-  contentHtml: string;
-}
-
-// Gray matter frontmatter 타입
+// 1. Base metadata (from gray-matter frontmatter)
 export interface FeedFrontmatter {
   title: string;
   description: string;
@@ -32,6 +13,18 @@ export interface FeedFrontmatter {
   readingTime?: number;
   featured?: boolean;
 }
+
+// 2. Feed Data for lists (adds slug)
+export interface FeedData extends FeedFrontmatter {
+  slug: string;
+}
+
+// 3. Full Feed with content (adds contentHtml)
+export interface Feed extends FeedData {
+  contentHtml: string;
+}
+
+
 
 // Project Types
 export interface Project {
