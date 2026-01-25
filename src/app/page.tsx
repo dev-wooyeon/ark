@@ -1,9 +1,9 @@
 "use client";
 
 import Link from 'next/link';
-import TypingAnimation from '@/components/TypingAnimation';
+import TypingAnimation from '@/components/features/animation/TypingAnimation';
 import styles from './page.module.css';
-import AmbientBackground from '@/components/AmbientBackground';
+import AmbientBackground from '@/components/layout/AmbientBackground';
 import { motion } from 'framer-motion';
 
 export default function Home() {

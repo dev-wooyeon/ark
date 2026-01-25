@@ -1,7 +1,7 @@
 import { getFeedData, getAllFeedSlugs } from '@/lib/feeds';
 import { parseHeadingsFromHtml } from '@/lib/markdown';
-import InlineTableOfContents from '@/components/InlineTableOfContents';
-import ReadingProgress from '@/components/ReadingProgress';
+import InlineTableOfContents from '@/components/features/post/InlineTableOfContents';
+import ReadingProgress from '@/components/layout/ReadingProgress';
 import { notFound } from 'next/navigation';
 import styles from './feed.module.css';
 

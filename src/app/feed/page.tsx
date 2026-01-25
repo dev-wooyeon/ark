@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getSortedFeedData } from '@/lib/feeds';
-import FeedList from '@/components/FeedList';
+import FeedList from '@/components/features/feed/FeedList';
 import styles from './page.module.css';
 
 export default function FeedPage() {
