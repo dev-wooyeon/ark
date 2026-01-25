@@ -4,7 +4,6 @@ description: "데이터 엔지니어링 직무 역량을 갖추기 위해 고군
 date: "2025-01-20"
 category: "Dev"
 tags: ["Flink", "Kafka", "ClickHouse", "Redis", "Data Pipeline"]
-readingTime: 5
 featured: true
 ---
 

@@ -4,7 +4,6 @@ description: "ioT 시스템을 글로벌 플랫폼으로 전환하기 위해 고
 date: "2024-08-18"  # 실제 작성일로 변경
 category: "Dev"
 tags: ["Project", "Engineering", "Review"]
-readingTime: 3  # 콘텐츠 길이에 따라 조정
 featured: false
 ---
 

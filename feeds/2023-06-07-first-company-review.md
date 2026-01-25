@@ -4,7 +4,6 @@ description: "첫 직장 생활 3년 회고와 퇴사 과정에 대한 솔직한
 date: "2023-06-07"  # 실제 작성일로 변경
 category: "Life"
 tags: ["Career", "Resignation", "Retrospective", "Work"]
-readingTime: 5  # 콘텐츠 길이에 따라 조정
 featured: false
 ---
 

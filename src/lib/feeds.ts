@@ -63,6 +63,9 @@ function validateFeedFrontmatter(data: unknown, slug: string): FeedFrontmatter |
         return null;
     }
 
+    // Calculate reading time if not provided
+    let finalReadingTime = typeof readingTime === 'number' ? readingTime : 0;
+
     return {
         title,
         description,
@@ -70,10 +73,18 @@ function validateFeedFrontmatter(data: unknown, slug: string): FeedFrontmatter |
         category,
         tags: Array.isArray(tags) ? tags.filter((tag): tag is string => typeof tag === 'string') : undefined,
         image: typeof image === 'string' ? image : undefined,
-        readingTime: typeof readingTime === 'number' ? readingTime : undefined,
+        readingTime: finalReadingTime,
         featured: typeof featured === 'boolean' ? featured : undefined,
         updated: typeof updated === 'string' ? updated : undefined,
     };
+}
+
+function calculateReadingTime(content: string): number {
+    const cleanContent = content.replace(/!\[.*?\]\(.*?\)/g, '') // Remove image links
+        .replace(/\[.*?\]\(.*?\)/g, '$1')  // Keep text of links
+        .replace(/[#*`]/g, '');            // Remove basic markdown syntax
+    const length = cleanContent.length;
+    return Math.ceil(length / 500) || 1; // 500 characters per minute, min 1 min
 }
 
 export function getSortedFeedData(): FeedData[] {
@@ -113,6 +124,11 @@ export function getSortedFeedData(): FeedData[] {
                 if (!frontmatter) {
                     console.error(`Invalid frontmatter for ${slug}, skipping`);
                     return null;
+                }
+
+                // Auto-calculate reading time if not present
+                if (!frontmatter.readingTime) {
+                    frontmatter.readingTime = calculateReadingTime(matterResult.content);
                 }
 
                 // Combine the data with the id
@@ -176,6 +192,11 @@ export async function getFeedData(slug: string): Promise<Feed | null> {
         if (!frontmatter) {
             console.error(`Invalid frontmatter for ${slug}`);
             return null;
+        }
+
+        // Auto-calculate reading time if not present
+        if (!frontmatter.readingTime) {
+            frontmatter.readingTime = calculateReadingTime(matterResult.content);
         }
 
         // Use remark to convert markdown into HTML string

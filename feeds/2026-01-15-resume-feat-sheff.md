@@ -4,7 +4,6 @@ description: "이력서에 대한 고찰"
 date: "2026-01-15"
 category: "Life"
 tags: ["이력서"]
-readingTime: 5
 featured: true
 ---
 ![](https://velog.velcdn.com/images/ieunune/post/68a917e1-67b6-4262-9bf6-0743a0b8ee1e/image.png)
