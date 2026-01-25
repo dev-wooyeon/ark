@@ -68,7 +68,8 @@ export default function InlineTableOfContents({ tocItems }: InlineTableOfContent
         const element = document.getElementById(id);
         if (element) {
             const headerOffset = 80; // 헤더 높이 + 여백
-            const elementPosition = element.offsetTop;
+            // getBoundingClientRect()를 사용하여 정확한 위치 계산
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY;
             const offsetPosition = elementPosition - headerOffset;
 
             window.scrollTo({
