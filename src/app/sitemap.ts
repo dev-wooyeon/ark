@@ -1,14 +1,14 @@
 import { MetadataRoute } from 'next';
-import { getAllFeedSlugs } from '@/lib/feeds';
+import { getSortedFeedData } from '@/lib/feeds';
 
 const URL = 'https://eunu.log';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const feedSlugs = getAllFeedSlugs();
+    const feeds = getSortedFeedData();
 
-    const feeds = feedSlugs.map((slugObj) => ({
-        url: `${URL}/feed/${slugObj.params.slug}`,
-        lastModified: new Date().toISOString().split('T')[0],
+    const feedEntries = feeds.map((feed) => ({
+        url: `${URL}/feed/${feed.slug}`,
+        lastModified: feed.date, // Use actual post date
         changeFrequency: 'weekly' as const,
         priority: 0.7,
     }));
@@ -20,5 +20,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 1,
     }));
 
-    return [...routes, ...feeds];
+    return [...routes, ...feedEntries];
 }
