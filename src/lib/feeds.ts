@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { FeedData, Feed, FeedFrontmatter } from '@/types';
 import { markdownToHtml } from './markdown';
+import { z } from 'zod';
 
 const feedsDirectory = path.join(process.cwd(), 'feeds');
 
@@ -34,49 +35,29 @@ function safeExists(path: string): boolean {
     }
 }
 
+const FeedFrontmatterSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.string(),
+    category: z.string(),
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+    readingTime: z.number().optional(),
+    featured: z.boolean().optional(),
+    updated: z.string().optional(),
+    transliteratedTitle: z.string().optional(),
+});
+
 // 프론트매터 유효성 검증 함수
 function validateFeedFrontmatter(data: unknown, slug: string): FeedFrontmatter | null {
-    if (!data || typeof data !== 'object') {
-        console.error(`Invalid frontmatter for ${slug}: not an object`);
+    const result = FeedFrontmatterSchema.safeParse(data);
+
+    if (!result.success) {
+        console.error(`Invalid frontmatter for ${slug}:`, result.error.format());
         return null;
     }
 
-    const { title, description, date, category, tags, image, readingTime, featured, updated } = data as Record<string, unknown>;
-
-    if (!title || typeof title !== 'string') {
-        console.error(`Invalid title for ${slug}: ${title}`);
-        return null;
-    }
-
-    if (!description || typeof description !== 'string') {
-        console.error(`Invalid description for ${slug}: ${description}`);
-        return null;
-    }
-
-    if (!date || typeof date !== 'string') {
-        console.error(`Invalid date for ${slug}: ${date}`);
-        return null;
-    }
-
-    if (!category || typeof category !== 'string') {
-        console.error(`Invalid category for ${slug}: ${category}`);
-        return null;
-    }
-
-    // Calculate reading time if not provided
-    let finalReadingTime = typeof readingTime === 'number' ? readingTime : 0;
-
-    return {
-        title,
-        description,
-        date,
-        category,
-        tags: Array.isArray(tags) ? tags.filter((tag): tag is string => typeof tag === 'string') : undefined,
-        image: typeof image === 'string' ? image : undefined,
-        readingTime: finalReadingTime,
-        featured: typeof featured === 'boolean' ? featured : undefined,
-        updated: typeof updated === 'string' ? updated : undefined,
-    };
+    return result.data;
 }
 
 function calculateReadingTime(content: string): number {
