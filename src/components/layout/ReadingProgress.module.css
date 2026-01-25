@@ -3,7 +3,8 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1001; /* 헤더(1000)보다 위 */
+    z-index: var(--z-progress-bar);
+    /* 헤더(var(--z-header))보다 위 */
     display: flex;
     align-items: center;
     background: var(--bg-primary);

@@ -1,16 +1,16 @@
 .header {
   position: sticky;
-  top: 28px; /* 프로그레스바 높이만큼 */
+  top: var(--reading-progress-height);
   width: 100%;
   padding: var(--space-4) var(--space-8);
-  background: rgba(234, 235, 234, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.8);
   backdrop-filter: blur(10px);
-  z-index: 1000;
+  z-index: var(--z-header);
   border-bottom: 1px solid var(--border);
 }
 
 .navContainer {
-  max-width: 1200px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -47,7 +47,7 @@
 
 @media (max-width: 768px) {
   .header {
-    top: 26px; /* 모바일 프로그레스바 높이 */
+    top: var(--reading-progress-height-mobile);
     padding: var(--space-4);
   }
 

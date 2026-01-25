@@ -1,6 +1,8 @@
 :root {
   /* ===== Primary Colors ===== */
   --bg-primary: #eaebea;
+  --bg-primary-rgb: 234, 235, 234;
+  /* For rgba */
   /* 신문색 베이지 (배경) */
   --text-primary: #1a1a1a;
   /* 부드러운 검정 (주 텍스트) */
@@ -11,10 +13,14 @@
 
   /* ===== Accent Colors ===== */
   --accent-primary: #0066CC;
+  --accent-primary-rgb: 0, 102, 204;
+  /* For rgba */
   /* 클래식 블루 (버튼, 링크) */
   --accent-secondary: #004499;
   /* 어두운 블루 (호버) */
   --accent-tertiary: #F0F4F8;
+  --accent-tertiary-rgb: 240, 244, 248;
+  /* For rgba */
   /* 매우 연한 그레이 블루 (배경 강조) */
 
   /* ===== Code & Technical ===== */
@@ -116,15 +122,31 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  /* ===== Layout & Dimensions ===== */
+  --layout-max-width: 1200px;
+  --header-height: 80px;
+  /* Approximate */
+  --reading-progress-height: 28px;
+  --reading-progress-height-mobile: 26px;
+
+  /* ===== Z-Index ===== */
+  --z-negative: -1;
+  --z-normal: 1;
+  --z-header: 1000;
+  --z-progress-bar: 1001;
+  --z-overlay: 2000;
+  --z-modal: 3000;
 }
 
 /* ===== Dark Mode ===== */
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
+  --bg-primary-rgb: 26, 26, 26;
   --text-primary: #F9FAFB;
   --text-secondary: #D1D5DB;
   --text-tertiary: #9CA3AF;
   --accent-primary: #4A9EFF;
+  --accent-primary-rgb: 74, 158, 255;
   --bg-code: #353535;
   /* 다크모드 코드 배경 */
   --text-code: #F9FAFB;
@@ -132,5 +154,7 @@
   --border: #404040;
   /* 다크모드 테두리 */
   --accent-tertiary: rgba(74, 158, 255, 0.1);
+  --accent-tertiary-rgb: 74, 158, 255;
+  /* Note: accent-tertiary itself uses opacity here, but base RGB is same as primary */
   /* 다크모드 배경 강조 */
 }
