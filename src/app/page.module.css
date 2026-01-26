@@ -51,6 +51,10 @@
   display: flex;
 
   color: var(--text-primary);
+  /* iOS Safari 색상 문제 해결: -webkit-text-fill-color 명시 */
+  -webkit-text-fill-color: var(--text-primary);
+  /* Safari 자동 링크 감지로 인한 색상 변경 방지 */
+  -webkit-text-decoration: none;
 }
 
 .introduction {
