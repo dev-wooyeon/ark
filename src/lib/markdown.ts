@@ -16,7 +16,38 @@ export async function markdownToHtml(content: string): Promise<string> {
         .use(rehypeStringify)
         .process(content);
 
-    return processedContent.toString();
+    const htmlString = processedContent.toString();
+
+    // 헤딩에 ID 추가
+    return addHeadingIds(htmlString);
+}
+
+// HTML 헤딩에 ID를 추가하는 함수
+function addHeadingIds(html: string): string {
+    const $ = cheerio.load(html);
+    const idCounts: Record<string, number> = {};
+
+    $('h1, h2, h3, h4, h5, h6').each((_, element) => {
+        const heading = $(element);
+        if (!heading.attr('id')) {
+            const text = heading.text().trim();
+            if (text) {
+                let id = generateHeadingId(text);
+
+                // 중복 ID 처리
+                if (idCounts[id]) {
+                    idCounts[id]++;
+                    id = `${id}-${idCounts[id]}`;
+                } else {
+                    idCounts[id] = 1;
+                }
+
+                heading.attr('id', id);
+            }
+        }
+    });
+
+    return $.html();
 }
 
 // HTML에서 헤딩들을 파싱해서 목차 데이터 생성

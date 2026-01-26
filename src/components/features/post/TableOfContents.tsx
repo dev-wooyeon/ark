@@ -39,20 +39,8 @@ export default function TableOfContents({ tocItems, className }: TableOfContents
         return () => window.removeEventListener('resize', handleResize);
     }, [tocItems]);
 
-    // 헤딩에 id 추가 및 Intersection Observer 설정
+    // Intersection Observer 설정
     useEffect(() => {
-        // 모든 헤딩에 id 추가 (순서대로 매핑)
-        const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-        let tocIndex = 0;
-
-        headings.forEach((heading) => {
-            if (!heading.id && tocIndex < tocItems.length) {
-                // 해당하는 tocItem의 id를 할당
-                heading.id = tocItems[tocIndex].id;
-                tocIndex++;
-            }
-        });
-
         // Intersection Observer로 현재 보이는 섹션 감지
         const observer = new IntersectionObserver(
             (entries) => {
@@ -93,7 +81,8 @@ export default function TableOfContents({ tocItems, className }: TableOfContents
         const element = document.getElementById(id);
         if (element) {
             const headerOffset = 80; // 헤더 높이 + 여백
-            const elementPosition = element.offsetTop;
+            // getBoundingClientRect()를 사용하여 정확한 위치 계산
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY;
             const offsetPosition = elementPosition - headerOffset;
 
             window.scrollTo({
