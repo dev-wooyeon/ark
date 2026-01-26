@@ -1,9 +1,9 @@
 import { getFeedData, getAllFeedSlugs } from '@/lib/feeds';
 import { parseHeadingsFromHtml } from '@/lib/markdown';
-import InlineTableOfContents from '@/components/features/post/InlineTableOfContents';
-import ReadingProgress from '@/components/layout/ReadingProgress';
+import InlineTableOfContents from './_components/InlineTableOfContents';
+import ReadingProgress from './_components/ReadingProgress';
 import { notFound } from 'next/navigation';
-import styles from './feed.module.css';
+import styles from '@/styles/pages.module.css';
 
 import { Metadata } from 'next';
 
@@ -56,9 +56,9 @@ export default async function Feed({ params }: { params: { slug: string } }) {
                     ← Feed
                 </a>
 
-                <header className={styles.header}>
+                <header className={styles.articleHeader}>
                     <div className={styles.category}>{feedData.category}</div>
-                    <h1 className={styles.title}>{feedData.title}</h1>
+                    <h1 className={styles.articleTitle}>{feedData.title}</h1>
                     <div className={styles.meta}>
                         <time>{feedData.date}</time>
                         {feedData.tags && (
@@ -75,7 +75,7 @@ export default async function Feed({ params }: { params: { slug: string } }) {
                 <InlineTableOfContents tocItems={tocItems} />
 
                 <div
-                    className={styles.content}
+                    className={styles.articleContent}
                     dangerouslySetInnerHTML={{ __html: feedData.contentHtml }}
                 />
             </article>

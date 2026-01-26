@@ -1,17 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import styles from './page.module.css';
+import styles from '@/styles/pages.module.css';
 
 export default function Resume() {
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
+    <div className={styles.resumeContainer}>
+      <header className={styles.resumeHeader}>
         <Link href="/" className={styles.backLink}>← Home</Link>
-        <h1 className={styles.title}>Resume</h1>
+        <h1 className={styles.resumeTitle}>Resume</h1>
       </header>
 
-      <main className={styles.main}>
+      <main className={styles.resumeMain}>
         {/* Personal Info Grid */}
         <section className={styles.infoGrid}>
           <div className={styles.infoItem}>
