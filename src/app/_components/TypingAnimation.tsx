@@ -1,50 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-interface LinkPattern {
-  pattern: string;
-  url: string;
-}
+import { TYPING_SPEED } from '@/lib/constants';
 
 interface TypingAnimationProps {
-  texts: string[];
+  /** 타이핑할 텍스트 (HTML 포함 가능) */
+  text: string;
+  /** 타이핑 속도 (ms) - 기본값: 15 */
   speed?: number;
-  deleteSpeed?: number;
-  pauseDuration?: number;
-  linkPatterns?: LinkPattern[];
 }
 
+/**
+ * HTML 태그를 인식하는 타이핑 애니메이션 컴포넌트
+ * - HTML 태그는 즉시 렌더링되고 텍스트만 한 글자씩 타이핑됨
+ * - 접근성: 스크린리더는 완성된 텍스트를 즉시 읽음
+ */
 export default function TypingAnimation({
-  texts,
-  speed = 100,
-  deleteSpeed = 50,
-  pauseDuration = 2000,
-  linkPatterns = []
+  text,
+  speed = TYPING_SPEED.fast,
 }: TypingAnimationProps) {
   const [displayText, setDisplayText] = useState('');
   const [charIndex, setCharIndex] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-
-  const fullText = texts[0];
-
-  // Extract visible text length (excluding HTML tags)
-  const getVisibleLength = (htmlString: string, upToIndex: number) => {
-    let visibleCount = 0;
-    let inTag = false;
-
-    for (let i = 0; i < upToIndex && i < htmlString.length; i++) {
-      if (htmlString[i] === '<') {
-        inTag = true;
-      } else if (htmlString[i] === '>') {
-        inTag = false;
-      } else if (!inTag) {
-        visibleCount++;
-      }
-    }
-
-    return visibleCount;
-  };
 
   // Get the HTML substring that shows exactly N visible characters
   const getDisplayText = (htmlString: string, visibleChars: number) => {
@@ -82,11 +59,11 @@ export default function TypingAnimation({
   useEffect(() => {
     if (isComplete) return;
 
-    const totalVisibleChars = fullText.replace(/<[^>]*>/g, '').length;
+    const totalVisibleChars = text.replace(/<[^>]*>/g, '').length;
 
     const timeout = setTimeout(() => {
       if (charIndex < totalVisibleChars) {
-        setDisplayText(getDisplayText(fullText, charIndex + 1));
+        setDisplayText(getDisplayText(text, charIndex + 1));
         setCharIndex(charIndex + 1);
       } else {
         setIsComplete(true);
@@ -94,12 +71,25 @@ export default function TypingAnimation({
     }, speed);
 
     return () => clearTimeout(timeout);
-  }, [charIndex, fullText, speed, isComplete]);
+  }, [charIndex, text, speed, isComplete]);
 
   return (
-    <span className="inline-block min-h-[1.3em] font-[var(--common-font-family)]">
-      <span dangerouslySetInnerHTML={{ __html: displayText }} />
-      {!isComplete && <span className="inline-block ml-0.5 animate-blink font-light">|</span>}
+    <span className="inline-block min-h-[1.3em]">
+      {/* 스크린리더용 전체 텍스트 (시각적으로 숨김) */}
+      <span className="sr-only">{text.replace(/<[^>]*>/g, '')}</span>
+
+      {/* 시각적 타이핑 애니메이션 */}
+      <span aria-hidden="true">
+        <span dangerouslySetInnerHTML={{ __html: displayText }} />
+        {!isComplete && (
+          <span
+            className="inline-block ml-0.5 animate-blink font-light"
+            aria-hidden="true"
+          >
+            |
+          </span>
+        )}
+      </span>
     </span>
   );
 }

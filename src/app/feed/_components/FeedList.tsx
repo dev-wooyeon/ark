@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { FeedData } from '@/types';
 import FeedListItem from './FeedListItem';
 import { useFeedFilter, FilterType } from '../_hooks/useFeedFilter';
+import Button from '@/app/_components/Button';
 
 interface FeedListProps {
     feed: FeedData[];
@@ -83,48 +84,34 @@ function FeedListContent({ feed }: FeedListProps) {
     return (
         <div className="flex flex-col w-full">
             <div className="flex items-center gap-4 max-md:gap-3">
-                <span className="text-sm font-medium text-[var(--text-tertiary)] max-md:text-xs">Filter:</span>
-                <div className="inline-flex bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg p-0.5 gap-0.5">
+                <span className="text-sm font-medium text-text-tertiary max-md:text-xs">Filter:</span>
+                <div className="inline-flex bg-primary border border-border rounded-lg p-0.5 gap-0.5">
                     {(['Dev', 'Life'] as FilterType[]).map((filter) => (
-                        <button
+                        <Button
                             key={filter}
-                            className={`
-                                border-none font-sans text-sm font-semibold
-                                cursor-pointer py-2 px-4 rounded-md whitespace-nowrap
-                                transition-all duration-200
-                                max-md:text-xs max-md:py-1 max-md:px-3
-                                ${activeFilter === filter
-                                    ? 'bg-[var(--accent-primary)] text-white shadow-sm hover:bg-[var(--accent-secondary)]'
-                                    : 'bg-transparent text-[var(--text-primary)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-tertiary)]'
-                                }
-                            `}
+                            variant={activeFilter === filter ? 'primary' : 'ghost'}
+                            size="sm"
                             onClick={() => setActiveFilter(filter)}
+                            className="max-md:text-xs max-md:py-1 max-md:px-3"
                         >
                             {filter}
-                        </button>
+                        </Button>
                     ))}
-                    <button
-                        className={`
-                            border-none font-sans text-sm font-semibold
-                            cursor-pointer py-2 px-4 rounded-md whitespace-nowrap
-                            transition-all duration-200
-                            max-md:text-xs max-md:py-1 max-md:px-3
-                            ${activeFilter === 'All'
-                                ? 'bg-[var(--accent-primary)] text-white shadow-sm hover:bg-[var(--accent-secondary)]'
-                                : 'bg-transparent text-[var(--text-primary)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-tertiary)]'
-                            }
-                        `}
+                    <Button
+                        variant={activeFilter === 'All' ? 'primary' : 'ghost'}
+                        size="sm"
                         onClick={() => setActiveFilter('All')}
+                        className="max-md:text-xs max-md:py-1 max-md:px-3"
                     >
                         Clear
-                    </button>
+                    </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-[120px_1fr_100px] items-center gap-4 py-4 bg-[var(--bg-primary)] border-b-2 border-[var(--border)] font-semibold text-sm text-[var(--text-primary)] mb-2 max-md:hidden">
-                <div className="font-mono text-sm text-[var(--text-tertiary)]">Date /</div>
-                <div className="font-mono text-sm text-[var(--text-tertiary)]">Title /</div>
-                <div className="font-mono text-sm text-[var(--text-tertiary)] text-right">Time /</div>
+            <div className="grid grid-cols-[120px_1fr_100px] items-center gap-4 py-4 bg-primary border-b-2 border-border font-semibold text-sm text-text-primary mb-2 max-md:hidden">
+                <div className="font-mono text-sm text-text-tertiary">Date /</div>
+                <div className="font-mono text-sm text-text-tertiary">Title /</div>
+                <div className="font-mono text-sm text-text-tertiary text-right">Time /</div>
             </div>
 
             <div className="flex flex-col w-full">

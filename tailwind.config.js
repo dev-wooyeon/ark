@@ -8,6 +8,74 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: 'var(--bg-primary)',
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-tertiary': 'var(--text-tertiary)',
+        accent: {
+          DEFAULT: 'var(--accent-primary)',
+          secondary: 'var(--accent-secondary)',
+          tertiary: 'var(--accent-tertiary)',
+        },
+        code: {
+          bg: 'var(--bg-code)',
+          text: 'var(--text-code)',
+        },
+        border: 'var(--border)',
+      },
+      spacing: {
+        1: 'var(--space-1)',
+        2: 'var(--space-2)',
+        3: 'var(--space-3)',
+        4: 'var(--space-4)',
+        6: 'var(--space-6)',
+        8: 'var(--space-8)',
+        12: 'var(--space-12)',
+        16: 'var(--space-16)',
+      },
+      fontSize: {
+        xs: 'var(--text-xs)',
+        sm: 'var(--text-sm)',
+        base: 'var(--text-base)',
+        lg: 'var(--text-lg)',
+        xl: 'var(--text-xl)',
+        '2xl': 'var(--text-2xl)',
+        '3xl': 'var(--text-3xl)',
+        '4xl': 'var(--text-4xl)',
+        '5xl': 'var(--text-5xl)',
+      },
+      fontWeight: {
+        normal: 'var(--font-normal)',
+        medium: 'var(--font-medium)',
+        semibold: 'var(--font-semibold)',
+        bold: 'var(--font-bold)',
+      },
+      borderRadius: {
+        none: 'var(--radius-none)',
+        sm: 'var(--radius-sm)',
+        DEFAULT: 'var(--radius-md)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)',
+        full: 'var(--radius-full)',
+      },
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        DEFAULT: 'var(--shadow-md)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
+        xl: 'var(--shadow-xl)',
+      },
+      animation: {
+        blink: 'blink 1s infinite',
+      },
+      keyframes: {
+        blink: {
+          '0%, 49%': { opacity: '1' },
+          '50%, 100%': { opacity: '0' },
+        },
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
