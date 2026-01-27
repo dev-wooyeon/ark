@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getSortedFeedData } from '@/lib/feeds';
+import { getSortedFeedData } from '@/lib/mdx-feeds';
 import FeedList from './_components/FeedList';
 import styles from '@/styles/pages.module.css';
 

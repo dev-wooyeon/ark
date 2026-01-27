@@ -1,7 +1,7 @@
 // Feed Types
-// Feed Types
+import { MDXProps } from 'mdx/types';
 
-// 1. Base metadata (from gray-matter frontmatter)
+// 1. Base metadata (from JSON file)
 export interface FeedFrontmatter {
   title: string;
   description: string;
@@ -12,6 +12,7 @@ export interface FeedFrontmatter {
   image?: string;
   readingTime?: number;
   featured?: boolean;
+  transliteratedTitle?: string;
 }
 
 // 2. Feed Data for lists (adds slug)
@@ -19,9 +20,9 @@ export interface FeedData extends FeedFrontmatter {
   slug: string;
 }
 
-// 3. Full Feed with content (adds contentHtml)
+// 3. Full Feed with MDX component (replaces contentHtml)
 export interface Feed extends FeedData {
-  contentHtml: string;
+  Content: React.ComponentType<MDXProps>;
 }
 
 

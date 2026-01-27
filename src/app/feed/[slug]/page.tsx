@@ -1,7 +1,8 @@
-import { getFeedData, getAllFeedSlugs } from '@/lib/feeds';
-import { parseHeadingsFromHtml } from '@/lib/markdown';
+import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
+import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import InlineTableOfContents from './_components/InlineTableOfContents';
 import ReadingProgress from './_components/ReadingProgress';
+import { mdxComponents } from './_components/MdxComponents';
 import { notFound } from 'next/navigation';
 import styles from '@/styles/pages.module.css';
 
@@ -46,7 +47,11 @@ export default async function Feed({ params }: { params: Promise<{ slug: string 
         notFound();
     }
 
-    const tocItems = parseHeadingsFromHtml(feedData.contentHtml);
+    // Get MDX source for TOC generation
+    const mdxSource = getMdxSource(slug);
+    const tocItems = mdxSource ? parseHeadingsFromMdx(mdxSource) : [];
+
+    const { Content } = feedData;
 
     return (
         <>
@@ -76,10 +81,10 @@ export default async function Feed({ params }: { params: Promise<{ slug: string 
                 {/* 본문 상단 인라인 목차 - 모바일에서도 표시 */}
                 <InlineTableOfContents tocItems={tocItems} />
 
-                <div
-                    className={styles.articleContent}
-                    dangerouslySetInnerHTML={{ __html: feedData.contentHtml }}
-                />
+                {/* Replace dangerouslySetInnerHTML with MDX component */}
+                <div className="prose prose-lg max-w-none">
+                    <Content components={mdxComponents} />
+                </div>
             </article>
         </>
     );

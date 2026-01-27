@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TocItem } from '@/lib/feeds';
+import { TocItem } from '@/lib/mdx-feeds';
 import styles from '@/styles/components.module.css';
 
 interface InlineTableOfContentsProps {

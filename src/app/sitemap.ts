@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getSortedFeedData } from '@/lib/feeds';
+import { getSortedFeedData } from '@/lib/mdx-feeds';
 
 const URL = 'https://eunu.log';
 
