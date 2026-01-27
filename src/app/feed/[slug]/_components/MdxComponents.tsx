@@ -40,4 +40,13 @@ export const mdxComponents = {
     h4: Heading(4),
     h5: Heading(5),
     h6: Heading(6),
+    p: ({ children, ...props }: ComponentPropsWithoutRef<'p'>) => <p {...props}>{children}</p>,
+    strong: ({ children, ...props }: ComponentPropsWithoutRef<'strong'>) => <strong {...props}>{children}</strong>,
+    em: ({ children, ...props }: ComponentPropsWithoutRef<'em'>) => <em {...props}>{children}</em>,
+    ul: ({ children, ...props }: ComponentPropsWithoutRef<'ul'>) => <ul {...props}>{children}</ul>,
+    ol: ({ children, ...props }: ComponentPropsWithoutRef<'ol'>) => <ol {...props}>{children}</ol>,
+    li: ({ children, ...props }: ComponentPropsWithoutRef<'li'>) => <li {...props}>{children}</li>,
+    blockquote: ({ children, ...props }: ComponentPropsWithoutRef<'blockquote'>) => <blockquote {...props}>{children}</blockquote>,
+    a: ({ children, ...props }: ComponentPropsWithoutRef<'a'>) => <a {...props}>{children}</a>,
+    hr: (props: ComponentPropsWithoutRef<'hr'>) => <hr {...props} />,
 };

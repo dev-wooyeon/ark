@@ -77,8 +77,8 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
 // MDX 소스 파일 로드 (TOC 생성용)
 export function getMdxSource(slug: string): string | null {
     try {
-        const feedsDirectory = path.join(process.cwd(), 'feeds');
-        const filePath = path.join(feedsDirectory, `${slug}.mdx`);
+        const contentDirectory = path.join(process.cwd(), 'content');
+        const filePath = path.join(contentDirectory, slug, 'index.mdx');
         return fs.readFileSync(filePath, 'utf8');
     } catch (error) {
         console.error(`Failed to read MDX source for ${slug}:`, error);

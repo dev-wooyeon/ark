@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { getFeedData } from './feeds';
+import { getFeedData } from './mdx-feeds';
 import fs from 'fs';
 
 // Mock fs module

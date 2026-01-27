@@ -99,7 +99,10 @@ eunu.log/
 │   ├── 📁 lib/                 # Utilities
 │   ├── 📁 styles/              # Global styles & variables
 │   └── 📁 types/               # TypeScript definitions
-├── 📁 feeds/                   # Markdown blog posts
+├── 📁 content/                  # Blog posts (MDX + metadata)
+│   └── 📁 [slug]/              # Each post in its own folder
+│       ├── index.mdx           # Post content
+│       └── meta.json           # Post metadata
 ├── 📁 public/                  # Static assets
 └── 📁 docs/                    # Documentation
 ```
@@ -176,20 +179,20 @@ npm run start
 
 ## 📝 Writing a Post
 
-1. `/feeds` 디렉토리에 `.md` 파일 생성
-2. frontmatter 추가:
+1. `/content` 디렉토리에 slug 이름으로 폴더 생성 (예: `2025-01-20-my-post`)
+2. 폴더 내에 `meta.json` 파일 생성:
 
-```yaml
----
-title: "포스트 제목"
-description: "간단한 설명"
-date: "2025-01-20"
-category: "Dev"  # Dev or Life
-tags: ["Tag1", "Tag2"]
----
+```json
+{
+  "title": "포스트 제목",
+  "description": "간단한 설명",
+  "date": "2025-01-20",
+  "category": "Dev",
+  "tags": ["Tag1", "Tag2"]
+}
 ```
 
-3. Markdown으로 내용 작성
+3. 폴더 내에 `index.mdx` 파일 생성하고 Markdown으로 내용 작성
 4. 자동으로 피드 목록에 표시됨
 
 <br />

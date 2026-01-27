@@ -3,7 +3,7 @@ import path from 'path';
 import { FeedData, Feed, FeedFrontmatter } from '@/types';
 import { z } from 'zod';
 
-const feedsDirectory = path.join(process.cwd(), 'feeds');
+const contentDirectory = path.join(process.cwd(), 'content');
 
 // TOC item type
 export interface TocItem {
@@ -80,11 +80,11 @@ function calculateReadingTime(content: string): number {
 
 // Load metadata from JSON file
 function loadMetadata(slug: string): FeedFrontmatter | null {
-  const metaPath = path.join(feedsDirectory, `${slug}.meta.json`);
+  const metaPath = path.join(contentDirectory, slug, 'meta.json');
   const metaContents = safeReadFile(metaPath);
 
   if (!metaContents) {
-    console.error(`Metadata file not found: ${slug}.meta.json`);
+    console.error(`Metadata file not found: ${slug}/meta.json`);
     return null;
   }
 
@@ -98,7 +98,7 @@ function loadMetadata(slug: string): FeedFrontmatter | null {
 
     // Auto-calculate reading time if not present
     if (!metadata.readingTime) {
-      const mdxPath = path.join(feedsDirectory, `${slug}.mdx`);
+      const mdxPath = path.join(contentDirectory, slug, 'index.mdx');
       const mdxContents = safeReadFile(mdxPath);
       if (mdxContents) {
         metadata.readingTime = calculateReadingTime(mdxContents);
@@ -114,42 +114,48 @@ function loadMetadata(slug: string): FeedFrontmatter | null {
 
 // Get all feed slugs for static generation
 export function getAllFeedSlugs() {
-  if (!safeExists(feedsDirectory)) {
-    console.warn('Feeds directory does not exist');
+  if (!safeExists(contentDirectory)) {
+    console.warn('Content directory does not exist');
     return [];
   }
 
-  const fileNames = safeReaddir(feedsDirectory);
-  if (!fileNames) {
-    console.error('Failed to read feeds directory');
+  const dirNames = safeReaddir(contentDirectory);
+  if (!dirNames) {
+    console.error('Failed to read content directory');
     return [];
   }
 
-  // Get unique slugs from .mdx files
-  return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => ({
-      slug: fileName.replace(/\.mdx$/, ''),
+  // Get slugs from directory names (each post has its own folder)
+  return dirNames
+    .filter((dirName) => {
+      const dirPath = path.join(contentDirectory, dirName);
+      return fs.statSync(dirPath).isDirectory();
+    })
+    .map((dirName) => ({
+      slug: dirName,
     }));
 }
 
 // Get sorted feed data for listing pages
 export function getSortedFeedData(): FeedData[] {
-  if (!safeExists(feedsDirectory)) {
-    console.warn('Feeds directory does not exist');
+  if (!safeExists(contentDirectory)) {
+    console.warn('Content directory does not exist');
     return [];
   }
 
-  const fileNames = safeReaddir(feedsDirectory);
-  if (!fileNames) {
-    console.error('Failed to read feeds directory');
+  const dirNames = safeReaddir(contentDirectory);
+  if (!dirNames) {
+    console.error('Failed to read content directory');
     return [];
   }
 
-  const allFeedData = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, '');
+  const allFeedData = dirNames
+    .filter((dirName) => {
+      const dirPath = path.join(contentDirectory, dirName);
+      return fs.statSync(dirPath).isDirectory();
+    })
+    .map((dirName) => {
+      const slug = dirName;
       const metadata = loadMetadata(slug);
 
       if (!metadata) {
@@ -185,7 +191,7 @@ export async function getFeedData(slug: string): Promise<Feed | null> {
 
   try {
     // Dynamic import of MDX file
-    const mdxModule = await import(`@/../feeds/${slug}.mdx`);
+    const mdxModule = await import(`@/../content/${slug}/index.mdx`);
 
     return {
       slug,
