@@ -1,21 +1,18 @@
+import createMDX from '@next/mdx';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   images: {
     formats: ['image/avif', 'image/webp'],
   },
   turbopack: {},
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader',
-    });
-    return config;
-  },
 };
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
 });
 
-module.exports = withBundleAnalyzer(nextConfig);
+// Bundle analyzer is optional - only use if ANALYZE=true
+export default withMDX(nextConfig);
