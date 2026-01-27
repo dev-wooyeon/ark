@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import styles from '@/styles/pages.module.css';
+import TypingAnimation from '@/app/_components/TypingAnimation';
 
 export default function Home() {
   return (
@@ -13,7 +14,13 @@ export default function Home() {
         </div>
         <section className={styles.bioSection}>
           <p className={styles.bio}>
-            Make <span className={styles.highlight}>Data</span>, <span className={styles.highlight}>System</span>, <span className={styles.highlight}>Creative</span> Things. Currently working as a Software Engineer <Link href="https://981park.com" className={styles.bioLink} target="_blank" rel="noopener noreferrer">@9.81park</Link>.
+            <TypingAnimation
+              texts={[
+                'Make <span class="' + styles.highlight + '">Data</span>, <span class="' + styles.highlight + '">System</span>, <span class="' + styles.highlight + '">Creative</span> Things. Currently working as a Software Engineer <a href="https://981park.com" class="' + styles.bioLink + '" target="_blank" rel="noopener noreferrer">@9.81park</a>.'
+              ]}
+              speed={15}
+              linkPatterns={[]}
+            />
           </p>
         </section>
       </div>

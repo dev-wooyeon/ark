@@ -23,44 +23,83 @@ export default function TypingAnimation({
   pauseDuration = 2000,
   linkPatterns = []
 }: TypingAnimationProps) {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [charIndex, setCharIndex] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
-  const renderTextWithLinks = (text: string) => {
-    let result = text;
-    linkPatterns.forEach(({ pattern, url }) => {
-      result = result.replace(
-        pattern,
-        `<a href="${url}" target="_blank" rel="noopener noreferrer" class="${styles.bioLink}">${pattern}</a>`
-      );
-    });
-    return { __html: result };
+  const fullText = texts[0];
+
+  // Extract visible text length (excluding HTML tags)
+  const getVisibleLength = (htmlString: string, upToIndex: number) => {
+    let visibleCount = 0;
+    let inTag = false;
+
+    for (let i = 0; i < upToIndex && i < htmlString.length; i++) {
+      if (htmlString[i] === '<') {
+        inTag = true;
+      } else if (htmlString[i] === '>') {
+        inTag = false;
+      } else if (!inTag) {
+        visibleCount++;
+      }
+    }
+
+    return visibleCount;
+  };
+
+  // Get the HTML substring that shows exactly N visible characters
+  const getDisplayText = (htmlString: string, visibleChars: number) => {
+    let result = '';
+    let visibleCount = 0;
+    let inTag = false;
+    let tagBuffer = '';
+
+    for (let i = 0; i < htmlString.length; i++) {
+      const char = htmlString[i];
+
+      if (char === '<') {
+        inTag = true;
+        tagBuffer = '<';
+      } else if (char === '>') {
+        inTag = false;
+        tagBuffer += '>';
+        result += tagBuffer;
+        tagBuffer = '';
+      } else if (inTag) {
+        tagBuffer += char;
+      } else {
+        if (visibleCount < visibleChars) {
+          result += char;
+          visibleCount++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return result;
   };
 
   useEffect(() => {
     if (isComplete) return;
 
-    const fullText = texts[currentTextIndex];
+    const totalVisibleChars = fullText.replace(/<[^>]*>/g, '').length;
 
     const timeout = setTimeout(() => {
-      if (currentText.length < fullText.length) {
-        // Typing
-        setCurrentText(fullText.substring(0, currentText.length + 1));
+      if (charIndex < totalVisibleChars) {
+        setDisplayText(getDisplayText(fullText, charIndex + 1));
+        setCharIndex(charIndex + 1);
       } else {
-        // Finished typing
         setIsComplete(true);
       }
     }, speed);
 
     return () => clearTimeout(timeout);
-  }, [currentText, currentTextIndex, texts, speed, isComplete]);
+  }, [charIndex, fullText, speed, isComplete]);
 
   return (
     <span className={styles.typingText}>
-      <span dangerouslySetInnerHTML={renderTextWithLinks(currentText)} />
+      <span dangerouslySetInnerHTML={{ __html: displayText }} />
       {!isComplete && <span className={styles.cursor}>|</span>}
     </span>
   );
