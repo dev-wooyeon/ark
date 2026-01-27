@@ -39,6 +39,8 @@ export default function Resume() {
           </div>
         </section>
 
+        <hr />
+
         {/* Personal Projects */}
         <section className={styles.workSection}>
           <div className={styles.workLeft}>
