@@ -33,9 +33,10 @@
 /* ===== Fonts ===== */
 @font-face {
   font-family: 'Tossface';
-  src: url('https://static.toss.im/tossface-font/TossFaceFontWeb.otf') format('opentype');
+  src: url('/fonts/TossFaceFontWeb.otf') format('opentype');
   font-weight: 500;
   font-display: swap;
+  unicode-range: U+1F000-1FFFF, U+2600-26FF, U+2700-27BF, U+1F300-1F9FF, U+1F1E6-1F1FF;
 }
 
 @font-face {
@@ -55,7 +56,7 @@
   }
 
   body {
-    font-family: var(--font-sans);
+    font-family: 'Tossface', var(--font-sans);
     line-height: 1.6;
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);

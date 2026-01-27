@@ -8,7 +8,7 @@ export default function Home() {
     <div className={styles.homeContainer}>
       <div className={styles.leftSection}>
         <div>
-          <span className={styles.prefix}>(+82)</span>
+          <span className={styles.prefix}>🇰🇷</span>
           <h1 className={styles.siteName}>eunu.log</h1>
         </div>
         <section className={styles.bioSection}>
