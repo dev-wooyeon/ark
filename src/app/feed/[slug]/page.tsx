@@ -12,8 +12,9 @@ export async function generateStaticParams() {
     return slugs;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const feedData = await getFeedData(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const feedData = await getFeedData(slug);
 
     if (!feedData) {
         return {
@@ -36,8 +37,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function Feed({ params }: { params: { slug: string } }) {
-    const feedData = await getFeedData(params.slug);
+export default async function Feed({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const feedData = await getFeedData(slug);
 
     // 피드 데이터를 찾을 수 없는 경우 404 페이지 표시
     if (!feedData) {

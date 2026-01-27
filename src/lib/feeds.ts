@@ -149,9 +149,7 @@ export function getAllFeedSlugs() {
     return fileNames
         .filter((fileName) => fileName.endsWith('.md'))
         .map((fileName) => ({
-            params: {
-                slug: fileName.replace(/\.md$/, ''),
-            },
+            slug: fileName.replace(/\.md$/, ''),
         }));
 }
 
