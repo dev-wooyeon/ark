@@ -1,32 +1,12 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+@import './variables.css';
 
 @import "tailwindcss";
 
-/* ===== Theme Configuration ===== */
+/* ===== Tailwind Theme Configuration ===== */
 @theme {
-  /* Colors */
-  --color-bg-primary: #eaebea;
-  --color-bg-code: #ffffff;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #4a4a4a;
-  --color-text-tertiary: #6a6a6a;
-  --color-text-code: #1a1a1a;
-  --color-accent-primary: #0066CC;
-  --color-accent-secondary: #004499;
-  --color-accent-tertiary: #F0F4F8;
-  --color-border: #E5E7EB;
-
-  /* Font Family */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-jetbrains: 'JetBrains Mono', ui-monospace, monospace;
-
-  /* Z-Index */
-  --z-index-header: 1000;
-  --z-index-progress-bar: 1001;
-  --z-index-overlay: 2000;
-  --z-index-modal: 3000;
+  /* Tailwind v4 specific theme tokens can go here if needed */
 }
 
 
