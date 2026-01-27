@@ -38,7 +38,7 @@
   body {
     font-family: 'Tossface', var(--font-sans);
     line-height: 1.6;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     background-color: var(--bg-primary);
     overflow-x: hidden;
     margin: 0;
@@ -60,18 +60,18 @@ a:hover {
 code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  background-color: var(--accent-tertiary);
+  background-color: var(--accent-tertiary) !important;
   padding: 0.2em 0.4em;
-  border-radius: 0.25rem;
+  border-radius: 0.25rem !important;
 }
 
 pre {
   background-color: var(--bg-code);
   color: var(--text-code);
-  padding: 1rem;
+  padding: 1rem !important;
   border-radius: 0.5rem;
   overflow-x: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
 }
 
 pre code {
@@ -82,7 +82,7 @@ pre code {
 /* Lists */
 ul,
 ol {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
   padding-left: 1.5rem;
 }
 
@@ -95,18 +95,18 @@ blockquote {
   border-left: 4px solid var(--accent-primary);
   padding-left: 1rem;
   margin: 1.5rem 0;
-  font-style: italic;
-  color: var(--text-secondary);
-  background-color: var(--accent-tertiary);
-  padding: 1rem;
-  border-radius: 0.25rem;
+  font-style: italic !important;
+  color: var(--text-secondary) !important;
+  background-color: var(--accent-tertiary) !important;
+  padding: 1rem !important;
+  border-radius: 0.25rem !important;
 }
 
 /* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem !important;
   font-size: 0.875rem;
 }
 
@@ -114,19 +114,19 @@ th,
 td {
   padding: 0.75rem 1rem;
   text-align: left;
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   background-color: var(--bg-code);
   border: 1px solid var(--border);
 }
 
 th {
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 hr {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 2rem 0;
+  margin: 2rem 0 !important;
 }
 
 button {
@@ -155,7 +155,7 @@ button {
 
 ::selection {
   background-color: var(--accent-secondary);
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
 }
 
 /* Scrollbar */
@@ -195,65 +195,83 @@ button {
   animation: blink 1s infinite;
 }
 
-/* ===== Article Content ===== */
-.article-content h1 {
-  font-size: 1.5rem;
-  margin-top: 3rem;
-  color: var(--text-primary);
+/* ===== Typography Overrides ===== */
+.prose {
+  max-width: none !important;
 }
 
-.article-content h2 {
-  font-size: 1.25rem;
-  margin-top: 2.5rem;
-  color: var(--text-primary);
+.prose p {
+  white-space: pre-wrap !important;
 }
 
-.article-content h3 {
-  font-size: 1.125rem;
-  margin-top: 2rem;
-  color: var(--text-primary);
+.prose ul,
+.prose ol {
+  padding-left: 1.625em !important;
+  margin-bottom: 1.5em !important;
 }
 
-.article-content p {
-  margin-bottom: 1rem;
+.prose ul {
+  list-style-type: disc !important;
 }
 
-.article-content blockquote p {
-  margin-bottom: 0;
+.prose ol {
+  list-style-type: decimal !important;
 }
 
-.article-content img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 2rem auto;
-  border-radius: 0.5rem;
+.prose li {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+  line-height: 1.8 !important;
+  padding-left: 0.375em !important;
 }
 
-.article-content pre {
-  background-color: var(--bg-code);
-  color: var(--text-code);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  overflow-x: auto;
-  margin: 2rem 0;
-  font-family: var(--font-mono);
-  max-width: 100%;
+.prose li::marker {
+  color: var(--accent-primary) !important;
+  font-weight: 600 !important;
 }
 
-.article-content code {
-  font-family: var(--font-mono);
-  word-break: break-word;
+.prose h1,
+.prose h2,
+.prose h3 {
+  color: var(--text-primary) !important;
+  line-height: 1.3 !important;
 }
 
-.article-content pre code {
-  word-break: normal;
+.prose h1 {
+  margin-top: 3rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
-.article-content blockquote {
-  border-left: 4px solid var(--accent-primary);
-  padding-left: 1.5rem;
-  margin: 2rem 0;
-  color: var(--text-secondary);
-  font-style: italic;
+.prose h2 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.prose h3 {
+  margin-top: 2rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.prose blockquote {
+  border-left-color: var(--accent-primary) !important;
+  background-color: var(--accent-tertiary) !important;
+  padding: 1rem !important;
+  border-radius: 0.25rem !important;
+  color: var(--text-secondary) !important;
+  font-style: italic !important;
+  margin: 2rem 0 !important;
+  border-left-width: 4px !important;
+}
+
+.prose a {
+  color: var(--accent-primary) !important;
+  text-decoration: underline !important;
+  text-decoration-color: var(--accent-primary) !important;
+  text-underline-offset: 3px !important;
+  transition: all 0.2s !important;
+}
+
+.prose a:hover {
+  color: var(--text-primary) !important;
+  text-decoration-color: var(--text-primary) !important;
 }
