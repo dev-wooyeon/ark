@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { FeedData } from '@/types';
 import FeedListItem from './FeedListItem';
-import styles from '@/styles/components.module.css';
 import { useFeedFilter, FilterType } from '../_hooks/useFeedFilter';
 
 interface FeedListProps {
@@ -13,29 +12,32 @@ interface FeedListProps {
 
 function FeedListSkeleton() {
     return (
-        <div className={styles.feedListContainer}>
-            <div className={styles.filterSection}>
-                <span className={styles.filterLabel}>Filter:</span>
-                <div className={styles.segmentedControl}>
+        <div className="flex flex-col w-full">
+            <div className="flex items-center gap-4 max-md:gap-3">
+                <span className="text-sm font-medium text-[var(--text-tertiary)] max-md:text-xs">Filter:</span>
+                <div className="inline-flex bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg p-0.5 gap-0.5">
                     {['Dev', 'Life', 'Clear'].map((filter) => (
-                        <div key={filter} className={`${styles.segment} ${styles.skeletonSegment}`}>
+                        <div
+                            key={filter}
+                            className="bg-transparent border-none font-sans text-sm font-semibold text-[var(--text-primary)] py-2 px-4 rounded-md whitespace-nowrap opacity-50 pointer-events-none max-md:text-xs max-md:py-1 max-md:px-3"
+                        >
                             {filter}
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className={styles.tableHeader}>
-                <div className={styles.headerDate}>Date /</div>
-                <div className={styles.headerTitle}>Title /</div>
-                <div className={styles.headerReadingTime}>Time /</div>
+            <div className="grid grid-cols-[120px_1fr_100px] items-center gap-4 py-4 bg-[var(--bg-primary)] border-b-2 border-[var(--border)] font-semibold text-sm text-[var(--text-primary)] mb-2 max-md:hidden">
+                <div className="font-mono text-sm text-[var(--text-tertiary)]">Date /</div>
+                <div className="font-mono text-sm text-[var(--text-tertiary)]">Title /</div>
+                <div className="font-mono text-sm text-[var(--text-tertiary)] text-right">Time /</div>
             </div>
 
-            <div className={styles.feedList}>
+            <div className="flex flex-col w-full">
                 {[1, 2, 3, 4, 5].map((i) => (
                     <motion.div
                         key={i}
-                        className={styles.skeletonItem}
+                        className="grid grid-cols-[120px_1fr_100px] items-center gap-4 py-4 border-b border-[var(--border)] max-md:grid-cols-1 max-md:gap-2"
                         initial={{ opacity: 0.4 }}
                         animate={{ opacity: [0.4, 0.7, 0.4] }}
                         transition={{
@@ -44,9 +46,9 @@ function FeedListSkeleton() {
                             delay: i * 0.1,
                         }}
                     >
-                        <div className={styles.skeletonDate} />
-                        <div className={styles.skeletonTitle} />
-                        <div className={styles.skeletonTime} />
+                        <div className="h-3.5 w-20 bg-[var(--text-tertiary)] opacity-15 rounded" />
+                        <div className="h-5 w-3/5 bg-[var(--text-tertiary)] opacity-15 rounded max-md:order-first max-md:w-4/5" />
+                        <div className="h-3 w-15 bg-[var(--text-tertiary)] opacity-15 rounded ml-auto max-md:ml-0" />
                     </motion.div>
                 ))}
             </div>
@@ -57,20 +59,20 @@ function FeedListSkeleton() {
 function EmptyState() {
     return (
         <motion.div
-            className={styles.empty}
+            className="flex flex-col items-center gap-3 py-16 text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
         >
             <motion.span
-                className={styles.emptyIcon}
+                className="text-2xl text-[var(--text-tertiary)] opacity-50"
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
             >
                 ∅
             </motion.span>
-            <span className={styles.emptyText}>No feed found.</span>
+            <span className="font-mono text-sm text-[var(--text-tertiary)]">No feed found.</span>
         </motion.div>
     );
 }
@@ -79,21 +81,39 @@ function FeedListContent({ feed }: FeedListProps) {
     const { activeFilter, setActiveFilter, filteredFeed } = useFeedFilter(feed);
 
     return (
-        <div className={styles.feedListContainer}>
-            <div className={styles.filterSection}>
-                <span className={styles.filterLabel}>Filter:</span>
-                <div className={styles.segmentedControl}>
+        <div className="flex flex-col w-full">
+            <div className="flex items-center gap-4 max-md:gap-3">
+                <span className="text-sm font-medium text-[var(--text-tertiary)] max-md:text-xs">Filter:</span>
+                <div className="inline-flex bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg p-0.5 gap-0.5">
                     {(['Dev', 'Life'] as FilterType[]).map((filter) => (
                         <button
                             key={filter}
-                            className={`${styles.segment} ${activeFilter === filter ? styles.active : ''}`}
+                            className={`
+                                border-none font-sans text-sm font-semibold
+                                cursor-pointer py-2 px-4 rounded-md whitespace-nowrap
+                                transition-all duration-200
+                                max-md:text-xs max-md:py-1 max-md:px-3
+                                ${activeFilter === filter
+                                    ? 'bg-[var(--accent-primary)] text-white shadow-sm hover:bg-[var(--accent-secondary)]'
+                                    : 'bg-transparent text-[var(--text-primary)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-tertiary)]'
+                                }
+                            `}
                             onClick={() => setActiveFilter(filter)}
                         >
                             {filter}
                         </button>
                     ))}
                     <button
-                        className={`${styles.segment} ${activeFilter === 'All' ? styles.active : ''}`}
+                        className={`
+                            border-none font-sans text-sm font-semibold
+                            cursor-pointer py-2 px-4 rounded-md whitespace-nowrap
+                            transition-all duration-200
+                            max-md:text-xs max-md:py-1 max-md:px-3
+                            ${activeFilter === 'All'
+                                ? 'bg-[var(--accent-primary)] text-white shadow-sm hover:bg-[var(--accent-secondary)]'
+                                : 'bg-transparent text-[var(--text-primary)] hover:text-[var(--accent-primary)] hover:bg-[var(--accent-tertiary)]'
+                            }
+                        `}
                         onClick={() => setActiveFilter('All')}
                     >
                         Clear
@@ -101,20 +121,13 @@ function FeedListContent({ feed }: FeedListProps) {
                 </div>
             </div>
 
-
-            <div className={styles.tableHeader}>
-                <div className={styles.headerDate}>
-                    Date /
-                </div>
-                <div className={styles.headerTitle}>
-                    Title /
-                </div>
-                <div className={styles.headerReadingTime}>
-                    Time /
-                </div>
+            <div className="grid grid-cols-[120px_1fr_100px] items-center gap-4 py-4 bg-[var(--bg-primary)] border-b-2 border-[var(--border)] font-semibold text-sm text-[var(--text-primary)] mb-2 max-md:hidden">
+                <div className="font-mono text-sm text-[var(--text-tertiary)]">Date /</div>
+                <div className="font-mono text-sm text-[var(--text-tertiary)]">Title /</div>
+                <div className="font-mono text-sm text-[var(--text-tertiary)] text-right">Time /</div>
             </div>
 
-            <div className={styles.feedList}>
+            <div className="flex flex-col w-full">
                 {filteredFeed.length > 0 ? (
                     filteredFeed.map((feed) => (
                         <FeedListItem key={feed.slug} feed={feed} />

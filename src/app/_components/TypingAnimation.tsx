@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import styles from '@/styles/components.module.css';
 
 interface LinkPattern {
   pattern: string;
@@ -98,9 +97,9 @@ export default function TypingAnimation({
   }, [charIndex, fullText, speed, isComplete]);
 
   return (
-    <span className={styles.typingText}>
+    <span className="inline-block min-h-[1.3em] font-[var(--common-font-family)]">
       <span dangerouslySetInnerHTML={{ __html: displayText }} />
-      {!isComplete && <span className={styles.cursor}>|</span>}
+      {!isComplete && <span className="inline-block ml-0.5 animate-blink font-light">|</span>}
     </span>
   );
 }

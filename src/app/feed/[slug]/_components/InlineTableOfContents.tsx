@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { TocItem } from '@/lib/mdx-feeds';
-import styles from '@/styles/components.module.css';
 
 interface InlineTableOfContentsProps {
     tocItems: TocItem[];
@@ -86,17 +85,22 @@ export default function InlineTableOfContents({ tocItems }: InlineTableOfContent
         const isActive = activeId === item.id;
 
         return (
-            <li key={item.id} className={styles.tocItem}>
+            <li key={item.id} className="mb-1">
                 <a
                     href={`#${item.id}`}
                     onClick={(e) => handleClick(item.id, e)}
-                    className={`${styles.tocLink} ${isActive ? styles.active : ''}`}
+                    className={`
+                        block py-2 px-3 text-[var(--text-secondary)] no-underline rounded-sm
+                        transition-all duration-200 text-sm leading-relaxed
+                        hover:bg-[var(--accent-tertiary)] hover:text-[var(--accent-primary)]
+                        ${isActive ? 'text-[var(--accent-primary)] font-medium relative before:content-[""] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[3px] before:h-[60%] before:bg-[var(--accent-primary)] before:rounded-sm' : ''}
+                    `}
                     style={{ paddingLeft: `${depth * 16 + 12}px` }}
                 >
                     {item.text}
                 </a>
                 {hasChildren && (
-                    <ul className={styles.tocSubList}>
+                    <ul className="list-none p-0 my-1">
                         {item.children!.map((child) => renderTocItem(child, depth + 1))}
                     </ul>
                 )}
@@ -105,21 +109,21 @@ export default function InlineTableOfContents({ tocItems }: InlineTableOfContent
     };
 
     return (
-        <nav className={styles.inlineToc}>
+        <nav className="bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg mb-8 overflow-hidden">
             <button
-                className={styles.tocToggle}
+                className="w-full flex items-center gap-2 p-4 bg-transparent border-none cursor-pointer text-base text-[var(--text-primary)] transition-colors duration-200 hover:bg-[var(--accent-tertiary)]"
                 onClick={() => setIsExpanded(!isExpanded)}
                 aria-expanded={isExpanded}
             >
-                <span className={styles.tocIcon}>
+                <span className="text-xs text-[var(--text-secondary)] transition-transform duration-200">
                     {isExpanded ? '▼' : '▶'}
                 </span>
-                <span className={styles.tocTitle}>목차</span>
-                <span className={styles.tocCount}>({tocItems.length})</span>
+                <span className="font-semibold">목차</span>
+                <span className="text-sm text-[var(--text-tertiary)]">({tocItems.length})</span>
             </button>
 
             {isExpanded && (
-                <ul className={styles.tocList}>
+                <ul className="list-none p-4 pt-0 m-0 border-t border-[var(--border)]">
                     {tocItems.map((item) => renderTocItem(item))}
                 </ul>
             )}

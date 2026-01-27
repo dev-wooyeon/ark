@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import styles from '@/styles/components.module.css';
 
 // GSAP 플러그인 등록
 if (typeof window !== 'undefined') {
@@ -43,14 +42,14 @@ export default function ReadingProgress() {
     }, []);
 
     return (
-        <div className={styles.progressContainer}>
-            <div className={styles.progressBar}>
+        <div className="fixed top-0 left-0 right-0 z-[1001] flex items-center bg-[var(--bg-primary)] py-1 px-4 gap-3 border-b border-[var(--border)] max-md:px-3 max-md:gap-2">
+            <div className="flex-1 h-[3px] bg-[var(--border)] rounded-sm overflow-hidden relative max-md:h-0.5">
                 <div
                     ref={progressBarRef}
-                    className={styles.progressFill}
+                    className="absolute top-0 left-0 w-full h-full bg-[var(--accent-primary)] origin-left scale-x-0 rounded-sm"
                 />
             </div>
-            <div className={styles.percentage}>
+            <div className="text-xs font-semibold text-[var(--text-secondary)] min-w-10 text-right tabular-nums max-md:text-[10px] max-md:min-w-[35px]">
                 {progress}%
             </div>
         </div>

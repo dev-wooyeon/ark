@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { FeedData } from '@/types';
-import styles from '@/styles/components.module.css';
 
 interface FeedListItemProps {
     feed: FeedData;
@@ -10,11 +9,30 @@ interface FeedListItemProps {
 
 export default function FeedListItem({ feed }: FeedListItemProps) {
     return (
-        <Link href={`/feed/${feed.slug}`} className={styles.feedItem}>
-            <span className={styles.feedItemDate}>{feed.date}</span>
-            <h3 className={styles.feedItemTitle}>{feed.title}</h3>
+        <Link
+            href={`/feed/${feed.slug}`}
+            className="
+                grid grid-cols-[120px_1fr_100px] items-center gap-4
+                py-4 px-3 -mx-3
+                border-b border-[var(--border)] border-l-2 border-l-transparent
+                rounded-sm no-underline
+                transition-all duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]
+                text-inherit relative
+                hover:bg-[var(--accent-tertiary)] hover:border-l-[var(--accent-primary)] hover:translate-x-1
+                max-md:grid-cols-1 max-md:gap-1 max-md:items-start max-md:hover:translate-x-0.5
+                group
+            "
+        >
+            <span className="font-mono text-sm text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] max-md:text-xs max-md:order-1">
+                {feed.date}
+            </span>
+            <h3 className="font-sans text-lg font-semibold text-[var(--text-primary)] m-0 overflow-hidden text-ellipsis whitespace-nowrap transition-colors duration-200 group-hover:text-[var(--accent-primary)] max-md:text-base max-md:whitespace-normal max-md:order-first">
+                {feed.title}
+            </h3>
             {feed.readingTime && (
-                <span className={styles.feedItemReadingTime}>{feed.readingTime} min read</span>
+                <span className="font-mono text-xs text-[var(--text-tertiary)] text-right group-hover:text-[var(--text-secondary)] max-md:text-left max-md:order-2">
+                    {feed.readingTime} min read
+                </span>
             )}
         </Link>
     );
