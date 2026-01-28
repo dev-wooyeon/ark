@@ -1,18 +1,10 @@
 import Link from 'next/link';
-import BackLink from '../_components/BackLink';
+import { PageLayout } from '../_components/PageLayout';
 import { personalInfo, experiences } from '@/data/resume';
 
 export default function Resume() {
   return (
-    <div className="min-h-screen p-8 bg-primary max-md:p-4">
-      <header className="max-w-[800px] mx-auto mb-16">
-        <BackLink href="/" text="← Home" />
-        <h1 className="font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] text-display-md font-bold text-text-primary m-0 tracking-[-0.02em] max-md:text-[2rem]">
-          Resume
-        </h1>
-      </header>
-
-      <main className="max-w-[800px] mx-auto">
+    <PageLayout title="Resume">
         {/* Personal Info Grid */}
         <section className="grid grid-cols-4 gap-10 mb-16 pb-12 border-b border-border max-lg:grid-cols-2 max-lg:gap-x-8 max-lg:gap-y-6 max-lg:mb-12 max-lg:pb-10">
           <div className="flex flex-col gap-3">
@@ -98,7 +90,6 @@ export default function Resume() {
             </section>
           </div>
         ))}
-      </main>
-    </div>
+    </PageLayout>
   );
 }
