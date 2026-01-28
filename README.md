@@ -2,42 +2,17 @@
 
 # ✨ Eunu.log
 
-**Interactive Tech Blog with 3D Particle Animations**
-
 [![Next.js](https://img.shields.io/badge/Next.js-14+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-r150+-black?style=flat-square&logo=three.js)](https://threejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-*기술 콘텐츠와 인터랙티브 3D 애니메이션이 만나는 곳*
+개인 기술 블로그입니다!
 
-[Live Demo](https://eunu.log) · [Features](#-features) · [Getting Started](#-getting-started)
+[Live Demo](https://eunu-log.vercel.app)
 
 </div>
 
 ---
-
-## 🎯 Overview
-
-**Eunu.log**는 뇌 과학 기반의 상호작용 애니메이션을 통해 **높은 기억력과 재방문율**을 목표로 하는 모던 기술 블로그입니다.
-
-신문에서 영감을 받은 클래식한 디자인(베이지 + 클래식 블루)과 Three.js 기반의 파티클 애니메이션이 결합되어 독특한 사용자 경험을 제공합니다.
-
-<br />
-
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 🎨 **3D Particle Text** | 마우스 인터랙션에 반응하는 텍스트 파티클 애니메이션 |
-| 🌐 **Interactive Sphere** | 마우스를 따라가는 3D 구체 히어로 씬 |
-| 📰 **Newspaper Design** | 베이지 + 클래식 블루의 프리미엄 컬러 시스템 |
-| 🌙 **Dark Mode** | 시스템 설정에 따른 자동 테마 전환 |
-| 📖 **Smart TOC** | 스크롤에 따라 현재 섹션을 하이라이트하는 목차 |
-| ⚡ **60fps Animation** | 최적화된 애니메이션 성능 |
-| 📱 **Responsive** | 모든 디바이스에서 완벽한 반응형 디자인 |
-
-<br />
 
 ## 🛠 Tech Stack
 
@@ -157,7 +132,6 @@ npm run start
 | Mode | Background | Text | Accent |
 |------|------------|------|--------|
 | ☀️ Light | `#EAEBEA` Newspaper Beige | `#1A1A1A` Soft Black | `#0066CC` Classic Blue |
-| 🌙 Dark | `#1A1A1A` Deep Gray | `#F5F5F5` Off White | `#4A9EFF` Bright Blue |
 
 ### Typography
 
@@ -197,31 +171,10 @@ npm run start
 
 <br />
 
-## 🗺 Roadmap
-
-- [x] Next.js 14+ App Router 설정
-- [x] Three.js 파티클 텍스트 애니메이션
-- [x] 3D 히어로 씬
-- [x] 마크다운 피드 시스템
-- [x] 다크모드 지원
-- [x] 반응형 목차 (TOC)
-- [ ] 검색 기능
-- [ ] 댓글 시스템
-- [ ] RSS 피드
-- [ ] i18n 지원
-
-<br />
-
-## 📄 License
-
-MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
 <div align="center">
 
 **[⬆ Back to Top](#-eunulog)**
-
-Made with ❤️ by [dev-wooyeon](https://github.com/dev-wooyeon)
 
 </div>
