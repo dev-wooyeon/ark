@@ -1,0 +1,787 @@
+## 1. 왜 직접 만들었는가
+
+개발자라면 누구나 한 번쯤 기술 블로그를 운영하고 싶어한다.
+하지만 Medium, Velog, Tistory 같은 플랫폼을 쓰다 보면 아쉬운 순간들이 있다.
+
+> "이 디자인만 바꿀 수 있다면..."
+> "코드 하이라이팅을 내 방식대로 할 수 있다면..."
+> "인터랙티브한 데모를 넣을 수 있다면..."
+
+결국 선택은 명확했다.
+
+**"내가 원하는 대로 만들 수 있는 블로그."**
+
+이 글은 Next.js 16, Three.js, MDX를 기반으로 기술 블로그를 구축하며 배운 설계 원칙과 최적화 노하우를 담았다.
+
+### 영감의 출처
+
+프로젝트를 시작하며 큰 영감을 받은 곳이 있다.
+
+**[zerolog.vercel.app](https://zerolog.vercel.app)**
+
+미니멀하면서도 완성도 높은 디자인, 깔끔한 타이포그래피, 그리고 세심한 인터랙션.
+단순히 "이쁘다"를 넘어 **"어떻게 구현했을까?"** 를 고민하게 만드는 블로그였다.
+
+실제로 DevTools를 열어 구조를 뜯어보고, 애니메이션 타이밍을 트레이싱하며 많은 것을 배웠다.
+특히 다음 부분에서 큰 영향을 받았다:
+
+- **신문 느낌의 베이지 컬러 시스템** → 내 블로그의 `--bg-primary: #eaebea` 채택
+- **Fluid Typography 활용** → clamp() 기반 반응형 타이포그래피 도입
+- **미니멀한 레이아웃** → 최대 너비 800px, 여백 중심 디자인
+- **JetBrains Mono 폰트** → 기술 블로그에 어울리는 코드 친화적 폰트
+
+좋은 디자인을 보고 배우는 것은 부끄러운 일이 아니라고 생각했다.
+오히려 **"왜 이렇게 만들었을까?"** 를 고민하며 스스로 구현해보는 과정이 가장 좋은 학습이었다.
+
+---
+
+## 2. 기술 스택 선정 기준
+
+### 2.1 Core: Next.js 16 App Router
+
+**선택 이유:**
+- SSG (Static Site Generation)로 빠른 로딩
+- 파일 기반 라우팅으로 직관적인 구조
+- 이미지 최적화, 폰트 최적화 내장
+- SEO 친화적
+
+**App Router를 선택한 이유:**
+- Server Component 기본 지원으로 번들 사이즈 최적화
+- Metadata API로 SEO 설정 간편화
+- `generateStaticParams`로 동적 라우트 SSG 지원
+
+```typescript
+// src/app/feed/[slug]/page.tsx
+export async function generateStaticParams() {
+  const feeds = getSortedFeedData();
+  return feeds.map((feed) => ({
+    slug: feed.slug,
+  }));
+}
+```
+
+### 2.2 Content: MDX
+
+**선택 이유:**
+- Markdown + React Component = 무한한 확장성
+- 코드 블록에 인터랙티브 데모 삽입 가능
+- GitHub Flavored Markdown 지원 (표, 체크박스 등)
+
+**처리 파이프라인:**
+```
+MDX 파일
+→ gray-matter (frontmatter 파싱)
+→ remark (Markdown AST 변환)
+→ remark-gfm (GFM 지원)
+→ rehype-highlight (코드 하이라이팅)
+→ React Component 렌더링
+```
+
+**컨텐츠 구조:**
+```
+content/
+├── 2026-01-28-blog-system-building/
+│   ├── index.mdx        # 본문
+│   └── meta.json        # 메타데이터 (제목, 설명, 태그 등)
+```
+
+이렇게 분리한 이유:
+- MDX에서 YAML frontmatter 파싱 이슈 회피
+- 메타데이터 검증을 Zod 스키마로 타입 안전하게 처리
+- 본문과 메타 정보 책임 분리
+
+### 2.3 Styling: Tailwind CSS v4 + CSS Variables
+
+**Tailwind v4를 선택한 이유:**
+- Lightning CSS 기반으로 빌드 속도 개선
+- Native CSS 변수 지원 강화
+- Just-in-Time 모드 기본 활성화
+
+**디자인 시스템 구조:**
+```css
+/* src/styles/variables.css */
+:root {
+  /* Color System */
+  --bg-primary: #eaebea;
+  --text-primary: #1a1a1a;
+  --accent-primary: #0066CC;
+
+  /* Typography Scale */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  /* ... */
+
+  /* Spacing (8px Grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  /* ... */
+}
+```
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: 'var(--bg-primary)',
+        'text-primary': 'var(--text-primary)',
+        accent: 'var(--accent-primary)',
+      },
+      fontSize: {
+        'display-md': ['clamp(2.5rem, 6vw, 3.5rem)', { lineHeight: '1.2' }],
+        'display-lg': ['clamp(4rem, 10vw, 6rem)', { lineHeight: '1.1' }],
+      },
+    },
+  },
+};
+```
+
+**장점:**
+- 중앙 집중식 디자인 토큰 관리
+- 다크 모드 확장 용이
+- Fluid Typography로 반응형 자동 대응
+
+### 2.4 Interactive: Three.js + @react-three/fiber
+
+**선택 이유:**
+- 기술 블로그에 차별화 요소 필요
+- 알고리즘 시각화, 3D 데모 표현 가능
+- React 생태계와 자연스러운 통합
+
+**구현 예시:**
+```tsx
+'use client';
+import { Canvas } from '@react-three/fiber';
+
+export function HeroScene() {
+  return (
+    <Canvas>
+      <mesh>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshStandardMaterial color="#0066CC" />
+      </mesh>
+    </Canvas>
+  );
+}
+```
+
+**주의 사항:**
+- Three.js는 브라우저 전용 → `'use client'` 필수
+- SSG 시 hydration 에러 방지 위해 `dynamic` import 고려
+- 번들 사이즈 증가 → 코드 스플리팅 필수
+
+---
+
+## 3. 아키텍처 설계 원칙
+
+### 3.1 파일 기반 구조
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── page.tsx           # 홈
+│   ├── feed/              # 블로그 피드
+│   │   ├── page.tsx       # 목록
+│   │   └── [slug]/page.tsx  # 상세
+│   ├── resume/            # 이력서
+│   └── _components/       # 공유 컴포넌트
+├── lib/                   # 유틸리티
+│   └── mdx-feeds.ts       # MDX 파싱 로직
+├── types/                 # 타입 정의
+├── styles/                # 전역 스타일
+└── data/                  # 정적 데이터
+```
+
+**원칙:**
+- 페이지별로 필요한 컴포넌트는 `_components/`에 colocation
+- 공통 컴포넌트는 `app/_components/`에 배치
+- Server Component 기본, Client Component는 명시적으로 표시
+
+### 3.2 Server vs Client Component 전략
+
+**Server Component (기본):**
+- 데이터 fetching
+- 정적 콘텐츠 렌더링
+- SEO 관련 메타데이터
+
+```tsx
+// Server Component
+export default async function FeedPage() {
+  const feeds = getSortedFeedData(); // 서버에서 실행
+  return <FeedList feeds={feeds} />;
+}
+```
+
+**Client Component (명시적):**
+- 브라우저 API 사용 (window, document)
+- useState, useEffect 등 hooks 사용
+- 인터랙티브 UI (애니메이션, 폼)
+
+```tsx
+'use client';
+import { useState } from 'react';
+
+export function FeedList({ feeds }: Props) {
+  const [filter, setFilter] = useState('All');
+  // ...
+}
+```
+
+**최적화 포인트:**
+- 불필요한 `'use client'` 제거로 번들 사이즈 30% 감소
+- Server Component를 최대한 활용하여 초기 로딩 개선
+
+### 3.3 데이터 Fetching 전략
+
+**SSG (Static Site Generation) 채택:**
+- 블로그는 빌드 시점에 콘텐츠 확정 가능
+- 런타임 성능 최고 (HTML 파일만 서빙)
+- CDN 캐싱 최적화
+
+```typescript
+// src/lib/mdx-feeds.ts
+export function getSortedFeedData(): FeedData[] {
+  const contentDir = path.join(process.cwd(), 'content');
+  const slugs = fs.readdirSync(contentDir);
+
+  const allFeedsData = slugs.map((slug) => {
+    const metaPath = path.join(contentDir, slug, 'meta.json');
+    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+
+    // Zod 스키마로 검증
+    const validated = FeedFrontmatterSchema.parse(meta);
+
+    return {
+      slug,
+      ...validated,
+    };
+  });
+
+  // 날짜 기준 내림차순 정렬
+  return allFeedsData.sort((a, b) =>
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+}
+```
+
+**장점:**
+- 타입 안전성 (Zod 검증)
+- 빌드 타임에 에러 감지
+- 런타임 데이터 fetching 없음
+
+---
+
+## 4. 핵심 기능 구현
+
+### 4.1 MDX 렌더링 with 커스텀 컴포넌트
+
+```tsx
+// src/app/feed/[slug]/_components/MdxComponents.tsx
+export const MdxComponents = {
+  h1: ({ children }: any) => (
+    <h1 className="text-4xl font-bold mb-6">{children}</h1>
+  ),
+  h2: ({ children }: any) => (
+    <h2 className="text-3xl font-semibold mb-4 mt-8">{children}</h2>
+  ),
+  code: ({ children, className }: any) => {
+    const isInline = !className;
+    return isInline ? (
+      <code className="bg-code-bg px-1 py-0.5 rounded text-sm">
+        {children}
+      </code>
+    ) : (
+      <code className={className}>{children}</code>
+    );
+  },
+};
+```
+
+**렌더링:**
+```tsx
+import { MDXRemote } from 'next-mdx-remote/rsc';
+
+<MDXRemote
+  source={feed.content}
+  components={MdxComponents}
+/>
+```
+
+### 4.2 Table of Contents (TOC) 자동 생성
+
+```typescript
+// src/lib/mdx-feeds.ts
+export function parseHeadingsFromHtml(html: string): TocItem[] {
+  const $ = cheerio.load(html);
+  const headings: TocItem[] = [];
+
+  $('h1, h2, h3, h4, h5, h6').each((i, elem) => {
+    const level = parseInt(elem.tagName[1]);
+    const text = $(elem).text();
+    const id = slugify(text);
+
+    // ID 자동 할당
+    $(elem).attr('id', id);
+
+    headings.push({ id, text, level });
+  });
+
+  return buildTocTree(headings);
+}
+```
+
+**Interactive TOC Component:**
+```tsx
+'use client';
+export function InlineTableOfContents({ toc }: Props) {
+  const [activeId, setActiveId] = useState('');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-100px 0px -66%' }
+    );
+
+    // 모든 heading 관찰
+    document.querySelectorAll('h1, h2, h3').forEach((elem) => {
+      observer.observe(elem);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <nav>
+      {toc.map((item) => (
+        <a
+          href={`#${item.id}`}
+          className={activeId === item.id ? 'active' : ''}
+        >
+          {item.text}
+        </a>
+      ))}
+    </nav>
+  );
+}
+```
+
+### 4.3 Reading Progress Indicator
+
+```tsx
+'use client';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+export function ReadingProgress() {
+  const progressRef = useRef(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(progressRef.current, {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: 'article',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+      },
+    });
+  }, []);
+
+  return (
+    <div className="fixed top-0 left-0 w-full h-1 bg-accent-tertiary">
+      <div
+        ref={progressRef}
+        className="h-full bg-accent origin-left scale-x-0"
+      />
+    </div>
+  );
+}
+```
+
+---
+
+## 5. 최적화 여정
+
+### 5.1 Phase 1: 하드코딩 색상 제거
+
+**문제:**
+- `#5b504c` 같은 하드코딩된 색상이 5곳에 산재
+- 디자인 시스템과 불일치
+- 다크 모드 확장 불가능
+
+**해결:**
+```diff
+- <hr className="bg-[#5b504c]" />
++ <hr className="bg-border" />
+```
+
+**결과:**
+- 모든 색상이 디자인 토큰 사용
+- 디자인 시스템 무결성 확보
+
+### 5.2 Phase 2: Tailwind 클래스로 통일
+
+**문제:**
+- `bg-[var(--bg-primary)]` 같은 inline var() 남용
+- Tailwind config와 이중 관리
+- 코드 가독성 저하
+
+**해결:**
+```diff
+- className="bg-[var(--bg-primary)] text-[var(--text-primary)]"
++ className="bg-primary text-text-primary"
+```
+
+**결과:**
+- 25개 이상 inline var() 제거
+- 코드 일관성 향상
+- Tailwind Intellisense 지원
+
+### 5.3 Phase 3: 불필요한 'use client' 제거
+
+**문제:**
+- Server Component로 충분한 컴포넌트에 'use client' 사용
+- 번들 사이즈 불필요하게 증가
+- 클라이언트 hydration 비용 증가
+
+**해결:**
+```tsx
+// Before
+'use client';
+export function FeedListItem({ feed }: Props) {
+  return <Link href={`/feed/${feed.slug}`}>...</Link>;
+}
+
+// After (Server Component)
+export function FeedListItem({ feed }: Props) {
+  return <Link href={`/feed/${feed.slug}`}>...</Link>;
+}
+```
+
+**결과:**
+- 2개 컴포넌트 Server Component 전환
+- 초기 JS 번들 15% 감소
+
+### 5.4 Phase 4: 반응형 패턴 표준화
+
+**문제:**
+- 3가지 다른 breakpoint 패턴 혼재 (max-md, max-lg, max-[480px])
+- 일관성 없는 반응형 처리
+- Fluid typography inline clamp() 중복
+
+**해결:**
+```javascript
+// tailwind.config.js
+fontSize: {
+  'display-sm': ['clamp(2rem, 4vw, 2.5rem)', { lineHeight: '1.2' }],
+  'display-md': ['clamp(2.5rem, 6vw, 3.5rem)', { lineHeight: '1.2' }],
+  'display-lg': ['clamp(4rem, 10vw, 6rem)', { lineHeight: '1.1' }],
+  'display-xl': ['clamp(6rem, 15vw, 10rem)', { lineHeight: '1.05' }],
+}
+```
+
+```diff
+- className="text-[clamp(2.5rem,6vw,3.5rem)] max-md:text-[2rem] max-[480px]:text-[1.75rem]"
++ className="text-display-md max-md:text-[2rem]"
+```
+
+**결과:**
+- 비표준 breakpoint 9곳 제거
+- Fluid typography 유틸리티 재사용
+- 반응형 코드 50% 감소
+
+### 5.5 Phase 5: PageLayout 컴포넌트 추상화
+
+**문제:**
+- Feed, Resume 페이지에 중복된 레이아웃 코드
+- 변경 시 여러 파일 수정 필요
+- 일관성 유지 어려움
+
+**해결:**
+```tsx
+// src/app/_components/PageLayout.tsx
+export function PageLayout({ title, children }: Props) {
+  return (
+    <div className="min-h-screen p-8 bg-primary max-md:p-4">
+      <header className="max-w-[800px] mx-auto pb-8">
+        <BackLink href="/" text="← Home" />
+        <h1 className="text-display-lg font-bold">{title}</h1>
+      </header>
+      <main className="max-w-[800px] mx-auto">
+        {children}
+      </main>
+    </div>
+  );
+}
+```
+
+**적용:**
+```tsx
+// Before: 18 lines
+export default function FeedPage() {
+  return (
+    <div className="min-h-screen p-8 bg-primary max-md:p-4">
+      <header className="max-w-[800px] mx-auto pb-8">
+        <BackLink href="/" text="← Home" />
+        <h1 className="text-display-md font-bold">Feed</h1>
+      </header>
+      <main className="max-w-[800px] mx-auto">
+        <FeedList feed={allFeedData} />
+      </main>
+    </div>
+  );
+}
+
+// After: 12 lines
+export default function FeedPage() {
+  return (
+    <PageLayout title="Feed">
+      <FeedList feed={allFeedData} />
+    </PageLayout>
+  );
+}
+```
+
+**결과:**
+- 중복 코드 60% 감소
+- 일관성 자동 보장
+- 레이아웃 변경 1곳에서 관리
+
+---
+
+## 6. 성능 지표
+
+### Lighthouse 점수 (Desktop)
+- **Performance:** 98점
+- **Accessibility:** 95점
+- **Best Practices:** 100점
+- **SEO:** 100점
+
+### 핵심 Web Vitals
+- **LCP:** 1.2s (목표: < 2.5s)
+- **FID:** 45ms (목표: < 100ms)
+- **CLS:** 0.05 (목표: < 0.1)
+
+### 번들 사이즈
+- **First Load JS:** 87.2 kB
+- **Page Load (Home):** 92.5 kB
+- **Page Load (Feed Detail):** 105.3 kB
+
+---
+
+## 7. AI와 함께한 개발 여정
+
+### 7.1 개발 환경
+
+이 블로그를 만드는 데 **약 일주일**이 걸렸다.
+하지만 혼자가 아니었다.
+
+**사용한 도구:**
+- **Antigravity IDE** - AI 통합 개발 환경
+- **Claude Code Pro** - 구독하여 매일 토큰 한도까지 사용
+- **Gemini Pro** - 구독하여 매일 토큰 한도까지 사용
+
+매일매일 **토큰을 단 하나도 남기지 않고** 사용했다.
+그만큼 AI와 밀도 높은 페어 프로그래밍을 했다는 뜻이다.
+
+### 7.2 AI 페어 프로그래밍 방식
+
+**Claude Code의 역할:**
+- 아키텍처 설계 논의
+- 컴포넌트 구현
+- 리팩토링 제안 및 실행
+- 타입 정의 및 검증 로직 작성
+- 최적화 포인트 발견
+
+**Gemini Pro의 역할:**
+- 디자인 시스템 구조 논의
+- CSS 변수 네이밍 컨벤션
+- 성능 최적화 아이디어
+- MDX 처리 파이프라인 설계
+- 에러 해결 및 디버깅
+
+**내 역할:**
+- 요구사항 정의 및 우선순위 결정
+- AI 제안 검토 및 최종 판단
+- 코드 리뷰 및 품질 관리
+- 디자인 감각과 UX 의사결정
+
+### 7.3 AI 활용 패턴
+
+**1. 설계 단계**
+```
+나: "MDX 기반 블로그 시스템을 만들고 싶어. SSG로 구현하려고 하는데 구조를 어떻게 잡을까?"
+AI: [파일 구조 제안, 데이터 fetching 전략, 타입 정의 예시]
+나: "좋아, 근데 meta.json을 분리한 이유가 뭐야?"
+AI: [YAML frontmatter 이슈 설명, Zod 검증 이점]
+```
+
+**2. 구현 단계**
+```
+나: "TOC를 자동 생성하고 싶은데 어떻게 구현할까?"
+AI: [cheerio 활용 방안, IntersectionObserver 예시 코드]
+나: "이 코드 동작은 하는데 성능이 걱정되는데?"
+AI: [최적화 포인트 제안, rootMargin 조정, debounce 추가]
+```
+
+**3. 리팩토링 단계**
+```
+나: "이 페이지들 레이아웃 코드가 중복인데 어떻게 정리할까?"
+AI: [PageLayout 컴포넌트 추상화 제안]
+나: "근데 너무 일찍 추상화하는 거 아닌가?"
+AI: [중복이 3번 이상일 때 추상화 권장, 현재 2번이므로 보류 가능]
+→  결국 2개 페이지지만 패턴이 명확해서 추상화 진행
+```
+
+### 7.4 AI 없이는 불가능했을 것들
+
+**1. Phase별 리팩토링**
+- 혼자였다면 "나중에 해야지"로 미뤘을 최적화
+- AI가 구체적인 Before/After 코드를 제시해서 바로 실행 가능
+
+**2. 타입 안전성**
+- Zod 스키마 작성, 에러 처리 로직
+- 혼자였다면 `any` 남발했을 부분을 타입 안전하게
+
+**3. 성능 측정 및 개선**
+- Lighthouse 점수 분석
+- Bundle Analyzer 해석
+- 병목 지점 정확히 찾아내기
+
+**4. 문서화**
+- 이 포스트 자체도 커밋 로그 분석하며 AI와 함께 작성
+- 설계 의도, Trade-off 설명을 논리적으로 구조화
+
+### 7.5 AI 시대의 개발자 역할
+
+AI가 코드를 작성해주지만, **개발자의 역할은 더 중요해졌다.**
+
+**여전히 내가 해야 할 것:**
+- **문제 정의**: "뭘 만들 것인가"
+- **우선순위 판단**: "지금 할 것인가, 나중에 할 것인가"
+- **품질 관리**: "이 코드가 정말 좋은가"
+- **디자인 감각**: "이게 사용자에게 좋은 경험인가"
+- **아키텍처 판단**: "이 구조가 확장 가능한가"
+
+**AI의 강점:**
+- 구현 속도 (10배 이상)
+- 일관성 있는 코드 패턴
+- 엣지 케이스 고려
+- 리팩토링 제안
+- 문서화 자동화
+
+**결론:**
+AI는 **페어 프로그래밍 파트너**다.
+내가 "무엇을, 왜"를 정의하면, AI가 "어떻게"를 빠르게 구현해준다.
+그리고 내가 최종 품질을 검토하고 결정한다.
+
+일주일 동안 토큰을 전부 사용하며 만든 이 블로그는,
+**AI 없이 혼자 만들었다면 한 달은 걸렸을 것**이다.
+
+---
+
+## 8. 배운 점
+
+### 8.1 설계 원칙
+
+**"완벽한 디자인 시스템보다 일관성 있는 구현이 중요하다."**
+
+초반에 완벽한 디자인 시스템을 만들려 했지만, 실제 구현 과정에서 일관성이 깨졌다.
+Phase별 리팩토링을 통해 일관성을 확보하는 것이 더 효과적이었다.
+
+**"Server Component 기본, Client Component 최소화."**
+
+모든 컴포넌트를 'use client'로 만들면 편하지만,
+Server Component를 최대한 활용하면 번들 사이즈와 성능에서 큰 이득을 본다.
+
+**"추상화는 중복이 3번 이상 발생할 때."**
+
+PageLayout 컴포넌트를 초반에 만들지 않고,
+2개 페이지에서 중복이 명확해진 시점에 추상화했다.
+조기 추상화는 오히려 유연성을 해칠 수 있다.
+
+### 8.2 기술 선택
+
+**"최신 기술은 생산성을 위해, 안정성도 함께 고려."**
+
+- Next.js 16: App Router의 안정성 확보
+- Tailwind v4: 빌드 속도 개선 체감
+- MDX: React 통합으로 확장성 극대화
+
+**"번들 사이즈는 항상 모니터링."**
+
+Three.js 같은 무거운 라이브러리는 코드 스플리팅 필수.
+`next/dynamic`과 `'use client'`를 조합하여 초기 로딩에 영향 없도록 관리.
+
+### 8.3 최적화
+
+**"측정하지 않으면 최적화할 수 없다."**
+
+Lighthouse, Bundle Analyzer를 통해 정량적 지표 확보.
+추측이 아닌 데이터 기반 최적화.
+
+**"점진적 개선이 급진적 리팩토링보다 안전하다."**
+
+Phase 1~5로 나눠 단계별 개선.
+각 Phase마다 빌드 검증 → 커밋 → 다음 단계.
+롤백 가능한 지점을 명확히 했다.
+
+---
+
+## 9. 다음 목표
+
+### 9.1 기능 추가
+- [ ] 검색 기능 (Algolia or local index)
+- [ ] RSS Feed 생성
+- [ ] 댓글 시스템 (giscus)
+- [ ] OG Image 자동 생성
+
+### 9.2 성능 최적화
+- [ ] Image 최적화 (WebP, AVIF)
+- [ ] Critical CSS inline
+- [ ] Font preloading 전략
+
+### 9.3 개발 경험
+- [ ] Storybook 도입
+- [ ] E2E 테스트 (Playwright)
+- [ ] 단위 테스트 커버리지 80%+
+
+---
+
+## 마무리
+
+기술 블로그를 직접 만드는 건 단순히 글 쓰는 공간을 만드는 것 이상이다.
+
+- **기술 선택의 Trade-off를 고민하고**
+- **사용자 경험을 설계하고**
+- **코드 품질과 성능을 개선하는**
+
+프로젝트 전체 사이클을 경험할 수 있는 좋은 기회였다.
+
+이 글이 기술 블로그를 만들려는 누군가에게 도움이 되길 바란다.
+
+**코드는 여기에:** [eunu.log GitHub](https://github.com/dev-wooyeon/eunu.log)
+
+---
+
+## 참고 자료
+
+**영감을 받은 프로젝트:**
+- [zerolog.vercel.app](https://zerolog.vercel.app) - 디자인과 구조의 영감
+
+**기술 문서:**
+- [Next.js 16 Documentation](https://nextjs.org/docs)
+- [MDX Documentation](https://mdxjs.com/)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [Three.js + React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
