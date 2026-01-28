@@ -22,16 +22,23 @@ export interface PersonalInfo {
     name: string;
     birthDate: string;
     position: string;
-    keywords: string;
+    // keywords: string;
     email: string;
+    github: string;
+    skills: string[];
 }
 
 export const personalInfo: PersonalInfo = {
     name: '박은우',
     birthDate: '1996.07.20',
     position: 'Software Engineer',
-    keywords: 'BE, DE, Platform',
+    // keywords: 'BE, DE, Platform',
     email: 'une@kakao.com',
+    github: 'https://github.com/dev-wooyeon',
+    skills: [
+        'Java', 'Spring Boot', 'AWS',
+        'Kafka', 'Flink', 'ClickHouse'
+    ],
 };
 
 export const experiences: Experience[] = [
@@ -51,17 +58,19 @@ export const experiences: Experience[] = [
                 ],
                 links: [
                     {
-                        label: 'GitHub',
+                        label: '코드 저장소',
                         href: 'https://github.com/dev-wooyeon/ctr-pipeline',
                         external: true,
                     },
                     {
                         label: '시스템 구축기',
                         href: '/feed/2025-12-02-make-ctr-pipeline',
+                        external: true,
                     },
                     {
                         label: '성능개선기',
                         href: '/feed/2025-12-10-macbook-air-m1-life',
+                        external: true,
                     },
                 ],
             },
