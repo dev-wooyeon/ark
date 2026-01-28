@@ -1,0 +1,13 @@
+@import url("https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css");
+
+/* 
+  Do NOT apply Tossface to body globally to avoid affecting numbers and text kerning.
+  Use the .tossface utility class for specific emoji elements.
+*/
+
+.tossface {
+    font-family: "Tossface", sans-serif !important;
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+}

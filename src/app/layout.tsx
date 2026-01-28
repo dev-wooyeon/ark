@@ -1,5 +1,6 @@
-import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
+import '@/styles/tossface.css';
+import IntroSplash from '@/components/layout/IntroSplash';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://eunu.log'),
@@ -43,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
+        <IntroSplash />
         <div id="app-root">{children}</div>
         <div id="overlay-root" />
       </body>

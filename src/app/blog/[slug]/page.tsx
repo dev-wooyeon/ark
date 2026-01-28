@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
-import { Header, Footer, Container } from '@/components/layout';
+import { Header, Container } from '@/components/layout';
 import { TableOfContents, ReadingProgress } from '@/components/blog';
 
 export async function generateStaticParams() {
@@ -103,7 +103,7 @@ export default async function BlogPostPage({
       </article>
 
       <TableOfContents items={tocItems} />
-      <Footer />
+
     </>
   );
 }

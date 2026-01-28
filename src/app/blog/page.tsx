@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getSortedFeedData } from '@/lib/mdx-feeds';
-import { Header, Footer, Container } from '@/components/layout';
+import { Header, Container } from '@/components/layout';
 import BlogListClient from './BlogListClient';
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function BlogPage() {
         </Container>
       </main>
 
-      <Footer />
+
     </>
   );
 }
