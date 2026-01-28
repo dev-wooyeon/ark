@@ -7,7 +7,7 @@ export default function Resume() {
     <div className="min-h-screen p-8 bg-primary max-md:p-4">
       <header className="max-w-[800px] mx-auto mb-16">
         <BackLink href="/" text="← Home" />
-        <h1 className="font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] text-[clamp(2.5rem,6vw,3.5rem)] font-bold text-text-primary m-0 tracking-[-0.02em] max-md:text-[2rem]">
+        <h1 className="font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] text-display-md font-bold text-text-primary m-0 tracking-[-0.02em] max-md:text-[2rem]">
           Resume
         </h1>
       </header>

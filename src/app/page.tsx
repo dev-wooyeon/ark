@@ -6,8 +6,8 @@ export default function Home() {
     <div className="flex flex-col h-full w-full p-[2.5rem_1rem] lg:flex-row lg:p-10">
       <div className="flex flex-col w-full gap-6 lg:w-1/2 lg:h-full lg:gap-24">
         <div>
-          <span className="flex text-text-primary text-[clamp(6rem,15vw,10rem)] leading-none tracking-[-0.06em] -translate-x-2 font-light lg:text-[10rem] lg:-translate-x-8" role="img" aria-label="South Korea flag">🇰🇷</span>
-          <h1 className="flex text-text-primary text-[clamp(6rem,15vw,10rem)] leading-none tracking-[-0.06em] font-light m-0 font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] lg:text-[10rem]">eunu.log</h1>
+          <span className="flex text-text-primary text-display-xl leading-none tracking-[-0.06em] -translate-x-2 font-light lg:text-[10rem] lg:-translate-x-8" role="img" aria-label="South Korea flag">🇰🇷</span>
+          <h1 className="flex text-text-primary text-display-xl leading-none tracking-[-0.06em] font-light m-0 font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] lg:text-[10rem]">eunu.log</h1>
         </div>
         <section className="w-full pb-2 pt-4 text-text-primary font-['JetBrains_Mono',var(--font-mono)] text-[clamp(1rem,2vw,2rem)] leading-[1.2] tracking-[-0.05em] font-light lg:text-[2rem]">
           <p className="m-0 font-light max-md:text-[0.95rem]">

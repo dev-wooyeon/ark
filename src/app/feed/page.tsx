@@ -10,7 +10,7 @@ export default function FeedPage() {
     <div className="min-h-screen p-8 bg-primary max-md:p-4">
       <header className="max-w-[800px] mx-auto pb-8">
         <BackLink href="/" text="← Home" />
-        <h1 className="font-sans text-[clamp(2.5rem,6vw,3.5rem)] font-bold text-text-primary m-0 tracking-[-0.02em] max-md:text-[2rem]">Feed</h1>
+        <h1 className="font-sans text-display-md font-bold text-text-primary m-0 tracking-[-0.02em] max-md:text-[2rem]">Feed</h1>
       </header>
 
       <main className="max-w-[800px] mx-auto">
