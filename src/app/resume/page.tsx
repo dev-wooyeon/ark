@@ -86,7 +86,7 @@ export default function Resume() {
                                       {link.label}
                                     </Link>
                                   )}
-                                  {linkIndex < project.links.length - 1 && ' · '}
+                                  {linkIndex < (project.links?.length ?? 0) - 1 && ' · '}
                                 </span>
                               ))}
                             </div>

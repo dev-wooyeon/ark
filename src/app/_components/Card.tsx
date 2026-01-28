@@ -17,21 +17,22 @@ interface CardLinkProps extends Omit<ComponentPropsWithoutRef<typeof Link>, 'cla
 
 type CardComponentProps = CardProps | CardLinkProps;
 
-export default function Card({
-    children,
-    className = '',
-    hover = false,
-    as = 'div',
-    ...props
-}: CardComponentProps) {
+export default function Card(allProps: CardComponentProps) {
+    const {
+        children,
+        className = '',
+        hover = false,
+        as = 'div',
+    } = allProps;
+
     const baseStyles = 'rounded-lg border border-border bg-primary p-6 transition-all duration-200';
     const hoverStyles = hover
         ? 'hover:shadow-md hover:border-accent cursor-pointer'
         : '';
     const combinedClassName = `${baseStyles} ${hoverStyles} ${className}`;
 
-    if ('as' in props && props.as === 'link') {
-        const { as: _, ...linkProps } = props;
+    if (allProps.as === 'link') {
+        const { as: _, hover: __, className: ___, children: ____, ...linkProps } = allProps;
         return (
             <Link {...linkProps} className={combinedClassName}>
                 {children}
@@ -39,9 +40,10 @@ export default function Card({
         );
     }
 
-    const Component = as;
+    const { as: _, hover: __, className: ___, children: ____, ...divProps } = allProps;
+    const Component = as as 'div' | 'article' | 'section';
     return (
-        <Component {...props} className={combinedClassName}>
+        <Component {...divProps} className={combinedClassName}>
             {children}
         </Component>
     );
