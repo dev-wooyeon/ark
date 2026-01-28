@@ -35,8 +35,8 @@
 <br>Three.js
 </td>
 <td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=css" width="48" height="48" alt="CSS" />
-<br>CSS Modules
+<img src="https://skillicons.dev/icons?i=tailwind" width="48" height="48" alt="CSS" />
+<br>Tailwind CSS
 </td>
 </tr>
 </table>
