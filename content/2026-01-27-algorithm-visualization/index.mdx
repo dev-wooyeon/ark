@@ -1,9 +1,3 @@
-import GraphTraversalVisualization from '@/app/_components/GraphTraversalVisualization';
-import SortingVisualization from '@/app/_components/SortingVisualization';
-import BinarySearchVisualization from '@/app/_components/BinarySearchVisualization';
-import TwoPointerVisualization from '@/app/_components/TwoPointerVisualization';
-import SlidingWindowVisualization from '@/app/_components/SlidingWindowVisualization';
-import DPVisualization from '@/app/_components/DPVisualization';
 
 
 ## 코딩테스트 알고리즘 완전정복
@@ -52,7 +46,6 @@ import DPVisualization from '@/app/_components/DPVisualization';
 
 아래 시각화로 두 알고리즘의 차이를 직접 확인하세요.
 
-<GraphTraversalVisualization />
 
 > **핵심 차이:** DFS는 **깊이 우선** (세로로), BFS는 **너비 우선** (가로로) 탐색합니다.
 
@@ -111,7 +104,6 @@ import DPVisualization from '@/app/_components/DPVisualization';
 
 아래 시각화로 세 가지 정렬 알고리즘의 동작 방식을 직접 확인하세요.
 
-<SortingVisualization />
 
 > **핵심 차이:** 퀵 정렬은 피벗 기준 분할, 병합 정렬은 분할 후 병합, 힙 정렬은 힙 구조 활용
 
@@ -149,7 +141,6 @@ while left <= right:
 
 정렬된 배열에서 이진 탐색이 어떻게 동작하는지 확인하세요.
 
-<BinarySearchVisualization />
 
 > **핵심:** 매번 탐색 범위를 절반으로 줄여 O(log n) 시간에 탐색합니다.
 
@@ -207,7 +198,6 @@ while left <= right:
 
 동적 프로그래밍이 어떻게 중복 계산을 제거하는지 확인하세요.
 
-<DPVisualization />
 
 > **핵심:** 작은 문제의 결과를 저장하고 재사용하여 O(2ⁿ) → O(n)으로 최적화합니다.
 
@@ -332,7 +322,6 @@ while right < n:
 
 두 포인터가 어떻게 이동하며 목표값을 찾는지 확인하세요.
 
-<TwoPointerVisualization />
 
 > **핵심:** 정렬된 배열에서 양 끝의 포인터를 조건에 따라 이동하여 O(n) 시간에 해결합니다.
 
@@ -377,7 +366,6 @@ for right in range(n):
 
 고정 크기 윈도우가 어떻게 이동하며 최대값을 찾는지 확인하세요.
 
-<SlidingWindowVisualization />
 
 > **핵심:** 윈도우를 한 칸씩 이동하며 이전 계산 결과를 재사용하여 O(n) 시간에 해결합니다.
 
