@@ -44,6 +44,10 @@ module.exports = {
         '3xl': 'var(--text-3xl)',
         '4xl': 'var(--text-4xl)',
         '5xl': 'var(--text-5xl)',
+        'display-sm': ['clamp(2rem, 4vw, 2.5rem)', { lineHeight: '1.2' }],
+        'display-md': ['clamp(2.5rem, 6vw, 3.5rem)', { lineHeight: '1.2' }],
+        'display-lg': ['clamp(4rem, 10vw, 6rem)', { lineHeight: '1.1' }],
+        'display-xl': ['clamp(6rem, 15vw, 10rem)', { lineHeight: '1.05' }],
       },
       fontWeight: {
         normal: 'var(--font-normal)',
