@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { ButtonProps, ButtonVariant, ButtonSize, ButtonAsButton } from './Button.types';
@@ -62,16 +63,35 @@ const Button = forwardRef<
     </>
   );
 
+
+
   if ('as' in rest && rest.as === 'a') {
-    const { as, ...anchorProps } = rest;
+    const { as, href, ...anchorProps } = rest;
+    // Check if it's an external link
+    const isExternal = typeof href === 'string' && (href.startsWith('http') || href.startsWith('mailto:'));
+
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          {...anchorProps}
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          className={baseStyles}
+        >
+          {content}
+        </a>
+      );
+    }
+
     return (
-      <a
+      <Link
+        href={href || ''}
         {...anchorProps}
         ref={ref as React.Ref<HTMLAnchorElement>}
         className={baseStyles}
       >
         {content}
-      </a>
+      </Link>
     );
   }
 

@@ -35,16 +35,12 @@ export default function HomePage() {
               에서 소프트웨어 엔지니어로 일하고 있어요.
             </p>
             <div className="mt-8 flex gap-4">
-              <Link href="/blog" passHref legacyBehavior>
-                <Button as="a">
-                  <span className="tossface mr-2">📝</span>블로그 보기
-                </Button>
-              </Link>
-              <Link href="/resume" passHref legacyBehavior>
-                <Button as="a" variant="secondary">
-                  <span className="tossface mr-2">👨‍💻</span>이력서 보기
-                </Button>
-              </Link>
+              <Button as="a" href="/blog">
+                <span className="tossface mr-2">📝</span>블로그 보기
+              </Button>
+              <Button as="a" href="/resume" variant="secondary">
+                <span className="tossface mr-2">👨‍💻</span>이력서 보기
+              </Button>
             </div>
           </Container>
         </section>
