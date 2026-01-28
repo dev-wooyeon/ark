@@ -28,7 +28,7 @@
 </td>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
-<br>TypeScript
+<br>TypeScript 5.0+
 </td>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=threejs" width="48" height="48" alt="Three.js" />
