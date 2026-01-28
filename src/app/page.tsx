@@ -12,17 +12,17 @@ export default function Home() {
         <section className="w-full pb-2 pt-4 text-text-primary font-['JetBrains_Mono',var(--font-mono)] text-[clamp(1rem,2vw,2rem)] leading-[1.2] tracking-[-0.05em] font-light lg:text-[2rem]">
           <p className="m-0 font-light max-md:text-[0.95rem]">
             <TypingAnimation
-              text='Make <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Data</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">System</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Creative</span> Things. Currently working as a Software Engineer <a href="https://981park.com" class="text-text-primary underline underline-offset-[3px] decoration-1 decoration-text-primary transition-all duration-200 hover:text-accent hover:decoration-accent" target="_blank" rel="noopener noreferrer">@9.81park</a>.'
+              text='Make <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Data</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">System</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Creative</span> Things. Currently working as a Software Engineer <a href="https://981park.com" style="color: var(--accent-primary); text-decoration-color: var(--accent-primary);" class="underline underline-offset-[3px] decoration-1 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:opacity-70" target="_blank" rel="noopener noreferrer">@9.81park</a>.'
             />
           </p>
         </section>
       </div>
       <div className="flex flex-col w-full h-full gap-6 mt-4 lg:w-1/2 lg:mt-0">
         <section className="w-full flex flex-col font-['JetBrains_Mono',var(--font-mono)] text-text-primary text-[clamp(1.25rem,2.5vw,2.5rem)] leading-[1.2] tracking-[-0.05em] lg:text-[2.5rem]">
-          <Link href="/feed" className="text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-200 hover:text-accent hover:decoration-accent">
+          <Link href="/feed" className="w-fit inline-block text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:text-accent hover:decoration-accent hover:-translate-y-1 transform-gpu">
             Feed
           </Link>
-          <Link href="/resume" className="text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-200 hover:text-accent hover:decoration-accent">
+          <Link href="/resume" className="w-fit inline-block text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:text-accent hover:decoration-accent hover:-translate-y-1 transform-gpu">
             Resume
           </Link>
         </section>

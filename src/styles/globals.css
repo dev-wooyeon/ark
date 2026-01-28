@@ -110,7 +110,7 @@
   body {
     font-family: 'Tossface', var(--font-sans);
     line-height: 1.6;
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
     background-color: var(--bg-primary);
     overflow-x: hidden;
     margin: 0;
@@ -125,7 +125,7 @@ a {
 }
 
 a:hover {
-  color: var(--text-primary);
+  color: var(--accent-primary);
 }
 
 /* Code */
@@ -189,6 +189,8 @@ td {
 
 th {
   font-weight: 600 !important;
+  background-color: var(--th-bg-code) !important;
+  color: var(--text-primary) !important;
 }
 
 hr {
