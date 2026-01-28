@@ -14,13 +14,12 @@ interface FeedListProps {
 function FeedListSkeleton() {
     return (
         <div className="flex flex-col w-full">
-            <div className="flex items-center gap-4 max-md:gap-3">
-                <span className="text-sm font-medium text-[var(--text-tertiary)] max-md:text-xs">Filter:</span>
-                <div className="inline-flex bg-[var(--bg-primary)] border border-[var(--border)] rounded-lg p-0.5 gap-0.5">
-                    {['Dev', 'Life', 'Clear'].map((filter) => (
+            <div className="flex items-center gap-6 mb-8 max-md:gap-4 max-md:mb-6">
+                <div className="flex bg-[var(--bg-code)] rounded-full p-1 border border-[var(--border)]">
+                    {['All', 'Dev', 'Life'].map((filter) => (
                         <div
                             key={filter}
-                            className="bg-transparent border-none font-sans text-sm font-semibold text-[var(--text-primary)] py-2 px-4 rounded-md whitespace-nowrap opacity-50 pointer-events-none max-md:text-xs max-md:py-1 max-md:px-3"
+                            className="px-5 py-1.5 text-sm font-medium rounded-full opacity-50 pointer-events-none max-md:px-4 max-md:py-1 max-md:text-xs"
                         >
                             {filter}
                         </div>
@@ -83,28 +82,24 @@ function FeedListContent({ feed }: FeedListProps) {
 
     return (
         <div className="flex flex-col w-full">
-            <div className="flex items-center gap-4 max-md:gap-3">
-                <span className="text-sm font-medium text-text-tertiary max-md:text-xs">Filter:</span>
-                <div className="inline-flex bg-primary border border-border rounded-lg p-0.5 gap-0.5">
-                    {(['Dev', 'Life'] as FilterType[]).map((filter) => (
-                        <Button
+            <div className="flex items-center gap-6 mb-8 max-md:gap-4 max-md:mb-6">
+                <div className="flex bg-code-bg rounded-full p-1 border border-border">
+                    {(['All', 'Dev', 'Life'] as FilterType[]).map((filter) => (
+                        <button
                             key={filter}
-                            variant={activeFilter === filter ? 'primary' : 'ghost'}
-                            size="sm"
                             onClick={() => setActiveFilter(filter)}
-                            className="max-md:text-xs max-md:py-1 max-md:px-3"
+                            className={`
+                                px-5 py-1.5 text-sm font-medium rounded-full transition-all duration-300
+                                ${activeFilter === filter
+                                    ? 'bg-text-primary text-primary shadow-sm'
+                                    : 'text-text-tertiary hover:text-text-primary'
+                                }
+                                max-md:px-4 max-md:py-1 max-md:text-xs
+                            `}
                         >
                             {filter}
-                        </Button>
+                        </button>
                     ))}
-                    <Button
-                        variant={activeFilter === 'All' ? 'primary' : 'ghost'}
-                        size="sm"
-                        onClick={() => setActiveFilter('All')}
-                        className="max-md:text-xs max-md:py-1 max-md:px-3"
-                    >
-                        Clear
-                    </Button>
                 </div>
             </div>
 
