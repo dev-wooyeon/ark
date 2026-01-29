@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import '@/styles/tossface.css';
-import IntroSplash from '@/components/layout/IntroSplash';
+
 import JsonLd from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <IntroSplash />
+
         <div id="app-root">{children}</div>
         <div id="overlay-root" />
         <JsonLd

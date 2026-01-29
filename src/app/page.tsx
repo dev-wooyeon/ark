@@ -5,6 +5,8 @@ import { PostCard } from '@/components/blog';
 import { getSortedFeedData } from '@/lib/mdx-feeds';
 import HeroBackground from '@/components/home/HeroBackground';
 
+
+
 export default function HomePage() {
   const recentPosts = getSortedFeedData().slice(0, 3);
 

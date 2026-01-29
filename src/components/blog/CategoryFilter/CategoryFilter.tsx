@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+
 import { clsx } from 'clsx';
 
 type Category = 'All' | 'Dev' | 'Life';
@@ -17,31 +17,20 @@ export default function CategoryFilter({
   onCategoryChange,
 }: CategoryFilterProps) {
   return (
-    <div className="flex gap-2 p-1 bg-[var(--color-grey-100)] rounded-[12px] w-fit">
+    <div className="flex gap-2 flex-wrap">
       {categories.map((category) => (
         <button
           key={category}
           onClick={() => onCategoryChange(category)}
           className={clsx(
-            'relative px-4 py-2 text-sm font-medium rounded-[var(--radius-sm)]',
-            'transition-colors duration-[var(--duration-150)]',
+            'px-4 py-2 text-sm rounded-full transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]',
+            'active:scale-95',
             activeCategory === category
-              ? 'text-white'
-              : 'text-[var(--color-grey-600)] hover:text-[var(--color-grey-900)]'
+              ? 'bg-[var(--color-toss-blue)] text-white font-bold shadow-md'
+              : 'bg-[var(--color-grey-50)] text-[var(--color-grey-600)] hover:bg-[var(--color-grey-100)] font-medium'
           )}
         >
-          {activeCategory === category && (
-            <motion.div
-              layoutId="category-indicator"
-              className="absolute inset-0 bg-[var(--color-grey-900)] rounded-[var(--radius-sm)]"
-              transition={{
-                type: 'spring',
-                stiffness: 400,
-                damping: 30,
-              }}
-            />
-          )}
-          <span className="relative z-10">{category}</span>
+          {category}
         </button>
       ))}
     </div>
