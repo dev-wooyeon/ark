@@ -41,8 +41,12 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
   const handleClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const top = element.offsetTop - 100;
-      window.scrollTo({ top, behavior: 'smooth' });
+      const yOffset = -100;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+
+      // Update URL hash without jumping and without adding to history
+      window.history.replaceState(null, '', `#${id}`);
     }
   };
 

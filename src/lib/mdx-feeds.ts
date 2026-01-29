@@ -2,8 +2,31 @@ import fs from 'fs';
 import path from 'path';
 import { FeedData, Feed, FeedFrontmatter } from '@/types';
 import { z } from 'zod';
+import crypto from 'crypto';
 
 const contentDirectory = path.join(process.cwd(), 'content');
+
+// Helper to generate a stable hash for a folder name
+export function getPublicSlug(folderSlug: string): string {
+  return crypto.createHash('md5').update(folderSlug).digest('hex').slice(0, 10);
+}
+
+// Helper to find original folder name from hash
+export function getFolderSlug(publicSlug: string): string | null {
+  if (!safeExists(contentDirectory)) return null;
+  const dirNames = safeReaddir(contentDirectory);
+  if (!dirNames) return null;
+
+  return dirNames.find(dirName => {
+    const dirPath = path.join(contentDirectory, dirName);
+    try {
+      if (!fs.statSync(dirPath).isDirectory()) return false;
+      return getPublicSlug(dirName) === publicSlug;
+    } catch (e) {
+      return false;
+    }
+  }) || null;
+}
 
 // TOC item type
 export interface TocItem {
@@ -78,19 +101,19 @@ function calculateReadingTime(content: string): number {
   return Math.ceil(length / 500) || 1; // 500 characters per minute, min 1 min
 }
 
-// Load metadata from JSON file
-function loadMetadata(slug: string): FeedFrontmatter | null {
-  const metaPath = path.join(contentDirectory, slug, 'meta.json');
+// Load metadata from JSON file (internal folder slug)
+function loadMetadata(folderSlug: string): FeedFrontmatter | null {
+  const metaPath = path.join(contentDirectory, folderSlug, 'meta.json');
   const metaContents = safeReadFile(metaPath);
 
   if (!metaContents) {
-    console.error(`Metadata file not found: ${slug}/meta.json`);
+    console.error(`Metadata file not found: ${folderSlug}/meta.json`);
     return null;
   }
 
   try {
     const data = JSON.parse(metaContents);
-    const metadata = validateFeedFrontmatter(data, slug);
+    const metadata = validateFeedFrontmatter(data, folderSlug);
 
     if (!metadata) {
       return null;
@@ -98,7 +121,7 @@ function loadMetadata(slug: string): FeedFrontmatter | null {
 
     // Auto-calculate reading time if not present
     if (!metadata.readingTime) {
-      const mdxPath = path.join(contentDirectory, slug, 'index.mdx');
+      const mdxPath = path.join(contentDirectory, folderSlug, 'index.mdx');
       const mdxContents = safeReadFile(mdxPath);
       if (mdxContents) {
         metadata.readingTime = calculateReadingTime(mdxContents);
@@ -107,12 +130,12 @@ function loadMetadata(slug: string): FeedFrontmatter | null {
 
     return metadata;
   } catch (error) {
-    console.error(`Failed to parse metadata for ${slug}:`, error);
+    console.error(`Failed to parse metadata for ${folderSlug}:`, error);
     return null;
   }
 }
 
-// Get all feed slugs for static generation
+// Get all feed slugs for static generation (uses hashed slugs)
 export function getAllFeedSlugs() {
   if (!safeExists(contentDirectory)) {
     console.warn('Content directory does not exist');
@@ -125,18 +148,22 @@ export function getAllFeedSlugs() {
     return [];
   }
 
-  // Get slugs from directory names (each post has its own folder)
+  // Get slugs from directory names and convert to public hash
   return dirNames
     .filter((dirName) => {
       const dirPath = path.join(contentDirectory, dirName);
-      return fs.statSync(dirPath).isDirectory();
+      try {
+        return fs.statSync(dirPath).isDirectory();
+      } catch (e) {
+        return false;
+      }
     })
     .map((dirName) => ({
-      slug: dirName,
+      slug: getPublicSlug(dirName),
     }));
 }
 
-// Get sorted feed data for listing pages
+// Get sorted feed data for listing pages (uses hashed slugs)
 export function getSortedFeedData(): FeedData[] {
   if (!safeExists(contentDirectory)) {
     console.warn('Content directory does not exist');
@@ -152,19 +179,23 @@ export function getSortedFeedData(): FeedData[] {
   const allFeedData = dirNames
     .filter((dirName) => {
       const dirPath = path.join(contentDirectory, dirName);
-      return fs.statSync(dirPath).isDirectory();
+      try {
+        return fs.statSync(dirPath).isDirectory();
+      } catch (e) {
+        return false;
+      }
     })
     .map((dirName) => {
-      const slug = dirName;
-      const metadata = loadMetadata(slug);
+      const folderSlug = dirName;
+      const metadata = loadMetadata(folderSlug);
 
       if (!metadata) {
-        console.error(`Failed to load metadata for ${slug}, skipping`);
+        console.error(`Failed to load metadata for ${folderSlug}, skipping`);
         return null;
       }
 
       return {
-        slug,
+        slug: getPublicSlug(folderSlug),
         ...metadata,
       };
     })
@@ -180,26 +211,29 @@ export function getSortedFeedData(): FeedData[] {
   });
 }
 
-// Get single feed data with MDX component
+// Get single feed data with MDX component (slug can be hash or original)
 export async function getFeedData(slug: string): Promise<Feed | null> {
-  const metadata = loadMetadata(slug);
+  // Try to find the folder slug if a hash was passed
+  const folderSlug = getFolderSlug(slug) || slug;
+
+  const metadata = loadMetadata(folderSlug);
 
   if (!metadata) {
-    console.error(`Failed to load metadata for ${slug}`);
+    console.error(`Failed to load metadata for ${folderSlug}`);
     return null;
   }
 
   try {
-    // Dynamic import of MDX file
-    const mdxModule = await import(`@/../content/${slug}/index.mdx`);
+    // Dynamic import of MDX file using folder slug
+    const mdxModule = await import(`@/../content/${folderSlug}/index.mdx`);
 
     return {
-      slug,
+      slug: getPublicSlug(folderSlug),
       ...metadata,
       Content: mdxModule.default,
     };
   } catch (error) {
-    console.error(`Failed to load MDX content for ${slug}:`, error);
+    console.error(`Failed to load MDX content for ${folderSlug}:`, error);
     return null;
   }
 }

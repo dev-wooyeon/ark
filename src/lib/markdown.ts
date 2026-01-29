@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { TocItem } from '@/lib/mdx-feeds';
+import { getFolderSlug, TocItem } from '@/lib/mdx-feeds';
 import fs from 'fs';
 import path from 'path';
 
@@ -7,10 +7,10 @@ import path from 'path';
 function generateHeadingId(text: string): string {
     return text
         .toLowerCase()
-        .replace(/[^\w\s-]/g, '') // 특수문자 제거
+        .replace(/[^\w\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uD7B0-\uD7FF\s-]/g, '') // 한글, 영문, 숫자, 공백, 하이픈 제외 제거 (특수문자/이모지 제거)
+        .trim()
         .replace(/\s+/g, '-') // 공백을 하이픈으로
-        .replace(/-+/g, '-') // 연속된 하이픈 하나로
-        .trim();
+        .replace(/-+/g, '-'); // 연속된 하이픈 하나로
 }
 
 
@@ -37,9 +37,10 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
 
             // Generate unique ID
             let id = generateHeadingId(text);
-            if (idCounts[id]) {
-                idCounts[id]++;
-                id = `${id}-${idCounts[id]}`;
+            if (idCounts[id] !== undefined) {
+                const count = idCounts[id];
+                idCounts[id] = count + 1;
+                id = `${id}-${count}`;
             } else {
                 idCounts[id] = 1;
             }
@@ -77,8 +78,9 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
 // MDX 소스 파일 로드 (TOC 생성용)
 export function getMdxSource(slug: string): string | null {
     try {
+        const folderSlug = getFolderSlug(slug) || slug;
         const contentDirectory = path.join(process.cwd(), 'content');
-        const filePath = path.join(contentDirectory, slug, 'index.mdx');
+        const filePath = path.join(contentDirectory, folderSlug, 'index.mdx');
         return fs.readFileSync(filePath, 'utf8');
     } catch (error) {
         console.error(`Failed to read MDX source for ${slug}:`, error);
