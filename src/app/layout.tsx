@@ -1,3 +1,4 @@
+import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import '@/styles/tossface.css';
 import IntroSplash from '@/components/layout/IntroSplash';
