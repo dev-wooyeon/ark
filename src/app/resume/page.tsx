@@ -1,95 +1,157 @@
-import Link from 'next/link';
-import { PageLayout } from '../_components/PageLayout';
-import { personalInfo, experiences } from '@/data/resume';
+import { Metadata } from 'next';
+import { Header, Container } from '@/components/layout';
+import { experiences, personalInfo } from '@/data/resume';
 
-export default function Resume() {
+export const metadata: Metadata = {
+  title: 'Resume',
+  description: `${personalInfo.name}의 이력서`,
+};
+
+export default function ResumePage() {
+  // Calculate years of experience (Start: Dec 2019)
+  const startDate = new Date(2019, 12); // Month is 0-indexed (11 = Dec)
+  const now = new Date();
+  let years = now.getFullYear() - startDate.getFullYear();
+  const m = now.getMonth() - startDate.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < startDate.getDate())) {
+    years--;
+  }
   return (
-    <PageLayout title="Resume">
-        {/* Personal Info Grid */}
-        <section className="grid grid-cols-4 gap-10 mb-16 pb-12 border-b border-border max-lg:grid-cols-2 max-lg:gap-x-8 max-lg:gap-y-6 max-lg:mb-12 max-lg:pb-10">
-          <div className="flex flex-col gap-3">
-            <div className="text-xs text-text-tertiary uppercase tracking-[0.08em] font-semibold max-lg:text-[11px]">ID / </div>
-            <div className="text-[15px] text-text-primary leading-relaxed font-normal max-lg:text-sm">
-              {personalInfo.name}<br />
-              <span className="text-[13px] text-text-tertiary font-normal max-lg:text-xs">{personalInfo.birthDate}</span>
+    <>
+      <Header />
+
+      <main className="py-16 bg-white">
+        <Container size="md">
+          {/* Profile Header */}
+          <header className="mb-12">
+            <h1 className="text-4xl font-bold text-[var(--color-grey-900)] mb-6">
+              Resume
+            </h1>
+
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl text-[var(--color-grey-900)]">
+                {personalInfo.name}
+              </h2>
+              <p className="text-xl text-[var(--color-grey-700)] font-medium">
+                {personalInfo.position}
+              </p>
+              {/* <p className="text-[var(--color-grey-600)]">
+                {personalInfo.keywords}
+              </p> */}
             </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-xs text-text-tertiary uppercase tracking-[0.08em] font-semibold max-lg:text-[11px]">Position / </div>
-            <div className="text-[15px] text-text-primary leading-relaxed font-normal max-lg:text-sm">{personalInfo.position}</div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-xs text-text-tertiary uppercase tracking-[0.08em] font-semibold max-lg:text-[11px]">Keyword / </div>
-            <div className="text-[15px] text-text-primary leading-relaxed font-normal max-lg:text-sm">{personalInfo.keywords}</div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="text-xs text-text-tertiary uppercase tracking-[0.08em] font-semibold max-lg:text-[11px]">Contact / </div>
-            <div className="text-[15px] text-text-primary leading-relaxed font-normal max-lg:text-sm">
-              <a href={`mailto:${personalInfo.email}`} className="text-accent underline underline-offset-[3px] decoration-accent transition-all duration-200 hover:text-text-primary hover:decoration-text-primary">
+
+            {/* Contact & Links */}
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-[var(--color-grey-600)]">
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+              >
+                <span className="tossface">📧</span>
                 {personalInfo.email}
               </a>
+              <a
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+              >
+                <span className="tossface">🐱</span>
+                GitHub
+              </a>
             </div>
-          </div>
-        </section>
+          </header>
 
-        {/* Work Sections */}
-        {experiences.map((exp, expIndex) => (
-          <div key={expIndex}>
-            <hr className="h-px border-0 bg-border my-8 opacity-70" />
+          {/* Skills Section */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-[var(--color-grey-900)] mb-8 flex items-center gap-2">
+              <span className="tossface text-3xl">🛠️</span> Skills
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {personalInfo.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-4 py-2 bg-[var(--color-grey-50)] text-[var(--color-grey-800)] rounded-[var(--radius-md)] font-medium border border-[var(--color-grey-100)]"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </section>
 
-            <section className="grid grid-cols-[200px_1fr] gap-10 max-lg:grid-cols-1 max-lg:gap-8">
-              <div className="flex flex-col gap-2 sticky top-8 self-start max-lg:static max-lg:gap-1">
-                <h2 className="text-[20px] font-bold text-text-primary m-0 tracking-[-0.01em] max-lg:text-[18px]">{exp.company}</h2>
-                <div className="text-sm text-text-secondary font-normal leading-normal max-lg:text-[13px]">{exp.role}</div>
-                <div className="text-[13px] text-text-tertiary font-normal mt-1 max-lg:text-xs">{exp.period}</div>
-              </div>
+          {/* Experience Section */}
+          <section className="space-y-16">
+            <h2 className="text-2xl font-bold text-[var(--color-grey-900)] mb-8 flex items-center gap-2 border-b border-[var(--color-grey-100)] pb-4">
+              <span className="tossface text-3xl">💼</span>
+              Experience
+              <span className="ml-2 text-base font-bold text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-3 py-0.5 rounded-full align-middle">
+                {years}+ Years
+              </span>
+            </h2>
 
-              <div className="flex flex-col gap-6">
-                {exp.projects.map((project, projIndex) => (
-                  <article key={projIndex} className="flex flex-col gap-4 pb-6 border-b border-border last:border-b-0 last:pb-0 max-lg:gap-3 max-lg:pb-6">
-                    <h3 className="text-[18px] font-semibold text-text-primary m-0 tracking-[-0.01em] max-lg:text-base">{project.title}</h3>
-                    <p className="text-[15px] text-text-secondary leading-[1.7] m-0 font-normal max-lg:text-sm">
-                      {project.description}
+            {experiences.map((exp, index) => (
+              <article key={index} className="relative pl-4 md:pl-0">
+                {/* Visual Timeline Line for mobile */}
+                <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-grey-100)] md:hidden"></div>
+
+                <div className="grid md:grid-cols-[200px_1fr] gap-8">
+                  {/* Left Column: Period & Company */}
+                  <div className="md:text-right">
+                    <span className="inline-block px-3 py-1 bg-[var(--color-toss-blue)]/5 text-[var(--color-toss-blue)] text-sm font-bold rounded-full mb-2">
+                      {exp.period}
+                    </span>
+                    <h3 className="text-xl font-bold text-[var(--color-grey-900)]">
+                      {exp.company}
+                    </h3>
+                    <p className="text-[var(--color-grey-600)] font-medium mt-1">
+                      {exp.role}
                     </p>
-                    <ul className="list-disc pl-6 m-0 flex flex-col gap-2">
-                      {project.achievements.map((achievement, achIndex) => (
-                        <li key={achIndex} className="text-[15px] text-text-secondary leading-[1.7] max-lg:text-sm">
-                          {achievement}
-                          {project.links && achIndex === project.achievements.length - 1 && (
-                            <div className="mt-2">
-                              {project.links.map((link, linkIndex) => (
-                                <span key={linkIndex}>
-                                  {link.external ? (
-                                    <a
-                                      href={link.href}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-accent underline underline-offset-[2px] decoration-accent transition-all duration-200 text-sm font-normal hover:text-text-primary hover:decoration-text-primary max-lg:text-[13px]"
-                                    >
-                                      {link.label}
-                                    </a>
-                                  ) : (
-                                    <Link
-                                      href={link.href}
-                                      className="text-accent underline underline-offset-[2px] decoration-accent transition-all duration-200 text-sm font-normal hover:text-text-primary hover:decoration-text-primary max-lg:text-[13px]"
-                                    >
-                                      {link.label}
-                                    </Link>
-                                  )}
-                                  {linkIndex < (project.links?.length ?? 0) - 1 && ' · '}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-                ))}
-              </div>
-            </section>
-          </div>
-        ))}
-    </PageLayout>
+                  </div>
+
+                  {/* Right Column: Projects */}
+                  <div className="space-y-12">
+                    {exp.projects.map((project, pIndex) => (
+                      <div key={pIndex} className="relative group">
+                        <h4 className="text-xl font-bold text-[var(--color-grey-900)] mb-3 group-hover:text-[var(--color-toss-blue)] transition-colors">
+                          {project.title}
+                        </h4>
+                        <p className="text-[var(--color-grey-700)] leading-relaxed mb-4">
+                          {project.description}
+                        </p>
+
+                        <ul className="space-y-2 mb-6 pl-0 ml-0 list-none">
+                          {project.achievements.map((achievement, aIndex) => (
+                            <li key={aIndex} className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed">
+                              <span className="tossface text-sm mt-0.5 shrink-0">✔️</span>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {project.links && project.links.length > 0 && (
+                          <div className="flex gap-3 mt-4">
+                            {project.links.map((link, lIndex) => (
+                              <a
+                                key={lIndex}
+                                href={link.href}
+                                target={link.external ? "_blank" : "_self"}
+                                rel={link.external ? "noopener noreferrer" : ""}
+                                className="text-sm font-medium text-[var(--color-grey-700)] hover:text-[var(--color-toss-blue)] flex items-center gap-1.5 transition-colors bg-[var(--color-grey-100)] px-3 py-2 rounded-[var(--radius-sm)] hover:bg-[var(--color-toss-blue)]/10"
+                              >
+                                {link.external ? <span className="tossface text-sm">🔗</span> : <span className="tossface text-sm">📄</span>}
+                                {link.label}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </section>
+        </Container>
+      </main>
+    </>
   );
 }

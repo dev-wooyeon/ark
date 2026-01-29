@@ -1,32 +1,53 @@
 import Link from 'next/link';
-import TypingAnimation from '@/app/_components/TypingAnimation';
+import { Header, Footer, Container } from '@/components/layout';
+import { Button } from '@/components/ui';
+import { PostCard } from '@/components/blog';
+import { getSortedFeedData } from '@/lib/mdx-feeds';
+import HeroBackground from '@/components/home/HeroBackground';
 
-export default function Home() {
+export default function HomePage() {
+  const recentPosts = getSortedFeedData().slice(0, 3);
+
   return (
-    <div className="flex flex-col h-full w-full p-[2.5rem_1rem] lg:flex-row lg:p-10">
-      <div className="flex flex-col w-full gap-6 lg:w-1/2 lg:h-full lg:gap-24">
-        <div>
-          <span className="flex text-text-primary text-[clamp(5rem,20vw,15rem)] leading-none tracking-[-0.06em] -translate-x-2 font-light xl:text-[10rem] lg:-translate-x-8" role="img" aria-label="South Korea flag">(+82)</span>
-          <h1 className="flex text-text-primary text-[clamp(5rem,20vw,15rem)] leading-none tracking-[-0.06em] font-light m-0 font-[ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif] xl:text-[10rem]">eunu.log</h1>
-        </div>
-        <section className="w-full pb-2 pt-4 text-text-primary font-['JetBrains_Mono',var(--font-mono)] text-[clamp(1rem,2vw,2rem)] leading-[1.2] tracking-[-0.05em] font-light lg:text-[2rem]">
-          <p className="m-0 font-light max-md:text-[0.95rem]">
-            <TypingAnimation
-              text='Make <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Data</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">System</span>, <span class="underline underline-offset-[3px] decoration-1 decoration-text-primary">Creative</span> Things. Currently working as a Software Engineer <a href="https://981park.com" style="color: var(--accent-primary); text-decoration-color: var(--accent-primary);" class="underline underline-offset-[3px] decoration-1 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:opacity-70" target="_blank" rel="noopener noreferrer">@9.81park</a>.'
-            />
-          </p>
+    <>
+      <Header />
+
+      <main>
+        {/* Hero Section */}
+        <section className="relative py-20 md:py-32 overflow-hidden">
+          {/* <HeroBackground /> */}
+          <Container size="md">
+            <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-grey-900)] leading-tight">
+              안녕하세요,
+              <br />
+              <span className="text-[var(--color-toss-blue)]">우연</span>입니다
+            </h1>
+            <p className="mt-6 text-lg text-[var(--color-grey-600)] leading-relaxed max-w-lg">
+              데이터와 시스템, 창의적인 것들을 만듭니다. <br />현재{' '}
+              <a
+                href="https://981park.com"
+                className="text-[var(--color-toss-blue)] hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @9.81park
+              </a>
+              에서 소프트웨어 엔지니어로 일하고 있어요.
+            </p>
+            <div className="mt-8 flex gap-4">
+              <Button as="a" href="/blog">
+                <span className="tossface mr-2">📝</span>블로그 보기
+              </Button>
+              <Button as="a" href="/resume" variant="secondary">
+                <span className="tossface mr-2">👨‍💻</span>이력서 보기
+              </Button>
+            </div>
+          </Container>
         </section>
-      </div>
-      <div className="flex flex-col w-full h-full gap-6 mt-4 lg:w-1/2 lg:mt-0">
-        <section className="w-full flex flex-col font-['JetBrains_Mono',var(--font-mono)] text-text-primary text-[clamp(1.25rem,2.5vw,2.5rem)] leading-[1.2] tracking-[-0.05em] lg:text-[2.5rem]">
-          <Link href="/feed" className="w-fit inline-block text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:text-accent hover:decoration-accent hover:-translate-y-1 transform-gpu">
-            Feed
-          </Link>
-          <Link href="/resume" className="w-fit inline-block text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:text-accent hover:decoration-accent hover:-translate-y-1 transform-gpu">
-            Resume
-          </Link>
-        </section>
-      </div>
-    </div>
+
+      </main>
+
+
+    </>
   );
 }

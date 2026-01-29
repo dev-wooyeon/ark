@@ -1,0 +1,127 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { clsx } from 'clsx';
+import ThreeTossLogo from '@/components/ui/ThreeTossLogo';
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/resume', label: 'Resume' },
+];
+
+const socialLinks = [
+  { name: 'GitHub', href: 'https://github.com/dev-wooyeon' },
+  { name: 'Email', href: 'mailto:contact@une@kakao.com' },
+];
+
+export default function Header() {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-[var(--z-sticky)] bg-white/80 backdrop-blur-md border-b border-[var(--color-grey-100)]">
+      <div className="max-w-[1200px] mx-auto px-6 h-16 relative flex items-center justify-between">
+
+        {/* Left: Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xl font-bold text-[var(--color-grey-900)] hover:text-[var(--color-toss-blue)] transition-colors z-10"
+        >
+          <ThreeTossLogo />
+          <span>eunu.log</span>
+        </Link>
+
+        {/* Right: Hamburger Button (Always Visible) */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="p-2 text-[var(--color-grey-700)] hover:bg-[var(--color-grey-100)] rounded-[var(--radius-sm)] transition-colors z-10"
+          aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+          aria-expanded={isMenuOpen}
+        >
+          <motion.div
+            animate={isMenuOpen ? "open" : "closed"}
+            className="w-8 h-8 flex flex-col justify-center items-center gap-1.5"
+          >
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: 0 },
+                open: { rotate: 45, y: 8 }
+              }}
+              className="w-6 h-0.5 bg-current block"
+            />
+            <motion.span
+              variants={{
+                closed: { opacity: 1 },
+                open: { opacity: 0 }
+              }}
+              className="w-6 h-0.5 bg-current block"
+            />
+            <motion.span
+              variants={{
+                closed: { rotate: 0, y: 0 },
+                open: { rotate: -45, y: -8 }
+              }}
+              className="w-6 h-0.5 bg-current block"
+            />
+          </motion.div>
+        </button>
+      </div>
+
+      {/* Full Width Menu Dropdown */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }} // Toss easing
+            className="border-t border-[var(--color-grey-100)] bg-white overflow-hidden absolute w-full left-0 top-16 shadow-xl"
+            style={{ borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px' }}
+          >
+            <div className="max-w-[1200px] mx-auto px-6 py-8 flex flex-col gap-8">
+              {/* Main Nav Links */}
+              <ul className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={clsx(
+                        'block text-3xl font-bold transition-all duration-200 hover:translate-x-2',
+                        pathname === item.href
+                          ? 'text-[var(--color-toss-blue)]'
+                          : 'text-[var(--color-grey-900)] hover:text-[var(--color-toss-blue)]'
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Social Links */}
+              <div className="border-t border-[var(--color-grey-100)] pt-6 flex gap-6">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-base font-medium text-[var(--color-grey-600)] hover:text-[var(--color-toss-blue)] transition-colors flex items-center gap-2"
+                  >
+                    {link.name}
+                    <span className="text-xs">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
