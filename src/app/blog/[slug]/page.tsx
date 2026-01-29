@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import { Header, Container } from '@/components/layout';
-import { TableOfContents, ReadingProgress } from '@/components/blog';
+import { ReadingProgress, TableOfContents } from '@/components/blog';
 import JsonLd from '@/components/seo/JsonLd';
+import { useMDXComponents } from '@/mdx-components';
 
 export async function generateStaticParams() {
   return getAllFeedSlugs();
@@ -98,7 +99,7 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div className="prose">
-            <Content />
+            <Content components={useMDXComponents({})} />
           </div>
         </Container>
       </article>
