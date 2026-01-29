@@ -4,6 +4,7 @@ import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import { Header, Container } from '@/components/layout';
 import { TableOfContents, ReadingProgress } from '@/components/blog';
+import JsonLd from '@/components/seo/JsonLd';
 
 export async function generateStaticParams() {
   return getAllFeedSlugs();
@@ -101,6 +102,21 @@ export default async function BlogPostPage({
           </div>
         </Container>
       </article>
+
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.description,
+          author: {
+            '@type': 'Person',
+            name: 'Eunu',
+          },
+          datePublished: post.date,
+          image: [`https://eunu.log/og?title=${encodeURIComponent(post.title)}`],
+        }}
+      />
 
       <TableOfContents items={tocItems} />
 

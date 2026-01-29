@@ -1,13 +1,13 @@
 import { MetadataRoute } from 'next';
 import { getSortedFeedData } from '@/lib/mdx-feeds';
 
-const URL = 'https://eunu.log';
+const URL = 'https://eunu-log.vercel.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const feeds = getSortedFeedData();
 
     const feedEntries = feeds.map((feed) => ({
-        url: `${URL}/feed/${feed.slug}`,
+        url: `${URL}/blog/${feed.slug}`,
         lastModified: feed.date, // Use actual post date
         changeFrequency: 'weekly' as const,
         priority: 0.7,

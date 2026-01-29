@@ -18,12 +18,12 @@ export default function HomePage() {
           {/* <HeroBackground /> */}
           <Container size="md">
             <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-grey-900)] leading-tight">
-              (+82)
+              안녕하세요,
               <br />
-              <span className="text-[var(--color-grey-900)]">안녕하세요.</span>
+              <span className="text-[var(--color-toss-blue)]">우연</span> 기술 블로그입니다
             </h1>
-            <p className="mt-6 text-lg text-[var(--color-grey-800)] leading-relaxed max-w-lg">
-              Make Data, System, Creative things. <br /> Currently working as a software engineer {' '}
+            <p className="mt-6 text-lg text-[var(--color-grey-600)] leading-relaxed max-w-lg">
+              데이터와 시스템, 창의적인 것들을 만듭니다. <br />현재{' '}
               <a
                 href="https://981park.com"
                 className="text-[var(--color-toss-blue)] hover:underline"
@@ -32,6 +32,7 @@ export default function HomePage() {
               >
                 @9.81park
               </a>
+              에서 소프트웨어 엔지니어로 일하고 있어요.
             </p>
             <div className="mt-8 flex gap-4">
               <Button as="a" href="/blog">
