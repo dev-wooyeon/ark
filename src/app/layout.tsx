@@ -36,6 +36,11 @@ export const metadata: Metadata = {
       'naver-site-verification': 'NAVER_VERIFICATION_CODE_PLACEHOLDER',
     },
   },
+  alternates: {
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
 };
 
 export const viewport: Viewport = {

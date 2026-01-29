@@ -13,10 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.7,
     }));
 
-    const routes = ['', '/feed', '/resume'].map((route) => ({
+    const routes = ['', '/blog', '/resume', '/feed.xml'].map((route) => ({
         url: `${URL}${route}`,
         lastModified: new Date().toISOString().split('T')[0],
-        changeFrequency: 'monthly' as const,
+        changeFrequency: route === '/feed.xml' ? 'daily' as const : 'monthly' as const,
         priority: 1,
     }));
 
