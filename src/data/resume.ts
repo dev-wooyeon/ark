@@ -60,7 +60,7 @@ export const personalInfo: PersonalInfo = {
     email: 'une@kakao.com',
     phone: '+82 01029139706',
     github: 'https://github.com/dev-wooyeon',
-    blog: 'https://eunu.dev',
+    blog: 'https://eunu-log.vercel.app',
     skills: [
         'Java', 'Spring Boot', 'MySQL', 'AWS',
         'Kafka', 'Flink', 'ClickHouse', 'JPA'
@@ -91,13 +91,13 @@ export const experiences: Experience[] = [
                     },
                     {
                         label: '시스템 구축기',
-                        href: '/feed/2025-12-02-make-ctr-pipeline',
-                        external: false,
+                        href: '/blog/92a7da984f',
+                        external: true,
                     },
                     {
                         label: '성능개선기',
-                        href: '/feed/2025-12-10-macbook-air-m1-life',
-                        external: false,
+                        href: '/blog/3a7dc86780',
+                        external: true,
                     },
                 ],
             },
@@ -119,8 +119,8 @@ export const experiences: Experience[] = [
                 links: [
                     {
                         label: '회고',
-                        href: '/feed/data-analysis-automation',
-                        external: false,
+                        href: '/blog/a145b9f9dd',
+                        external: true,
                     },
                 ],
             },
@@ -136,8 +136,8 @@ export const experiences: Experience[] = [
                 links: [
                     {
                         label: '회고',
-                        href: '/feed/global-platform-redesign',
-                        external: false,
+                        href: '/blog/d403f1d9cb',
+                        external: true,
                     },
                 ],
             },
@@ -159,8 +159,8 @@ export const experiences: Experience[] = [
                 links: [
                     {
                         label: '회고',
-                        href: '/feed/payment-service-project',
-                        external: false,
+                        href: '/blog/1816648d73',
+                        external: true,
                     },
                 ],
             },
@@ -174,8 +174,8 @@ export const experiences: Experience[] = [
                 links: [
                     {
                         label: '회고',
-                        href: '/feed/batch-settlement-automation',
-                        external: false,
+                        href: '/blog/f8ce857e95',
+                        external: true,
                     },
                 ],
             },
@@ -190,8 +190,8 @@ export const experiences: Experience[] = [
                 links: [
                     {
                         label: '회고',
-                        href: '/feed/operation-automation',
-                        external: false,
+                        href: '/blog/d21fa41ed5',
+                        external: true,
                     },
                 ],
             },

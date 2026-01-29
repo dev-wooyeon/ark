@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { Header, Container } from '@/components/layout';
-import { experiences, personalInfo } from '@/data/resume';
+import { experiences, personalInfo, education, activities, certifications } from '@/data/resume';
 
 export const metadata: Metadata = {
   title: 'Resume',
@@ -28,16 +28,18 @@ export default function ResumePage() {
               Resume
             </h1>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mb-4">
               <h2 className="text-2xl text-[var(--color-grey-900)]">
                 {personalInfo.name}
               </h2>
               <p className="text-xl text-[var(--color-grey-700)] font-medium">
                 {personalInfo.position}
               </p>
-              {/* <p className="text-[var(--color-grey-600)]">
-                {personalInfo.keywords}
-              </p> */}
+              {personalInfo.introduction && (
+                <p className="text-[var(--color-grey-600)] mt-2 leading-relaxed">
+                  {personalInfo.introduction}
+                </p>
+              )}
             </div>
 
             {/* Contact & Links */}
@@ -49,6 +51,15 @@ export default function ResumePage() {
                 <span className="tossface">📧</span>
                 {personalInfo.email}
               </a>
+              {personalInfo.phone && (
+                <a
+                  href={`tel:${personalInfo.phone}`}
+                  className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+                >
+                  <span className="tossface">📱</span>
+                  {personalInfo.phone}
+                </a>
+              )}
               <a
                 href={personalInfo.github}
                 target="_blank"
@@ -58,6 +69,17 @@ export default function ResumePage() {
                 <span className="tossface">🐱</span>
                 GitHub
               </a>
+              {personalInfo.blog && (
+                <a
+                  href={personalInfo.blog}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+                >
+                  <span className="tossface">📝</span>
+                  Blog
+                </a>
+              )}
             </div>
           </header>
 
@@ -96,9 +118,20 @@ export default function ResumePage() {
                 <div className="grid md:grid-cols-[200px_1fr] gap-8">
                   {/* Left Column: Period & Company */}
                   <div className="md:text-right">
-                    <span className="inline-block px-3 py-1 bg-[var(--color-toss-blue)]/5 text-[var(--color-toss-blue)] text-sm font-bold rounded-full mb-2">
-                      {exp.period}
-                    </span>
+                    <div className="inline-flex flex-col md:items-end">
+                      <span className="inline-block px-3 py-1 bg-[var(--color-toss-blue)]/5 text-[var(--color-toss-blue)] text-sm font-bold rounded-lg mb-2">
+                        {exp.period.includes('(') ? (
+                          <>
+                            <span className="block">{exp.period.split(' (')[0]}</span>
+                            <span className="block text-xs opacity-70 font-medium mt-0.5">
+                              ({exp.period.split(' (')[1]}
+                            </span>
+                          </>
+                        ) : (
+                          exp.period
+                        )}
+                      </span>
+                    </div>
                     <h3 className="text-xl font-bold text-[var(--color-grey-900)]">
                       {exp.company}
                     </h3>
@@ -149,6 +182,91 @@ export default function ResumePage() {
                 </div>
               </article>
             ))}
+          </section>
+
+          {/* Education Section */}
+          <section className="mt-16">
+            <h2 className="text-2xl font-bold text-[var(--color-grey-900)] mb-8 flex items-center gap-2 border-b border-[var(--color-grey-100)] pb-4">
+              <span className="tossface text-3xl">🎓</span> Education
+            </h2>
+            <div className="space-y-6">
+              {education.map((edu, index) => (
+                <div key={index} className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8">
+                  <div className="md:text-right">
+                    <span className="inline-block px-3 py-1 bg-[var(--color-grey-100)] text-[var(--color-grey-700)] text-sm font-medium rounded-full">
+                      {edu.period}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[var(--color-grey-900)]">
+                      {edu.school}
+                    </h3>
+                    <p className="text-[var(--color-grey-700)] mt-1">
+                      {edu.degree} | {edu.major}
+                    </p>
+                    <span className="inline-block mt-2 px-2 py-1 bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] text-xs font-medium rounded">
+                      {edu.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Activities Section */}
+          <section className="mt-16">
+            <h2 className="text-2xl font-bold text-[var(--color-grey-900)] mb-8 flex items-center gap-2 border-b border-[var(--color-grey-100)] pb-4">
+              <span className="tossface text-3xl">🌟</span> Activities
+            </h2>
+            <div className="space-y-8">
+              {activities.map((activity, index) => (
+                <div key={index} className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8">
+                  <div className="md:text-right">
+                    <span className="inline-block px-3 py-1 bg-[var(--color-grey-100)] text-[var(--color-grey-700)] text-sm font-medium rounded-full">
+                      {activity.period}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[var(--color-grey-900)] mb-1">
+                      {activity.title}
+                    </h3>
+                    <p className="text-[var(--color-grey-600)] font-medium mb-4">
+                      {activity.organization}
+                    </p>
+                    <ul className="space-y-2 pl-0 ml-0 list-none">
+                      {activity.description.map((desc, dIndex) => (
+                        <li key={dIndex} className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed">
+                          <span className="tossface text-sm mt-0.5 shrink-0">✔️</span>
+                          <span>{desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Certifications Section */}
+          <section className="mt-16 mb-16">
+            <h2 className="text-2xl font-bold text-[var(--color-grey-900)] mb-8 flex items-center gap-2 border-b border-[var(--color-grey-100)] pb-4">
+              <span className="tossface text-3xl">📜</span> Certifications
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {certifications.map((cert, index) => (
+                <div key={index} className="p-6 bg-[var(--color-grey-50)] rounded-[var(--radius-md)] border border-[var(--color-grey-100)]">
+                  <h3 className="text-lg font-bold text-[var(--color-grey-900)] mb-2">
+                    {cert.name}
+                  </h3>
+                  <p className="text-[var(--color-grey-600)] text-sm mb-1">
+                    {cert.issuer}
+                  </p>
+                  <p className="text-[var(--color-grey-500)] text-sm">
+                    {cert.date}
+                  </p>
+                </div>
+              ))}
+            </div>
           </section>
         </Container>
       </main>
