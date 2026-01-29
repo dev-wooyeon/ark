@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
-import ThreeTossLogo from '@/components/ui/ThreeTossLogo';
+import Logo from '@/components/ui/Logo';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -31,7 +31,7 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-xl font-bold text-[var(--color-grey-900)] hover:text-[var(--color-toss-blue)] transition-colors z-10"
         >
-          <ThreeTossLogo />
+          <Logo />
           <span>eunu.log</span>
         </Link>
 
