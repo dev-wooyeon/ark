@@ -1,4 +1,13 @@
 import remarkGfm from 'remark-gfm';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+
+/** @type {import('rehype-pretty-code').Options} */
+const prettyCodeOptions = {
+  theme: 'one-dark-pro',
+  keepBackground: true,
+  defaultLang: 'plaintext',
+};
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -16,7 +25,7 @@ const nextConfig = {
           loader: '@mdx-js/loader',
           options: {
             remarkPlugins: [remarkGfm],
-            rehypePlugins: [],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, prettyCodeOptions]],
           },
         },
       ],

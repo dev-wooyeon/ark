@@ -384,20 +384,61 @@
   border-radius: 0.25rem;
 }
 
-.prose pre {
-  background-color: var(--color-grey-900);
-  color: var(--color-grey-100);
-  padding: 1.25rem;
-  border-radius: var(--radius-sm);
-  overflow-x: auto;
-  margin: 1.5rem 0;
-  font-size: var(--text-sm);
-}
-
+/* Inline code should not have background if it's inside pre */
 .prose pre code {
   background-color: transparent;
   padding: 0;
   color: inherit;
+  border-radius: 0;
+  font-size: inherit;
+  display: grid;
+  /* For line highlighting to work correctly */
+}
+
+.prose pre {
+  padding: 1.25rem 0;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  background-color: var(--color-grey-900) !important;
+  /* Force consistent background */
+  color: var(--color-grey-100);
+}
+
+.prose pre [data-line] {
+  padding: 0 1.25rem;
+  border-left: 2px solid transparent;
+}
+
+.prose pre [data-highlighted-line] {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--color-toss-blue);
+}
+
+.prose [data-rehype-pretty-code-figure] {
+  margin: 1.5rem 0;
+}
+
+.prose [data-rehype-pretty-code-title] {
+  background-color: var(--color-grey-800);
+  color: var(--color-grey-100);
+  padding: 0.5rem 1rem;
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: -1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.prose [data-rehype-pretty-code-title]+pre {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .prose table {
