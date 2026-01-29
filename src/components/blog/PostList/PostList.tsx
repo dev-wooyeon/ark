@@ -50,7 +50,7 @@ export default function PostList({ posts }: PostListProps) {
       className="grid gap-6 md:grid-cols-2"
     >
       {posts.map((post) => (
-        <motion.div key={post.slug} variants={itemVariants}>
+        <motion.div key={post.slug} variants={itemVariants} className="h-full">
           <PostCard post={post} />
         </motion.div>
       ))}

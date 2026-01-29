@@ -51,7 +51,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     <Link
       href={`/blog/${post.slug}`}
       className={clsx(
-        'group block p-6 rounded-[var(--radius-md)] border border-[var(--color-grey-200)] bg-white',
+        'group flex flex-col h-full p-6 rounded-[var(--radius-md)] border border-[var(--color-grey-200)] bg-white',
         'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
         'hover:border-[var(--color-grey-300)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5'
       )}
@@ -64,10 +64,10 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
           {formattedDate}
         </time>
       </div>
-      <h3 className="text-lg font-semibold text-[var(--color-grey-900)] group-hover:text-[var(--color-toss-blue)] transition-colors leading-snug">
+      <h3 className="text-lg font-semibold text-[var(--color-grey-900)] group-hover:text-[var(--color-toss-blue)] transition-colors leading-snug line-clamp-2">
         {post.title}
       </h3>
-      <p className="mt-2 text-sm text-[var(--color-grey-600)] line-clamp-2">
+      <p className="mt-2 text-sm text-[var(--color-grey-600)] line-clamp-2 flex-grow">
         {post.description}
       </p>
       {post.readingTime && (
