@@ -15,6 +15,13 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   images: {
     formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'velog.velcdn.com',
+        pathname: '/**',
+      },
+    ],
   },
   webpack: (config, options) => {
     config.module.rules.push({
