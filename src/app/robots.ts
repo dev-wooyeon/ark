@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/private/',
         },
-        sitemap: 'https://eunu.log/sitemap.xml',
+        sitemap: 'https://eunu-log.vercel.app/sitemap.xml',
     };
 }

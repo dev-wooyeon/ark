@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   verification: {
-    google: 'GOOGLE_VERIFICATION_CODE_PLACEHOLDER',
+    google: 'Lg-je4JjsFWeaBipKGX15JV1fsHCuM7LCmsmGCvnXiU',
     other: {
-      'naver-site-verification': 'NAVER_VERIFICATION_CODE_PLACEHOLDER',
+      'naver-site-verification': '94f6667c9c4ccb0b226ca6cea419f584bc0f5043',
     },
   },
   alternates: {
@@ -65,11 +65,11 @@ export default function RootLayout({
             '@context': 'https://schema.org',
             '@type': 'WebSite',
             name: 'eunu.log',
-            url: 'https://eunu.log',
+            url: 'https://eunu-log.vercel.app',
             author: {
               '@type': 'Person',
               name: 'Eunu',
-              url: 'https://eunu.log/resume',
+              url: 'https://eunu-log.vercel.app/resume',
               sameAs: [
                 'https://github.com/dev-wooyeon',
                 'mailto:contact@une@kakao.com'
