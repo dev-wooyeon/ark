@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import { Header, Container } from '@/components/layout';
-import { ReadingProgress, TableOfContents } from '@/components/blog';
+import { ReadingProgress, TableOfContents, GiscusComments } from '@/components/blog';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
 
@@ -103,6 +103,13 @@ export default async function BlogPostPage({
           </div>
         </Container>
       </article>
+
+      {/* Comments */}
+      <section className="py-12">
+        <Container size="md">
+          <GiscusComments slug={slug} />
+        </Container>
+      </section>
 
       <JsonLd
         data={{
