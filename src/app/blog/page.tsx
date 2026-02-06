@@ -16,7 +16,7 @@ export default function BlogPage() {
       <Header />
 
       <main className="py-16">
-        <Container>
+        <Container size="md">
           <header className="mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-grey-900)]">
               Blog
