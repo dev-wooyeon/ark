@@ -2,10 +2,11 @@
 
 import { useState, useMemo } from 'react';
 import { CategoryFilter, PostList } from '@/components/blog';
-import type { Post, Category } from '@/components/blog';
+import type { Category } from '@/components/blog';
+import type { FeedData } from '@/types';
 
 interface BlogListClientProps {
-  posts: Post[];
+  posts: FeedData[];
 }
 
 export default function BlogListClient({ posts }: BlogListClientProps) {

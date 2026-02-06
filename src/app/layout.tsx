@@ -72,7 +72,7 @@ export default function RootLayout({
               url: 'https://eunu-log.vercel.app/resume',
               sameAs: [
                 'https://github.com/dev-wooyeon',
-                'mailto:contact@une@kakao.com'
+                'mailto:une@kakao.com'
               ]
             },
           }}

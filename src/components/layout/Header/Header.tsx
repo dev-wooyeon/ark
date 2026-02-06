@@ -15,7 +15,7 @@ const navItems = [
 
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/dev-wooyeon' },
-  { name: 'Email', href: 'mailto:contact@une@kakao.com' },
+  { name: 'Email', href: 'mailto:une@kakao.com' },
 ];
 
 export default function Header() {
@@ -79,8 +79,7 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }} // Toss easing
-            className="border-t border-[var(--color-grey-100)] bg-white overflow-hidden absolute w-full left-0 top-16 shadow-xl"
-            style={{ borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px' }}
+            className="border-t border-[var(--color-grey-100)] bg-white overflow-hidden absolute w-full left-0 top-16 shadow-xl rounded-b-[var(--radius-lg)]"
           >
             <div className="max-w-[1200px] mx-auto px-6 py-8 flex flex-col gap-8">
               {/* Main Nav Links */}
@@ -114,7 +113,8 @@ export default function Header() {
                     className="text-base font-medium text-[var(--color-grey-600)] hover:text-[var(--color-toss-blue)] transition-colors flex items-center gap-2"
                   >
                     {link.name}
-                    <span className="text-xs">↗</span>
+                    <span className="text-xs" aria-hidden="true">↗</span>
+                    <span className="sr-only">새 탭에서 열림</span>
                   </a>
                 ))}
               </div>

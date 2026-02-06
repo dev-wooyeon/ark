@@ -1,17 +1,9 @@
 import Link from 'next/link';
 import { clsx } from 'clsx';
-
-interface Post {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  category: string;
-  readingTime?: number;
-}
+import { FeedData } from '@/types';
 
 interface PostCardProps {
-  post: Post;
+  post: FeedData;
   variant?: 'default' | 'featured';
 }
 
@@ -79,4 +71,4 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
   );
 }
 
-export type { PostCardProps, Post };
+export type { PostCardProps };

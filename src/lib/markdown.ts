@@ -1,4 +1,3 @@
-import * as cheerio from 'cheerio';
 import { getFolderSlug, TocItem } from '@/lib/mdx-feeds';
 import fs from 'fs';
 import path from 'path';

@@ -32,6 +32,7 @@ module.exports = {
         6: 'var(--space-6)',
         8: 'var(--space-8)',
         12: 'var(--space-12)',
+        13: '3.25rem', // 52px for button height (8pt grid)
         16: 'var(--space-16)',
       },
       fontSize: {

@@ -17,7 +17,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 const sizeStyles: Record<ButtonSize, string> = {
   sm: 'h-9 px-3 text-sm rounded-[var(--radius-sm)]',
   md: 'h-11 px-4 text-base rounded-[var(--radius-sm)]',
-  lg: 'h-[52px] px-6 text-lg rounded-[var(--radius-sm)]',
+  lg: 'h-13 px-6 text-lg rounded-[var(--radius-sm)]',
 };
 
 const Button = forwardRef<

@@ -1,11 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { PostCard, Post } from '../PostCard';
+import { PostCard } from '../PostCard';
 import { EmptyState } from '@/components/ui';
+import type { FeedData } from '@/types';
 
 interface PostListProps {
-  posts: Post[];
+  posts: FeedData[];
 }
 
 const containerVariants = {

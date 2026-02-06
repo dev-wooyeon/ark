@@ -1,6 +1,6 @@
 // Blog Components
 export { PostCard } from './PostCard';
-export type { PostCardProps, Post } from './PostCard';
+export type { PostCardProps } from './PostCard';
 
 export { PostList } from './PostList';
 export type { PostListProps } from './PostList';
