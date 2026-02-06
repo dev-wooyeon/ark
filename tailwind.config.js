@@ -35,6 +35,9 @@ module.exports = {
         13: '3.25rem', // 52px for button height (8pt grid)
         16: 'var(--space-16)',
       },
+      fontFamily: {
+        mono: 'var(--font-mono)',
+      },
       fontSize: {
         xs: 'var(--text-xs)',
         sm: 'var(--text-sm)',
