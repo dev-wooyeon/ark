@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-r150+-black?style=flat-square&logo=three.js)](https://threejs.org/)
 
-개인 기술 블로그입니다!
+개인 블로그입니다!
 
 [Live Demo](https://eunu-log.vercel.app)
 
@@ -135,10 +135,17 @@ npm run start
 
 ### Typography
 
-- **Font Family:** Geist Sans & Geist Mono
-- **Scale:** 12px ~ 48px (design tokens)
+- **Font Family:** Pretendard (Base), JetBrains Mono (Code/Mono), TossFace (Emoji)
+- **Scale:** Minor Third Scale (TDS Standard)
 
 <br />
+
+## ✨ Key Features (New)
+
+- **TDS Integration**: Applied Toss Design System tokens (Colors, Spacing, Typography).
+- **Interactive Scroll Hint**: Clickable arrow button with smooth scrolling.
+- **Glassmorphism**: "True Black Glass" effect on navigation elements.
+- **Layout Stability**: "Invisible Reservation" pattern to prevent layout shifts during typing effects.
 
 ## 📈 Performance
 
