@@ -37,6 +37,14 @@ export async function generateMetadata({
       publishedTime: post.date,
       authors: ['Eunu'],
       tags: post.tags,
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(post.title)}&date=${post.date}&tags=${post.tags?.join(',') || ''}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
   };
 }
