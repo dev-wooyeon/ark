@@ -25,8 +25,6 @@ export interface Feed extends FeedData {
   Content: React.ComponentType<MDXProps>;
 }
 
-
-
 // Project Types
 export interface Project {
   id: string;

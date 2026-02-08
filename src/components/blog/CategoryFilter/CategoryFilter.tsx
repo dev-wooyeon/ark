@@ -1,6 +1,5 @@
 'use client';
 
-
 import { clsx } from 'clsx';
 
 type Category = 'All' | 'Dev' | 'Life';

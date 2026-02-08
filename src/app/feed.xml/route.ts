@@ -3,14 +3,14 @@ import { getSortedFeedData } from '@/lib/mdx-feeds';
 const SITE_URL = 'https://eunu-log.vercel.app';
 
 export async function GET() {
-    const allPosts = getSortedFeedData();
+  const allPosts = getSortedFeedData();
 
-    const feedItems = allPosts
-        .map((post) => {
-            const postUrl = `${SITE_URL}/blog/${post.slug}`;
-            const pubDate = new Date(post.date).toUTCString();
+  const feedItems = allPosts
+    .map((post) => {
+      const postUrl = `${SITE_URL}/blog/${post.slug}`;
+      const pubDate = new Date(post.date).toUTCString();
 
-            return `
+      return `
     <item>
       <title><![CDATA[${post.title}]]></title>
       <link>${postUrl}</link>
@@ -19,10 +19,10 @@ export async function GET() {
       <description><![CDATA[${post.description}]]></description>
       <category><![CDATA[${post.category}]]></category>
     </item>`;
-        })
-        .join('');
+    })
+    .join('');
 
-    const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>eunu.log</title>
@@ -36,10 +36,10 @@ export async function GET() {
   </channel>
 </rss>`;
 
-    return new Response(rss, {
-        headers: {
-            'Content-Type': 'application/xml; charset=utf-8',
-            'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800',
-        },
-    });
+  return new Response(rss, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800',
+    },
+  });
 }

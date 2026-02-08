@@ -3,10 +3,6 @@
   "description": "데이터 분석 파이프라인을 구축하였고 이를 발판으로 성장하기 위한 방법을 생각해본다.",
   "date": "2025-09-07",
   "category": "Dev",
-  "tags": [
-    "Project",
-    "Engineering",
-    "Review"
-  ],
+  "tags": ["Project", "Engineering", "Review"],
   "featured": false
 }

@@ -9,7 +9,7 @@
 @import './tokens.css';
 
 /* Tailwind CSS */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ===== Local Fonts ===== */
 
@@ -238,7 +238,6 @@
 
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -435,7 +434,7 @@
   z-index: 1;
 }
 
-.prose [data-rehype-pretty-code-title]+pre {
+.prose [data-rehype-pretty-code-title] + pre {
   margin-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -478,7 +477,6 @@
 
 /* ===== Custom Animations ===== */
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;
@@ -506,8 +504,6 @@
 .animate-spin {
   animation: spin 1s linear infinite;
 }
-
-
 
 /* ===== Utility Classes ===== */
 .sr-only {
@@ -549,8 +545,13 @@
 }
 
 @keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 @layer utilities {
@@ -561,6 +562,12 @@
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

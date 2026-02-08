@@ -3,10 +3,6 @@
   "description": "ioT 시스템을 글로벌 플랫폼으로 전환하기 위해 고민했던 흔적을 남긴다.",
   "date": "2024-08-18",
   "category": "Dev",
-  "tags": [
-    "Project",
-    "Engineering",
-    "Review"
-  ],
+  "tags": ["Project", "Engineering", "Review"],
   "featured": false
 }

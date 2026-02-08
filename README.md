@@ -42,15 +42,18 @@
 </table>
 
 **Core:**
+
 - **Framework:** Next.js 14+ (App Router, SSG)
 - **Language:** TypeScript (Strict Mode)
 - **Styling:** CSS Modules + CSS Variables
 
 **Animation:**
+
 - **3D:** Three.js + @react-three/fiber + @react-three/drei
 - **Motion:** Framer Motion
 
 **Content:**
+
 - **Format:** Markdown + gray-matter
 - **Processing:** remark + rehype + syntax highlighting
 
@@ -129,8 +132,8 @@ npm run start
 
 ### Color Palette
 
-| Mode | Background | Text | Accent |
-|------|------------|------|--------|
+| Mode     | Background                | Text                 | Accent                 |
+| -------- | ------------------------- | -------------------- | ---------------------- |
 | ☀️ Light | `#EAEBEA` Newspaper Beige | `#1A1A1A` Soft Black | `#0066CC` Classic Blue |
 
 ### Typography
@@ -149,12 +152,12 @@ npm run start
 
 ## 📈 Performance
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| LCP | < 2.5s | ✅ |
-| FID | < 100ms | ✅ |
-| CLS | < 0.1 | ✅ |
-| Animation | 60fps | ✅ |
+| Metric    | Target  | Status |
+| --------- | ------- | ------ |
+| LCP       | < 2.5s  | ✅     |
+| FID       | < 100ms | ✅     |
+| CLS       | < 0.1   | ✅     |
+| Animation | 60fps   | ✅     |
 
 <br />
 

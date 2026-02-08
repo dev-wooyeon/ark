@@ -57,7 +57,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-
         <div id="app-root">{children}</div>
         <div id="overlay-root" />
         <JsonLd
@@ -72,8 +71,8 @@ export default function RootLayout({
               url: 'https://eunu-log.vercel.app/resume',
               sameAs: [
                 'https://github.com/dev-wooyeon',
-                'mailto:une@kakao.com'
-              ]
+                'mailto:une@kakao.com',
+              ],
             },
           }}
         />

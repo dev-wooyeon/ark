@@ -3,10 +3,6 @@
   "description": "거래, 정산, 송금 도메인을 분리하여 시스템 안정성을 확보한 경험",
   "date": "2026-01-24",
   "category": "Dev",
-  "tags": [
-    "Architecture",
-    "Payment",
-    "Domain Driven Design"
-  ],
+  "tags": ["Architecture", "Payment", "Domain Driven Design"],
   "transliteratedTitle": "payment-system-design-retrospective"
 }

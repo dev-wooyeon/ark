@@ -3,11 +3,6 @@
   "description": "정책 변경 이력을 시스템이 기억하게 하여 신뢰할 수 있는 소급 정산을 구현한 경험",
   "date": "2026-01-24",
   "category": "Dev",
-  "tags": [
-    "Architecture",
-    "Payment",
-    "Settlement",
-    "Batch"
-  ],
+  "tags": ["Architecture", "Payment", "Settlement", "Batch"],
   "transliteratedTitle": "settlement-automation-retrospective"
 }

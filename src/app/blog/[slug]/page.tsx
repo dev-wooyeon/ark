@@ -3,7 +3,11 @@ import { notFound } from 'next/navigation';
 import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import { Header, Container } from '@/components/layout';
-import { ReadingProgress, TableOfContents, GiscusComments } from '@/components/blog';
+import {
+  ReadingProgress,
+  TableOfContents,
+  GiscusComments,
+} from '@/components/blog';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
 
@@ -122,12 +126,13 @@ export default async function BlogPostPage({
             name: 'Eunu',
           },
           datePublished: post.date,
-          image: [`https://eunu.log/og?title=${encodeURIComponent(post.title)}`],
+          image: [
+            `https://eunu.log/og?title=${encodeURIComponent(post.title)}`,
+          ],
         }}
       />
 
       <TableOfContents items={tocItems} />
-
     </>
   );
 }

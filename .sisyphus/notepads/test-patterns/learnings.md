@@ -3,12 +3,14 @@
 ## Testing Framework: Vitest Setup
 
 ### Configuration
+
 - **Framework**: Vitest (v4.0.18) with React plugin
 - **Environment**: jsdom for DOM testing
 - **Setup File**: `vitest.setup.ts`
 - **Config**: `vitest.config.ts`
 
 ### Key Dependencies
+
 - `@testing-library/jest-dom`: DOM matchers and assertions
 - `@testing-library/react`: React component testing utilities
 - `jsdom`: DOM environment for Node.js testing
@@ -38,6 +40,7 @@
 ### Testing Focus Areas
 
 Based on existing tests, the project emphasizes:
+
 - **File System Operations**: Mocking fs interactions for content processing
 - **Data Validation**: Testing Zod schema validation for frontmatter
 - **Business Logic**: Reading time calculation, metadata processing
@@ -48,19 +51,20 @@ Based on existing tests, the project emphasizes:
 ```typescript
 // vitest.config.ts
 export default defineConfig({
-    plugins: [react()],
-    test: {
-        environment: 'jsdom',
-        globals: true, // Enable global test functions
-        setupFiles: './vitest.setup.ts',
-        alias: {
-            '@': path.resolve(__dirname, './src'), // Path alias matching Next.js
-        },
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    globals: true, // Enable global test functions
+    setupFiles: './vitest.setup.ts',
+    alias: {
+      '@': path.resolve(__dirname, './src'), // Path alias matching Next.js
     },
+  },
 });
 ```
 
 ### Script Integration
+
 - Test command: `npm run test` maps to `vitest`
 - No test build or coverage scripts currently configured
 - Testing appears to be focused on utility functions and data processing

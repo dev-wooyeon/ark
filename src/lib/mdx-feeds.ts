@@ -17,15 +17,17 @@ export function getFolderSlug(publicSlug: string): string | null {
   const dirNames = safeReaddir(contentDirectory);
   if (!dirNames) return null;
 
-  return dirNames.find(dirName => {
-    const dirPath = path.join(contentDirectory, dirName);
-    try {
-      if (!fs.statSync(dirPath).isDirectory()) return false;
-      return getPublicSlug(dirName) === publicSlug;
-    } catch (e) {
-      return false;
-    }
-  }) || null;
+  return (
+    dirNames.find((dirName) => {
+      const dirPath = path.join(contentDirectory, dirName);
+      try {
+        if (!fs.statSync(dirPath).isDirectory()) return false;
+        return getPublicSlug(dirName) === publicSlug;
+      } catch (e) {
+        return false;
+      }
+    }) || null
+  );
 }
 
 // TOC item type
@@ -35,7 +37,6 @@ export interface TocItem {
   level: number;
   children?: TocItem[];
 }
-
 
 // Zod schema for validation (same as before)
 const FeedFrontmatterSchema = z.object({
@@ -80,7 +81,10 @@ function safeExists(path: string): boolean {
 }
 
 // Validate frontmatter
-function validateFeedFrontmatter(data: unknown, slug: string): FeedFrontmatter | null {
+function validateFeedFrontmatter(
+  data: unknown,
+  slug: string
+): FeedFrontmatter | null {
   const result = FeedFrontmatterSchema.safeParse(data);
 
   if (!result.success) {

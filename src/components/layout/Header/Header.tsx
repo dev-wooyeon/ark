@@ -24,7 +24,6 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-[var(--z-sticky)] bg-white/80 backdrop-blur-md border-b border-[var(--color-grey-100)]">
       <div className="max-w-[800px] mx-auto px-6 h-16 relative flex items-center justify-between">
-
         {/* Left: Logo */}
         <Link
           href="/"
@@ -60,27 +59,27 @@ export default function Header() {
           aria-expanded={isMenuOpen}
         >
           <motion.div
-            animate={isMenuOpen ? "open" : "closed"}
+            animate={isMenuOpen ? 'open' : 'closed'}
             className="w-8 h-8 flex flex-col justify-center items-center gap-1.5"
           >
             <motion.span
               variants={{
                 closed: { rotate: 0, y: 0 },
-                open: { rotate: 45, y: 8 }
+                open: { rotate: 45, y: 8 },
               }}
               className="w-6 h-0.5 bg-current block"
             />
             <motion.span
               variants={{
                 closed: { opacity: 1 },
-                open: { opacity: 0 }
+                open: { opacity: 0 },
               }}
               className="w-6 h-0.5 bg-current block"
             />
             <motion.span
               variants={{
                 closed: { rotate: 0, y: 0 },
-                open: { rotate: -45, y: -8 }
+                open: { rotate: -45, y: -8 },
               }}
               className="w-6 h-0.5 bg-current block"
             />
@@ -107,7 +106,9 @@ export default function Header() {
                     onClick={() => setIsMenuOpen(false)}
                     className={clsx(
                       'block text-3xl font-bold transition-all duration-200 hover:translate-x-2',
-                      pathname === '/' ? 'text-[var(--color-toss-blue)]' : 'text-[var(--color-grey-900)]'
+                      pathname === '/'
+                        ? 'text-[var(--color-toss-blue)]'
+                        : 'text-[var(--color-grey-900)]'
                     )}
                   >
                     홈
@@ -142,7 +143,9 @@ export default function Header() {
                     className="text-base font-medium text-[var(--color-grey-600)] hover:text-[var(--color-toss-blue)] transition-colors flex items-center gap-2"
                   >
                     {link.name}
-                    <span className="text-xs" aria-hidden="true">↗</span>
+                    <span className="text-xs" aria-hidden="true">
+                      ↗
+                    </span>
                     <span className="sr-only">새 탭에서 열림</span>
                   </a>
                 ))}

@@ -20,7 +20,6 @@ CTR은 조회수와, 클릭의 각 데이터가 카프카 이벤트가 들어오
 
 ![](https://velog.velcdn.com/images/ieunune/post/269ea8ea-bca3-44f8-850b-fdcb0de82ca7/image.png)
 
-
 ## 1.3 프로젝트 저장소
 
 https://github.com/dev-wooyeon/demo-flink-product
@@ -39,7 +38,6 @@ https://github.com/dev-wooyeon/demo-flink-product
 
 4. Out-of-order 이벤트를 배제하면 정확성이 떨어지고, 과도하게 허용하면 지연(latency)이 증가한다.
 
-
 ## 2.2 이벤트 시간(Event Time) 기반 처리
 
 Flink는 Processing Time 대신 Event Time 기반 처리를 권장한다.
@@ -53,7 +51,6 @@ Flink는 Processing Time 대신 Event Time 기반 처리를 권장한다.
 3. Allowed Lateness: 추가 5초 허용
 
 이 조합의 근거는 뒤의 Decision 섹션에서 상세히 설명한다.
-
 
 ## 2.3 상태(State) 기반 집계
 
@@ -75,9 +72,7 @@ CTR은 작은 누락이나 중복도 큰 오차가 되므로 Exactly-Once 처리
 
 3. RETAIN_ON_CANCELLATION으로 안전한 상태 보존
 
-
 ![](https://velog.velcdn.com/images/ieunune/post/7f6074b2-44dc-4699-9276-0ce7ab069ac9/image.png)
-
 
 ---
 
@@ -89,17 +84,15 @@ CTR은 작은 누락이나 중복도 큰 오차가 되므로 Exactly-Once 처리
 
 1. 5초
 
-    노이즈가 크고 CTR 값 변동이 지나치게 민감했습니다.
+   노이즈가 크고 CTR 값 변동이 지나치게 민감했습니다.
 
 2. 10초
 
-    지연·정확성·계산 안정성 비교적 균형적이여서 최종 선택하였습니다.
+   지연·정확성·계산 안정성 비교적 균형적이여서 최종 선택하였습니다.
 
 3. 30초
 
-    응답성이 너무 낮고 실시간 모니터링 용도로 부적합해보였습니다.
-
-    
+   응답성이 너무 낮고 실시간 모니터링 용도로 부적합해보였습니다.
 
 ## 3.2 Allowed Lateness 5초
 
@@ -119,17 +112,15 @@ CTR은 작은 누락이나 중복도 큰 오차가 되므로 Exactly-Once 처리
 
 1. Redis
 
-    서빙(실시간 API)용. 빠른(밀리초) 응답.
+   서빙(실시간 API)용. 빠른(밀리초) 응답.
 
 2. ClickHouse
 
-    OLAP 및 히스토리 분석용. (MergeTree Engine을 사용)
+   OLAP 및 히스토리 분석용. (MergeTree Engine을 사용)
 
 3. DuckDB
 
-    로컬 개발, 디버깅용
-
-    
+   로컬 개발, 디버깅용
 
 ## 3.5 병렬도(Parallelism)와 파티션 대응
 
@@ -145,33 +136,31 @@ Parallelism 1에서는 Redis·ClickHouse가 포화되어 지연 급증하였습�
 
 ### 3.5.1 당시 도커 컨테이너 상태
 
-| CONTAINER ID | NAME | CPU % | MEM USAGE / LIMIT | MEM % | NET I/O | BLOCK I/O |
-| --- | --- | --- | --- | --- | --- | --- |
-| 4e796f1fb8cb | kafka-ui | 0.16% | 307.5MiB / 3.827GiB | 7.85% | 1.14MB / 2.85MB | 186MB / 117MB |
-| cfef347c1c0b | kafka2 | 127.08% | 330.2MiB / 3.827GiB | 8.43% | 859MB / 929MB | 33.2MB / 319MB |
-| 4288ee2e1646 | kafka3 | 41.49% | 293.9MiB / 3.827GiB | 7.50% | 698MB / 552MB | 34.4MB / 318MB |
-| fbf6b8aa4bc4 | kafka1 | 77.39% | 345.4MiB / 3.827GiB | 8.81% | 811MB / 817MB | 81.9MB / 312MB |
-| fb27f07ba10e | superset | 1.26% | 101.1MiB / 3.827GiB | 2.58% | 53.9kB / 2.3MB | 391MB / 163MB |
-| 678f5e428704 | ctr-api | 0.60% | 23.31MiB / 3.827GiB | 0.59% | 261kB / 272kB | 60.9MB / 43.4MB |
-| 45b518fceab4 | flink-taskmanager | 55.83% | 756.4MiB / 3.827GiB | 19.30% | 686MB / 262MB | 175MB / 332MB |
-| 46ebe361fcda | redisinsight | 0.00% | 26.65MiB / 3.827GiB | 0.68% | 1.03MB / 65.8kB | 151MB / 67.2MB |
-| c207c6890b09 | redis | 0.51% | 1.832MiB / 3.827GiB | 0.05% | 264kB / 252kB | 19.5MB / 2.98MB |
-| d9bd0b068af2 | flink-jobmanager | 1.89% | 767.4MiB / 3.827GiB | 19.58% | 168MB / 168MB | 458MB / 459MB |
-| ab8c8cfa95c5 | clickhouse | 8.72% | 310.9MiB / 3.827GiB | 7.93% | 293kB / 209kB | 558MB / 212MB |
-| 5f09c7acfd18 | zookeeper | 7.05% | 80.93MiB / 3.827GiB | 2.07% | 228kB / 203kB | 70.2MB / 36.2MB |
-
+| CONTAINER ID | NAME              | CPU %   | MEM USAGE / LIMIT   | MEM %  | NET I/O         | BLOCK I/O       |
+| ------------ | ----------------- | ------- | ------------------- | ------ | --------------- | --------------- |
+| 4e796f1fb8cb | kafka-ui          | 0.16%   | 307.5MiB / 3.827GiB | 7.85%  | 1.14MB / 2.85MB | 186MB / 117MB   |
+| cfef347c1c0b | kafka2            | 127.08% | 330.2MiB / 3.827GiB | 8.43%  | 859MB / 929MB   | 33.2MB / 319MB  |
+| 4288ee2e1646 | kafka3            | 41.49%  | 293.9MiB / 3.827GiB | 7.50%  | 698MB / 552MB   | 34.4MB / 318MB  |
+| fbf6b8aa4bc4 | kafka1            | 77.39%  | 345.4MiB / 3.827GiB | 8.81%  | 811MB / 817MB   | 81.9MB / 312MB  |
+| fb27f07ba10e | superset          | 1.26%   | 101.1MiB / 3.827GiB | 2.58%  | 53.9kB / 2.3MB  | 391MB / 163MB   |
+| 678f5e428704 | ctr-api           | 0.60%   | 23.31MiB / 3.827GiB | 0.59%  | 261kB / 272kB   | 60.9MB / 43.4MB |
+| 45b518fceab4 | flink-taskmanager | 55.83%  | 756.4MiB / 3.827GiB | 19.30% | 686MB / 262MB   | 175MB / 332MB   |
+| 46ebe361fcda | redisinsight      | 0.00%   | 26.65MiB / 3.827GiB | 0.68%  | 1.03MB / 65.8kB | 151MB / 67.2MB  |
+| c207c6890b09 | redis             | 0.51%   | 1.832MiB / 3.827GiB | 0.05%  | 264kB / 252kB   | 19.5MB / 2.98MB |
+| d9bd0b068af2 | flink-jobmanager  | 1.89%   | 767.4MiB / 3.827GiB | 19.58% | 168MB / 168MB   | 458MB / 459MB   |
+| ab8c8cfa95c5 | clickhouse        | 8.72%   | 310.9MiB / 3.827GiB | 7.93%  | 293kB / 209kB   | 558MB / 212MB   |
+| 5f09c7acfd18 | zookeeper         | 7.05%   | 80.93MiB / 3.827GiB | 2.07%  | 228kB / 203kB   | 70.2MB / 36.2MB |
 
 ### 3.5.2 Flink BackPressure 확인
 
 ![](https://velog.velcdn.com/images/ieunune/post/82bdc9e9-1ecb-4082-9792-6a12182de138/image.png)
-
 
 Flink UI를 확인 했을 때 초당 812건의 데이터를 처리할 수 있는 것을 확인할 수 있었고, 25분 정도 돌려 보았을 때 120만건 정도 처리할 수 있었습니다.
 
 ### 3.5.3 K6 Serving API 부하 테스트
 
 ```
-█ THRESHOLDS 
+█ THRESHOLDS
 
     http_req_duration
     ✗ 'p(95)<1000' p(95)=6.41s
@@ -182,7 +171,7 @@ Flink UI를 확인 했을 때 초당 812건의 데이터를 처리할 수 있는
     response_time
     ✗ 'p(95)<1000' p(95)=6.41s
 
-  █ TOTAL RESULTS 
+  █ TOTAL RESULTS
 
     checks_total.......: 450     12.054939/s
     checks_succeeded...: 100.00% 450 out of 450
@@ -220,6 +209,7 @@ ctr_load ✓ [======================================] 00/20 VUs  35s  10.00 iter
 ---
 
 # 4. 시스템 구성
+
 ![](https://velog.velcdn.com/images/ieunune/post/4cb5c5aa-cccf-44e0-a350-d691bebd28ee/image.png)
 
 ## 4.1 전체 데이터 흐름
@@ -227,7 +217,6 @@ ctr_load ✓ [======================================] 00/20 VUs  35s  10.00 iter
 Impressions/Clicks → Kafka → Flink → Redis/ClickHouse/DuckDB → FastAPI
 
 ![](https://velog.velcdn.com/images/ieunune/post/de40af18-360a-416a-b4af-4536211148b2/image.png)
-
 
 Flink는 웹 UI를 제공하고, Kafka랑 redis는 UI를 제공하지 않기 때문에, 직접 눈으로 보고 확인 할 수 있도록 각 provectuslabs/kafka-ui와 redis/redisinsight를 사용하여 확인 할 수 있었습니다.
 
@@ -257,7 +246,6 @@ CTR 같이 집계하는 비지니스는 이벤트 발생 시간으로 집계하�
 Processing TIme을 사용하면 네트워크 지연이나 시스템 부하로인해 늦게 도착하는 이벤트들이 제외되거나 예외 사항이 발생할 수 있기 때문입니다.
 
 Event Time을 사용하였으므로, 집계 시작 시간을 지정하기 위해 WaterMark를 2초로 설정하였고, Allowed Lateness는 5초를 할당하였습니다.
-
 
 ### 4.3.2 디렉토리 구조
 
@@ -302,18 +290,18 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-  
+
   # Flink 클러스터
   flink-jobmanager:
     image: flink:1.18-scala_2.12-java17
     volumes:
       - ./flink-app/build/libs:/opt/flink/usrlib # ShadowJar로 Flink에 배포 가능한 단일 JAR 생성.
-  
+
   # Redis (서빙 레이어)
   redis:
     image: redis:7.0-alpine
     command: redis-server --appendonly yes
-  
+
   # ClickHouse (분석 DB)
   clickhouse:
     image: clickhouse/clickhouse-server:23.8
@@ -324,6 +312,7 @@ services:
 # 5. 운영 및 장애 대응
 
 ## 5.1 Backpressure 모니터링
+
 ![](https://velog.velcdn.com/images/ieunune/post/5a27c9a2-4ed2-40c8-9f46-39de00295f55/image.png)
 
 **실험 결과**
@@ -342,7 +331,6 @@ services:
 
 3. ClickHouse batch size 조정.
 
-
 ## 5.2 체크포인트 장애
 
 **문제**
@@ -356,7 +344,6 @@ services:
 2. 병렬도 조정
 
 3. 상태 크기 감소(윈도우 상태 최소화)
-
 
 ## 5.3 파티션 skew
 
@@ -390,10 +377,10 @@ class CTRResultTest {
             windowStart = 0L,
             windowEnd = 10000L
         )
-        
+
         assertThat(result.ctr).isEqualTo(0.1)
     }
-    
+
     @Test
     fun `CTR 계산 - impression이 0인 경우`() {
         val result = CTRResult.calculate("product1", 0, 0, 0L, 10000L)
@@ -411,18 +398,18 @@ fromCollection → keyBy → window → aggregate 흐름 전체 검증.
 fun `EventCountAggregator 통합 테스트`() {
     val env = StreamExecutionEnvironment.getExecutionEnvironment()
     env.setParallelism(1)
-    
+
     val events = listOf(
         Event(eventType = "impression", productId = "p1", ...),
         Event(eventType = "click", productId = "p1", ...)
     )
-    
+
     val result = env.fromCollection(events)
         .keyBy { it.productId }
         .window(TumblingEventTimeWindows.of(Time.seconds(10)))
         .aggregate(EventCountAggregator())
         .executeAndCollect()
-    
+
     assertThat(result.first().impressions).isEqualTo(1)
     assertThat(result.first().clicks).isEqualTo(1)
 }
@@ -448,7 +435,7 @@ def get_all_latest_ctr(redis: Redis = Depends(get_redis)):
 def get_ctr_by_product_id(product_id: str, redis: Redis = Depends(get_redis)):
     latest_json = redis.hget("ctr:latest", product_id)
     previous_json = redis.hget("ctr:previous", product_id)
-    
+
     return {
         "latest": json.loads(latest_json) if latest_json else None,
         "previous": json.loads(previous_json) if previous_json else None
@@ -457,7 +444,7 @@ def get_ctr_by_product_id(product_id: str, redis: Redis = Depends(get_redis)):
 
 ## 7.2 API 응답 예시
 
-``` json
+```json
 {
   "product1": {
     "productId": "product1",
@@ -490,9 +477,7 @@ def get_ctr_by_product_id(product_id: str, redis: Redis = Depends(get_redis)):
 
 3. 풍부한 상태 관리
 
-    Spark는 마이크로배치가 강점이지만 CTR 같은 실시간 지표에는 부적합해보였습니다.
-
-    
+   Spark는 마이크로배치가 강점이지만 CTR 같은 실시간 지표에는 부적합해보였습니다.
 
 ## 8.2 Spring Boot
 
@@ -508,7 +493,6 @@ Spring Boot는 과거 경험으로 익숙하고 Flink와 호환성이 좋아 선
 
 홈페이지 문서를 읽어보니 비교적 쉬운 접근성으로 판단되어 선택하였습니다.
 
-
 ## 8.4 DuckDB 활용 이유
 
 ClickHouse는 다른 부서에서 사용할 수 있음으로 운영 중에 데이터를 건드리는 것은 위험하다고 판단했고,
@@ -519,20 +503,19 @@ ClickHouse는 다른 부서에서 사용할 수 있음으로 운영 중에 데�
 
 # 9. 한계와 다음 단계
 
-1. 단일 노트북 기반 실험으로 실제 M개 TaskManager 환경 성능 검증 부족 
-    → 클라우드 기반 서버 구축 해보기
-2. productId 외의 다차원 기준(광고그룹, 캠페인 등) 집계는 미지원 
-    
-    → 광고 도메인에 대한 이해도 부족
-    
+1. 단일 노트북 기반 실험으로 실제 M개 TaskManager 환경 성능 검증 부족
+   → 클라우드 기반 서버 구축 해보기
+2. productId 외의 다차원 기준(광고그룹, 캠페인 등) 집계는 미지원
+
+   → 광고 도메인에 대한 이해도 부족
+
 3. 멀티 리전 또는 WAN 환경에서 워터마크 설정 재검토 필요
-    
-    → 실제 업무 경험 필요해 보임
-    
+
+   → 실제 업무 경험 필요해 보임
+
 4. S3 기반 Lakehouse(Hudi·Iceberg) + ClickHouse Materialized View로 고도화 가능
-    
-    → minio 사용하여 로컬에서 테스트 해보기
-    
+
+   → minio 사용하여 로컬에서 테스트 해보기
 
 ---
 

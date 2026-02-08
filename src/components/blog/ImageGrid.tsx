@@ -7,15 +7,16 @@ interface ImageGridProps {
 }
 
 export const ImageGrid = ({ children, cols = 2, gap = 16 }: ImageGridProps) => {
-  const gridCols = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-2',
-    3: 'grid-cols-2 sm:grid-cols-3',
-    4: 'grid-cols-2 lg:grid-cols-4',
-  }[cols] || 'grid-cols-2';
+  const gridCols =
+    {
+      1: 'grid-cols-1',
+      2: 'grid-cols-2',
+      3: 'grid-cols-2 sm:grid-cols-3',
+      4: 'grid-cols-2 lg:grid-cols-4',
+    }[cols] || 'grid-cols-2';
 
   return (
-    <div 
+    <div
       className={`grid ${gridCols} w-full my-12 
         [&_p]:contents 
         [&_span:not([class*='text-'])]:!m-0 [&_span:not([class*='text-'])]:!p-0 [&_span:not([class*='text-'])]:!border-0 [&_span:not([class*='text-'])]:!rounded-none [&_span:not([class*='text-'])]:block

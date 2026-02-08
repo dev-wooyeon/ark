@@ -1,6 +1,12 @@
 import { Metadata } from 'next';
 import { Header, Container } from '@/components/layout';
-import { experiences, personalInfo, education, activities, certifications } from '@/data/resume';
+import {
+  experiences,
+  personalInfo,
+  education,
+  activities,
+  certifications,
+} from '@/data/resume';
 
 export const metadata: Metadata = {
   title: 'Resume',
@@ -122,7 +128,9 @@ export default function ResumePage() {
                       <span className="inline-block px-3 py-1 bg-[var(--color-toss-blue)]/5 text-[var(--color-toss-blue)] text-sm font-bold rounded-lg mb-2">
                         {exp.period.includes('(') ? (
                           <>
-                            <span className="block">{exp.period.split(' (')[0]}</span>
+                            <span className="block">
+                              {exp.period.split(' (')[0]}
+                            </span>
                             <span className="block text-xs opacity-70 font-medium mt-0.5">
                               ({exp.period.split(' (')[1]}
                             </span>
@@ -153,8 +161,13 @@ export default function ResumePage() {
 
                         <ul className="space-y-2 mb-6 pl-0 ml-0 list-none">
                           {project.achievements.map((achievement, aIndex) => (
-                            <li key={aIndex} className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed">
-                              <span className="tossface text-sm mt-0.5 shrink-0">✔️</span>
+                            <li
+                              key={aIndex}
+                              className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed"
+                            >
+                              <span className="tossface text-sm mt-0.5 shrink-0">
+                                ✔️
+                              </span>
                               <span>{achievement}</span>
                             </li>
                           ))}
@@ -166,11 +179,15 @@ export default function ResumePage() {
                               <a
                                 key={lIndex}
                                 href={link.href}
-                                target={link.external ? "_blank" : "_self"}
-                                rel={link.external ? "noopener noreferrer" : ""}
+                                target={link.external ? '_blank' : '_self'}
+                                rel={link.external ? 'noopener noreferrer' : ''}
                                 className="text-sm font-medium text-[var(--color-grey-700)] hover:text-[var(--color-toss-blue)] flex items-center gap-1.5 transition-colors bg-[var(--color-grey-100)] px-3 py-2 rounded-[var(--radius-sm)] hover:bg-[var(--color-toss-blue)]/10"
                               >
-                                {link.external ? <span className="tossface text-sm">🔗</span> : <span className="tossface text-sm">📄</span>}
+                                {link.external ? (
+                                  <span className="tossface text-sm">🔗</span>
+                                ) : (
+                                  <span className="tossface text-sm">📄</span>
+                                )}
                                 {link.label}
                               </a>
                             ))}
@@ -191,7 +208,10 @@ export default function ResumePage() {
             </h2>
             <div className="space-y-6">
               {education.map((edu, index) => (
-                <div key={index} className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8">
+                <div
+                  key={index}
+                  className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8"
+                >
                   <div className="md:text-right">
                     <span className="inline-block px-3 py-1 bg-[var(--color-grey-100)] text-[var(--color-grey-700)] text-sm font-medium rounded-full">
                       {edu.period}
@@ -220,7 +240,10 @@ export default function ResumePage() {
             </h2>
             <div className="space-y-8">
               {activities.map((activity, index) => (
-                <div key={index} className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8">
+                <div
+                  key={index}
+                  className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8"
+                >
                   <div className="md:text-right">
                     <span className="inline-block px-3 py-1 bg-[var(--color-grey-100)] text-[var(--color-grey-700)] text-sm font-medium rounded-full">
                       {activity.period}
@@ -235,8 +258,13 @@ export default function ResumePage() {
                     </p>
                     <ul className="space-y-2 pl-0 ml-0 list-none">
                       {activity.description.map((desc, dIndex) => (
-                        <li key={dIndex} className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed">
-                          <span className="tossface text-sm mt-0.5 shrink-0">✔️</span>
+                        <li
+                          key={dIndex}
+                          className="flex items-start gap-2 text-[var(--color-grey-800)] text-base leading-relaxed"
+                        >
+                          <span className="tossface text-sm mt-0.5 shrink-0">
+                            ✔️
+                          </span>
                           <span>{desc}</span>
                         </li>
                       ))}
@@ -254,7 +282,10 @@ export default function ResumePage() {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               {certifications.map((cert, index) => (
-                <div key={index} className="p-6 bg-[var(--color-grey-50)] rounded-[var(--radius-md)] border border-[var(--color-grey-100)]">
+                <div
+                  key={index}
+                  className="p-6 bg-[var(--color-grey-50)] rounded-[var(--radius-md)] border border-[var(--color-grey-100)]"
+                >
                   <h3 className="text-lg font-bold text-[var(--color-grey-900)] mb-2">
                     {cert.name}
                   </h3>

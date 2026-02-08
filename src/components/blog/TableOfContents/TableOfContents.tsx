@@ -42,7 +42,8 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
     const element = document.getElementById(id);
     if (element) {
       const yOffset = -100;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
 
       // Update URL hash without jumping and without adding to history

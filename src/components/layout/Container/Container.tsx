@@ -22,7 +22,9 @@ export default function Container({
   as: Component = 'div',
 }: ContainerProps) {
   return (
-    <Component className={clsx('mx-auto px-6 md:px-8', sizeStyles[size], className)}>
+    <Component
+      className={clsx('mx-auto px-6 md:px-8', sizeStyles[size], className)}
+    >
       {children}
     </Component>
   );

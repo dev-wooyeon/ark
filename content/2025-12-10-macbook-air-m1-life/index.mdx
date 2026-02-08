@@ -26,7 +26,6 @@
 
 ![](https://velog.velcdn.com/images/ieunune/post/ca279de3-4630-43b9-9811-1fff0b6a3833/image.png)
 
-
 Kafka로부터 조회수와 클릭수 이벤트를 수신받아 집계하고 저장하는 과정에서 ClickHouse와 Redis에 데이터를 저장하고, ClickHouse는 분석용으로, Redis + Serving API는 관련 부서에 데이터를 전달하는 용도로 사용하고자 했습니다.
 
 그런데 이렇게 구성해 보니 세 가지 Pain Point가 생겼습니다.
@@ -74,7 +73,7 @@ ClickHouse의 강력한 기능인 `Materialized View`를 활용하면, 별도의
 2. **`ctr_ml_view`**: 복잡한 집계 쿼리를 대체. 1분 단위로 미리 합계를 계산해 둠 (`AggregatingMergeTree`).
 3. **효과**: API 서버에서 처리하던 `Merge` 로직이나 `Filtering` 로직이 모두 SQL 레벨로 내려가면서 API 컨테이너 자체가 불필요해짐.
 
-## 4.  가설 검증
+## 4. 가설 검증
 
 실제로 Redis와 Serving API 컨테이너를 제거하고 ClickHouse로 통합해 본 결과는 아주 매우 만족스러웠습니다.
 
@@ -105,14 +104,14 @@ ex. SELECT count() FROM ctr_results_raw;
 
 ## 5. 아키텍처 변경 전후 비교표
 
-| 항목 | 기존 구조 (Redis + API) | 개선 구조 (ClickHouse MV) |
-| --- | --- | --- |
-| 주요 저장소 | Redis + ClickHouse | ClickHouse 단일화 |
-| API 필요 여부 | 필수 | 불필요 |
-| 리소스 사용량 | 1GB 추가 | 0GB (삭제) |
-| 쿼리 복잡도 | Python API 로직 필요 | SQL로 단순화 |
-| 지연 시간 | 1~3ms | 10~30ms |
-| 처리량 | ~4k | 평균 20k, 스파이크 55k |
+| 항목          | 기존 구조 (Redis + API) | 개선 구조 (ClickHouse MV) |
+| ------------- | ----------------------- | ------------------------- |
+| 주요 저장소   | Redis + ClickHouse      | ClickHouse 단일화         |
+| API 필요 여부 | 필수                    | 불필요                    |
+| 리소스 사용량 | 1GB 추가                | 0GB (삭제)                |
+| 쿼리 복잡도   | Python API 로직 필요    | SQL로 단순화              |
+| 지연 시간     | 1~3ms                   | 10~30ms                   |
+| 처리량        | ~4k                     | 평균 20k, 스파이크 55k    |
 
 ## 6. 느낀점
 

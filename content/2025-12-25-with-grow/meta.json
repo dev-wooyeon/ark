@@ -3,10 +3,6 @@
   "description": "독서",
   "date": "2025-12-29",
   "category": "Life",
-  "tags": [
-    "Career",
-    "Work",
-    "Book"
-  ],
+  "tags": ["Career", "Work", "Book"],
   "featured": false
 }

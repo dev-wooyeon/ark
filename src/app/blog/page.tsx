@@ -29,8 +29,6 @@ export default function BlogPage() {
           <BlogListClient posts={allPosts} />
         </Container>
       </main>
-
-
     </>
   );
 }

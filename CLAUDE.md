@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Eunu.log** is a modern tech blog platform with interactive 3D animations built using Next.js 14+ App Router. The project emphasizes memorable user experiences through particle-based interactive animations and clean typography while maintaining 60fps performance.
 
 Core objectives:
+
 - Deliver technical content with high memorability through interactive animations
 - Provide premium visual experience with newspaper-inspired design (beige + classic blue)
 - Maintain 60fps across all animations
@@ -16,6 +17,7 @@ Core objectives:
 ## Development Commands
 
 ### Essential Commands
+
 ```bash
 # Start development server (runs on http://localhost:3000)
 npm run dev
@@ -35,15 +37,18 @@ npm run lint
 ### Technology Stack
 
 **Framework & Core:**
+
 - Next.js 14+ (App Router with SSG/SSR)
 - React 18+ (with TypeScript)
 - TypeScript in strict mode
 
 **Animation Libraries:**
+
 - Three.js + @react-three/fiber + @react-three/drei (3D particle animations)
 - Framer Motion (React animations)
 
 **Content Management:**
+
 - Markdown feeds in `/feeds` directory
 - gray-matter for frontmatter parsing
 - remark + remark-gfm for Markdown to HTML conversion
@@ -52,12 +57,14 @@ npm run lint
 - raw-loader webpack configuration for .md files
 
 **Styling:**
+
 - CSS Modules for component-scoped styles
 - CSS Variables for design tokens (defined in `src/styles/variables.css`)
 - Newspaper-inspired color palette (beige + classic blue)
 - Geist font family (sans and mono variants)
 
 **Utilities:**
+
 - date-fns for date formatting
 - clsx for conditional classes
 
@@ -104,11 +111,13 @@ eunu.log/
 ### Key Design Patterns
 
 **Server-Side Generation:**
+
 - Feed list and detail pages use Next.js SSG with `generateStaticParams`
 - Feeds are read from filesystem at build time using `fs` module
 - HTML is pre-rendered for optimal performance and SEO
 
 **Client-Side 3D Rendering:**
+
 - Three.js components are client-only ('use client' directive)
 - HeroScene and TextParticleScene use `@react-three/fiber` Canvas
 - Dynamic imports with `next/dynamic` and `ssr: false` can be used for lazy loading
@@ -116,6 +125,7 @@ eunu.log/
 
 **Color System:**
 All colors are defined as CSS variables in `src/styles/variables.css`:
+
 - **Light Mode:**
   - Background: Newspaper beige (#EAEBEA)
   - Text: Soft black (#1A1A1A) for primary, grays for secondary/tertiary
@@ -129,6 +139,7 @@ All colors are defined as CSS variables in `src/styles/variables.css`:
 
 **TypeScript Types:**
 Core types are centralized in `src/types/index.ts`:
+
 - `Post` and `FeedData` for blog content
 - `Project` for portfolio items
 - `NavItem` and `SocialLink` for navigation
@@ -143,9 +154,11 @@ The project uses `@/*` alias for `./src/*` imports (configured in `tsconfig.json
 The project features two main 3D animation components:
 
 #### 1. HeroScene (3D Sphere)
+
 **Component:** `src/components/animations/HeroScene.tsx`
 
 **Key Implementation Details:**
+
 - Uses `@react-three/fiber` Canvas for React integration
 - `@react-three/drei` for MeshDistortMaterial and Sphere geometry
 - Mouse tracking: Sphere rotates based on normalized mouse coordinates (-1 to 1)
@@ -154,14 +167,17 @@ The project features two main 3D animation components:
 - Colors match design system: Accent colors with emissive properties
 
 **Performance Considerations:**
+
 - Component is client-only ('use client' directive)
 - Uses `useFrame` hook for animation loop (runs at 60fps)
 - Event listener for mouse position added only on client side
 
 #### 2. TextParticleScene (Interactive Text Particles)
+
 **Component:** `src/components/animations/TextParticleScene.tsx`
 
 **Key Implementation Details:**
+
 - Converts text ("eunu") into particle system using Canvas 2D API
 - Uses `THREE.InstancedMesh` for efficient rendering of thousands of particles
 - **Intro Animation:** Particles fly in from random positions to form text
@@ -172,6 +188,7 @@ The project features two main 3D animation components:
 - Colors match design system with emissive materials
 
 **Performance Considerations:**
+
 - InstancedMesh for rendering thousands of particles efficiently
 - Particle sampling with gap parameter to control density
 - Client-only rendering with 'use client' directive
@@ -248,6 +265,7 @@ The feed processing pipeline includes these key functions:
 **Component:** `src/components/TableOfContents.tsx`
 
 **Features:**
+
 - **Automatic Generation:** Parses headings from HTML content
 - **Hierarchical Display:** Nested structure matching heading levels
 - **Active Section Tracking:** Uses IntersectionObserver to highlight current section
@@ -256,6 +274,7 @@ The feed processing pipeline includes these key functions:
 - **ID Assignment:** Dynamically assigns IDs to headings if missing
 
 **Technical Implementation:**
+
 - Client component ('use client') for browser APIs
 - IntersectionObserver with custom rootMargin for header offset
 - Window resize listener for responsive visibility
@@ -264,6 +283,7 @@ The feed processing pipeline includes these key functions:
 ### Webpack Configuration
 
 The `next.config.js` includes:
+
 - Custom webpack rule for `.md` files using `raw-loader`
 - Image optimization with AVIF and WebP formats
 - React strict mode enabled
@@ -271,6 +291,7 @@ The `next.config.js` includes:
 ## Performance Targets
 
 Based on PRD requirements:
+
 - **LCP (Largest Contentful Paint):** < 2.5s
 - **FID (First Input Delay):** < 100ms
 - **CLS (Cumulative Layout Shift):** < 0.1
@@ -282,6 +303,7 @@ Based on PRD requirements:
 ### When Adding New Features
 
 **For New Pages:**
+
 - Create in `src/app/[pagename]/page.tsx`
 - Use Server Components by default for better performance
 - Only add 'use client' when you need browser APIs or interactivity
@@ -289,7 +311,8 @@ Based on PRD requirements:
 - Use `generateStaticParams` for dynamic routes that should be pre-rendered
 
 **For New Components:**
-- Use CSS Modules for styling (*.module.css)
+
+- Use CSS Modules for styling (\*.module.css)
 - Reference design tokens from `src/styles/variables.css`
 - Follow naming convention: PascalCase for components, camelCase for utilities
 - Place in appropriate directory:
@@ -298,6 +321,7 @@ Based on PRD requirements:
 - Export types alongside component when using TypeScript
 
 **For Animations:**
+
 - Keep 60fps as priority - test on lower-end devices
 - Use `requestAnimationFrame` or animation library frame hooks (e.g., `useFrame`)
 - Implement `prefers-reduced-motion` for accessibility
@@ -306,12 +330,14 @@ Based on PRD requirements:
 - Consider performance impact of particle count and geometry complexity
 
 **For Blog Features:**
+
 - Add new feed types to `src/types/index.ts`
 - Update Feed interface if adding metadata fields
 - Add processing logic to `src/lib/feeds.ts` if needed
 - Consider creating utility functions in `src/lib/` for complex operations
 
 **For Utility Functions:**
+
 - Create in `src/lib/` directory
 - Export as named exports
 - Include TypeScript types
@@ -321,6 +347,7 @@ Based on PRD requirements:
 
 **CSS Variables Usage:**
 Always use design tokens instead of hardcoded values:
+
 - Colors: `var(--text-primary)`, `var(--accent-primary)`, `var(--bg-primary)`
 - Typography: `var(--text-lg)`, `var(--font-semibold)`, `var(--font-sans)`
 - Spacing: `var(--space-4)`, `var(--space-8)` (8px grid system)
@@ -328,17 +355,20 @@ Always use design tokens instead of hardcoded values:
 - Borders: `var(--radius-md)`, `var(--border)`
 
 **Typography:**
+
 - Use Geist font family variables: `var(--font-sans)` and `var(--font-mono)`
 - Font sizes follow design tokens: `--text-xs` (12px) to `--text-5xl` (48px)
 - Font weights: `--font-normal` (400) to `--font-bold` (700)
 
 **Responsive Design:**
 The project targets mobile-first responsive design. Test across:
+
 - Mobile (< 768px)
 - Tablet (768px - 1024px)
 - Desktop (> 1024px)
 
 **Dark Mode:**
+
 - Colors automatically adapt via `@media (prefers-color-scheme: dark)`
 - Test both light and dark modes for all new components
 - Ensure sufficient contrast ratios in both modes
@@ -346,12 +376,14 @@ The project targets mobile-first responsive design. Test across:
 ### Code Quality
 
 **TypeScript:**
+
 - Enable strict mode (already configured)
 - Define types for all props, state, and function parameters
 - Use type imports: `import type { TypeName } from '@/types'`
 - Avoid `any` - use `unknown` or proper types
 
 **Component Structure:**
+
 1. Imports (React, Next.js, types, components, styles)
 2. Type/interface definitions
 3. Component function
@@ -359,6 +391,7 @@ The project targets mobile-first responsive design. Test across:
 5. Export statement
 
 **File Naming:**
+
 - Components: PascalCase (e.g., `FeedCard.tsx`)
 - Utilities: camelCase (e.g., `feeds.ts`)
 - CSS Modules: Component name + `.module.css` (e.g., `FeedCard.module.css`)
@@ -367,41 +400,49 @@ The project targets mobile-first responsive design. Test across:
 ## Important Files Reference
 
 ### Core Configuration
+
 - `next.config.js` - Next.js and webpack configuration
 - `tsconfig.json` - TypeScript configuration with path aliases
 - `package.json` - Dependencies and scripts
 
 ### Styling
+
 - `src/styles/variables.css` - Complete design system tokens (colors, typography, spacing)
 - `src/styles/globals.css` - Global styles and resets
 
 ### Content & Utilities
+
 - `src/lib/feeds.ts` - Feed fetching, parsing, and TOC generation utilities
 - `src/types/index.ts` - TypeScript type definitions for Post, Project, etc.
 
 ### Key Components
+
 - `src/components/TableOfContents.tsx` - Interactive TOC with scroll tracking
 - `src/components/animations/HeroScene.tsx` - 3D sphere animation
 - `src/components/animations/TextParticleScene.tsx` - Text particle explosion
 
 ### Pages
+
 - `src/app/page.tsx` - Home page with site introduction
 - `src/app/feeds/page.tsx` - Feed list page
 - `src/app/feeds/[slug]/page.tsx` - Feed detail page with TOC
 - `src/app/layout.tsx` - Root layout with Geist fonts and metadata
 
 ### Documentation
+
 - `docs/PRD.md` - Comprehensive product requirements document
 - `CLAUDE.md` - This file (AI assistant guidance)
 
 ## Testing & Development Pages
 
 The project includes sample pages for testing design system components:
+
 - `/samples` - General component samples
 - `/color-samples` - Color palette visualization
 - `/font-samples` - Typography testing
 
 These pages are useful for:
+
 - Testing design token changes
 - Previewing component variations
 - Debugging responsive behavior
@@ -410,6 +451,7 @@ These pages are useful for:
 ## Common Tasks
 
 ### Adding a New Blog Post
+
 1. Create a new `.md` file in `/feeds/` directory
 2. Add frontmatter with required fields (title, description, date, category)
 3. Write content in Markdown with GitHub Flavored Markdown support
@@ -417,6 +459,7 @@ These pages are useful for:
 5. Feed will automatically appear in feed list and have its own detail page
 
 ### Creating a New Animation
+
 1. Create component in `src/components/animations/`
 2. Add 'use client' directive at the top
 3. Import Three.js dependencies
@@ -426,6 +469,7 @@ These pages are useful for:
 7. Test performance on various devices
 
 ### Modifying the Design System
+
 1. Update color/spacing/typography values in `src/styles/variables.css`
 2. Changes automatically propagate to all components using CSS variables
 3. Test in both light and dark modes
@@ -433,6 +477,7 @@ These pages are useful for:
 5. Check sample pages (`/color-samples`, `/font-samples`) for visual confirmation
 
 ### Debugging Build Issues
+
 1. Check `npm run build` output for errors
 2. Verify all dynamic routes have `generateStaticParams`
 3. Ensure no client-only code runs during SSG
@@ -442,16 +487,17 @@ These pages are useful for:
 ## Known Patterns
 
 **Dynamic Imports (when needed):**
+
 ```typescript
 import dynamic from 'next/dynamic';
 
-const HeroScene = dynamic(
-  () => import('@/components/animations/HeroScene'),
-  { ssr: false }
-);
+const HeroScene = dynamic(() => import('@/components/animations/HeroScene'), {
+  ssr: false,
+});
 ```
 
 **Feed Fetching:**
+
 ```typescript
 import { getSortedFeedsData, getFeedData } from '@/lib/feeds';
 
@@ -461,6 +507,7 @@ const feed = await getFeedData(slug); // Single post
 ```
 
 **CSS Variable Usage:**
+
 ```css
 .component {
   color: var(--text-primary);
@@ -472,6 +519,7 @@ const feed = await getFeedData(slug); // Single post
 ```
 
 **Three.js Animation:**
+
 ```typescript
 'use client';
 
