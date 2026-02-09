@@ -55,11 +55,11 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
 
   return (
     <nav
-      className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 w-64"
+      className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 w-64 max-h-[80vh]"
       aria-label="목차"
     >
-      <div className="p-4 bg-[var(--color-grey-50)] rounded-[var(--radius-md)]">
-        <h2 className="text-sm font-semibold text-[var(--color-grey-900)] mb-4">
+      <div className="p-4 bg-[var(--color-grey-50)] rounded-[var(--radius-md)] max-h-[80vh] overflow-y-auto">
+        <h2 className="text-sm font-semibold text-[var(--color-grey-900)] mb-4 sticky top-0 bg-[var(--color-grey-50)] pb-2">
           목차
         </h2>
         <ul className="flex flex-col gap-1">

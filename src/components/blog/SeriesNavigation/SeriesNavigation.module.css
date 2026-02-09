@@ -1,0 +1,188 @@
+.container {
+    margin: 24px 0 32px;
+    border: 1px solid var(--color-grey-100);
+    border-radius: 16px;
+    background: var(--color-grey-50);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 200ms ease;
+}
+
+.header:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.seriesLabel {
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    background: var(--color-toss-blue);
+    border-radius: 6px;
+}
+
+.seriesTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-grey-900);
+}
+
+.count {
+    font-size: 13px;
+    color: var(--color-grey-500);
+}
+
+.chevron {
+    color: var(--color-grey-500);
+    transition: transform 200ms ease;
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.content {
+    padding: 0 20px 20px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+}
+
+.item {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.order {
+    display: inline-block;
+    width: 24px;
+    color: var(--color-grey-500);
+}
+
+.link {
+    display: block;
+    padding: 8px 12px;
+    color: var(--color-grey-600);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 150ms ease, color 150ms ease;
+}
+
+.link:hover {
+    background: white;
+    color: var(--color-grey-900);
+}
+
+.current {
+    display: block;
+    padding: 8px 12px;
+    color: var(--color-toss-blue);
+    font-weight: 500;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.itemActive .order {
+    color: var(--color-toss-blue);
+}
+
+.navigation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-grey-100);
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--color-grey-700);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.navLink:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.navLink:active {
+    transform: scale(0.98);
+}
+
+.navLinkNext {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.navText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.navLabel {
+    font-size: 12px;
+    color: var(--color-grey-500);
+}
+
+.navTitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-grey-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+    .headerContent {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .seriesTitle {
+        flex-basis: 100%;
+        order: 3;
+        font-size: 14px;
+    }
+
+    .navigation {
+        grid-template-columns: 1fr;
+    }
+
+    .navLinkNext {
+        justify-content: flex-start;
+        text-align: left;
+        flex-direction: row-reverse;
+    }
+}
