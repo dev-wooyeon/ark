@@ -1,0 +1,17 @@
+{
+    "title": "Flink Connector 실전",
+    "slug": "flink-connectors",
+    "description": "Kafka, ClickHouse, Iceberg, JDBC 등 주요 Connector의 활용법과 실전 아키텍처를 정리했습니다.",
+    "date": "2025-11-28",
+    "category": "Tech",
+    "tags": [
+        "Flink",
+        "Kafka",
+        "Connector"
+    ],
+    "series": {
+        "id": "flink-mastery",
+        "title": "Flink 완전 정복",
+        "order": 5
+    }
+}

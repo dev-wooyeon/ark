@@ -4,6 +4,7 @@ import { MDXProps } from 'mdx/types';
 // 1. Base metadata (from JSON file)
 export interface FeedFrontmatter {
   title: string;
+  slug: string; // SEO-friendly URL slug (required)
   description: string;
   date: string;
   updated?: string;
@@ -13,6 +14,11 @@ export interface FeedFrontmatter {
   readingTime?: number;
   featured?: boolean;
   transliteratedTitle?: string;
+  series?: {
+    id: string;
+    title: string;
+    order: number;
+  };
 }
 
 // 2. Feed Data for lists (adds slug)

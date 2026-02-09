@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getFeedData, getAllFeedSlugs } from '@/lib/mdx-feeds';
+import { getFeedData, getAllFeedSlugs, getSeriesPosts } from '@/lib/mdx-feeds';
 import { getMdxSource, parseHeadingsFromMdx } from '@/lib/markdown';
 import { Header, Container } from '@/components/layout';
 import {
   ReadingProgress,
   TableOfContents,
   GiscusComments,
+  SeriesNavigation,
 } from '@/components/blog';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
@@ -64,6 +65,9 @@ export default async function BlogPostPage({
   const mdxSource = getMdxSource(slug);
   const tocItems = mdxSource ? parseHeadingsFromMdx(mdxSource) : [];
 
+  // Get series posts if this post belongs to a series
+  const seriesPosts = post.series ? getSeriesPosts(post.series.id) : [];
+
   const { Content } = post;
   const formattedDate = new Date(post.date).toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -108,6 +112,16 @@ export default async function BlogPostPage({
               </div>
             )}
           </header>
+
+          {/* Series Navigation */}
+          {post.series && seriesPosts.length > 0 && (
+            <SeriesNavigation
+              currentSlug={post.slug}
+              seriesTitle={post.series.title}
+              seriesPosts={seriesPosts}
+              currentOrder={post.series.order}
+            />
+          )}
 
           {/* Content */}
           <div className="prose">

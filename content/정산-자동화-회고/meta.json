@@ -1,0 +1,13 @@
+{
+  "title": "영중소 차액정산 자동화 회고: 정책 데이터와 소급 정산을 시스템으로 흡수한 기록",
+  "slug": "settlement-automation",
+  "description": "정책 변경 이력을 시스템이 기억하게 하여 신뢰할 수 있는 소급 정산을 구현한 경험",
+  "date": "2026-01-24",
+  "category": "Tech",
+  "tags": [
+    "Architecture",
+    "Payment",
+    "Settlement",
+    "Batch"
+  ]
+}

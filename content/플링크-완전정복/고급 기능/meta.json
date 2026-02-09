@@ -1,0 +1,17 @@
+{
+    "title": "Flink 고급 기능",
+    "slug": "flink-advanced-features",
+    "description": "CEP, BroadcastState, Async I/O 심화, Watermark 튜닝 등 대규모 서비스를 위한 고급 기능을 정리했습니다.",
+    "date": "2025-11-28",
+    "category": "Tech",
+    "tags": [
+        "Flink",
+        "CEP",
+        "Advanced"
+    ],
+    "series": {
+        "id": "flink-mastery",
+        "title": "Flink 완전 정복",
+        "order": 8
+    }
+}

@@ -31,7 +31,7 @@ const nextConfig = {
         {
           loader: '@mdx-js/loader',
           options: {
-            remarkPlugins: [remarkGfm],
+            remarkPlugins: [[remarkGfm, { singleTilde: false }]],
             rehypePlugins: [rehypeSlug, [rehypePrettyCode, prettyCodeOptions]],
           },
         },

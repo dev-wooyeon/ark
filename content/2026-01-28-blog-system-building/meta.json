@@ -1,8 +1,0 @@
-{
-  "title": "Next.js 16과 Three.js로 만드는 기술 블로그: 구축부터 최적화까지",
-  "description": "MDX 기반 정적 블로그를 만들며 얻은 설계 원칙과 최적화 노하우",
-  "date": "2026-01-28",
-  "category": "Dev",
-  "tags": ["Next.js", "React", "MDX", "Three.js", "Design System"],
-  "transliteratedTitle": "blog-system-building"
-}

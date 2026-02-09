@@ -1,0 +1,15 @@
+{
+  "title": "실시간 CTR 분석 파이프라인 성능개선기",
+  "slug": "macbook-air-m1-life",
+  "description": "MacBook Air M1의 처절한 생존기 (w/ Clickhouse)",
+  "date": "2025-01-20",
+  "category": "Tech",
+  "tags": [
+    "Flink",
+    "Kafka",
+    "ClickHouse",
+    "Redis",
+    "Data Pipeline"
+  ],
+  "featured": true
+}

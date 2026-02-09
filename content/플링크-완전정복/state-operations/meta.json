@@ -1,0 +1,17 @@
+{
+    "title": "State & 운영",
+    "slug": "flink-state-operations",
+    "description": "Flink의 State Backend, Checkpoint, Savepoint, 재시작 전략 등 운영 핵심 개념을 정리했습니다.",
+    "date": "2025-11-28",
+    "category": "Tech",
+    "tags": [
+        "Flink",
+        "State",
+        "Operations"
+    ],
+    "series": {
+        "id": "flink-mastery",
+        "title": "Flink 완전 정복",
+        "order": 4
+    }
+}

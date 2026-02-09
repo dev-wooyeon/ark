@@ -1,0 +1,216 @@
+# 성능 튜닝
+
+## 전체 그림부터 잡기
+
+Flink 성능 튜닝은 결국 세 가지를 다루는 일임.
+
+- 얼마나 많이 병렬로 돌릴지 (parallelism, 리소스)
+- 각 연산이 얼마나 싸게 돌 수 있게 만들지 (Serialization, State, RocksDB, Window)
+- 시스템이 버티면서 안정적으로 돌아가게 할지 (Checkpoint, Backpressure, Restart)
+
+즉,
+
+**"빨리 + 많이 + 안 터지게"**
+
+이 세 가지를 동시에 맞추는 작업이 성능 튜닝임.
+
+---
+
+## 병렬도(parallelism) & 리소스 설계
+
+Flink에서 성능을 가장 크게 바꾸는 레버는 병렬도임.
+
+### 병렬도 기본 개념
+
+- 각 operator는 parallelism을 가짐
+- parallelism N → N개의 subtask가 서로 다른 slot에서 돌게 됨
+- Kafka source의 경우 파티션 수와도 연관됨 (파티션 수가 parallelism보다 작으면 일부 subtask는 할 일 없음)
+
+**병렬도 설계 포인트**
+- source 병렬도: Kafka 파티션 수 기준
+- compute 병렬도: CPU 사용량·state 크기 기준
+- sink 병렬도: 외부 시스템이 감당 가능한 TPS 기준
+
+**실무 감각**
+- CPU 70~80% 근처에서 안정적으로 유지되도록 조정
+- "느리게 도는 task"가 있으면 그 구간 병렬도만 올리는 식으로 부분 조정
+
+---
+
+## Operator Chain & Task 배치
+
+Flink는 기본적으로 여러 operator를 하나의 task로 "체인"해서 실행함.
+
+**장점**
+- operator 간 데이터 이동(네트워크/버퍼) 비용 감소
+- GC·스레드 전환 비용 감소
+- 단순 파이프라인에선 체인 덕분에 성능↑
+
+**단점**
+- 특정 operator 하나가 병목이면 같은 체인에 묶인 애들까지 전부 영향
+- 모니터링 시 "어디가 느린지" 구분이 어려워짐
+
+**전략**
+- 가벼운 map/filter 연산은 체인 유지
+- 무거운 window, async I/O, sink 앞뒤는 필요하면 체인 끊기 (disableChaining, startNewChain 등 활용)
+
+---
+
+## Serialization 튜닝
+
+직렬화는 성능에 크게 영향 주는 요소인데, 생각보다 많이 간과됨.
+
+**핵심 포인트**
+- 타입을 명확하게 사용 (POJO, Avro, Protobuf 등)
+- `Generic/Map<String, Object>` 같은 구조 남발하면 직렬화 비용↑
+- Kryo 기본 직렬화는 편하지만 비싸고 예측하기 어렵기 때문에, 가능하면 TypeInformation 기반 명시 타입 추천
+
+**전략**
+- schema 고정 가능한 스트림: Avro/Protobuf 사용 고려
+- DataStream/State에 들어가는 타입은 "불필요한 필드" 줄이기
+- 큰 객체를 그대로 state에 넣지 말고 필요한 최소 형태로 변환해서 저장
+
+---
+
+## Window & State 크기 관리
+
+성능이 점점 느려지고, checkpoint도 점점 오래 걸린다면 대개 이유는 "state가 비대해졌기 때문"임.
+
+### Window 튜닝 포인트
+- window 길이 줄이기 (너무 긴 윈도우는 state 폭증)
+- key cardinality 관리 (키 수가 너무 많으면 state도 그만큼 증가)
+- 필요 없는 집계/필드를 과감히 제거
+- late data 허용 범위가 과도하게 넓지 않은지 체크
+
+### State 줄이는 기본 전략
+- 오래된 state를 TTL로 날리기 (State TTL 설정)
+- 사실상 필요 없는 key/state는 주기적으로 cleanup
+- MapState/ListState에 무한정 쌓지 말고 "요약된 값"으로 줄이기
+
+---
+
+## RocksDB 튜닝 (대규모 state일 때)
+
+대규모 state를 쓴다면 RocksDB를 쓰게 되고, 이때 성능 문제의 80%는 RocksDB 쪽에서 터짐.
+
+**핵심 이슈**
+- compaction 비용
+- 디스크 I/O
+- checkpoint 시 snapshot 크기
+
+**기본 전략**
+- incremental checkpoint 사용 (변경분만 저장)
+- RocksDB block cache·write buffer 크기 조정 (메모리 허용 범위 내에서 키움)
+- local SSD 사용 시 성능 크게 개선
+- 너무 잦은 checkpoint는 RocksDB에 부담 → interval/timeout 적절하게 조정
+
+**체감으로는**
+- checkpoint가 오래 걸리면 RocksDB 튜닝 + checkpoint 주기 조정
+- RocksDB 디렉토리 있는 디스크 I/O 모니터링 필수
+
+---
+
+## Checkpoint & Savepoint 성능
+
+Checkpoint는 성능과 안정성의 "절충점"이다.
+
+**너무 자주 하면**
+- job이 checkpoint만 하다 끝나는 느낌
+- 매번 state snapshot 때문에 I/O 폭증
+
+**너무 안 하면**
+- 장애 시 재처리 구간이 너무 길어짐
+- 복구 시간↑
+
+**실무 기준**
+- 지연 허용 여유가 있다면 30~60초 정도 간격에서 시작
+- checkpoint 완료 시간이 interval의 50%를 넘으면 부담이 크다고 보고 튜닝 검토
+- 대규모 state일수록 incremental checkpoint 필수에 가깝게 고려
+
+Savepoint는 성능보단 "배포/업그레이드용"이라, 크기와 생성 시간 정도만 참고.
+
+---
+
+## Backpressure 튜닝
+
+성능 튜닝의 최종 보스는 항상 backpressure임.
+
+backpressure는 "어딘가가 느려서 upstream이 밀리는 상태".
+
+**주요 원인**
+- sink가 느림 (DB, ClickHouse, ES, 외부 시스템)
+- async I/O에서 외부 응답 늦음
+- window 연산이 너무 무거움
+- state 접근이 많고 비효율적
+- 네트워크 병목
+
+**해결 방향**
+- 병목 sink의 병렬도 올리기
+- batch size / flush interval 튜닝 (sink connector 설정)
+- async I/O concurrency 늘리기 (동시에 처리 가능한 요청 수)
+- 느린 연산을 앞단에서 필터링해 데이터 양 자체를 줄이기
+- 필요시 operator 체인을 끊어서 병목 구간 분리
+
+**운영 팁**
+- Web UI에서 backpressure 있는 subtask를 먼저 찾기
+- 해당 subtask에 연결된 operator/sink를 중심으로 파헤치기
+
+---
+
+## 리소스(CPU/메모리) & Parallelism 전략
+
+성능은 결국 "할당한 리소스를 얼마나 효율적으로 쓰느냐"로 귀결됨.
+
+**전략 느낌**
+- CPU는 60~80% 구간에서 안정적으로 유지되는 선까지 parallelism↑
+- GC가 잦으면: heap 줄이고 task 수를 늘리거나, 상태를 RocksDB로 옮기는 것도 고려
+- TaskManager당 slot 수: 코어 수와 작업 특성을 같이 보고 결정
+  (CPU-bound면 코어 수 이하, I/O-bound면 조금 더 높게 설정하는 식)
+
+**주의할 점**
+- 무조건 parallelism을 키운다고 해결되지 않음
+  → 외부 시스템이 못 받으면 그냥 병목만 오른쪽으로 이동
+- 병렬도/리소스/외부 시스템 TPS를 "셋트"로 보고 튜닝해야 함
+
+---
+
+## 실제로 튜닝할 때의 사고 순서
+
+실무에서 성능 문제를 본다고 하면, 보통 이런 순서로 보면 됨.
+
+1. **지표 확인**
+   - 처리량(throughput), 지연(latency), checkpoint 시간, backpressure 여부
+
+2. **어디가 느린지 찾기**
+   - Web UI에서 병목 task/operator 확인
+
+3. **병목 유형 판별**
+   - CPU 100%? → 계산/직렬화/윈도우/복잡 로직 문제
+   - 외부 I/O 대기? → sink/async I/O 문제
+   - checkpoint만 오래 걸림? → state/RocksDB 문제
+
+4. **레버 선택**
+   - 병렬도 조정
+   - operator chain 조정
+   - window/state 구조 리팩토링
+   - RocksDB/Checkpoint 튜닝
+   - sink 설정 튜닝 (batch size, flush interval, retry 등)
+
+이렇게 "지표 → 원인 → 해당 레버" 순서대로 보는 게 제일 깔끔함.
+
+---
+
+## 정리
+
+성능 튜닝 관점에서 Flink는 병렬도, state 구조, checkpoint, backpressure 네 가지를 중심으로 보고 있습니다. 병렬도와 리소스를 조정해 처리량을 확보하고, state와 window 크기를 관리해 checkpoint 시간과 RocksDB 부담을 줄입니다. sink와 async I/O 병목은 backpressure로 드러나기 때문에, Web UI와 메트릭을 통해 병목 구간을 찾고 해당 operator의 parallelism, batch size, flush 정책을 조정하는 방식으로 튜닝합니다.
+
+---
+
+## 공식 문서 출처
+
+- [Performance Tuning & Monitoring 개요](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/overview/)
+- [Operator Chain](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/overview/)
+- [State & Checkpoint](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/fault-tolerance/state/)
+- [RocksDB State Backend](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/rocksdb/)
+- [Backpressure Monitoring](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/monitoring/back_pressure/)
+- [Resource & Parallelism](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/execution/)

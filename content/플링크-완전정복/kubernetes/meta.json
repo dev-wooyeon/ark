@@ -1,0 +1,17 @@
+{
+    "title": "Flink Kubernetes 운영",
+    "slug": "flink-kubernetes",
+    "description": "Kubernetes 기반 Flink 운영의 핵심 개념, 배포 전략, 장애 대응을 정리했습니다.",
+    "date": "2025-11-28",
+    "category": "Tech",
+    "tags": [
+        "Flink",
+        "Kubernetes",
+        "DevOps"
+    ],
+    "series": {
+        "id": "flink-mastery",
+        "title": "Flink 완전 정복",
+        "order": 7
+    }
+}

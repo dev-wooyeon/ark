@@ -1,8 +1,0 @@
-{
-  "title": "지급대행 시스템 설계 회고: 책임의 분리가 만든 안정성",
-  "description": "거래, 정산, 송금 도메인을 분리하여 시스템 안정성을 확보한 경험",
-  "date": "2026-01-24",
-  "category": "Dev",
-  "tags": ["Architecture", "Payment", "Domain Driven Design"],
-  "transliteratedTitle": "payment-system-design-retrospective"
-}

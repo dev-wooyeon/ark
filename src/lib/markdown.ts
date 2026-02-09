@@ -26,7 +26,6 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
     // Regex to match markdown headings (## Heading, ### Heading, etc.)
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
     const tocItems: TocItem[] = [];
-    const stack: TocItem[] = [];
     const idCounts: Record<string, number> = {};
 
     let match;
@@ -46,27 +45,12 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
         idCounts[id] = 1;
       }
 
-      const tocItem: TocItem = {
+      // Flat structure - just push all headings
+      tocItems.push({
         id,
         text,
         level,
-        children: [],
-      };
-
-      // Build hierarchy using stack
-      while (stack.length > 0 && stack[stack.length - 1].level >= level) {
-        stack.pop();
-      }
-
-      if (stack.length === 0) {
-        tocItems.push(tocItem);
-      } else {
-        const parent = stack[stack.length - 1];
-        parent.children = parent.children || [];
-        parent.children.push(tocItem);
-      }
-
-      stack.push(tocItem);
+      });
     }
 
     return tocItems;

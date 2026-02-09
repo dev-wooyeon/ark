@@ -1,0 +1,266 @@
+## Flink?
+
+Flink는 "스트림 기반(Stateful Stream Processing) 엔진"
+배치도 할 수 있지만, 본질은 스트림이고 배치조차 "유한한 스트림"으로 보는 철학을 가짐.
+
+**Spark**
+- RDD 기반의 배치 중심 엔진에 스트리밍 기능이 붙어 있는 느낌(특히 Structured Streaming은 micro-batch 느낌이 강함)
+
+**Flink**
+- 처음부터 "무한 스트림 + 상태(State)"를 제대로 처리하려고 설계된 엔진
+
+---
+
+## 스트림 vs 배치의 본질적 차이
+
+### 배치 처리
+
+**특징**
+- 배치는 "모든 데이터가 다 모여 있다"는 가정이 깔려 있음.
+- 예를 들어 1년 치 로그 파일을 모아서, 그 위에 쿼리를 한 번 날리는 방식임.
+- 시간은 보통 "컬럼 값"으로만 이용할 뿐, "지금 들어오고 있는 데이터의 시간 흐름" 자체를 신경 쓰지 않음.
+
+**특성**
+- 입력 데이터: 유한(finite)
+- 처리 기준: 대부분 처리 시점(언제 돌리냐)
+- 지연 데이터 개념이 약함: 이미 다 모인 후에 처리하니까
+
+### 스트림 처리
+
+**특징**
+- 스트림은 "데이터가 끝없이 도착한다"는 가정입니다.
+- 예를 들어 IoT 센서, Kafka 로그, 게임 이벤트 스트림처럼 계속 들어옵니다.
+- 여기서 중요한 건 "데이터가 언제 발생했는지(event-time)"와 "언제 도착했는지(ingestion-time)"가 다를 수 있다는 점입니다.
+
+**특성**
+- 입력 데이터: 이론적으로 무한(infinite)
+- 처리 기준: 시간 개념이 핵심 (event-time, processing-time 등)
+- 지연 데이터 처리: 늦게 도착했을 때 어떻게 할 것인지 정책이 필요
+
+본질적으로 이런 차이점이 존재하지만, Flink는 "배치는 유한한 **스트림**이다" 라고 정의한다. 그래서 같은 엔진과 같은 API로 배치와 스트림을 모두 처리할 수 있다.
+
+---
+
+## Flink Runtime 구조
+Flink Runtime의 구조는 JobManager, TaskManager, Slot 나누어져 있다.
+각각의 역할은 다음과 같다.
+
+### JobManager
+
+**역할**: 컨트롤 플레인
+
+**책임**
+- Job Graph 생성, 최적화(Logical → Physical Plan)
+- Task 배치와 스케줄링
+- Checkpoint 트리거 및 관리
+- 장애 발생 시 재시작 결정(어디부터, 어느 state로)
+
+### TaskManager
+
+**역할**: 실제 데이터 처리(워커 노드)
+
+내부에 여러 개의 Slot을 가지고 있고, 각 Slot이 하나의 서브태스크(Subtask)를 실행합니다.
+
+### Slot
+
+"논리적인 실행 단위"라고 보면 됩니다.
+
+예를 들어 parallelism 4인 Operator는 4개의 Subtask로 나뉘고, 각 Subtask가 Slot 하나씩을 점유합니다.
+
+하나의 TaskManager가 CPU, memory 리소스를 기반으로 여러 Slot을 가질 수 있습니다.
+
+![Flink Runtime 구조](/assets/posts/2025-11-28-flink-basics/image.png)
+
+---
+
+## 실행 흐름 개념
+
+개발자가 Flink Job을 제출하면
+
+- Client가 Job을 JobManager에게 제출
+- JobManager가 JobGraph를 생성 후 ExecutionGraph로 변환
+- ExecutionGraph를 보고 각 TaskManager의 Slot에 Task를 분배
+- TaskManager들이 데이터를 주고받으면서 처리
+
+> 💡 **중요 포인트**
+> - JobManager는 "뇌", TaskManager는 "팔·다리"에 가깝움
+> - Slot 개수와 parallelism 설계가 성능과 비용에 직결됨
+
+---
+
+## 시간 개념 : Event-time, Processing-time, Ingestion-time
+
+Flink에서 시간은 스트림 의미를 결정하는 핵심입니다.
+
+### Processing-time
+
+- "현재 머신의 시계" 기준
+- 장점: 구현이 간단. 시스템 시간만 보면 됨
+- 단점: 이벤트가 늦게 도착해도, 시스템 시계 기준으로 윈도우가 닫혀버리므로 "발생 시점 기준 집계"가 어긋날 수 있음
+
+### Event-time
+
+- "이벤트가 실제 발생한 시간" 기준
+- 보통 Kafka 메시지의 timestamp, 로그의 timestamp 필드를 사용
+- 장점: 지연 도착, 네트워크 지연이 있더라도 '발생 시점' 기준으로 정확한 집계가 가능
+- 단점: lateness(지연 도착)에 대한 정책과 watermarks 설계가 필요
+
+### Ingestion-time
+
+- "Flink에 들어온 시점" 기준 (source에서 ingest된 순간)
+- Processing-time의 단점을 조금 보완하지만, Event-time만큼 정교하진 않음
+- 실무에선 Event-time 또는 Processing-time을 주로 사용하고, ingestion-time은 애매한 중간 케이스 정도로 이해해도 됩니다.
+
+---
+
+## 워터마크(Watermark)와 지연 데이터(Late Data)
+
+Event-time을 쓴다는 건 "늦게 도착하는 데이터"를 고려하겠다는 뜻입니다.
+
+Flink는 Watermark라는 개념으로 "이 시점까지는 더 이상 예전 이벤트가 들어오지 않았다고 가정해도 된다"를 표현합니다.
+
+### Watermark 기본 개념
+
+Watermark는 보통 "현재까지 본 이벤트의 최대 event-time – 허용 지연 시간" 같은 형태로 설정합니다.
+
+데이터가 보통 5분 이내에 들어온다면 `watermark = maxEventTime – 5 minutes`
+
+Watermark가 특정 윈도우의 끝 시간을 지나치면, 그 윈도우를 "이제 닫아도 된다"고 판단하고 결과를 보냄.
+
+### Late Data(지연 도착 데이터) 처리
+
+Watermark 이후에 들어온, 이미 닫힌 윈도우의 이벤트는 Late Data입니다.
+
+**Late Data에 대한 정책**
+- 버린다 (drop)
+- 별도 side output으로 뺀다
+- 허용 lateness를 추가로 더 준다 (allowedLateness)
+
+---
+
+## Stateful Stream Processing 개념
+
+Flink의 가장 큰 특징 중 하나가 "상태(State)를 가진 스트림 처리"입니다.
+
+### State란 무엇인가?
+
+간단히 말해 "연속되는 이벤트들을 처리하면서 필요한 중간값"입니다.
+
+**예시**
+- 유저별 클릭 수 합계
+- 특정 키에 대한 최근 N개 이벤트
+- 윈도우 내의 집계 값
+- 일반 함수형 스트림 처리는 이벤트 하나만 보고 결과를 만들지만, Flink는 "이전까지의 정보"를 상태로 들고 있다가 함께 계산합니다.
+
+### Keyed State / Operator State
+
+**Keyed State**
+- keyBy로 같은 키를 가진 이벤트들이 같은 Subtask로 라우팅됩니다.
+- 각 키별로 독립된 State를 가집니다. (예: userId별 합계, deviceId별 최근 10개 이벤트 등)
+
+**Operator State**
+키 수준이 아니라 오퍼레이터 전체 수준에서 관리하는 상태입니다.
+
+예시: source 연산자가 파일 오프셋을 기억하는 용도 등
+
+### State Backend
+
+이 상태들을 메모리나 RocksDB 등에 저장하는 방식이 State Backend입니다.
+
+**예시**
+- HashMapStateBackend: 메모리에 상태 저장(소규모, 빠름)
+- RocksDBStateBackend(현재는 Changelog 기반 등으로 발전): 디스크에 저장(대량 상태 처리에 적합)
+
+---
+
+## Checkpoint와 Savepoint
+
+아마 이 부분은 게임을 좋아하는 유저라면 익숙한 용어일 것 같다. 그 의미랑 비슷하다고 보면된다.
+
+Flink의 내결함성(fault-tolerance) 핵심이 바로 Checkpoint/Savepoint입니다.
+
+### Checkpoint
+
+주기적으로 Stream Job의 상태(state)와 오프셋을 **스냅샷** 떠서 저장함.
+
+주로 장애 복구용의 목적을 가짐.
+
+**예시**
+- Kafka 오프셋, 키별 상태, 윈도우 상태 등을 통째로 스냅샷
+
+**설정 요소**
+- interval: 몇 초/분마다 체크포인트를 찍을지
+- timeout: 얼마나 오래 걸리면 실패로 간주할지
+- 최소 간격(min pause between checkpoints)
+
+### Savepoint
+
+Checkpoint와 비슷하지만 "운영자가 의도적으로" 찍는 스냅샷
+
+Job 업그레이드의 목적을 가지고 수행함.
+
+코드 변경 후 상태를 이어받아 재시작
+
+**특징**
+- 보통 더 안정적인/오래 보관되는 저장소에 둠
+- 호환성 관리 필요 (state schema 변경 등)
+
+### 동작 원리 한 줄 설명
+
+- JobManager가 체크포인트를 트리거
+- 각 TaskManager들이 현재까지 처리한 상태를 State Backend에 저장
+- 전체 Task들이 성공하면 "이 시점까지 완전히 처리된 상태"라는 커밋 포인트처럼 사용
+
+---
+
+## Exactly-once의 의미와 Flink 내부 구현 방식
+
+많이들 "Flink는 exactly-once 보장"이라고 말하지만, 면접에서는 이 개념을 정확히 이해하고 있는지를 많이 봅니다.
+
+### Exactly-once의 실제 의미
+
+- "각 이벤트가 논리적으로 정확히 한 번만 처리된 것처럼 보인다"는 의미입니다.
+- 물리적으로는 다시 처리(replay)할 수도 있지만, 상태와 출력이 중복되지 않게 설계하는 것입니다.
+
+### Flink의 접근 방식
+
+**입력 측면**
+- Kafka 같은 source의 오프셋과 state를 함께 체크포인트에 저장합니다.
+- 장애 발생 시, 체크포인트 시점의 state와 오프셋으로 되돌아가서 재실행합니다.
+
+**상태(state) 측면**
+- 상태는 체크포인트 시점 기준으로 일관성(consistency)을 가집니다.
+
+**출력(sink) 측면**
+- Sink가 idempotent하거나, 트랜잭셔널이어야 진정한 end-to-end exactly-once가 됩니다.
+- 예시
+    - Kafka sink: 트랜잭션 기반으로 exactly-once 가능
+    - JDBC sink: Upsert(Primary Key 기준)로 idempotent하게 만들 수 있음
+
+---
+
+## 예상 면접 질문 및 답변
+
+### Flink의 기본 관점
+
+"저는 Flink를 스트림 퍼스트 엔진이라고 이해하고 있습니다. 배치도 처리하지만, 철학적으로는 배치를 유한한 스트림으로 보는 구조입니다. 그래서 Event-time, Watermark, Stateful Processing, Checkpoint 구조가 모두 무한 스트림과 장애 복구를 중심으로 설계되어 있습니다."
+
+### 스트림 vs 배치
+
+"배치는 유한 데이터에 한 번 쿼리하는 느낌이라면, 스트림은 끝없이 들어오는 데이터에 대해 실시간으로, 특히 '언제 발생했는지(event-time)'를 기준으로 집계하는 모델이라고 이해하고 있습니다. Flink는 이 둘을 같은 실행 엔진 위에서 처리해서, 스트림과 배치를 통일된 방식으로 운영할 수 있습니다."
+
+### Runtime 구조
+
+"실행 구조는 JobManager와 TaskManager, 그리고 Slot으로 이해합니다. JobManager는 계획 수립과 스케줄링, 체크포인트 관리를 담당하고, TaskManager는 실제 연산을 수행합니다. parallelism과 Slot 수를 어떻게 설계하느냐가 리소스 효율과 성능에 직결되기 때문에, 이 부분을 튜닝 포인트로 보고 있습니다."
+
+### 시간·워터마크
+
+"시간은 Processing-time, Event-time, Ingestion-time으로 나뉘는데, 실무에서는 Event-time 중심으로 설계합니다. 지연 도착 문제를 해결하기 위해 Watermark를 사용해서 '이 시점 이전 이벤트는 대부분 도착했다'는 기준을 잡고, Late Data에 대해서는 drop이나 side output 같은 정책을 설정합니다."
+
+### 상태와 체크포인트
+
+"Flink의 강점은 상태를 가진 스트림 처리입니다. keyBy 이후 각 키에 대한 상태를 관리하고, 이를 Checkpoint/Savepoint로 스냅샷 떠서 장애 시 동일한 지점에서 재시작할 수 있습니다. Checkpoint는 주기적 장애 복구용, Savepoint는 운영자가 코드 업그레이드나 마이그레이션을 위해 명시적으로 찍는 스냅샷으로 구분해서 사용합니다."
+
+### Exactly-once
+
+"마지막으로 exactly-once는 이벤트가 논리적으로 한 번만 처리된 것처럼 보이게 하는 모델입니다. Flink 내부적으로는 state와 source 오프셋을 함께 체크포인트하고, sink가 트랜잭션 또는 idempotent하게 동작해야 end-to-end exactly-once가 만족됩니다."

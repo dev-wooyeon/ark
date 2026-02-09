@@ -1,0 +1,239 @@
+# Flink Kubernetes 운영
+
+Flink를 실무에서 안정적으로 운영하려면 결국 Kubernetes 위에서 돌아가는 구조를 이해해야 한다.
+
+Flink는 기본적으로 **분산 스트림 처리 엔진**이기 때문에, JobManager/TaskManager/Checkpoint Storage 등을 어떻게 배포·확장·복구하느냐가 운영 품질을 좌우한다.
+
+아래는 Kubernetes 기반 Flink 운영에서 꼭 알고 있어야 하는 핵심 개념과 실전 운영 기준을 정리한 내용이다.
+
+---
+
+## Flink Kubernetes 운영 전략 전체 개요
+
+Flink Job은 크게 두 방식으로 Kubernetes에 배포된다.
+
+### 1. Flink Session Cluster
+- 하나의 JobManager + 여러 TaskManager
+- 여러 Job이 하나의 클러스터를 공유
+- 리소스 공유로 효율적이지만, 격리가 약하고 장애 파급 가능성 있음
+
+### 2. Flink Application Cluster (요즘 실무 표준)
+- 하나의 Job = 하나의 독립 클러스터
+- JobManager/TaskManager가 Job과 함께 생성/종료
+- 격리·안정성·배포 단순성이 좋아 대규모 서비스에서 주로 사용
+
+Session Cluster는 개발·테스트 환경,
+Application Cluster는 운영 환경에서 가장 적합하다.
+
+---
+
+## Kubernetes + Flink의 기본 아키텍처
+
+```
+Kubernetes
+ ├─ Deployment: Flink JobManager
+ ├─ Deployment: Flink TaskManager
+ ├─ Service: JobManager RPC / REST
+ ├─ ConfigMap: flink-conf.yaml / log4j / libs
+ └─ Persistent Volume: Checkpoint/Savepoint Storage
+```
+
+핵심은 JobManager의 안정성, TaskManager의 수평 확장, Checkpoint 저장소의 내구성 3가지다.
+
+---
+
+## JobManager 운영 포인트
+
+### 단일 장애 지점을 막기 위한 고가용성(HA)
+
+Kubernetes에서는 기본적으로 아래 방식으로 고가용성을 구현한다.
+
+- JobManager Deployment → replica 1 유지
+- Zookeeper 또는 Kubernetes-native HA 사용
+- JobManager 실패 시 새로운 파드가 뜰 때 checkpoint에서 복구
+
+**주의할 점:**
+JobManager는 "상태 없는 컨트롤 플레인처럼 보이지만", 실제로는 checkpoint/metadata 관리 때문에 반드시 **외부 고가용성 스토리지**가 필요하다.
+
+**추천 구성**
+- HA Storage → S3 / GCS / HDFS
+- HA Metadata → Kubernetes HA (Flink v1.15+ 권장)
+
+---
+
+## TaskManager 운영 포인트
+
+TaskManager는 전부 "소비자(worker)" 역할이다.
+
+**CPU/메모리 요청·제한 설정**
+
+TaskManager는 JVM + RocksDB + 네트워크 버퍼까지 고려해야 한다.
+
+**예시:**
+```yaml
+resources:
+  requests:
+    cpu: "2"
+    memory: "6Gi"
+  limits:
+    cpu: "3"
+    memory: "8Gi"
+```
+
+**스케일 조절**
+
+병렬도(parallelism)가 올라가면 TaskManager 개수도 자동 증가한다.
+
+- 병렬도 32
+- TM당 slot 4
+→ 최소 TaskManager 8개 필요
+
+**노드 장애 대비**
+
+Kubernetes는 TaskManager가 죽으면 자동으로 재생성하지만,
+State는 checkpoint에서 복구되므로 크게 문제되지 않는다.
+
+---
+
+## Checkpoint 저장소 (가장 중요한 운영 요소)
+
+Kubernetes 운영에서 checkpoint 저장소는 **사실상 S3가 정답**에 가깝다.
+
+**이유:**
+- Pod 재생성에도 state 유지 가능
+- HA 환경에서 공유 스토리지 필수
+- 병렬 checkpoint에 적합
+- Savepoint 보관에도 최적
+
+**폴더 예시:**
+```
+s3://my-bucket/flink/checkpoints/
+s3://my-bucket/flink/savepoints/
+```
+
+**주의할 점:**
+- local PV에 checkpoint 저장은 절대 비추 (노드 장애 시 state 손실)
+- S3 권한(IAM Role) 반드시 세팅
+
+---
+
+## 로그 및 Config 관리
+
+Flink 설정과 라이브러리는 ConfigMap 또는 initContainer로 관리한다.
+
+### 기본 설정 파일
+- flink-conf.yaml
+- log4j-console.properties
+
+Kubernetes에서는 각종 튜닝 파라미터를 환경 변수 형태로 주입하기도 한다.
+
+**예:**
+```yaml
+- name: FLINK_PROPERTIES
+  value: |
+    taskmanager.memory.process.size: 4096m
+    taskmanager.numberOfTaskSlots: 4
+```
+
+---
+
+## Kubernetes Operator 사용 여부
+
+### 1) Flink Kubernetes Operator (공식)
+
+운영 자동화를 위한 강력한 도구.
+
+**기능:**
+- Job 배포 자동화
+- Savepoint 기반 업그레이드 자동화
+- Job 상태 모니터링
+- Restart/Failover 자동 처리
+
+대규모 기업에서 이제는 사실상 표준이다.
+
+**특징:**
+- Application Cluster 운영에 최적화
+- GitOps/ArgoCD와 연계 쉬움
+
+---
+
+## 배포 전략 (가장 중요한 부분)
+
+배포 시 아래 두 가지 전략 중 하나를 선택한다.
+
+### 전략 A: Savepoint 기반 롤링 업데이트 (강력 추천)
+
+1. 기존 Job에서 savepoint 생성
+2. 새로운 이미지/코드로 Job 재시작
+3. savepoint에서 state 복구
+4. 문제 발생 시 이전 savepoint로 롤백
+
+**장점:**
+- 정확한 state 유지
+- 지표/세션/집계 모두 유지
+- 진정한 의미의 무중단 업데이트
+
+### 전략 B: Checkpoint 기반 자동 복구
+
+단순 재시작 시 checkpoint로부터 복구하는 방식이지만,
+업데이트에는 savepoint가 훨씬 안정적이다.
+
+---
+
+## 장애 대응 전략
+
+Kubernetes 위에서 문제 발생 시 가장 흔한 상황과 해결책:
+
+### ① TaskManager OOM
+- state가 너무 큼 → RocksDB or window 구조 재설계
+- 메모리 부족 → process.size 증가
+- operator chain 해제로 병목 분리
+
+### ② JobManager Restart Loop
+- checkpoint 경로 권한 문제
+- S3 네트워크 오류
+- HA metadata 손상 → cleanup 후 restore 필요
+
+### ③ Backpressure 지속
+- sink 병목 (ClickHouse/JDBC)
+- async I/O 응답 지연
+- parallelism 부족
+- window state 지나치게 큼
+
+### ④ Container가 너무 자주 재시작
+- JVM Heap 부족
+- RocksDB file descriptor 부족
+- CPU throttling (limits 너무 낮음)
+
+---
+
+## 실전 아키텍처 예시
+
+```
+Kafka → Flink (K8S Application Cluster)
+       ├─ ClickHouse (실시간 지표)
+       ├─ Iceberg (Data Lake / 장기 저장)
+       └─ Kafka monitoring (알림 / ML Feature Stream)
+
+Checkpoint → S3
+Savepoint → S3/savepoints
+Operator → Flink K8S Operator
+```
+
+대부분의 대규모 데이터 팀은 이 구조 그대로 운영한다.
+
+---
+
+## 정리
+
+Flink를 Kubernetes에서 운영할 때 핵심은 Application Cluster 기반으로 Job을 격리하고, Checkpoint와 Savepoint를 S3 같은 내구성 있는 스토리지에 저장하는 것이다. TaskManager는 병렬도와 리소스 요구사항에 따라 스케일되며, JobManager는 Kubernetes HA 방식으로 안정적으로 재시작된다. 배포는 Savepoint 기반 롤링 업데이트가 가장 안전하고, Flink K8S Operator를 사용하면 운영 자동화 수준을 크게 높일 수 있다.
+
+---
+
+## 공식 문서 출처
+
+- [Flink on Kubernetes](https://nightlies.apache.org/flink/flink-docs-stable/docs/deployment/resource-providers/overview/)
+- [Kubernetes Native HA](https://nightlies.apache.org/flink/flink-docs-stable/docs/deployment/ha/kubernetes_ha/)
+- [Application vs Session Mode](https://nightlies.apache.org/flink/flink-docs-stable/docs/deployment/overview/)
+- [Checkpoint / Savepoint](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/checkpoints/)
+- [Flink Kubernetes Operator](https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-stable/)

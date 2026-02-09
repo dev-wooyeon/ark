@@ -1,0 +1,261 @@
+여기서는 실제 대규모 서비스에서 자주 활용되는 고급 기능만 선별해 정리했다.
+
+CEP, BroadcastState, Async I/O 심화, Watermark 튜닝, Checkpoint 고급 전략까지 모두 포함한다.
+
+---
+
+## 큰 그림
+
+대규모 실시간 파이프라인에서는 아래 기능들이 결정적 역할을 한다.
+
+- CEP (Complex Event Processing)
+- Broadcast State (컨트롤/정책 데이터 전파)
+- Async I/O 심화 (외부 DB/모델 호출)
+- Custom Watermark & Event-time 튜닝
+- Side Output 고급 패턴
+- Repartitioning 전략
+- Checkpoint/Savepoint 고급 설계
+- 성능 최적화를 위한 RocksDB & State Schema 설계
+
+아래에 각각의 주요 개념과 실제 적용 사례를 직관적으로 정리했다.
+
+---
+
+## 1) CEP — 이벤트 패턴 감지의 핵심
+
+CEP는 "특정 순서·패턴을 만족하는 이벤트 시퀀스 감지" 기능이다.
+
+**예제 상황:**
+- 로그인 → 결제 → 취소 같은 패턴 감지
+- 비정상 행동 패턴 탐지 (봇/사기탐지)
+- 장바구니 담기 → 상품 상세보기 → 구매 전환 흐름 분석
+
+CEP는 다음과 같은 복잡한 조건을 쉽게 표현할 수 있다.
+
+```
+A 이벤트 발생
+   AND 5분 내에 B 이벤트
+   AND 그 10초 뒤에 C가 발생하면 패턴 성립
+```
+
+**CEP 장점**
+- 복잡한 순서 조건을 간단히 표현
+- event-time 기반으로 정확한 시간 처리 가능
+- 지연 이벤트도 포함될 수 있도록 설정 가능
+
+CEP는 고객 행동 분석이나 Fraud Detection에서 가장 강력한 도구다.
+
+---
+
+## 2) Broadcast State — "전사 공통 룰" 공유
+
+BroadcastState는 **모든 TaskManager에게 동일한 정책/룰/설정을 실시간으로 전파**하는 기능이다.
+
+**예제 상황:**
+- 실시간 필터링 규칙 변경
+- ML 모델의 threshold 업데이트
+- 위험 상품 리스트를 모든 TM에게 전달
+- A/B 테스트 구분 로직 배포
+- 광고 추천 룰 변경
+
+**예시:**
+```
+Rules(Kafka Topic) → Broadcast
+Events(Kafka Topic) → KeyedStream
+ → Connect → BroadcastProcessFunction
+```
+
+이 구조는 "정책 변경이 잦은 서비스"에서 절대적으로 필요하다.
+
+**대표적인 사용처:**
+- 광고/추천 시스템
+- 실시간 라우팅 서비스
+- 실시간 필터 정책
+- Fraud detection
+
+---
+
+## 3) Async I/O 심화 — 외부 시스템 연동 강화
+
+기초 Async I/O는 이미 3단계에서 배웠지만, 실무에서는 훨씬 복잡한 패턴을 다룬다.
+
+**실전 Async I/O 사례:**
+- Redis에서 유저 정보/토큰 조회
+- MySQL에서 상품 카테고리 조회
+- 외부 AI/ML inference API 호출
+- Feature Store 읽기
+- 실시간 가격/재고 API 호출
+
+**고급 설정 포인트:**
+- timeout 설정
+- concurrency (최대 동시 호출 수)
+- capacity (큐 크기)
+- retry/backoff 전략
+- circuit breaker 패턴 적용
+
+**고급 전략:**
+- 병렬도 확장으로 TPS 증가
+- "타입 캐싱"으로 동일 키 반복 조회 방지
+- 병렬 Async I/O → 결과 결합
+
+Async I/O는 잘 쓰면 강력하지만, 잘못 쓰면 backpressure의 주요 원인이 된다.
+
+---
+
+## 4) Watermark & Event-time 고급 튜닝
+
+Watermark는 Flink 지연 처리의 핵심.
+
+고급 설정이 필요한 주요 상황은 다음과 같다.
+
+### ① 데이터 지연 정도가 업스트림에 따라 크게 달라질 때
+
+로그 수집 장비나 지역별 네트워크 상황에 따라 event-time 지연이 다를 수 있다.
+
+**해결:**
+- BoundedOutOfOrdernessWatermarks 개별 스트림별로 조정
+- Custom WatermarkGenerator로 상황별 커스텀 정책 구성
+
+### ② 특정 키만 지연이 큰 경우
+
+키별로 watermark 흐름이 달라질 수 있음.
+이때 정밀하게 관리하지 않으면 Window가 너무 늦게 닫힘.
+
+**해결:**
+- Keyed Watermark 관리 → StreamStatus 사용
+- latency histogram 기반 adaptive watermark 생성
+
+### ③ Late Data 다루기
+
+**고급 패턴:**
+- Late event → side output
+- Late event → Iceberg/Hudi에 기록
+- Late event → 보정 파이프라인으로 재전송
+
+---
+
+## 5) Side Output 고급 패턴
+
+Side Output은 단순 error 분기만이 아니다.
+
+실전에서는 다음과 같이 적극적으로 활용된다.
+
+- 고위험 이벤트만 별도 Kafka topic
+- 품질 이상치 데이터 스트림 생성
+- 실패 이벤트를 DLQ로 전달
+- A/B 테스트용 스트림 분리
+- 이벤트 라우팅 파이프라인 구성
+
+Side Output은 실제 회사 데이터 파이프라인에서 "서비스별 맞춤 스트림 생성" 기능으로 자주 쓰인다.
+
+---
+
+## 6) Repartitioning 전략 (Shuffle, Rebalance, Union)
+
+대규모 데이터 파이프라인에서는 파티셔닝 전략이 직결적으로 성능에 영향을 준다.
+
+**유형:**
+- keyBy — key 기반 파티션
+- rebalance — round-robin (부하 분산)
+- shuffle — 랜덤 분배
+- rescale — split-based partitioning
+- global — 하나의 subtask로 몰아넣기
+
+**전략 선택 기준:**
+- 데이터 편향(key skew) → rebalance or rescale
+- 연산 비용 균등화 필요 → rebalance
+- key 기반 집계 필요 → keyBy
+- 고정 key routing 필요 → shuffle + key mapping
+
+Key skew는 checkpoint 지연과 backpressure의 가장 흔한 원인이므로 파티션 전략은 매우 중요하다.
+
+---
+
+## 7) Checkpoint & Savepoint 고급 전략
+
+기본 개념은 이미 배웠으나, 고급 운영에서는 다음을 고려해야 한다.
+
+### ① Checkpoint Alignment 튜닝
+
+alignment timeout, unaligned checkpoint를 통해
+backpressure 상황에서도 checkpoint가 멈추지 않도록 개선.
+
+### ② Incremental + Unified Savepoint 전략
+
+대규모 state에서 savepoint는 시간이 오래 걸리므로
+
+**운영 전략:**
+- 소규모 savepoint: 배포용
+- 대규모 savepoint: 주기적 보관용
+- checkpoint: 장애 복구용
+
+Iceberg/Hudi 기반 Delta Stream을 운영하면 "snapshot 기반 복구"도 가능해진다.
+
+---
+
+## 8) RocksDB & State Schema 고급 설계
+
+대규모 state 환경에서 가장 중요한 내용.
+
+**고급 전략:**
+- valueState 대신 mapState 활용해 key 개수 줄이기
+- nested state 피하기 (RocksDB I/O 증가)
+- 큰 state는 "요약(aggregate)" 형태로 변환
+- TTL + cleanup timer로 state 누적 방지
+- RocksDB memory tuning
+  - block cache 증가
+  - write buffer 증가
+  - compaction priority 조정
+
+대규모 기업들은 대개 RocksDB state만 100~500GB를 운영한다.
+
+이 구간에서는 state schema 설계가 성능에 결정적이다.
+
+---
+
+## 9) Flink SQL Gateway & Catalog 통합
+
+고급 기능 중 실무에서 가장 빠르게 채택되고 있는 기능.
+
+**SQL Gateway를 사용하면:**
+- Flink job 없이도 SQL로 Iceberg/Hudi 테이블 조회
+- Data Lake 전체를 Flink와 통합
+- streaming + batch 통합 관리
+- 운영/분석/ETL을 모두 SQL로 구현
+
+Catalog 통합은 "Flink = DW 엔진"으로 확장하는 핵심 요소다.
+
+---
+
+## 10) ML & 실시간 Feature Engineering
+
+마지막 고급 단계는 ML 실시간 파이프라인과 연결하는 것이다.
+
+**주요 패턴:**
+- 실시간 Feature 계산 → Redis/Feast/ClickHouse
+- raw event → Iceberg → batch training
+- 실시간 inference → Async I/O로 모델 API 호출
+- 온라인/오프라인 feature consistency 유지
+
+Flink는 Spark 대비 **실시간 ML-serving pipeline**에서 강력한 위치를 가진다.
+
+---
+
+## 정리
+
+Flink는 단순 ETL 엔진이 아니라 **실시간 데이터 플랫폼의 심장** 역할을 하게 된다.
+
+핵심은 "기능을 많이 아는 것"보다 "어떤 문제에서 어떤 기능을 적용해야 하는지 판단하는 감"을 익히는 것이다.
+
+---
+
+## 공식 문서 출처
+
+- [CEP](https://nightlies.apache.org/flink/flink-docs-stable/docs/libs/cep/)
+- [Broadcast State](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/fault-tolerance/broadcast_state/)
+- [Async I/O](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/asyncio/)
+- [Watermarks](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/event-time/generating_watermarks/)
+- [Side Output](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/process_function/#side-outputs)
+- [Checkpoints & Savepoints](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/checkpoints/)
+- [RocksDB Backend](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/rocksdb/)
+- [Flink SQL Gateway](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/sql-gateway/)

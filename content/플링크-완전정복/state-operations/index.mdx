@@ -1,0 +1,249 @@
+# State & 운영
+
+## 왜 State Backend가 중요할까?
+
+Flink의 핵심은 "상태(state)를 가진 스트림 처리"임.
+
+여기서 **상태를 어디에 저장하느냐**가 성능, 안정성, 지연, checkpoint 시간 모두를 결정함.
+
+즉,
+- state backend를 어떻게 선택하느냐
+- checkpoint를 어떻게 조정하느냐
+- 재시작 전략을 어떻게 구성하느냐
+이 모든 것이 **운영 품질(안정성)과 성능(레이지/처리량)을 좌우**함.
+
+---
+
+## State Backend의 역할
+
+State Backend는 크게 두 가지를 담당함:
+- **상태(state)**를 어디에 저장할 것인가? (메모리 / RocksDB / Changelog 등)
+- **checkpoint/savepoint**를 어떤 방식으로 저장·복구할 것인가?
+
+Flink 앱이 다운돼도
+- "어제까지의 집계 값"
+- "유저별 최근 주문 상태"
+- "Window state"
+
+를 그대로 복구할 수 있는 이유가 바로 backend 때문임.
+
+---
+
+## 어떤 Backend가 있는지?
+
+현재 Flink에서 핵심적으로 쓰는 백엔드는 아래 3가지 구조임.
+
+### 1) HashMap State Backend
+
+(이전: Memory / Heap Backend)
+
+**특징**
+- 상태를 메모리에 저장
+- 가장 빠른 backend
+- state가 크지 않을 때 탁월한 선택
+
+**단점**
+- state 크기가 크면 메모리 터지고 checkpoint 시간 폭증
+- 대규모 state를 운영하기 어려움
+
+**적합 케이스**
+- 간단한 count, flag, 소규모 map/list
+- ML inference 라우팅처럼 상태가 거의 없는 job
+
+### 2) RocksDB State Backend
+
+(가장 널리 쓰이는 백엔드)
+
+**특징**
+- 로컬 RocksDB에 state 저장 → 디스크 기반
+- 매우 큰 상태도 안정적으로 처리 가능
+- 장애 복구 안정성 최상
+
+**단점**
+- 메모리 기반보다 느림
+- RocksDB compaction으로 인한 latency variance 발생 가능
+- checkpoint 사이즈가 커질 수 있음
+
+**적합 케이스**
+- 유저별 세션 추적
+- 수십·수백GB 규모 state 관리
+- IoT/주문/로그 스트림처럼 key 규모가 큰 경우
+
+---
+
+### 3) Changelog State Backend
+
+(Flink 1.15+ 이후 새로운 추세)
+
+**특징**
+- state 변경 내역(changelog)을 스트리밍처럼 기록
+- checkpoint 부하 감소 (전체 snapshot 대신 변경분만 기록)
+- 복구 속도 향상
+
+현재 많은 기업들이 차세대 표준으로 채택 중임.
+
+**적합 케이스**
+- 대규모 상태 + 빠른 checkpoint 필요할 때
+- 많은 업데이트가 발생하는 state-heavy job
+
+---
+
+## 운영에서 가장 중요한 개념: Checkpoint
+
+Checkpoint는 Flink의 "복구 포인트".
+
+**동작 흐름**
+- JobManager가 checkpoint trigger
+- 각 Task가 자신의 state(snapshot) 저장
+- 모든 task가 완료하면 checkpoint 성공
+- 실패하면 해당 시점 이전 checkpoint로 rollback
+
+Checkpoint 설정이 운영난이도를 결정한다고 봐도 됨.
+
+---
+
+## Checkpoint 튜닝 포인트
+
+실무에 바로 적용되는 기준으로 정리
+
+### checkpoint interval
+
+*너무 짧으면:* state snapshot 부하 ↑ → 성능 저하
+
+*너무 길면:* 장애 발생 시 재처리 구간 ↑ → 복구 지연
+
+→ 보통 **10초~5분 사이**에서 workload 기반으로 조정함.
+
+### checkpoint timeout
+
+지나치게 짧으면 "checkpoint timeout" 경고가 계속 터짐.
+
+RocksDB state가 크면 오래 걸릴 수 있으므로 별도 조정 필요.
+
+→ 1~5분이 일반적 범위
+
+### min pause between checkpoints
+
+너무 빠르게 연달아 checkpoint가 트리거되지 않게 함.
+
+→ 안정성 확보
+
+### incremental checkpoint (RocksDB)
+
+업데이트된 state의 변경분만 저장하는 방식.
+
+→ checkpoint 속도 크게 향상
+
+→ 하지만 장기적으로 파일 조각화(fragmentation)가 심해질 수 있어 주기적 savepoint 필요
+
+---
+
+## Savepoint 운영 전략
+
+Checkpoint는 장애 복구용, Savepoint는 **운영 전략용**임.
+
+**Savepoint 활용 시점**
+- 코드 배포 (Job 업그레이드)
+- parallelism 변경
+- cluster migration
+- 주요 버전 업그레이드
+
+**주의점**
+- state schema 변경 시 호환성 고려
+- 잘못 만들면 state가 날아갈 수 있으므로 staging에서 항상 검증 필요
+- 운영에서는 "savepoint 폴더 보관 정책"도 중요
+
+---
+
+## 재시작 전략(Restart Strategy)
+
+Flink job은 실패할 수 있음 → 자동 재시작 정책 필요.
+
+**주요 전략**
+- fixed-delay restart
+- failure-rate restart
+- no restart
+
+일반적으로 실무에서는 아래 구성이 안정적
+- "failure-rate restart + exponential backoff"
+
+**복구 흐름**
+1. 실패
+2. 가장 최근 checkpoint 상태 로드
+3. source offset도 checkpoint 시점으로 돌림
+4. 재시작 후 재처리 → end-to-end exactly-once 유지
+
+---
+
+## 운영에서 가장 많이 겪는 문제: Backpressure + Checkpoint 병목
+
+State backend가 RocksDB인 경우 자주 겪는 패턴:
+
+1. RocksDB compaction이 오래 걸림
+2. checkpoint가 지연됨
+3. 다음 checkpoint가 밀림
+4. backpressure 발생
+5. 전체 job의 latency 증가
+
+**이런 경우 해결 방법:**
+- checkpoint interval 늘리기
+- incremental checkpoint 활성화
+- RocksDB block cache / write buffer 튜닝
+- parallelism(병렬도) 조정
+- 특정 operator chaining 해제
+
+---
+
+## State Backend 선택 가이드 (실제 운영 기준)
+
+아래 기준이면 거의 90% 커버됨.
+
+### state < 수십 MB
+→ **HashMap Backend** (속도 가장 빠름)
+
+### state 수백 MB~수 GB 단위
+→ **RocksDB Backend** (안정성 최고)
+
+### state 매우 크고 checkpoint 시간이 너무 오래 걸림
+→ **Changelog Backend** 고려 (대규모 streaming use-case)
+
+---
+
+## 예시: 주문 이벤트 스트림 기준
+
+**요구사항**
+- 유저별 30분 세션 유지
+- 최근 10개 주문 기억
+- 5분 윈도우 기반 매출 집계
+- 장애 시 이전 상태 그대로 복구
+- 외부 시스템 부하로 checkpoint가 길어짐
+
+**설계**
+- State Backend: RocksDB
+- incremental checkpoint: on
+- checkpoint interval: 30~60초
+- restart strategy: failure-rate + backoff
+- periodic savepoint: 배포 전 수동 생성
+
+이 조합이면 안정성과 성능이 균형 있게 잡힘.
+
+---
+
+## 정리
+
+- Flink의 State Backend는 상태를 어디에 저장하고 어떻게 복구할지를 결정하는 핵심 요소.
+- HashMap Backend는 빠르지만 작은 상태에 적합하고, RocksDB Backend는 대규모 상태에 적합
+- 최근에는 Changelog Backend가 checkpoint 성능과 복구 속도를 개선하는 방식으로 사용됨.
+- 운영에서는 checkpoint interval, timeout, incremental checkpoint 설정이 중요하고, savepoint는 코드 배포나 마이그레이션 때 사용함.
+- Job 재시작 시 checkpoint의 state와 source offset을 함께 복구해 exactly-once를 유지하는 구조임.
+
+---
+
+## 공식 문서 출처
+
+- [State Backends](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/state_backends/)
+- [RocksDB State Backend](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/rocksdb/)
+- [Checkpointing](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/checkpoints/)
+- [Savepoints](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/state/savepoints/)
+- [Restart Strategies](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/execution/restart_strategies/)
+- [Backpressure Monitoring](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/monitoring/back_pressure/)

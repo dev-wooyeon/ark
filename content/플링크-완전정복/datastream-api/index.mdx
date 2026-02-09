@@ -1,0 +1,182 @@
+# DataStream API 심화
+
+## 왜 DataStream API가 필요한가?
+
+Table API/SQL로 대부분의 파이프라인을 만들 수 있는데도,
+
+DataStream API가 존재하는 이유는 **"SQL로 표현하기 어려운 영역"**이 분명히 있기 때문임.
+
+**대표 케이스**
+1. 이벤트 단위 정밀 제어
+2. 타이머 기반 로직 (예: N초 동안 추가 이벤트 없으면 time-out)
+3. 비정형 데이터 처리
+4. 커스텀 상태(state) 기반 로직
+5. 여러 스트림을 복잡하게 결합하거나 패턴 감지
+
+DataStream API는 "스트림 처리의 실체를 직접 다루는 레벨"이라고 보면 됨.
+
+---
+
+## DataStream API의 핵심 흐름
+
+DataStream은 크게 이렇게 흘러감:
+
+**Source → Transformation → Sink**
+
+Transformation 안에서 다음을 다룸:
+- keyBy
+- window
+- state
+- timers
+- process function
+- async IO
+- side output
+
+즉, Table API가 "추상화된 SQL"이라면,
+DataStream API는 "연산자(operator) 수준에서 직접 조립"하는 모델임.
+
+---
+
+## DataStream을 이해하는 핵심 4요소
+
+### 1) KeyedStream — Stateful 처리의 절대 기반
+
+Flink의 모든 상태 기반 로직은 **keyBy**를 중심으로 돌아감.
+
+왜냐면:
+- 같은 key는 반드시 같은 subtask로 라우팅됨
+- 그래서 key 단위로 상태(state)를 안전하게 유지할 수 있음
+- window, timer, state, process function 모두 KeyedStream 위에서 동작
+
+즉, "key를 기준으로 파티션 → 동일 key를 가진 이벤트는 같은 CPU에서 처리"라는 모델임.
+
+이게 없으면 state는 유지 불가.
+
+### 2) Window — 시간 기반 집계의 핵심
+
+Table API의 TUMBLE/HOP 같은 window와 유사하지만, DataStream은 더 강함:
+
+- Trigger 제어 가능
+- Evictor로 데이터 제거 가능
+- Late data 정책을 훨씬 유연하게 설정 가능
+- 윈도우 별로 process 가능
+
+**예시**
+- "5초 내 들어온 이벤트 합계"
+- "유저별 30분 세션 종료 감지"
+- "지연 데이터 허용 범위 동적으로 조절"
+
+DataStream window는 정말 디테일하게 제어할 수 있는 도구라고 보면 됨.
+
+### 3) ProcessFunction — DataStream API의 진짜 힘
+
+"윈도우 없이도 이벤트 단위로 모든 걸 제어할 수 있게 해주는 함수"임.
+
+ProcessFunction 계열은 Flink의 하이엔드 기능이라고 보면 됨.
+
+**대표 기능**
+- 이전 이벤트 접근
+- 다음 이벤트를 기다릴지 말지 결정
+- 타이머 등록 (Event-time / Processing-time 모두 가능)
+- side output으로 조건별 흐름 분기
+- 상태(state) 직접 관리
+
+이걸 이해하면 "Flink로 뭘 할 수 있고, 어디까지 가능한가" 감이 확실히 잡힘.
+
+**대표적인 사용 예**
+- N초 동안 추가 이벤트 없으면 timeout → 주문 취소 처리
+- 두 개 이벤트 조합해 패턴 감지 (ex. 로그인 → 결제)
+- "지연 도착한 이벤트 but 아직 처리해야 하는 케이스" 세밀 제어
+
+### 4) State — Flink를 Flink답게 만드는 요소
+
+State는 "이전 이벤트의 정보를 메모리나 로컬 DB(RocksDB)에 저장해두는 것".
+
+DataStream API에서 제공하는 상태:
+- ValueState
+- ListState
+- MapState
+- ReducingState
+- AggregatingState
+
+**예시**
+- "유저별 최근 주문 3개 저장" → ListState
+- "장바구니 상태 업데이트" → MapState
+- "이벤트 누적 합계" → ReducingState
+
+이 상태는 checkpoint에 함께 저장되어 장애 복구되는 구조임.
+
+---
+
+## 고급 기능 — 실무에서 가장 많이 쓰이는 것들
+
+### Async I/O — 외부 시스템 호출 시 무조건 고려하는 기능
+
+외부 DB/Redis/ML API 호출하면 병목 생김 → Flink 전반 backpressure 발생.
+
+**Solution = Async I/O**
+
+**특징**
+- 외부 요청을 비동기로 처리
+- backpressure 최소화
+- 병렬도 확장성 유지
+
+**예시**
+- user_id → Redis 프로필 조회
+- 상품 ID → 외부 정가 데이터 조회
+- ML inference API 호출
+
+### Side Output — 흐름을 조건으로 분기
+
+Table API에선 어려운 "조건 분기"를 DataStream API는 자연스럽게 지원함.
+
+**예시**
+- Late event만 별도 Kafka로
+- 잘못된 스키마 데이터만 "dead-letter-topic"으로
+- 특정 임계값 이상의 주문만 모니터링 토픽으로 송출
+
+### Backpressure — 성능과 안정성의 핵심 지표
+
+DataStream API를 운영할 때 가장 많이 겪는 문제.
+
+**원인**
+- Sink 데이터베이스 느림
+- 외부 API 느림
+- Window state 과도하게 큼
+- Serialization 무거움
+- 병렬도/리소스 부족
+
+**징후**
+- checkpoint duration 증가
+- watermark 지연
+- task queue 적체
+
+Flink 운영에서 "backpressure 이해"는 거의 필수임.
+
+---
+
+## 현실적인 예시
+
+주문 이벤트 스트림 기준으로 예를 드리면 아래처럼 동작함.
+
+**주문이 들어올 때마다**
+- 유저별 최근 주문 n개 추적 (ListState)
+- 결제 실패 후 5초 내 재시도 없으면 알림 (KeyedProcessFunction + timer)
+- 특정 금액 이상 주문은 별도 Kafka로 전송 (side output)
+- 외부 DB에서 상품 카테고리 조회 (Async I/O)
+- 매 10분마다 집계 후 ClickHouse에 저장 (Window)
+
+이걸 전부 Table API로 하는 건 불가능함.
+
+그래서 DataStream API가 필수로 필요함.
+
+---
+
+## 출처
+
+- [DataStream overview](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/overview/)
+- [State & Checkpoint](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/fault-tolerance/state/)
+- [Windows](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/windows/)
+- [ProcessFunction](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/process_function/)
+- [Async I/O](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/datastream/operators/asyncio/)
+- [Backpressure](https://nightlies.apache.org/flink/flink-docs-stable/docs/ops/monitoring/back_pressure/)

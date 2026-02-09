@@ -1,0 +1,252 @@
+# Table API & SQL 정복
+
+## Flink Table API & SQL 이란?
+
+Flink에서 고수준 추상화 계층임.
+
+DataStream API로도 다 할 수 있지만, 실무에선 대부분 Table API/SQL로 먼저 풀어보고, 안 되면 DataStream으로 내려가는 흐름이 일반적임.
+
+**정리**
+- "데이터베이스처럼 SQL로 스트림과 배치를 처리할 수 있게 해주는 레이어"
+- 배치와 스트림을 같은 Table/SQL 모델로 다룸
+- 내부적으로는 결국 DataStream으로 컴파일돼서 실행됨
+
+Spark Structured Streaming이 있는 것처럼, Flink에선 Table API/SQL이 그 역할을 담당한다고 보면 됨.
+
+---
+
+## 핵심 구성 요소
+
+### TableEnvironment
+
+Flink에서 Table/SQL을 다루는 엔트리 포인트임.
+
+- Table 생성, DDL 실행, SQL 쿼리 실행 담당
+- Connector를 DDL로 선언하고, Catalog/Database/Table을 관리
+- 최종적으로 JobGraph를 만들어서 Flink 클러스터에 제출
+
+보통 이런 흐름으로 씀:
+- EnvironmentSettings 생성 (batch/stream 모드 지정)
+- TableEnvironment.create(...) 호출
+- tableEnv.executeSql("CREATE TABLE ...")
+- tableEnv.sqlQuery(...) 또는 tableEnv.executeSql("INSERT INTO ... SELECT ...")
+
+### EnvironmentSettings
+
+TableEnvironment가 어떻게 동작할지 정하는 설정임.
+
+대부분 이 정도만 구분해도 충분함:
+- inBatchMode()
+- inStreamingMode()
+
+Flink 철학상 배치도 스트림이긴 한데, 최적화 전략과 종료 여부 등에서 차이가 나기 때문에 모드 설정이 필요함.
+
+---
+
+## Table, Schema, Catalog 개념
+
+### Table
+
+논리적인 테이블 개념임.
+
+스트림이든 파일이든 Kafka든 결국 Table로 추상화해서 다룸.
+
+**예시**
+- Kafka 토픽 → 주문 이벤트 스트림 테이블
+- S3 Parquet 파일 → 배치 테이블
+- JDBC 테이블 → 차원 테이블(dim table)
+
+### Schema
+
+Table에 대한 컬럼 정의임.
+
+**예시**
+- 필드명, 타입
+- 시간 컬럼 정의 (rowtime, watermark)
+- Primary Key, NOT NULL 같은 제약
+
+이 Schema 정의에 따라 Flink가 타입 체크, 시리얼라이즈, 워터마크 계산 등을 자동으로 처리함.
+
+### Catalog / Database
+
+RDBMS의 Catalog/Schema와 거의 비슷한 느낌임.
+
+- Catalog: 메타데이터 저장소 (Hive Metastore, JDBC, in-memory 등)
+- Database: Catalog 안의 네임스페이스
+
+이걸 잘 써두면:
+- 여러 Job에서 같은 테이블 정의를 재사용할 수 있고
+- SQL Gateway나 BI 도구에서 Flink를 "하나의 DB처럼" 바라볼 수 있음.
+
+---
+
+## DDL 기반 Connector 정의
+
+Table API/SQL의 핵심은 DDL로 외부 시스템을 선언하는 것임.
+
+대표 패턴은 "CREATE TABLE … WITH (…)" 형태.
+
+대표적인 Connector 종류:
+
+### FileSystem / Parquet / CSV
+- S3, HDFS, 로컬 파일 등
+- 배치 ETL에 자주 사용
+
+### Kafka
+- topic, format(JSON, Avro, Debezium 등) 지정
+- key/partition metadata도 컬럼으로 가져올 수 있음
+
+### JDBC
+- MySQL, Postgres, MariaDB 등
+- dimension join, 결과 적재 등에 사용
+
+### Iceberg/Hudi 등
+- 레이크하우스 테이블로 쓰기 위한 Connector
+- upsert, snapshot, time-travel 같은 기능 활용 가능
+
+요약하면, "외부 시스템 = 테이블"로 선언만 해두면 이후부터는 그냥 SQL로 join, filter, aggregation 하는 흐름임.
+
+---
+
+## 시간 속성 & 워터마크를 SQL로 선언
+
+1번에서 시간·워터마크 개념을 다뤘으니, Table API/SQL에서는 "어떻게 선언하는지"에 집중하면 됨.
+
+### 시간 속성 (Time Attribute)
+
+일반적으로 두 가지를 많이 씀:
+
+**Processing Time 컬럼**
+- `PROCTIME()` 같은 표현으로 정의
+- 운영 편하지만, 정확한 Event-time 집계에는 불리함
+
+**Event Time 컬럼**
+- 기존 timestamp 컬럼에 `WATERMARK FOR ts AS ...` 형태로 정의
+- 예: `WATERMARK FOR ts AS ts - INTERVAL '5' SECOND`
+- 이 정의를 기반으로 Flink가 워터마크를 계산함
+
+핵심은 "DDL에서 시간과 워터마크를 선언하면, 이후 SQL에서 window 함수가 그걸 기반으로 작동한다" 정도로 기억하면 됨.
+
+---
+
+## 윈도우(Window) 종류: TUMBLE, HOP, CUMULATE
+
+Table API/SQL에서 자주 나오는 윈도우 세 가지만 확실히 잡으면 면접 대응 충분함.
+
+### TUMBLE (고정 길이 윈도우)
+
+5분 단위, 1시간 단위
+
+겹치지 않는 구간 10:00 ~ 10:05, 10:05 ~ 10:10 …
+
+### HOP (슬라이딩 윈도우)
+
+1분마다 5분 구간 집계
+
+겹치는 구간 [10:00~10:05], [10:01~10:06], [10:02~10:07] …
+
+### CUMULATE (누적 윈도우)
+
+1분 간격으로, 최대 10분까지 누적
+
+예: [10:00~10:01], [10:00~10:02], …, [10:00~10:10]
+
+실무에서 가장 많이 쓰이는 건 TUMBLE/HOP이고, CUMULATE는 실시간 누적 지표에 유용함.
+
+---
+
+## StatementSet과 다중 Sink 처리
+
+실제 파이프라인에서는 "동일한 소스 → 여러 목적지" 패턴이 많이 나옴.
+
+**예시: Kafka 주문 이벤트 → Flink → 여러 Sink**
+
+**Sink 1 : 실시간 집계용**
+- 예: 5분 윈도우로 매출/주문 수 집계 → ClickHouse
+- 빠르게 읽기 위해 집계/요약된 형태로 저장
+
+**Sink 2 : 원본/분석용**
+- 주문 이벤트 row level을 날짜/쇼핑몰/카테고리 등으로 파티셔닝해서 Iceberg에 적재
+- 향후 Spark/Flink SQL로 리포트/배치 분석/머신러닝에 활용
+
+**Sink 3 : 모니터링/연동용**
+- "특정 조건(결제 실패, 이상 패턴, 고액 주문 등)"을 만족하는 이벤트만 골라서 모니터링용 Kafka 토픽으로 발행
+- 이 토픽은 알림 시스템, 다른 팀의 서비스들이 다시 소비
+
+이때 StatementSet으로 여러 INSERT를 하나의 Job으로 묶어서 실행할 수 있음.
+
+**요약**
+- TableEnvironment에 StatementSet 생성
+- `addInsertSql` 또는 `addInsert`로 여러 INSERT 추가
+- `execute()` 호출 시 하나의 Flink Job으로 실행됨
+- 소스를 중복으로 읽지 않고 공유하는 구조가 가능해짐
+
+---
+
+## UDF (User Defined Function)
+
+SQL로 대부분 해결되지만, 비즈니스 로직이 조금 더 복잡해지면 UDF가 필요해짐.
+
+종류는 크게 세 가지 정도만 기억해도 충분함:
+
+**Scalar Function**
+- 단일 행 → 단일 값
+- 예: 문자열 파싱, 도메인별 커스텀 매핑
+
+**Table Function**
+- 단일 행 → 여러 행
+- 예: JSON 배열을 여러 행으로 풀어내기
+
+**Aggregate Function**
+- 여러 행 → 단일 값
+- 예: 커스텀 집계 로직 (중간 상태를 들고 가는 집계)
+
+UDF를 쓰면 Table API/SQL에서도 꽤 복잡한 도메인 로직을 처리할 수 있고, DataStream으로 내려갈 필요가 줄어듦.
+
+---
+
+## Catalog 기반 운영 전략
+
+Table API/SQL을 "단순 코드 레벨 API"로만 쓰지 않고, "데이터베이스처럼" 쓰려면 Catalog를 잘 구성해야 함.
+
+**전략 예시**
+- dev / staging / prod Catalog 분리
+- 각 Catalog 안에 비즈니스 도메인별 Database 구성
+- 공통 차원 테이블, 공통 Kafka 토픽 정의는 재사용 가능하게 관리
+
+이렇게 해두면:
+1. Flink SQL Gateway나 BI 도구에서 Flink를 "하나의 DB"처럼 붙일 수 있고
+2. 팀 내에서 테이블 정의를 공유하기 쉬움
+3. Job 코드 안에서 DDL을 하드코딩하는 비율이 줄어듦
+
+---
+
+## 예상 면접 질문 & 답변 스크립트
+
+### Q. Flink Table API/SQL을 어떻게 이해하고 있나요?
+
+"저는 Flink Table API/SQL을 스트림과 배치를 통합해서 다룰 수 있는 고수준 레이어라고 이해하고 있습니다. Kafka, 파일, JDBC 같은 외부 시스템을 테이블로 선언해 두고, 그 위에서 SQL로 윈도우 집계나 조인, ETL을 수행합니다. 내부적으로는 DataStream으로 컴파일되지만, 개발자 입장에서는 대부분의 로직을 SQL/Table 단에서 해결할 수 있는 구조라고 보고 있습니다."
+
+---
+
+### Q. DataStream API와 비교했을 때 장단점은?
+
+"DataStream은 세밀한 제어와 복잡한 상태 기반 로직에 강점이 있고, Table API/SQL은 선언적인 방식으로 빠르게 ETL과 집계를 만들 수 있다는 장점이 있습니다. 실무에서는 먼저 Table API/SQL로 모델링하고, 표현이 어려운 고급 패턴이 필요할 때만 DataStream으로 내려가는 것이 유지보수 측면에서 유리하다고 보고 있습니다."
+
+---
+
+### Q. 시간 / 워터마크를 Table API/SQL에서 어떻게 다루나요?
+
+"Table DDL에서 이벤트 시간 컬럼과 워터마크를 함께 선언합니다. 예를 들어 timestamp 컬럼에 대해 `WATERMARK FOR ts AS ts - INTERVAL '5' SECOND` 같이 정의하면, Flink가 이 규칙에 따라 워터마크를 계산합니다. 이후 TUMBLE, HOP, CUMULATE 같은 윈도우 함수는 이 시간 컬럼과 워터마크를 기반으로 Event-time 윈도우를 계산하게 됩니다."
+
+---
+
+### Q. 여러 Sink로 동시에 보내야 할 때는 어떻게 설계하나요?
+
+"하나의 소스에서 여러 Sink로 나누어 보내야 하는 경우 StatementSet을 사용합니다. 동일한 소스 테이블을 읽는 여러 INSERT를 StatementSet에 등록하고, 한 번의 execute로 하나의 Job으로 실행하면, 소스는 공유하면서도 여러 타겟으로 데이터를 보낼 수 있습니다. 이렇게 하면 리소스 효율과 운영 복잡도 측면에서 유리합니다."
+
+---
+
+### Q. UDF는 어떤 경우에 사용하나요?
+
+"도메인 로직이 SQL 표현만으로는 복잡해지는 경우 UDF를 사용합니다. 예를 들면, 특정 포맷의 문자열에서 키 정보를 추출하거나, JSON 구조를 풀어서 여러 행으로 변환하거나, 커스텀 집계 로직이 필요한 경우입니다. Scalar, Table, Aggregate Function을 상황에 맞게 선택해서 Table API/SQL에서 재사용 가능한 함수 단위로 캡슐화하는 식으로 활용합니다."
