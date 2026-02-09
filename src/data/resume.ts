@@ -5,6 +5,15 @@ export interface Experience {
   projects: Project[];
 }
 
+export interface PersonalProject {
+  title: string;
+  role: string;
+  period: string;
+  description: string;
+  achievements: string[];
+  links?: ProjectLink[];
+}
+
 export interface Project {
   title: string;
   description: string;
@@ -76,41 +85,6 @@ export const personalInfo: PersonalInfo = {
 };
 
 export const experiences: Experience[] = [
-  {
-    company: '개인 프로젝트',
-    role: '데이터 엔지니어링',
-    period: '2025.11 - 2025.12',
-    projects: [
-      {
-        title: '실시간 CTR 분석 파이프라인 구축',
-        description:
-          '광고 CTR 지표를 실시간으로 계산·서빙하는 스트리밍 파이프라인 설계 및 구현. Kafka-Flink 기반 이벤트 시간 처리, 상태 관리, 윈도우 집계 구성.',
-        achievements: [
-          'Out-of-Order 이벤트 문제를 워터마크 기반으로 해결하여 집계 정확도 확보',
-          'Redis(실시간 API), ClickHouse(분석), DuckDB(검증) 멀티 싱크 구조 설계',
-          '고처리량 환경에서 Backpressure 및 파티션 skew 대응 전략 적용',
-          '대용량 트래픽 환경에서 안정적인 데이터 처리를 위한 지속적인 성능 개선'
-        ],
-        links: [
-          {
-            label: '코드 저장소',
-            href: 'https://github.com/dev-wooyeon/ctr-pipeline',
-            external: true,
-          },
-          {
-            label: '시스템 구축기',
-            href: '/blog/ctr-pipeline',
-            external: true,
-          },
-          {
-            label: '성능개선기',
-            href: '/blog/macbook-air-m1-life',
-            external: true,
-          },
-        ],
-      },
-    ],
-  },
   {
     company: '모노리스',
     role: '백엔드 엔지니어 • IoT팀',
@@ -213,6 +187,59 @@ export const experiences: Experience[] = [
             external: true,
           },
         ],
+      },
+    ],
+  },
+];
+
+export const personalProjects: PersonalProject[] = [
+  {
+    title: '개인 금융 데이터 분석 플랫폼',
+    role: '데이터 엔지니어링',
+    period: '2026.01 - 2026.02',
+    description:
+      'Apache Spark와 Delta Lake를 활용한 메달리온 아키텍처(Bronze/Silver/Gold) 기반의 개인 금융 데이터 분석 플랫폼 구축.',
+    achievements: [
+      'Raw 데이터부터 분석용 마트까지 이어지는 Medallion Architecture 전체 파이프라인 구현',
+      'Star Schema 설계를 통한 고성능 분석 환경 구축 (Fact/Dim 테이블 구조화)',
+      'Delta Lake 도입으로 데이터 일관성(ACID) 보장 및 Time Travel 기능 활용',
+      'Spark Partitioning 및 Caching 전략을 통한 데이터 처리 성능 최적화',
+    ],
+    links: [
+      {
+        label: '코드 저장소',
+        href: 'https://github.com/dev-wooyeon/demo-finance-engine',
+        external: true,
+      },
+    ],
+  },
+  {
+    title: '실시간 CTR 분석 파이프라인 구축',
+    role: '데이터 엔지니어링',
+    period: '2025.11 - 2025.12',
+    description:
+      '광고 CTR 지표를 실시간으로 계산·서빙하는 스트리밍 파이프라인 설계 및 구현. Kafka-Flink 기반 이벤트 시간 처리, 상태 관리, 윈도우 집계 구성.',
+    achievements: [
+      'Out-of-Order 이벤트 문제를 워터마크 기반으로 해결하여 집계 정확도 확보',
+      'Redis(실시간 API), ClickHouse(분석), DuckDB(검증) 멀티 싱크 구조 설계',
+      '고처리량 환경에서 Backpressure 및 파티션 skew 대응 전략 적용',
+      '대용량 트래픽 환경에서 안정적인 데이터 처리를 위한 지속적인 성능 개선'
+    ],
+    links: [
+      {
+        label: '코드 저장소',
+        href: 'https://github.com/dev-wooyeon/ctr-pipeline',
+        external: true,
+      },
+      {
+        label: '시스템 구축기',
+        href: '/blog/ctr-pipeline',
+        external: true,
+      },
+      {
+        label: '성능개선기',
+        href: '/blog/macbook-air-m1-life',
+        external: true,
       },
     ],
   },
