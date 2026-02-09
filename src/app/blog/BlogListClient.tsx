@@ -21,7 +21,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
     <div>
       <div className="mb-8">
         <CategoryFilter
-          categories={['All', 'Dev', 'Life']}
+          categories={['All', 'Tech', 'Life']}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
