@@ -79,7 +79,7 @@ export const experiences: Experience[] = [
   {
     company: 'Projects',
     role: '개인 프로젝트',
-    period: '2025.11 - 2025.12 (2개월)',
+    period: '2025.11 - 2025.12',
     projects: [
       {
         title: '실시간 CTR 분석 파이프라인 구축',
@@ -98,12 +98,12 @@ export const experiences: Experience[] = [
           },
           {
             label: '시스템 구축기',
-            href: '/blog/92a7da984f',
+            href: '/blog/ctr-pipeline',
             external: true,
           },
           {
             label: '성능개선기',
-            href: '/blog/3a7dc86780',
+            href: '/blog/macbook-air-m1-life',
             external: true,
           },
         ],
@@ -113,7 +113,7 @@ export const experiences: Experience[] = [
   {
     company: '모노리스',
     role: '백엔드 엔지니어 • IoT팀',
-    period: '2023.04 - 재직 중 (2년 10개월)',
+    period: '2023.04 - 재직 중',
     projects: [
       {
         title: '데이터 분석 업무 자동화 PoC',
@@ -126,7 +126,7 @@ export const experiences: Experience[] = [
         links: [
           {
             label: '회고',
-            href: '/blog/a145b9f9dd',
+            href: '/blog/data-analysis-pipeline-poc',
             external: true,
           },
         ],
@@ -143,7 +143,7 @@ export const experiences: Experience[] = [
         links: [
           {
             label: '회고',
-            href: '/blog/d403f1d9cb',
+            href: '/blog/platform-system-review',
             external: true,
           },
         ],
@@ -153,7 +153,7 @@ export const experiences: Experience[] = [
   {
     company: '엑심베이',
     role: '소프트웨어 개발자 • PG플랫폼팀',
-    period: '2019.12 - 2023.03 (3년 4개월)',
+    period: '2019.12 - 2023.03',
     projects: [
       {
         title: '지급대행 서비스 신규 구축',
@@ -166,7 +166,7 @@ export const experiences: Experience[] = [
         links: [
           {
             label: '회고',
-            href: '/blog/1816648d73',
+            href: '/blog/payment-system-design',
             external: true,
           },
         ],
@@ -181,7 +181,7 @@ export const experiences: Experience[] = [
         links: [
           {
             label: '회고',
-            href: '/blog/f8ce857e95',
+            href: '/blog/settlement-automation',
             external: true,
           },
         ],
@@ -197,7 +197,7 @@ export const experiences: Experience[] = [
         links: [
           {
             label: '회고',
-            href: '/blog/d21fa41ed5',
+            href: '/blog/operation-automation',
             external: true,
           },
         ],

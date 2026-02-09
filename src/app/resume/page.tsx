@@ -22,6 +22,37 @@ export default function ResumePage() {
   if (m < 0 || (m === 0 && now.getDate() < startDate.getDate())) {
     years--;
   }
+
+  // Calculate period duration from "YYYY.MM - YYYY.MM" or "YYYY.MM - 재직 중" format
+  const calculateDuration = (period: string): string => {
+    const parts = period.split(' - ');
+    if (parts.length !== 2) return '';
+
+    const parseDate = (str: string): Date | null => {
+      if (str.includes('재직 중')) return new Date();
+      const [year, month] = str.split('.').map(Number);
+      if (!year || !month) return null;
+      return new Date(year, month - 1);
+    };
+
+    const startDate = parseDate(parts[0]);
+    const endDate = parseDate(parts[1]);
+
+    if (!startDate || !endDate) return '';
+
+    let months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth()) + 1;
+    const calcYears = Math.floor(months / 12);
+    const calcMonths = months % 12;
+
+    if (calcYears > 0 && calcMonths > 0) {
+      return `${calcYears}년 ${calcMonths}개월`;
+    } else if (calcYears > 0) {
+      return `${calcYears}년`;
+    } else {
+      return `${calcMonths}개월`;
+    }
+  };
+
   return (
     <>
       <Header />
@@ -112,7 +143,7 @@ export default function ResumePage() {
               <span className="tossface text-3xl">💼</span>
               Experience
               <span className="ml-2 text-base font-bold text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-3 py-0.5 rounded-full align-middle">
-                {years}+ Years
+                {years}년 +
               </span>
             </h2>
 
@@ -122,30 +153,24 @@ export default function ResumePage() {
                 <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-grey-100)] md:hidden"></div>
 
                 <div className="grid md:grid-cols-[200px_1fr] gap-8">
-                  {/* Left Column: Period & Company */}
-                  <div className="md:text-right">
-                    <div className="inline-flex flex-col md:items-end">
-                      <span className="inline-block px-3 py-1 bg-[var(--color-toss-blue)]/5 text-[var(--color-toss-blue)] text-sm font-bold rounded-lg mb-2">
-                        {exp.period.includes('(') ? (
-                          <>
-                            <span className="block">
-                              {exp.period.split(' (')[0]}
-                            </span>
-                            <span className="block text-xs opacity-70 font-medium mt-0.5">
-                              ({exp.period.split(' (')[1]}
-                            </span>
-                          </>
-                        ) : (
-                          exp.period
-                        )}
+                  {/* Left Column: Company & Period */}
+                  <div className="space-y-2">
+                    <div>
+                      <h3 className="text-xl font-bold text-[var(--color-grey-900)]">
+                        {exp.company}
+                      </h3>
+                      <p className="text-[var(--color-grey-600)] font-medium text-sm">
+                        {exp.role}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-sm text-[var(--color-grey-500)]">
+                        {exp.period}
+                      </span>
+                      <span className="text-xs text-[var(--color-toss-blue)] font-medium">
+                        {calculateDuration(exp.period)}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-[var(--color-grey-900)]">
-                      {exp.company}
-                    </h3>
-                    <p className="text-[var(--color-grey-600)] font-medium mt-1">
-                      {exp.role}
-                    </p>
                   </div>
 
                   {/* Right Column: Projects */}
