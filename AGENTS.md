@@ -80,3 +80,9 @@ ANALYZE=true npm run build
 - No CI/CD setup - relies on Vercel auto-deployment
 - Korean language content support in feeds
 - 3D animations require 'use client' directive and careful performance management
+- Agent execution rules: `.agent/rules/meta-prompt.md`
+- AI engineering guardrails: `.agent/rules/meta-prompt-engineering.md`
+- Personal communication rules: `.agent/rules/meta-prompt-personal-preferences.md`
+- Multi-model knowledge sync: `.agent/rules/meta-prompt-knowledge-sync.md`
+- Unified product rules: `.agent/rules/product-rules.md`
+- Toss-inspired engineering rules: `.agent/rules/meta-prompt-toss-inspired.md`

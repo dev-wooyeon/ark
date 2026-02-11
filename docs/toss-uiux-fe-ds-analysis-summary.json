@@ -1,0 +1,13 @@
+{
+  "generated_at_utc": "2026-02-11T08:49:17.612031+00:00",
+  "article_count": 100,
+  "category_totals": {
+    "uiux": 226,
+    "frontend": 192,
+    "design_system": 66,
+    "quality": 118
+  },
+  "avg_word_count": 1324.83,
+  "max_word_count": 3549,
+  "min_word_count": 131
+}
