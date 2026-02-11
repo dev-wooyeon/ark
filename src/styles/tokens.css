@@ -193,11 +193,11 @@
   --color-text-disabled: #8b95a1;
 
   --color-bg-primary: #191f28;
-  --color-bg-secondary: #333d4b;
-  --color-bg-tertiary: #4e5968;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #1e293b;
 
-  --color-border: #4e5968;
-  --color-border-hover: var(--color-bg-secondary);
+  --color-border: #334155;
+  --color-border-hover: #243447;
   --color-divider: #333d4b;
 
   /* Primary Blue - Lighter in dark mode */
