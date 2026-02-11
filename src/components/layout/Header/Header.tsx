@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import Logo from '@/components/ui/Logo';
 
@@ -22,34 +23,40 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-[var(--z-sticky)] bg-white/80 backdrop-blur-md border-b border-[var(--color-grey-100)]">
+    <header className="sticky top-0 z-[var(--z-sticky)] bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-[800px] mx-auto px-6 h-16 relative flex items-center justify-between">
         {/* Left: Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-bold text-[var(--color-grey-900)] hover:text-[var(--color-toss-blue)] transition-colors z-10"
+          className="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-[#3182f6] transition-colors z-10"
         >
           <Logo />
           <span>eunu.log</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={clsx(
-                'text-base font-medium transition-colors',
-                pathname === item.href
-                  ? 'text-[var(--color-toss-blue)]'
-                  : 'text-[var(--color-grey-600)] hover:text-[var(--color-toss-blue)]'
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={clsx(
+                  'text-base font-medium transition-colors',
+                  pathname === item.href
+                    ? 'text-[#3182f6]'
+                    : 'text-gray-600 hover:text-[#3182f6]'
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="w-px h-4 bg-gray-200" />
+
+          <SearchButton />
+        </div>
 
         {/* Mobile: Hamburger Button */}
         <button
@@ -155,5 +162,40 @@ export default function Header() {
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+function SearchButton() {
+  const { query } = useKBar();
+
+  return (
+    <button
+      onClick={() => query.toggle()}
+      className="flex items-center gap-3 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-lg transition-all group"
+    >
+      <div className="flex items-center gap-2">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-gray-400 group-hover:text-gray-600 transition-colors"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <span className="text-sm font-medium text-gray-500 group-hover:text-gray-700 transition-colors">
+          검색
+        </span>
+      </div>
+      <div className="flex items-center gap-1 px-1.5 py-0.5 bg-white border border-gray-200 rounded md:flex hidden">
+        <span className="text-[10px] font-bold text-gray-400">⌘</span>
+        <span className="text-[10px] font-bold text-gray-400">K</span>
+      </div>
+    </button>
   );
 }
