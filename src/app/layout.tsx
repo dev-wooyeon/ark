@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
 import JsonLd from '@/components/seo/JsonLd';
+import ThemeProvider from '@/components/providers/ThemeProvider';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://eunu-log.vercel.app'),
@@ -55,27 +56,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body>
-        <div id="app-root">{children}</div>
-        <div id="overlay-root" />
-        <JsonLd
-          data={{
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'eunu.log',
-            url: 'https://eunu-log.vercel.app',
-            author: {
-              '@type': 'Person',
-              name: 'Eunu',
-              url: 'https://eunu-log.vercel.app/resume',
-              sameAs: [
-                'https://github.com/dev-wooyeon',
-                'mailto:une@kakao.com',
-              ],
-            },
-          }}
-        />
+        <ThemeProvider>
+          <div id="app-root">{children}</div>
+          <div id="overlay-root" />
+          <JsonLd
+            data={{
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'eunu.log',
+              url: 'https://eunu-log.vercel.app',
+              author: {
+                '@type': 'Person',
+                name: 'Eunu',
+                url: 'https://eunu-log.vercel.app/resume',
+                sameAs: [
+                  'https://github.com/dev-wooyeon',
+                  'mailto:une@kakao.com',
+                ],
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

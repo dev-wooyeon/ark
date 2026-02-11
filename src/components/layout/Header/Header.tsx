@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import Logo from '@/components/ui/Logo';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const navItems = [
   { href: '/blog', label: '블로그' },
@@ -56,6 +57,7 @@ export default function Header() {
           <div className="w-px h-4 bg-gray-200" />
 
           <SearchButton />
+          <ThemeToggle />
         </div>
 
         {/* Mobile: Hamburger Button */}
