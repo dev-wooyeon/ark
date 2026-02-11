@@ -81,7 +81,7 @@ export const personalInfo: PersonalInfo = {
     'JPA',
   ],
   introduction:
-    '데이터 중심으로 시스템을 만들고, 창작하는 것을 즐깁니다. 현재 9.81park 서비스를 운영하는 기업에서 Software Engineer로 근무하고 있습니다.',
+    '사용자 가치 중심의 문제 해결에 몰두하며, 안정적이고 확장 가능한 시스템을 설계하고 구현합니다. 데이터 기반의 깊은 통찰로 기술적 난제를 극복하고, 팀과 함께 성장하는 과정에서 최고의 성과를 창출하는 Software Engineer입니다.',
 };
 
 export const experiences: Experience[] = [

@@ -7,7 +7,7 @@
 .animator {
     max-width: 600px;
     width: 100%;
-    background: var(--color-surface);
+    background: var(--color-bg-primary);
     color: var(--color-text-primary);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -89,7 +89,7 @@
 
 .resultShortcut {
     padding: 2px 6px;
-    background: var(--color-surface);
+    background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     font-size: var(--text-xs);

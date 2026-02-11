@@ -33,6 +33,7 @@
   --color-bg-tertiary: #f2f4f6;
 
   --color-border: #e5e8eb;
+  --color-border-hover: #d1d6db;
   --color-divider: #f2f4f6;
 
   /* Feedback Colors */
@@ -167,4 +168,40 @@
 
   /* === Breakpoints (for reference) === */
   /* sm: 640px, md: 768px, lg: 1024px, xl: 1280px */
+}
+
+/* ============================================
+   Dark Mode Theme
+   ============================================ */
+.dark {
+  /* Inverted Grey Scale */
+  --color-grey-50: #191f28;
+  --color-grey-100: #333d4b;
+  --color-grey-200: #4e5968;
+  --color-grey-300: #6b7684;
+  --color-grey-400: #8b95a1;
+  --color-grey-500: #b0b8c1;
+  --color-grey-600: #d1d6db;
+  --color-grey-700: #e5e8eb;
+  --color-grey-800: #f2f4f6;
+  --color-grey-900: #f9fafb;
+
+  /* Semantic Colors - Dark Mode */
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #e5e8eb;
+  --color-text-tertiary: #d1d6db;
+  --color-text-disabled: #8b95a1;
+
+  --color-bg-primary: #191f28;
+  --color-bg-secondary: #333d4b;
+  --color-bg-tertiary: #4e5968;
+
+  --color-border: #4e5968;
+  --color-border-hover: var(--color-bg-secondary);
+  --color-divider: #333d4b;
+
+  /* Primary Blue - Lighter in dark mode */
+  --color-toss-blue: #4a9eff;
+  --color-toss-blue-light: #6bb3ff;
+  --color-toss-blue-dark: #3182f6;
 }

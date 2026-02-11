@@ -43,30 +43,29 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     <Link
       href={`/blog/${post.slug}`}
       className={clsx(
-        'group flex flex-col h-full p-6 rounded-[var(--radius-md)] border border-[var(--color-grey-200)] bg-white',
-        'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
-        'hover:border-[var(--color-grey-300)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5'
-      )}
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-xs font-medium text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-2 py-1 rounded-[4px]">
-          {post.category}
-        </span>
-        <time className="text-xs text-[var(--color-grey-500)]">
-          {formattedDate}
-        </time>
-      </div>
-      <h3 className="text-lg font-semibold text-[var(--color-grey-900)] group-hover:text-[var(--color-toss-blue)] transition-colors leading-snug line-clamp-2">
-        {post.title}
-      </h3>
-      <p className="mt-2 text-sm text-[var(--color-grey-600)] line-clamp-2 flex-grow">
-        {post.description}
-      </p>
-      {post.readingTime && (
-        <div className="mt-4 text-xs text-[var(--color-grey-500)]">
-          {post.readingTime}분 읽기
-        </div>
-      )}
+              'group flex flex-col h-full p-6 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)]',
+              'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
+              'hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5'
+            )}
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xs font-medium text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-2 py-1 rounded-[4px]">
+                {post.category}
+              </span>
+              <time className="text-xs text-[var(--color-text-tertiary)]">
+                {formattedDate}
+              </time>
+            </div>
+            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-toss-blue)] transition-colors leading-snug line-clamp-2">
+              {post.title}
+            </h3>
+            <p className="mt-2 text-sm text-[var(--color-text-secondary)] line-clamp-2 flex-grow">
+              {post.description}
+            </p>
+            {post.readingTime && (
+              <div className="mt-4 text-xs text-[var(--color-text-tertiary)]">
+                {post.readingTime}분 읽기
+              </div>      )}
     </Link>
   );
 }

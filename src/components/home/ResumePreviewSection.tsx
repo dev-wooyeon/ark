@@ -1,29 +1,47 @@
+'use client';
+
+import { useRef } from 'react';
 import Link from 'next/link';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Container } from '@/components/layout';
 import { Button } from '@/components/ui';
 
 export default function ResumePreviewSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
   return (
-    <section className="py-24 bg-grey-50 border-t border-grey-100">
+    <section ref={containerRef} className="py-24 overflow-hidden">
       <Container size="md">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <span className="text-toss-blue font-bold tracking-wider uppercase text-sm">
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            viewport={{ once: true, margin: '-100px' }}
+          >
+            <span className="text-[var(--color-toss-blue)] font-bold tracking-wider uppercase text-sm">
               About Me
             </span>
-            <h2 className="text-3xl font-bold text-grey-900 leading-tight">
+            <h2 className="text-3xl font-bold text-[var(--color-grey-900)] leading-tight">
               저를 한마디로 표현하면
               <br />
-              <span className="text-toss-blue">Problem Solver</span> 입니다.
+              <span className="text-[var(--color-toss-blue)]">Problem Solver</span> 입니다.
             </h2>
-            <p className="text-lg text-grey-600 leading-relaxed">
-              최우선적으로 사용자에게 가치를 전달하는 서비스를 만드는 과정에
-              집중합니다. 안정적이고 확장 가능한 시스템 설계를 즐기며,
-              팀원들과의 원활한 소통을 중요하게 생각합니다.
+            <p className="text-lg text-[var(--color-grey-600)] leading-relaxed">
+              사용자 가치 중심의 문제 해결에 몰두하며, 안정적이고 확장 가능한 시스템을 설계하고 구현합니다.
+              데이터 기반의 의사결정으로 난제를 극복하고, 동료와 함께 문제를 해결하며 성장하는 엔지니어입니다.
             </p>
 
             <div className="pt-4">
-              <h3 className="text-sm font-semibold text-grey-900 mb-3">
+              <h3 className="text-sm font-semibold text-[var(--color-grey-900)] mb-3">
                 Main Skills
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -36,65 +54,76 @@ export default function ResumePreviewSection() {
                   'Flink',
                   'ClickHouse',
                   'JPA',
-                ].map((skill) => (
-                  <span
+                ].map((skill, index) => (
+                  <motion.span
                     key={skill}
-                    className="px-3 py-1.5 bg-white border border-grey-200 rounded-full text-sm text-grey-700 font-medium"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                    viewport={{ once: true }}
+                    className="px-3 py-1.5 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-full text-sm text-[var(--color-grey-700)] font-medium"
                   >
                     {skill}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </div>
-
-            <div className="pt-6">
-              <Button
-                as="a"
-                href="/resume"
-                size="lg"
-                className="shadow-soft hover:shadow-soft-lg transition-shadow"
-              >
-                <span className="mr-2">📄</span> 이력서 전체 보기
-              </Button>
-            </div>
-          </div>
+          </motion.div>
 
           <div className="relative">
             {/* Timeline / Experience Card Preview */}
-            <div className="bg-white p-8 rounded-2xl shadow-soft border border-grey-100 relative z-10">
-              <h3 className="text-xl font-bold text-grey-900 mb-6 flex items-center gap-2">
+            <motion.div
+              style={{ y }}
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+              viewport={{ once: true, margin: '-100px' }}
+              className="bg-[var(--color-bg-primary)] p-8 rounded-2xl shadow-soft border border-[var(--color-border)] relative z-10"
+            >
+              <h3 className="text-xl font-bold text-[var(--color-grey-900)] mb-6 flex items-center gap-2">
                 <span>🏢</span> Experience
               </h3>
 
-              <div className="space-y-8 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-grey-100">
+              <div className="space-y-8 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-[var(--color-grey-100)]">
                 <div className="relative pl-8">
-                  <div className="absolute left-0 top-[6px] w-4 h-4 rounded-full bg-toss-blue border-4 border-white shadow-sm"></div>
-                  <h4 className="font-bold text-grey-900">Software Engineer</h4>
-                  <p className="text-toss-blue font-medium text-sm">
+                  <div className="absolute left-0 top-[6px] w-4 h-4 rounded-full bg-[var(--color-toss-blue)] border-4 border-[var(--color-bg-primary)] shadow-sm"></div>
+                  <h4 className="font-bold text-[var(--color-grey-900)]">Software Engineer</h4>
+                  <p className="text-[var(--color-toss-blue)] font-medium text-sm">
                     @9.81park (Monolith)
                   </p>
-                  <p className="text-grey-500 text-xs mt-1">
+                  <p className="text-[var(--color-grey-500)] text-xs mt-1">
                     2021.05 - Present
                   </p>
-                  <ul className="mt-2 text-sm text-grey-600 list-disc list-inside marker:text-grey-400">
-                    <li>테마파크 ioT 시스템 담당</li>
-                    <li>데이터 엔지니어 직무 경험 중</li>
+                  <ul className="mt-2 text-sm text-[var(--color-grey-600)] list-disc list-inside marker:text-[var(--color-grey-400)]">
+                    <li>테마파크 IoT 서버 시스템 주담당</li>
+                    <li>건강한 사내문화 주도 개선</li>
                   </ul>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-grey-50 text-center">
+              <div className="mt-8 pt-6 border-t border-[var(--color-grey-50)] text-center">
                 <Link
                   href="/resume"
-                  className="text-sm text-grey-500 hover:text-toss-blue transition-colors font-medium"
+                  className="text-sm text-[var(--color-blue-500)] hover:text-[var(--color-toss-blue)] transition-colors font-medium"
                 >
                   + View more experience
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
             {/* Decoration */}
-            <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50 -z-10"></div>
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-blue-100 rounded-full blur-3xl -z-10"
+            ></motion.div>
           </div>
         </div>
       </Container>
