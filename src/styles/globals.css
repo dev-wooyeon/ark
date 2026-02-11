@@ -61,9 +61,22 @@
     line-height: var(--leading-relaxed);
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);
+    transition:
+      background-color var(--duration-300) var(--ease-default),
+      color var(--duration-300) var(--ease-default);
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+  }
+
+  /* Smooth transition for theme-related properties */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke,
+      box-shadow;
+    transition-duration: var(--duration-300);
+    transition-timing-function: var(--ease-default);
   }
 
   /* Typography defaults */
@@ -238,6 +251,7 @@
 
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -434,7 +448,7 @@
   z-index: 1;
 }
 
-.prose [data-rehype-pretty-code-title] + pre {
+.prose [data-rehype-pretty-code-title]+pre {
   margin-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -477,6 +491,7 @@
 
 /* ===== Custom Animations ===== */
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
@@ -538,6 +553,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 @layer utilities {
   .animate-cursor-blink {
     animation: cursor-blink 1s step-end infinite;
@@ -545,10 +561,12 @@
 }
 
 @keyframes cursor-blink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -566,6 +584,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
