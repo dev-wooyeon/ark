@@ -1,7 +1,8 @@
 import type { MDXComponents } from 'mdx/types';
+import { isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { ImageGrid } from '@/components/blog';
+import { ImageGrid, MermaidDiagram, ScrollWorkflow } from '@/components/blog';
 
 // Dynamic imports for visualization components (code splitting)
 const BinarySearchVisualization = dynamic(() =>
@@ -34,6 +35,17 @@ const TwoPointerVisualization = dynamic(() =>
     default: mod.TwoPointerVisualization,
   }))
 );
+
+function extractText(node: ReactNode): string {
+  if (node == null || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return extractText(node.props.children);
+  }
+
+  return '';
+}
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -104,6 +116,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     SortingVisualization,
     TwoPointerVisualization,
     ImageGrid,
+    ScrollWorkflow,
+    pre: (props) => {
+      const preProps = props as ComponentPropsWithoutRef<'pre'> & {
+        'data-language'?: string;
+      };
+
+      if (preProps['data-language'] === 'mermaid') {
+        const chart = extractText(preProps.children).trimEnd();
+        return <MermaidDiagram chart={chart} />;
+      }
+
+      return <pre {...preProps}>{preProps.children}</pre>;
+    },
     ...components,
   };
 }
