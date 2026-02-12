@@ -12,13 +12,20 @@
     "test": "vitest",
     "new-post": "node scripts/new-post.js",
     "format": "prettier --write .",
-    "lint:md": "markdownlint-cli2 '**/*.md' '**/*.mdx'",
-    "lint:spell": "cspell '**/*'",
+    "lint:md": "markdownlint-cli2 --config config/markdownlint-cli2.jsonc '**/*.md' '**/*.mdx'",
+    "lint:spell": "cspell --config config/cspell.json '**/*'",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
-    "*.{md,mdx}": "markdownlint-cli2"
+    "*.{md,mdx}": "markdownlint-cli2 --config config/markdownlint-cli2.jsonc"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 80
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
