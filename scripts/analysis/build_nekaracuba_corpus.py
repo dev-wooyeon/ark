@@ -249,34 +249,45 @@ def fetch_line_records() -> list[Record]:
 
 
 def fetch_coupang_records() -> list[Record]:
-    xml_text = get_text("https://medium.com/feed/coupang-engineering")
-    soup = BeautifulSoup(xml_text, "xml")
+    feed_urls = [
+        "https://medium.com/feed/coupang-engineering",
+        "https://medium.com/feed/coupang-engineering/tagged/technology",
+        "https://medium.com/feed/coupang-engineering/tagged/machine-learning",
+        "https://medium.com/feed/coupang-engineering/tagged/infrastructure",
+        "https://medium.com/feed/coupang-engineering/tagged/backend",
+        "https://medium.com/feed/coupang-engineering/tagged/ai",
+    ]
     records: list[Record] = []
-    channel = soup.find("channel")
-    if channel is None:
-        return records
-    for item in channel.find_all("item"):
-        title = (item.find("title").text if item.find("title") else "").strip()
-        link = (item.find("link").text if item.find("link") else "").strip()
-        pub_date = (item.find("pubDate").text if item.find("pubDate") else "").strip()
-        categories = [(category.text or "").strip() for category in item.find_all("category")]
-        categories = [c for c in categories if c]
-        if not title or not link:
+    for feed_url in feed_urls:
+        xml_text = get_text(feed_url)
+        soup = BeautifulSoup(xml_text, "xml")
+        channel = soup.find("channel")
+        if channel is None:
             continue
-        clean_link = normalize_url(link.split("?")[0])
-        topic = infer_topic(title, categories)
-        records.append(
-            Record(
-                company="COUPANG",
-                source="Coupang Engineering (Medium)",
-                title=title,
-                link=clean_link,
-                date=to_iso_datetime(pub_date),
-                topic=topic,
-                tags=categories,
-                evidence=f"title={title}",
+        for item in channel.find_all("item"):
+            title = (item.find("title").text if item.find("title") else "").strip()
+            link = (item.find("link").text if item.find("link") else "").strip()
+            pub_date = (item.find("pubDate").text if item.find("pubDate") else "").strip()
+            categories = [
+                (category.text or "").strip() for category in item.find_all("category")
+            ]
+            categories = [c for c in categories if c]
+            if not title or not link:
+                continue
+            clean_link = normalize_url(link.split("?")[0])
+            topic = infer_topic(title, categories)
+            records.append(
+                Record(
+                    company="COUPANG",
+                    source="Coupang Engineering (Medium)",
+                    title=title,
+                    link=clean_link,
+                    date=to_iso_datetime(pub_date),
+                    topic=topic,
+                    tags=categories,
+                    evidence=f"feed={feed_url}",
+                )
             )
-        )
     return records
 
 
@@ -436,7 +447,8 @@ def write_summary(
     lines.append("")
     lines.append("- `LINE`은 페이지 크롤링 기반이라 일부 문서는 날짜 정보가 없고, `1970-01-01`로 표준화됩니다.")
     lines.append("- `KAKAO`는 `if.kakao` 공개 API(`/api/v1/contents`)에서 세션 메타데이터를 수집합니다.")
-    lines.append("- `COUPANG`은 Medium RSS 기반이며 링크 query string은 제거합니다.")
+    lines.append("- `COUPANG`은 Medium publication feed + tagged feed를 결합합니다.")
+    lines.append("- 모든 Medium 링크는 query string 제거 후 dedupe 처리합니다.")
 
     OUT_SUMMARY_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
