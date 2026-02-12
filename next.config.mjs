@@ -6,7 +6,7 @@ import rehypeSlug from 'rehype-slug';
 const prettyCodeOptions = {
   theme: {
     light: 'github-light',
-    dark: 'one-dark-pro',
+    dark: 'houston',
   },
   keepBackground: true,
   defaultLang: 'plaintext',
