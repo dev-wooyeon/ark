@@ -36,8 +36,5 @@ next-env.d.ts
 # local tooling / editor
 .vscode/
 .husky/
-.agent/
 .sisyphus/
 .claude/
-AGENTS.md
-CLAUDE.md
