@@ -14,5 +14,7 @@ export type { TableOfContentsProps, TocItem } from './TableOfContents';
 export { ReadingProgress } from './ReadingProgress';
 export { ImageGrid } from './ImageGrid';
 export { GiscusComments } from './GiscusComments';
+export { MermaidDiagram } from './MermaidDiagram';
+export { ScrollWorkflow } from './ScrollWorkflow';
 
 export { SeriesNavigation } from './SeriesNavigation';

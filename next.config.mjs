@@ -4,7 +4,10 @@ import rehypeSlug from 'rehype-slug';
 
 /** @type {import('rehype-pretty-code').Options} */
 const prettyCodeOptions = {
-  theme: 'one-dark-pro',
+  theme: {
+    light: 'github-light',
+    dark: 'one-dark-pro',
+  },
   keepBackground: true,
   defaultLang: 'plaintext',
 };

@@ -36,6 +36,13 @@
   --color-border-hover: #d1d6db;
   --color-divider: #f2f4f6;
 
+  /* Code Block Colors */
+  --color-code-bg: #f8fafc;
+  --color-code-fg: #1e293b;
+  --color-code-title-bg: #e2e8f0;
+  --color-code-title-fg: #334155;
+  --color-code-highlight: rgba(15, 23, 42, 0.06);
+
   /* Feedback Colors */
   --color-success: #00c471;
   --color-warning: #f59e0b;
@@ -199,6 +206,13 @@
   --color-border: #334155;
   --color-border-hover: #243447;
   --color-divider: #333d4b;
+
+  /* Code Block Colors - keep dark surface in dark mode */
+  --color-code-bg: #0f172a;
+  --color-code-fg: #e5e8eb;
+  --color-code-title-bg: #1e293b;
+  --color-code-title-fg: #e5e8eb;
+  --color-code-highlight: rgba(255, 255, 255, 0.12);
 
   /* Primary Blue - Lighter in dark mode */
   --color-toss-blue: #4a9eff;
