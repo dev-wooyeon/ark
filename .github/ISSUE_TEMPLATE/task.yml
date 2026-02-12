@@ -1,0 +1,51 @@
+name: Task
+description: 실행 가능한 작업 단위를 정의합니다.
+title: "[Task] "
+labels:
+  - task
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 목표
+      description: 이 작업이 해결해야 하는 결과를 한 줄로 작성하세요.
+      placeholder: 예) 홈 검색 전환율을 높이기 위해 빈 검색 결과 UX를 개선한다.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 작업 범위
+      description: 이번 이슈에서 직접 변경할 범위만 작성하세요.
+      placeholder: |
+        - src/app/blog/page.tsx
+        - src/components/blog/SearchEmptyState.tsx
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: 작업 체크리스트
+      description: 완료 가능한 단위로 분해하세요.
+      value: |
+        - [ ] 구현
+        - [ ] 테스트/빌드 검증
+        - [ ] PR 생성 및 리뷰 반영
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 조건
+      description: Done 판단 기준을 명확히 적어주세요.
+      placeholder: |
+        - [ ] 사용자 시나리오 기준 정상 동작
+        - [ ] 회귀 없음
+    validations:
+      required: true
+  - type: input
+    id: links
+    attributes:
+      label: 연관 링크
+      description: 관련 PR/Issue/문서를 링크하세요.
+      placeholder: https://github.com/dev-wooyeon/eunu-log/issues/123
