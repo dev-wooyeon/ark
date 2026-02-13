@@ -8,6 +8,7 @@ import {
   TableOfContents,
   GiscusComments,
   SeriesNavigation,
+  ViewCounter,
 } from '@/components/blog';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
@@ -98,6 +99,8 @@ export default async function BlogPostPage({
                   <span>{post.readingTime}분 읽기</span>
                 </>
               )}
+              <span className="w-1 h-1 bg-[var(--color-grey-300)] rounded-full" />
+              <ViewCounter slug={post.slug} />
             </div>
             {post.tags && (
               <div className="mt-4 flex items-center justify-center gap-2 flex-wrap">

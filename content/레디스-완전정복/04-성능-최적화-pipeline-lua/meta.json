@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #04 - 성능 최적화: Pipeline과 Lua",
+  "slug": "redis-deep-dive-04-pipeline-lua",
+  "description": "RTT를 줄이는 Pipeline과 원자성을 보장하는 Lua 스크립트로 Redis 성능을 최적화하는 방법을 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Pipeline",
+    "Lua",
+    "Performance"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 4
+  }
+}

@@ -3,7 +3,7 @@
     "slug": "flink-table-api-sql",
     "description": "Flink의 고수준 추상화 레이어인 Table API/SQL로 스트림과 배치를 통합 처리하는 방법을 정리했습니다.",
     "date": "2025-11-28",
-    "category": "Tech",
+    "category": "Series",
     "tags": [
         "Flink",
         "SQL",

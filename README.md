@@ -107,11 +107,27 @@ cd eunu.log
 npm install
 ```
 
+### Supabase Setup (View Count)
+
+```bash
+cp .env.example .env.local
+```
+
+`.env.local`에 아래 값을 채워주세요.
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+Supabase SQL Editor에서 `docs/supabase-view-count.sql`을 실행하면
+조회수 집계를 위한 테이블/정책/함수가 생성됩니다.
+
 ### Development
 
 ```bash
 # Start development server
-npm run dev
+npm run serve  # (alias: serve)
 ```
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
@@ -125,6 +141,13 @@ npm run build
 # Start production server
 npm run start
 ```
+
+### Ops Docs
+
+- PR 운영 가이드: `docs/pr-workflow.md`
+- UI 컴포넌트 가이드: `docs/ui-components-guide.md`
+- GA4 이벤트 스키마: `docs/analytics-ga4-schema.md`
+- 주간 KPI 리포트 템플릿: `docs/analytics-kpi-weekly-template.md`
 
 <br />
 

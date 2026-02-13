@@ -2,7 +2,28 @@ export interface Experience {
   company: string;
   role: string;
   period: string;
-  projects: Project[];
+  projects: ExperienceProject[];
+}
+
+export type ExperienceStageKey =
+  | 'problem'
+  | 'decision'
+  | 'implementation'
+  | 'verification'
+  | 'result'
+  | 'extension';
+
+export interface ExperienceStage {
+  key: ExperienceStageKey;
+  label: string;
+  detail: string;
+}
+
+export interface ExperienceProject {
+  title: string;
+  description: string;
+  stages: ExperienceStage[];
+  links?: ProjectLink[];
 }
 
 export interface PersonalProject {
@@ -10,14 +31,7 @@ export interface PersonalProject {
   role: string;
   period: string;
   description: string;
-  achievements: string[];
-  links?: ProjectLink[];
-}
-
-export interface Project {
-  title: string;
-  description: string;
-  achievements: string[];
+  stages: ExperienceStage[];
   links?: ProjectLink[];
 }
 
@@ -81,7 +95,7 @@ export const personalInfo: PersonalInfo = {
     'JPA',
   ],
   introduction:
-    '사용자 가치 중심의 문제 해결에 몰두하며, 안정적이고 확장 가능한 시스템을 설계하고 구현합니다. 데이터 기반의 깊은 통찰로 기술적 난제를 극복하고, 팀과 함께 성장하는 과정에서 최고의 성과를 창출하는 Software Engineer입니다.',
+    '결제·정산·데이터 파이프라인처럼 오류 비용이 큰 도메인에서 문제를 구조로 해결하는 백엔드 엔지니어입니다. 기능 구현보다 문제 정의와 의사결정 기준을 먼저 합의하고, 변경 영향 범위를 줄이는 설계와 자동화로 사용자와 운영팀의 시간을 절약하는 데 집중합니다.',
 };
 
 export const experiences: Experience[] = [
@@ -93,12 +107,32 @@ export const experiences: Experience[] = [
       {
         title: '데이터 분석 업무 자동화 PoC',
         description:
-          '수작업 기반 분석 프로세스를 CDC 파이프라인으로 전환.',
-        achievements: [
-          'CDC 기반 데이터 파이프라인 설계 및 구현.',
-          '운영 DB 부하 없이 실시간 분석 가능한 구조 설계.',
-          '분석 리드타임 1-2시간 → 즉시 조회, 재요청 0건',
-          '반복 분석 패턴에 맞춘 스타 스키마 모델링 및 DQ 도입',
+          '운영 DB 직접 조회와 수작업 검증으로 반복되던 분석 요청을 시스템화하기 위해 CDC 기반 분석 파이프라인 PoC를 설계·구현.',
+        stages: [
+          {
+            key: 'problem',
+            label: '문제 정의',
+            detail:
+              '요청마다 쿼리 수정·검증이 필요해 분석 리드타임 1-2시간, 월 평균 수동 대응 4회가 발생',
+          },
+          {
+            key: 'decision',
+            label: '의사결정',
+            detail:
+              '운영 부하와 데이터 최신성을 함께 만족하기 위해 배치 마트 대신 CDC(DMS→S3→Glue→Athena) 구조 선택',
+          },
+          {
+            key: 'implementation',
+            label: '구현',
+            detail:
+              '반복 조회 패턴(날짜·상품·상태)에 맞춰 스타 스키마를 설계하고 Glue 단계에서 DQ(Null·타입·무결성) 검증 적용',
+          },
+          {
+            key: 'result',
+            label: '성과',
+            detail:
+              '즉시 조회 체계로 전환해 재요청 0건을 달성하고, 분석 대응 시간을 주당 약 2시간 절감',
+          },
         ],
         links: [
           {
@@ -111,12 +145,38 @@ export const experiences: Experience[] = [
       {
         title: '글로벌 플랫폼 재설계',
         description:
-          '제주파크 전용 시스템을 글로벌 확장 대비를 위해 차세대 시스템 구축.',
-        achievements: [
-          'DDD + Hexagonal Architecture 도입 주도',
-          '실내 액티비티 도메인 설계 및 아키텍처 전환 참여',
-          '테스트 코드 생성 AI 활용 프롬프트 공유',
-          '팀 스터디와 점진적 도입으로 개발 문화 개선',
+          '제주파크 전용 구조를 멀티 파크 확장형 플랫폼으로 전환하기 위해 도메인 중심 아키텍처를 재설계.',
+        stages: [
+          {
+            key: 'problem',
+            label: '문제 정의',
+            detail:
+              '파크 추가 시 시스템 복제와 조건문 누적으로 변경 영향 범위를 예측하기 어려운 구조',
+          },
+          {
+            key: 'decision',
+            label: '의사결정',
+            detail:
+              '단기 보수보다 장기 안정성을 우선해 DDD + Hexagonal Architecture(책임 분리, 테스트 가능성)를 채택',
+          },
+          {
+            key: 'implementation',
+            label: '구현',
+            detail:
+              '메타데이터·상태·기록·로그·제어 도메인 경계를 재정의하고 포트/어댑터로 인프라 의존성 분리',
+          },
+          {
+            key: 'extension',
+            label: '전환 전략',
+            detail:
+              '티켓 도메인부터 점진 적용하고 팀 스터디/가이드 공유로 설계 합의와 도입 리스크를 관리',
+          },
+          {
+            key: 'result',
+            label: '성과',
+            detail:
+              '신규 파크를 설정 중심으로 확장 가능한 기반을 확보해 기능 변경 시 타 파크 영향 리스크를 낮춤',
+          },
         ],
         links: [
           {
@@ -136,12 +196,38 @@ export const experiences: Experience[] = [
       {
         title: '지급대행 서비스 신규 구축',
         description:
-          '송금 업무를 수행하는 국내 오픈마켓 사업자를 위해 각각의 판매자에게서 발생한 매출을 위탁 송금을 하기 위한 Open API 서비스 구축',
-        achievements: [
-          'PL로 참여하여 3인으로 구성된 팀의 리소스 분배 및 일정 관리',
-          '거래, 정산, 송금 개념을 추상화하여 도메인 중심으로 재설계',
-          'OpenAPI 시스템 구축 및 지급대행 서비스 API 19개 개발',
-          '테스트 커버리지 60% 이상 작성으로 서비스 안정성 확보'
+          '오픈마켓 판매 대금을 안전하게 위탁 송금할 수 있도록 거래·정산·송금 흐름을 분리한 지급대행 Open API 서비스를 신규 구축.',
+        stages: [
+          {
+            key: 'problem',
+            label: '문제 정의',
+            detail:
+              '거래·정산·송금 로직이 한 흐름에 섞여 있어 변경 시 금전 사고 리스크가 커지는 구조',
+          },
+          {
+            key: 'decision',
+            label: '의사결정',
+            detail:
+              '금전 도메인 안정성을 최우선 기준으로 도메인 책임을 분리하고 명시적 인터페이스로 통신하도록 설계',
+          },
+          {
+            key: 'implementation',
+            label: '구현',
+            detail:
+              '3인 팀 PL로 일정/우선순위를 관리하며 30개+ 테이블 재설계와 지급대행 핵심 API 19개 개발',
+          },
+          {
+            key: 'verification',
+            label: '검증',
+            detail:
+              '핵심 로직 테스트 100개+와 CI 자동 검증을 도입해 변경 영향 범위를 사전 확인',
+          },
+          {
+            key: 'result',
+            label: '성과',
+            detail:
+              '외부 고객사 초기 연동 장애 0건을 달성했고, 변경 예측 가능성이 높아져 팀 생산성 약 20% 개선',
+          },
         ],
         links: [
           {
@@ -152,14 +238,34 @@ export const experiences: Experience[] = [
         ],
       },
       {
-        title: '차액정산 자동화',
+        title: '영중소 구간변경 차액정산 자동화',
         description:
-          '여신금융협회에서 반기마다 제공하는 약 400만건 이상의 국내 모든 사업자 데이터를 관리하고 차액정산을 위한 프로세스 구축',
-        achievements: [
-          '반기별 영중소 구간 국내 사업자 데이터 관리 및 차액정산 프로세스 구축.',
-          '구간 변경 이력 관리 및 과거 거래 소급 정산 구조 설계',
-          '순수 Java Batch 기반 대용량 처리 및 성능 최적화',
-          '모든 사업자 데이터를 저장하여 수수료 적용 오류로 인한 매출 손실 리스크 제거',
+          '여신금융협회 반기 데이터(약 400만 건+)를 기반으로 영세·중소 구간 변경 이력을 관리하는 차액정산 자동화 시스템을 구축.',
+        stages: [
+          {
+            key: 'problem',
+            label: '문제 정의',
+            detail:
+              '정책 데이터가 반기마다 재정의되고 과거 거래와 충돌해 수작업 검증과 누락 리스크가 반복',
+          },
+          {
+            key: 'decision',
+            label: '의사결정',
+            detail:
+              '현재 상태보다 이력 추적을 우선해 원천 데이터 전체 저장 + 반기 스냅샷 + 변경 이력 모델을 선택',
+          },
+          {
+            key: 'implementation',
+            label: '구현',
+            detail:
+              'Spring Batch 청크 처리와 인덱스 최적화로 400만 건+ 대용량 데이터를 안정적으로 반복 처리',
+          },
+          {
+            key: 'result',
+            label: '성과',
+            detail:
+              '반기 정산을 자동화하고 신규/변경 가맹점 누락 위험을 제거해 수수료 오적용으로 인한 매출 손실 리스크를 차단',
+          },
         ],
         links: [
           {
@@ -172,13 +278,38 @@ export const experiences: Experience[] = [
       {
         title: '운영 자동화 및 백오피스 시스템 개선',
         description:
-          '고객(운영팀)이 사용하는 관리자 대시보드를 자동화 및 효율화를 위해 개선을 진행하여 사용자 경험 향상',
-        achievements: [
-          '운영팀의 Pain Point를 주도적 개선.',
-          '운영팀 백오피스 UI/UX, 기능 개선, 자동화 등 50건 이상 수행하여 업무효율 향상',
-          '부가세 참고자료 페이지 조회 성능 개선(10s → 1s)으로 업무 효율 향상.',
-          '반복 업무 자동화로 운영팀 주당 4시간 이상 절감',
-          '모니터링 알림 중요도 분리로 장애 대응 시간 단축',
+          '운영팀이 기다리는 시간을 줄이고 판단에 집중할 수 있도록 백오피스 성능 개선·자동화·모니터링 체계를 재구성.',
+        stages: [
+          {
+            key: 'problem',
+            label: '문제 정의',
+            detail:
+              '핵심 조회 화면 로딩 15초+, 반복 수동 작업, 단일 알림 채널로 인한 장애 신호 누락이 발생',
+          },
+          {
+            key: 'decision',
+            label: '의사결정',
+            detail:
+              '운영 요청 단건 대응 대신 운영 흐름 기준(자동화 우선, 자주 쓰는 화면 성능 우선, 알림 중요도 분리)으로 개선 전략 수립',
+          },
+          {
+            key: 'implementation',
+            label: '구현',
+            detail:
+              'EXPLAIN 기반 병목 쿼리 개선, 복합 인덱스 적용, N+1 제거, 페이지네이션 개선 및 자동화 과제 50건+ 수행',
+          },
+          {
+            key: 'result',
+            label: '성과',
+            detail:
+              '주요 조회 응답을 15,000ms → 2,000ms로 단축하고 운영팀 반복 업무를 주당 4시간 이상 절감',
+          },
+          {
+            key: 'extension',
+            label: '모니터링',
+            detail:
+              '긴급/일반 알림 채널을 분리해 장애 인지와 대응을 5분 이내로 단축',
+          },
         ],
         links: [
           {
@@ -198,17 +329,59 @@ export const personalProjects: PersonalProject[] = [
     role: '데이터 엔지니어링',
     period: '2026.01 - 2026.02',
     description:
-      'Apache Spark와 Delta Lake를 활용한 메달리온 아키텍처(Bronze/Silver/Gold) 기반의 개인 금융 데이터 분석 플랫폼 구축.',
-    achievements: [
-      'Raw 데이터부터 분석용 마트까지 이어지는 Medallion Architecture 전체 파이프라인 구현',
-      'Star Schema 설계를 통한 고성능 분석 환경 구축 (Fact/Dim 테이블 구조화)',
-      'Delta Lake 도입으로 데이터 일관성(ACID) 보장 및 Time Travel 기능 활용',
-      'Spark Partitioning 및 Caching 전략을 통한 데이터 처리 성능 최적화',
+      '1억 건 금융 거래 데이터를 단일 노드에서 신뢰성 있게 처리하기 위해 성능·정합성·운영성을 함께 검증한 레이크하우스 프로젝트.',
+    stages: [
+      {
+        key: 'problem',
+        label: '문제 정의',
+        detail:
+          '데이터가 커질수록 처리 시간이 급증하고, 차원 변경 이력이 소실되면 과거 분석 결과의 신뢰도가 흔들리는 문제가 발생',
+      },
+      {
+        key: 'decision',
+        label: '의사결정',
+        detail:
+          '재처리 비용과 분석 신뢰도의 균형을 위해 Medallion + Star Schema를 채택하고, 차원은 SCD Type 2, Fact는 증분 MERGE 전략으로 분리',
+      },
+      {
+        key: 'implementation',
+        label: '구현',
+        detail:
+          'Bronze/Silver/Gold 계층 파이프라인과 레이어별 품질 검증을 구축하고, 대용량 벤치마크 모드를 분리해 실험 재현성을 확보',
+      },
+      {
+        key: 'verification',
+        label: '검증',
+        detail:
+          '레이어별 품질 체크와 100M 성능 실험을 반복해 정합성 훼손 없이 확장되는지 확인',
+      },
+      {
+        key: 'result',
+        label: '성과',
+        detail:
+          '처리 시간을 `686.5초 → 24.65초`까지 단축하고, 병목 원인(CPU·I/O·엔진 초기화)을 분리해 확장 의사결정 근거를 확보',
+      },
+      {
+        key: 'extension',
+        label: '확장 전략',
+        detail:
+          'Spark와 DuckDB의 엔진 선택 기준, 압축/비압축 I/O 트레이드오프, 운영 모드와 실험 모드 분리 전략',
+      },
     ],
     links: [
       {
         label: '코드 저장소',
         href: 'https://github.com/dev-wooyeon/demo-finance-engine',
+        external: true,
+      },
+      {
+        label: '성능 도전회고',
+        href: 'https://github.com/dev-wooyeon/demo-finance-engine/blob/main/docs/100m_performance_challenge.md',
+        external: true,
+      },
+      {
+        label: 'Gold 레이어 고도화 회고',
+        href: 'https://github.com/dev-wooyeon/demo-finance-engine/blob/main/docs/blog_gold_layer_optimization.md',
         external: true,
       },
     ],
@@ -218,27 +391,59 @@ export const personalProjects: PersonalProject[] = [
     role: '데이터 엔지니어링',
     period: '2025.11 - 2025.12',
     description:
-      '광고 CTR 지표를 실시간으로 계산·서빙하는 스트리밍 파이프라인 설계 및 구현. Kafka-Flink 기반 이벤트 시간 처리, 상태 관리, 윈도우 집계 구성.',
-    achievements: [
-      'Out-of-Order 이벤트 문제를 워터마크 기반으로 해결하여 집계 정확도 확보',
-      'Redis(실시간 API), ClickHouse(분석), DuckDB(검증) 멀티 싱크 구조 설계',
-      '고처리량 환경에서 Backpressure 및 파티션 skew 대응 전략 적용',
-      '대용량 트래픽 환경에서 안정적인 데이터 처리를 위한 지속적인 성능 개선'
+      '실시간 CTR 집계의 정확성과 운영 단순화를 동시에 달성하기 위해 이벤트 처리부터 조회 계층까지 재설계한 스트리밍 프로젝트.',
+    stages: [
+      {
+        key: 'problem',
+        label: '문제 정의',
+        detail:
+          'Out-of-order 이벤트와 트래픽 급증 구간에서 집계 지연과 정확도 저하가 동시에 발생할 수 있는 구조',
+      },
+      {
+        key: 'decision',
+        label: '의사결정',
+        detail:
+          'Event-time 기반 윈도우 집계를 유지하면서, 조회 계층은 ClickHouse 단일 소스로 통합해 복잡도를 줄이는 방향을 선택',
+      },
+      {
+        key: 'implementation',
+        label: '구현',
+        detail:
+          'Kafka → Flink 10초 윈도우 집계, 지연 이벤트 처리, DLQ 분리, Materialized View 기반 조회 경로를 한 흐름으로 구성',
+      },
+      {
+        key: 'verification',
+        label: '검증',
+        detail:
+          'checkpoint/restart 전략과 지연 이벤트 처리 시나리오를 점검해 중복·누락 리스크를 제어',
+      },
+      {
+        key: 'result',
+        label: '성과',
+        detail:
+          '집계·조회 경로를 단일화해 운영 복잡도를 낮추고, 대시보드/분석 쿼리를 즉시 사용 가능한 상태로 전환',
+      },
+      {
+        key: 'extension',
+        label: '확장 전략',
+        detail:
+          '정확도와 지연시간의 균형점 설정, DLQ 운영 정책, 단일 저장소 전략에서의 장애/확장 트레이드오프',
+      },
     ],
     links: [
       {
         label: '코드 저장소',
-        href: 'https://github.com/dev-wooyeon/ctr-pipeline',
+        href: 'https://github.com/dev-wooyeon/demo-flink-kafka-redis-api',
         external: true,
       },
       {
-        label: '시스템 구축기',
-        href: '/blog/ctr-pipeline',
+        label: '설계 회고',
+        href: 'https://github.com/dev-wooyeon/demo-flink-kafka-redis-api/blob/main/docs/OPERATOR_CHAINING_REPORT.md',
         external: true,
       },
       {
-        label: '성능개선기',
-        href: '/blog/macbook-air-m1-life',
+        label: 'Redis/serving 제외 결정 회고',
+        href: 'https://github.com/dev-wooyeon/demo-flink-kafka-redis-api/blob/main/docs/WHY_REMOVE_DUCKDB.md',
         external: true,
       },
     ],
@@ -278,7 +483,7 @@ export const activities: Activity[] = [
       '누적 100회 이상의 개발자 커리어 멘토링 진행',
       '취업준비생 및 주니어 개발자들의 이력서 및 포트폴리오 첨삭을 통한 서류 합격률 개선 지원',
       '기술적 문제 해결(Troubleshooting) 및 학습 방향성에 대한 객관적 조언 제공',
-      "'함께 성장하는 가치'를 바탕으로 지식 공유 생태계 기여",
+      '결제·정산·플랫폼 재설계·데이터 파이프라인 주제의 회고를 작성하고 스터디/리뷰에 활용',
     ],
   },
   {

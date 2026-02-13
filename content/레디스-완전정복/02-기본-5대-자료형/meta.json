@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #02 - 기본 5대 자료형과 선택 전략",
+  "slug": "redis-deep-dive-02-core-data-types",
+  "description": "Redis 5대 자료형의 내부 특성과 시간 복잡도를 기준으로 실무 선택 전략을 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Data Structures",
+    "Performance",
+    "Data Engineering"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 2
+  }
+}

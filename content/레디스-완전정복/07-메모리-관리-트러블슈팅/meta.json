@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #07 - 메모리 관리와 트러블슈팅",
+  "slug": "redis-deep-dive-07-memory-troubleshooting",
+  "description": "Eviction 정책, INFO 지표, Slowlog 기반으로 Redis 운영 트러블슈팅 방법을 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Memory Management",
+    "Troubleshooting",
+    "Observability"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 7
+  }
+}

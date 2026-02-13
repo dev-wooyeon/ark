@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #05 - Persistence: RDB와 AOF",
+  "slug": "redis-deep-dive-05-persistence-rdb-aof",
+  "description": "Redis 영속성 전략인 RDB와 AOF의 동작 원리와 운영 트레이드오프를 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Persistence",
+    "RDB",
+    "AOF"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 5
+  }
+}

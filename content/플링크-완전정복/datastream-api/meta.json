@@ -3,7 +3,7 @@
     "slug": "flink-datastream-api",
     "description": "SQL로 표현하기 어려운 복잡한 스트림 처리를 위한 DataStream API의 핵심 개념과 고급 기능을 정리했습니다.",
     "date": "2025-11-28",
-    "category": "Tech",
+    "category": "Series",
     "tags": [
         "Flink",
         "DataStream",

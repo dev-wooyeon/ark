@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #01 - 분산 환경의 공유 메모리와 도입 근거",
+  "slug": "redis-deep-dive-01-shared-memory",
+  "description": "로컬 캐시의 한계를 분석하고 Redis를 분산 환경의 단일 진실 원천으로 도입하는 근거를 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Caching",
+    "Distributed Systems",
+    "Data Consistency"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 1
+  }
+}

@@ -7,12 +7,26 @@ interface PostCardProps {
   variant?: 'default' | 'featured';
 }
 
+function getCategoryBadgeClass(category: string): string {
+  switch (category) {
+    case 'Tech':
+      return 'text-[var(--color-category-tech-text)] bg-[var(--color-category-tech-bg)] border-[var(--color-category-tech-border)]';
+    case 'Series':
+      return 'text-[var(--color-category-series-text)] bg-[var(--color-category-series-bg)] border-[var(--color-category-series-border)]';
+    case 'Life':
+      return 'text-[var(--color-category-life-text)] bg-[var(--color-category-life-bg)] border-[var(--color-category-life-border)]';
+    default:
+      return 'text-[var(--color-category-tech-text)] bg-[var(--color-category-tech-bg)] border-[var(--color-category-tech-border)]';
+  }
+}
+
 export default function PostCard({ post, variant = 'default' }: PostCardProps) {
   const formattedDate = new Date(post.date).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
+  const categoryBadgeClass = getCategoryBadgeClass(post.category);
 
   if (variant === 'featured') {
     return (
@@ -43,29 +57,35 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     <Link
       href={`/blog/${post.slug}`}
       className={clsx(
-              'group flex flex-col h-full p-6 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)]',
-              'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
-              'hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5'
-            )}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-medium text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-2 py-1 rounded-[4px]">
-                {post.category}
-              </span>
-              <time className="text-xs text-[var(--color-text-tertiary)]">
-                {formattedDate}
-              </time>
-            </div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-toss-blue)] transition-colors leading-snug line-clamp-2">
-              {post.title}
-            </h3>
-            <p className="mt-2 text-sm text-[var(--color-text-secondary)] line-clamp-2 flex-grow">
-              {post.description}
-            </p>
-            {post.readingTime && (
-              <div className="mt-4 text-xs text-[var(--color-text-tertiary)]">
-                {post.readingTime}분 읽기
-              </div>      )}
+        'group flex h-full flex-col rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6',
+        'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
+        'hover:-translate-y-0.5 hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)]'
+      )}
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <span
+          className={clsx(
+            'rounded-[4px] border px-2 py-1 text-xs font-medium',
+            categoryBadgeClass
+          )}
+        >
+          {post.category}
+        </span>
+        <time className="text-xs text-[var(--color-text-tertiary)]">
+          {formattedDate}
+        </time>
+      </div>
+      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-toss-blue)]">
+        {post.title}
+      </h3>
+      <p className="mt-2 flex-grow line-clamp-2 text-sm text-[var(--color-text-secondary)]">
+        {post.description}
+      </p>
+      {post.readingTime && (
+        <div className="mt-4 text-xs text-[var(--color-text-tertiary)]">
+          {post.readingTime}분 읽기
+        </div>
+      )}
     </Link>
   );
 }

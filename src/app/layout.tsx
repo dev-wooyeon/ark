@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
 import JsonLd from '@/components/seo/JsonLd';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import KBarProvider from '@/components/providers/KBarProvider';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import PageViewTracker from '@/components/analytics/PageViewTracker';
 import { getSortedFeedData } from '@/lib/mdx-feeds';
 
 export const metadata: Metadata = {
@@ -59,12 +62,17 @@ export default function RootLayout({
 }) {
   // Get all posts for search
   const posts = getSortedFeedData();
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
     <html lang="ko" suppressHydrationWarning>
       <body>
+        <GoogleAnalytics measurementId={gaMeasurementId} />
         <ThemeProvider>
           <KBarProvider posts={posts}>
+            <Suspense fallback={null}>
+              <PageViewTracker />
+            </Suspense>
             <div id="app-root">{children}</div>
             <div id="overlay-root" />
           </KBarProvider>

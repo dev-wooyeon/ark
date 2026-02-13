@@ -31,6 +31,8 @@
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f9fafb;
   --color-bg-tertiary: #f2f4f6;
+  --color-surface: #ffffff;
+  --color-blue-500: #3182f6;
 
   --color-border: #e5e8eb;
   --color-border-hover: #d1d6db;
@@ -42,12 +44,25 @@
   --color-code-title-bg: #e2e8f0;
   --color-code-title-fg: #334155;
   --color-code-highlight: rgba(15, 23, 42, 0.06);
+  --shiki-light: #334155;
+  --shiki-dark: #e2e8f0;
 
   /* Feedback Colors */
   --color-success: #00c471;
   --color-warning: #f59e0b;
   --color-error: #f04452;
   --color-info: #3182f6;
+
+  /* Category Badge Colors - Light */
+  --color-category-tech-bg: #e8f2ff;
+  --color-category-tech-border: #bfd8ff;
+  --color-category-tech-text: #1b64da;
+  --color-category-series-bg: #e6f8ff;
+  --color-category-series-border: #b7e9ff;
+  --color-category-series-text: #0077b6;
+  --color-category-life-bg: #eef0ff;
+  --color-category-life-border: #ccd4ff;
+  --color-category-life-text: #4b5fd6;
 
   /* === Typography === */
 
@@ -202,6 +217,8 @@
   --color-bg-primary: #191f28;
   --color-bg-secondary: #1e293b;
   --color-bg-tertiary: #1e293b;
+  --color-surface: #111827;
+  --color-blue-500: #6bb3ff;
 
   --color-border: #334155;
   --color-border-hover: #243447;
@@ -213,9 +230,22 @@
   --color-code-title-bg: #1e293b;
   --color-code-title-fg: #e5e8eb;
   --color-code-highlight: rgba(255, 255, 255, 0.12);
+  --shiki-light: #94a3b8;
+  --shiki-dark: #f8fafc;
 
   /* Primary Blue - Lighter in dark mode */
   --color-toss-blue: #4a9eff;
   --color-toss-blue-light: #6bb3ff;
   --color-toss-blue-dark: #3182f6;
+
+  /* Category Badge Colors - Dark */
+  --color-category-tech-bg: rgba(74, 158, 255, 0.2);
+  --color-category-tech-border: rgba(110, 175, 255, 0.45);
+  --color-category-tech-text: #b7d9ff;
+  --color-category-series-bg: rgba(72, 188, 255, 0.2);
+  --color-category-series-border: rgba(120, 223, 255, 0.45);
+  --color-category-series-text: #beefff;
+  --color-category-life-bg: rgba(120, 138, 255, 0.22);
+  --color-category-life-border: rgba(163, 176, 255, 0.48);
+  --color-category-life-text: #d0d8ff;
 }

@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #06 - Replication과 Cluster 확장 전략",
+  "slug": "redis-deep-dive-06-replication-cluster",
+  "description": "Sentinel 기반 고가용성과 Cluster 기반 샤딩 구조를 비교해 확장 전략을 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Replication",
+    "Sentinel",
+    "Cluster"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 6
+  }
+}

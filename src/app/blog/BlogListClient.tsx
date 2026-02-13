@@ -13,7 +13,16 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
 
   const filteredPosts = useMemo(() => {
-    if (activeCategory === 'All') return posts;
+    if (activeCategory === 'All') {
+      return posts.filter((post) => post.category !== 'Series' && !post.series);
+    }
+
+    if (activeCategory === 'Series') {
+      return posts.filter(
+        (post) => post.category === 'Series' || !!post.series
+      );
+    }
+
     return posts.filter((post) => post.category === activeCategory);
   }, [posts, activeCategory]);
 
@@ -21,7 +30,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
     <div>
       <div className="mb-8">
         <CategoryFilter
-          categories={['All', 'Tech', 'Life']}
+          categories={['All', 'Tech', 'Series', 'Life']}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />

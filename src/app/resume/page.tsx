@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { Header, Container } from '@/components/layout';
 import {
   experiences,
@@ -8,6 +9,7 @@ import {
   activities,
   certifications,
 } from '@/data/resume';
+import { orderExperienceStages } from '@/lib/resume-stage-order';
 
 export const metadata: Metadata = {
   title: 'Resume',
@@ -52,6 +54,38 @@ export default function ResumePage() {
     } else {
       return `${calcMonths}개월`;
     }
+  };
+
+  const renderTextWithCode = (text: string): ReactNode[] => {
+    const segments = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
+    return segments
+      .filter((segment) => segment.length > 0)
+      .map((segment, index) => {
+        if (segment.startsWith('```') && segment.endsWith('```')) {
+          const code = segment.slice(3, -3).trim();
+          return (
+            <pre
+              key={`${segment}-${index}`}
+              className="mt-2 mb-2 overflow-x-auto bg-[var(--color-bg-secondary)] px-3 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)]"
+            >
+              <code className="text-sm font-mono">{code}</code>
+            </pre>
+          );
+        }
+
+        if (segment.startsWith('`') && segment.endsWith('`')) {
+          return (
+            <code
+              key={`${segment}-${index}`}
+              className="px-1 py-0.5 rounded bg-[var(--color-bg-secondary)] border border-[var(--color-border)] text-sm font-mono"
+            >
+              {segment.slice(1, -1)}
+            </code>
+          );
+        }
+
+        return <span key={`${segment}-${index}`}>{segment}</span>;
+      });
   };
 
   return (
@@ -185,19 +219,23 @@ export default function ResumePage() {
                           {project.description}
                         </p>
 
-                        <ul className="space-y-2 mb-6 pl-0 ml-0 list-none">
-                          {project.achievements.map((achievement, aIndex) => (
-                            <li
-                              key={aIndex}
-                              className="flex items-start gap-2 text-[var(--color-text-secondary)] text-base leading-relaxed"
-                            >
-                              <span className="tossface text-sm mt-0.5 shrink-0">
-                                ✔️
-                              </span>
-                              <span>{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <dl className="mb-6 space-y-3">
+                          {orderExperienceStages(project.stages).map(
+                            (stage, stageIndex) => (
+                              <div
+                                key={`${project.title}-${stage.key}-${stageIndex}`}
+                                className="space-y-1.5"
+                              >
+                                <dt className="text-sm font-bold text-[var(--color-toss-blue)]">
+                                  {stage.label}
+                                </dt>
+                                <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
+                                  {renderTextWithCode(stage.detail)}
+                                </dd>
+                              </div>
+                            )
+                          )}
+                        </dl>
 
                         {project.links && project.links.length > 0 && (
                           <div className="flex gap-3 mt-4">
@@ -267,19 +305,23 @@ export default function ResumePage() {
                         {project.description}
                       </p>
 
-                      <ul className="space-y-2 mb-6 pl-0 ml-0 list-none">
-                        {project.achievements.map((achievement, aIndex) => (
-                          <li
-                            key={aIndex}
-                            className="flex items-start gap-2 text-[var(--color-text-secondary)] text-base leading-relaxed"
-                          >
-                            <span className="tossface text-sm mt-0.5 shrink-0">
-                              ✔️
-                            </span>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <dl className="space-y-3 mb-6">
+                        {orderExperienceStages(project.stages).map(
+                          (stage, aIndex) => (
+                            <div
+                              key={`${project.title}-${stage.key}-${aIndex}`}
+                              className="space-y-1.5"
+                            >
+                              <dt className="text-sm font-bold text-[var(--color-toss-blue)]">
+                                {stage.label}
+                              </dt>
+                              <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
+                                {renderTextWithCode(stage.detail)}
+                              </dd>
+                            </div>
+                          )
+                        )}
+                      </dl>
 
                       {project.links && project.links.length > 0 && (
                         <div className="flex gap-3 mt-4">
@@ -363,16 +405,13 @@ export default function ResumePage() {
                     <p className="text-[var(--color-text-secondary)] font-medium mb-4">
                       {activity.organization}
                     </p>
-                    <ul className="space-y-2 pl-0 ml-0 list-none">
+                    <ul className="space-y-2 pl-5 list-disc">
                       {activity.description.map((desc, dIndex) => (
                         <li
                           key={dIndex}
-                          className="flex items-start gap-2 text-[var(--color-text-secondary)] text-base leading-relaxed"
+                          className="text-[var(--color-text-secondary)] text-base leading-relaxed"
                         >
-                          <span className="tossface text-sm mt-0.5 shrink-0">
-                            ✔️
-                          </span>
-                          <span>{desc}</span>
+                          {desc}
                         </li>
                       ))}
                     </ul>

@@ -8,6 +8,7 @@ import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import Logo from '@/components/ui/Logo';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics';
 
 const navItems = [
   { href: '/blog', label: '블로그' },
@@ -42,6 +43,12 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() =>
+                  trackEvent(AnalyticsEvents.click, {
+                    target: 'header_nav',
+                    destination: item.href,
+                  })
+                }
                 className={clsx(
                   'text-base font-medium transition-colors',
                   pathname === item.href
@@ -129,7 +136,13 @@ export default function Header() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        trackEvent(AnalyticsEvents.click, {
+                          target: 'header_nav_mobile',
+                          destination: item.href,
+                        });
+                      }}
                       className={clsx(
                         'block text-3xl font-bold transition-all duration-200 hover:translate-x-2',
                         pathname === item.href
@@ -174,7 +187,12 @@ function SearchButton() {
 
   return (
     <button
-      onClick={() => query.toggle()}
+      onClick={() => {
+        query.toggle();
+        trackEvent(AnalyticsEvents.click, {
+          target: 'search_button',
+        });
+      }}
       className="flex items-center gap-3 px-3 py-1.5 bg-[var(--color-grey-50)] hover:bg-[var(--color-grey-100)] border border-[var(--color-grey-100)] rounded-lg transition-all group"
     >
       <div className="flex items-center gap-2">
@@ -197,8 +215,12 @@ function SearchButton() {
         </span>
       </div>
       <div className="flex items-center gap-1 px-1.5 py-0.5 bg-[var(--color-surface)] border border-[var(--color-grey-200)] rounded md:flex hidden">
-        <span className="text-[10px] font-bold text-[var(--color-grey-400)]">⌘</span>
-        <span className="text-[10px] font-bold text-[var(--color-grey-400)]">K</span>
+        <span className="text-[10px] font-bold text-[var(--color-grey-400)]">
+          ⌘
+        </span>
+        <span className="text-[10px] font-bold text-[var(--color-grey-400)]">
+          K
+        </span>
       </div>
     </button>
   );

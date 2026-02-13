@@ -18,3 +18,4 @@ export { MermaidDiagram } from './MermaidDiagram';
 export { ScrollWorkflow } from './ScrollWorkflow';
 
 export { SeriesNavigation } from './SeriesNavigation';
+export { default as ViewCounter } from './ViewCounter';

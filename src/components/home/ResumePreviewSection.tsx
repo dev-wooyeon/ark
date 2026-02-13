@@ -33,11 +33,15 @@ export default function ResumePreviewSection() {
             <h2 className="text-3xl font-bold text-[var(--color-grey-900)] leading-tight">
               저를 한마디로 표현하면
               <br />
-              <span className="text-[var(--color-toss-blue)]">Problem Solver</span> 입니다.
+              <span className="text-[var(--color-toss-blue)]">
+                Problem Solver
+              </span>{' '}
+              입니다.
             </h2>
             <p className="text-lg text-[var(--color-grey-600)] leading-relaxed">
-              사용자 가치 중심의 문제 해결에 몰두하며, 안정적이고 확장 가능한 시스템을 설계하고 구현합니다.
-              데이터 기반의 의사결정으로 난제를 극복하고, 동료와 함께 문제를 해결하며 성장하는 엔지니어입니다.
+              사용자 가치 중심의 문제 해결에 몰두하며, 안정적이고 확장 가능한
+              시스템을 설계하고 구현합니다. 데이터 기반의 의사결정으로 난제를
+              극복하고, 동료와 함께 문제를 해결하며 성장하는 엔지니어입니다.
             </p>
 
             <div className="pt-4">
@@ -87,7 +91,9 @@ export default function ResumePreviewSection() {
               <div className="space-y-8 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-[var(--color-grey-100)]">
                 <div className="relative pl-8">
                   <div className="absolute left-0 top-[6px] w-4 h-4 rounded-full bg-[var(--color-toss-blue)] border-4 border-[var(--color-bg-primary)] shadow-sm"></div>
-                  <h4 className="font-bold text-[var(--color-grey-900)]">Software Engineer</h4>
+                  <h4 className="font-bold text-[var(--color-grey-900)]">
+                    Software Engineer
+                  </h4>
                   <p className="text-[var(--color-toss-blue)] font-medium text-sm">
                     @9.81park (Monolith)
                   </p>
@@ -104,7 +110,7 @@ export default function ResumePreviewSection() {
               <div className="mt-8 pt-6 border-t border-[var(--color-grey-50)] text-center">
                 <Link
                   href="/resume"
-                  className="text-sm text-[var(--color-blue-500)] hover:text-[var(--color-toss-blue)] transition-colors font-medium"
+                  className="text-sm text-[var(--color-toss-blue)] transition-colors hover:text-[var(--color-toss-blue-dark)] font-medium"
                 >
                   + View more experience
                 </Link>
@@ -120,10 +126,10 @@ export default function ResumePreviewSection() {
               transition={{
                 duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
               className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-blue-100 rounded-full blur-3xl -z-10"
-            ></motion.div>
+            />
           </div>
         </div>
       </Container>

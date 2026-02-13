@@ -1,0 +1,18 @@
+{
+  "title": "Redis Deep Dive #03 - 특화 자료형과 메모리 최적화",
+  "slug": "redis-deep-dive-03-specialized-types",
+  "description": "Bitmaps, HyperLogLog, Streams를 활용해 대규모 데이터를 낮은 비용으로 처리하는 전략을 정리합니다.",
+  "date": "2026-02-13",
+  "category": "Series",
+  "tags": [
+    "Redis",
+    "Bitmaps",
+    "HyperLogLog",
+    "Streams"
+  ],
+  "series": {
+    "id": "redis-deep-dive",
+    "title": "Redis 완전정복",
+    "order": 3
+  }
+}

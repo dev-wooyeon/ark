@@ -3,6 +3,7 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AnalyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -21,10 +22,17 @@ export default function ThemeToggle() {
   }
 
   const isDark = theme === 'dark';
+  const nextTheme = isDark ? 'light' : 'dark';
 
   return (
     <motion.button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={() => {
+        setTheme(nextTheme);
+        trackEvent(AnalyticsEvents.theme, {
+          from_theme: isDark ? 'dark' : 'light',
+          to_theme: nextTheme,
+        });
+      }}
       className="relative p-2 rounded-lg hover:bg-[var(--color-grey-100)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)]"
       aria-label={`${isDark ? '라이트' : '다크'} 모드로 전환`}
       whileHover={{ scale: 1.05 }}
