@@ -88,6 +88,18 @@ export default function ResumePage() {
       });
   };
 
+  const renderStageDetail = (detailLines: string[]): ReactNode => {
+    return (
+      <ul className="m-0 list-disc space-y-1 pl-5">
+        {detailLines.map((line, lineIndex) => (
+          <li key={`${line}-${lineIndex}`} className="leading-relaxed">
+            {renderTextWithCode(line)}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <>
       <Header />
@@ -230,7 +242,7 @@ export default function ResumePage() {
                                   {stage.label}
                                 </dt>
                                 <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
-                                  {renderTextWithCode(stage.detail)}
+                                  {renderStageDetail(stage.detail)}
                                 </dd>
                               </div>
                             )
@@ -316,7 +328,7 @@ export default function ResumePage() {
                                 {stage.label}
                               </dt>
                               <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
-                                {renderTextWithCode(stage.detail)}
+                                {renderStageDetail(stage.detail)}
                               </dd>
                             </div>
                           )
