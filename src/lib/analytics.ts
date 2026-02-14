@@ -1,69 +1,36 @@
-export const AnalyticsEvents = {
-  view: 'view',
-  click: 'click',
-  search: 'search',
-  error: 'error',
-  theme: 'theme',
-} as const;
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-export type AnalyticsEventName =
-  (typeof AnalyticsEvents)[keyof typeof AnalyticsEvents];
-
-type AnalyticsPrimitive = string | number | boolean | null;
-type AnalyticsParams = Record<string, AnalyticsPrimitive | undefined>;
+type GtagValue = string | number | boolean | undefined;
+type GtagParams = Record<string, GtagValue>;
 
 declare global {
   interface Window {
-    dataLayer?: unknown[];
+    dataLayer: unknown[];
     gtag?: (...args: unknown[]) => void;
   }
 }
 
-function getTheme(): 'light' | 'dark' {
-  if (typeof document === 'undefined') {
-    return 'light';
-  }
-
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+function canTrack(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    Boolean(GA_MEASUREMENT_ID) &&
+    typeof window.gtag === 'function'
+  );
 }
 
-function getDevice(): 'mobile' | 'desktop' {
-  if (typeof window === 'undefined') {
-    return 'desktop';
-  }
+export function trackPageView(path: string): void {
+  if (!canTrack()) return;
 
-  return window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop';
-}
-
-function getCommonParams(): AnalyticsParams {
-  if (typeof window === 'undefined') {
-    return {};
-  }
-
-  return {
-    page_path: window.location.pathname,
-    device: getDevice(),
-    theme: getTheme(),
-  };
-}
-
-export function trackEvent(
-  eventName: AnalyticsEventName,
-  params: AnalyticsParams = {}
-) {
-  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
-    return;
-  }
-
-  window.gtag('event', eventName, {
-    ...getCommonParams(),
-    ...params,
+  window.gtag?.('event', 'page_view', {
+    page_path: path,
+    page_title: document.title,
+    page_location: window.location.href,
   });
 }
 
-export function trackPageView(pathname: string) {
-  trackEvent(AnalyticsEvents.view, {
-    page_path: pathname,
-    page_title: typeof document !== 'undefined' ? document.title : undefined,
-  });
+export function trackEvent(eventName: string, params: GtagParams = {}): void {
+  if (!canTrack()) return;
+
+  window.gtag?.('event', eventName, params);
 }
+

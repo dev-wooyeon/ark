@@ -2,6 +2,7 @@
 
 import { Container } from '@/components/layout';
 import { Button } from '@/components/ui';
+import { trackEvent } from '@/lib/analytics';
 
 export default function HeroSection() {
   return (
@@ -27,14 +28,28 @@ export default function HeroSection() {
           <Button
             as="a"
             href="/blog"
-            className="!bg-[rgba(0,12,30,0.8)] dark:!bg-[rgba(255,255,255,0.8)] !backdrop-blur-md !border !border-white/10 dark:!border-black/10 !text-white dark:!text-black hover:!bg-[rgba(0,12,30,1)] dark:hover:!bg-[rgba(255,255,255,1)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            onClick={() =>
+              trackEvent('cta_click', {
+                cta_name: 'view_blog',
+                cta_location: 'home_hero',
+                destination: '/blog',
+              })
+            }
+            className="!bg-[rgba(0,12,30,0.8)] !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-[rgba(0,12,30,1)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
             <span className="mr-2">📝</span>블로그 보기
           </Button>
           <Button
             as="a"
             href="/resume"
-            className="!bg-[rgba(0,12,30,0.8)] dark:!bg-[rgba(255,255,255,0.8)] !backdrop-blur-md !border !border-white/10 dark:!border-black/10 !text-white dark:!text-black hover:!bg-[rgba(0,12,30,1)] dark:hover:!bg-[rgba(255,255,255,1)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            onClick={() =>
+              trackEvent('cta_click', {
+                cta_name: 'view_resume',
+                cta_location: 'home_hero',
+                destination: '/resume',
+              })
+            }
+            className="!bg-[rgba(0,12,30,0.8)] !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-[rgba(0,12,30,1)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
             <span className="mr-2">👨‍💻</span>이력서 보기
           </Button>

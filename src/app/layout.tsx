@@ -69,6 +69,8 @@ export default function RootLayout({
       <body>
         <GoogleAnalytics measurementId={gaMeasurementId} />
         <ThemeProvider>
+          <GoogleAnalytics />
+          <PageViewTracker />
           <KBarProvider posts={posts}>
             <Suspense fallback={null}>
               <PageViewTracker />

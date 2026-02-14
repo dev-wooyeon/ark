@@ -132,6 +132,14 @@ npm run serve  # (alias: serve)
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
+### Environment Variables
+
+GA4를 사용하려면 `.env.local`에 아래 값을 추가하세요.
+
+```bash
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
 ### Build
 
 ```bash

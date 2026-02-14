@@ -10,6 +10,7 @@ import {
   SeriesNavigation,
   ViewCounter,
 } from '@/components/blog';
+import PostViewTracker from '@/components/analytics/PostViewTracker';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
 
@@ -80,6 +81,11 @@ export default async function BlogPostPage({
     <>
       <ReadingProgress />
       <Header />
+      <PostViewTracker
+        slug={post.slug}
+        category={post.category}
+        tags={post.tags}
+      />
 
       <article className="py-16">
         <Container size="md">

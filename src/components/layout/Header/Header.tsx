@@ -38,7 +38,7 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-2">
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3">
             {navItems.map((item) => (
               <Link
                 key={item.href}
