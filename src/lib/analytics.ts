@@ -1,11 +1,23 @@
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-type GtagValue = string | number | boolean | undefined;
+export const AnalyticsEvents = {
+  view: 'view',
+  click: 'click',
+  search: 'search',
+  error: 'error',
+  theme: 'theme',
+} as const;
+
+export type AnalyticsEventName =
+  | (typeof AnalyticsEvents)[keyof typeof AnalyticsEvents]
+  | (string & {});
+
+type GtagValue = string | number | boolean | null | undefined;
 type GtagParams = Record<string, GtagValue>;
 
 declare global {
   interface Window {
-    dataLayer: unknown[];
+    dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
   }
 }
@@ -28,9 +40,11 @@ export function trackPageView(path: string): void {
   });
 }
 
-export function trackEvent(eventName: string, params: GtagParams = {}): void {
+export function trackEvent(
+  eventName: AnalyticsEventName,
+  params: GtagParams = {}
+): void {
   if (!canTrack()) return;
 
   window.gtag?.('event', eventName, params);
 }
-
