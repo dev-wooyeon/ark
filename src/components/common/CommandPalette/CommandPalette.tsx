@@ -14,6 +14,8 @@ import styles from './CommandPalette.module.css';
 import { AnalyticsEvents, trackEvent } from '@/lib/analytics';
 
 export const CommandPalette = () => {
+  const { query } = useKBar();
+
   return (
     <KBarPortal>
       <KBarPositioner className={styles.positioner}>
@@ -23,7 +25,27 @@ export const CommandPalette = () => {
               className={styles.search}
               defaultPlaceholder="무엇을 찾으시나요?"
             />
-            <div className={styles.shortcutHint}>ESC</div>
+            <button
+              type="button"
+              className={styles.closeButton}
+              onClick={() => query.toggle()}
+              aria-label="검색 모달 닫기"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
           </div>
           <RenderResults />
         </KBarAnimator>
@@ -107,33 +129,35 @@ function RenderResults() {
   }
 
   return (
-    <KBarResults
-      items={results}
-      onRender={({ item, active }) =>
-        typeof item === 'string' ? (
-          <div className={styles.sectionHeader}>{item}</div>
-        ) : (
-          <div
-            className={`${styles.resultItem} ${active ? styles.resultItemActive : ''}`}
-          >
-            <div className={styles.resultContent}>
-              <div className={styles.resultName}>{item.name}</div>
-              {item.subtitle && (
-                <div className={styles.resultSubtitle}>{item.subtitle}</div>
-              )}
-            </div>
-            {item.shortcut?.length ? (
-              <div className={styles.resultShortcuts}>
-                {item.shortcut.map((sc) => (
-                  <kbd key={sc} className={styles.resultShortcut}>
-                    {sc}
-                  </kbd>
-                ))}
+    <div className={styles.results}>
+      <KBarResults
+        items={results}
+        onRender={({ item, active }) =>
+          typeof item === 'string' ? (
+            <div className={styles.sectionHeader}>{item}</div>
+          ) : (
+            <div
+              className={`${styles.resultItem} ${active ? styles.resultItemActive : ''}`}
+            >
+              <div className={styles.resultContent}>
+                <div className={styles.resultName}>{item.name}</div>
+                {item.subtitle && (
+                  <div className={styles.resultSubtitle}>{item.subtitle}</div>
+                )}
               </div>
-            ) : null}
-          </div>
-        )
-      }
-    />
+              {item.shortcut?.length ? (
+                <div className={styles.resultShortcuts}>
+                  {item.shortcut.map((sc) => (
+                    <kbd key={sc} className={styles.resultShortcut}>
+                      {sc}
+                    </kbd>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )
+        }
+      />
+    </div>
   );
 }

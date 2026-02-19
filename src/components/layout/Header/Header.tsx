@@ -13,6 +13,7 @@ import { useScrollVisibility } from './useScrollVisibility';
 
 const navItems = [
   { href: '/blog', label: '블로그' },
+  { href: '/series', label: '시리즈' },
   { href: '/resume', label: '이력서' },
 ];
 
@@ -37,7 +38,7 @@ export default function Header() {
           topHeaderVisible ? 'pointer-events-auto' : 'pointer-events-none'
         )}
       >
-        <div className="max-w-[800px] mx-auto px-6 h-16 flex items-center">
+        <div className="max-w-[800px] mx-auto px-6 h-16 flex items-center justify-between">
           <Link
             href="/"
             className="flex items-center gap-2 text-xl font-bold text-[var(--color-grey-900)] hover:text-[var(--color-toss-blue)] transition-colors"
@@ -51,6 +52,8 @@ export default function Header() {
             <Logo />
             <span>eunu.log</span>
           </Link>
+
+          <ThemeToggle />
         </div>
       </motion.header>
 

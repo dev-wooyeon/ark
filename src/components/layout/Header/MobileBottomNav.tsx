@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
 import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import { AnalyticsEvents, trackEvent } from '@/lib/analytics';
@@ -14,10 +13,9 @@ interface MobileBottomNavProps {
 }
 
 interface MobileNavItem {
-  id: 'theme' | 'blog' | 'home' | 'resume' | 'search';
+  id: 'series' | 'blog' | 'home' | 'resume' | 'search';
   label: string;
   href?: string;
-  center?: boolean;
   onClick?: () => void;
 }
 
@@ -26,31 +24,13 @@ export default function MobileBottomNav({
   visible,
 }: MobileBottomNavProps) {
   const { query } = useKBar();
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDarkMode = mounted && resolvedTheme === 'dark';
-  const nextTheme = isDarkMode ? 'light' : 'dark';
 
   const navItems = useMemo<MobileNavItem[]>(
     () => [
       {
-        id: 'theme',
-        label: '테마',
-        onClick: () => {
-          if (!mounted) return;
-
-          setTheme(nextTheme);
-          trackEvent(AnalyticsEvents.theme, {
-            from_theme: isDarkMode ? 'dark' : 'light',
-            to_theme: nextTheme,
-            target: 'mobile_bottom_nav',
-          });
-        },
+        id: 'series',
+        label: '시리즈',
+        href: '/series',
       },
       {
         id: 'blog',
@@ -61,7 +41,6 @@ export default function MobileBottomNav({
         id: 'home',
         label: '홈',
         href: '/',
-        center: true,
       },
       {
         id: 'resume',
@@ -79,7 +58,7 @@ export default function MobileBottomNav({
         },
       },
     ],
-    [mounted, nextTheme, isDarkMode, query, setTheme]
+    [query]
   );
 
   return (
@@ -96,9 +75,7 @@ export default function MobileBottomNav({
             const isActive = isActiveItem(item, pathname);
             const itemClassName = clsx(
               'flex min-h-11 items-center justify-center rounded-[var(--radius-md)] px-1 py-1.5 transition-all',
-              item.center
-                ? 'relative -translate-y-2 border border-[var(--mobile-nav-home-border)] bg-[var(--mobile-nav-home-bg)] shadow-[var(--mobile-nav-home-shadow)]'
-                : isActive && 'bg-[var(--mobile-nav-active-bg)]'
+              isActive && 'bg-[var(--mobile-nav-active-bg)]'
             );
 
             const content = (
@@ -113,7 +90,7 @@ export default function MobileBottomNav({
                     )}
                     aria-hidden="true"
                   >
-                    <NavIcon id={item.id} isDark={isDarkMode} />
+                    <NavIcon id={item.id} />
                   </span>
                   <span
                     className={clsx(
@@ -178,35 +155,23 @@ function isActiveItem(item: MobileNavItem, pathname: string): boolean {
   return pathname.startsWith(item.href);
 }
 
-function NavIcon({ id, isDark }: { id: MobileNavItem['id']; isDark: boolean }) {
+function NavIcon({ id }: { id: MobileNavItem['id'] }) {
   switch (id) {
-    case 'theme':
+    case 'series':
       return (
         <svg
           viewBox="0 0 24 24"
           width="18"
           height="18"
-          fill={isDark ? 'currentColor' : 'none'}
+          fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          {isDark ? (
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-          ) : (
-            <>
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2" />
-              <path d="M12 20v2" />
-              <path d="m4.93 4.93 1.41 1.41" />
-              <path d="m17.66 17.66 1.41 1.41" />
-              <path d="M2 12h2" />
-              <path d="M20 12h2" />
-              <path d="m6.34 17.66-1.41 1.41" />
-              <path d="m19.07 4.93-1.41 1.41" />
-            </>
-          )}
+          <path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z" />
+          <path d="M8 7h7" />
+          <path d="M8 11h7" />
         </svg>
       );
     case 'blog':

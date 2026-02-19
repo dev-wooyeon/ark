@@ -13,13 +13,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const routes = ['', '/blog', '/resume', '/feed.xml'].map((route) => ({
-    url: `${URL}${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
-    changeFrequency:
-      route === '/feed.xml' ? ('daily' as const) : ('monthly' as const),
-    priority: 1,
-  }));
+  const routes = ['', '/blog', '/series', '/resume', '/feed.xml'].map(
+    (route) => ({
+      url: `${URL}${route}`,
+      lastModified: new Date().toISOString().split('T')[0],
+      changeFrequency:
+        route === '/feed.xml' ? ('daily' as const) : ('monthly' as const),
+      priority: 1,
+    })
+  );
 
   return [...routes, ...feedEntries];
 }

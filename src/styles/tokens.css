@@ -46,9 +46,6 @@
   --mobile-nav-text: #6b7684;
   --mobile-nav-active-text: #191f28;
   --mobile-nav-active-bg: rgba(49, 130, 246, 0.12);
-  --mobile-nav-home-bg: rgba(255, 255, 255, 0.88);
-  --mobile-nav-home-border: rgba(209, 214, 219, 0.74);
-  --mobile-nav-home-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
 
   /* Code Block Colors */
   --color-code-bg: #f8fafc;
@@ -246,9 +243,6 @@
   --mobile-nav-text: #b0b8c1;
   --mobile-nav-active-text: #f2f4f6;
   --mobile-nav-active-bg: rgba(74, 158, 255, 0.2);
-  --mobile-nav-home-bg: rgba(25, 31, 40, 0.84);
-  --mobile-nav-home-border: rgba(110, 129, 150, 0.72);
-  --mobile-nav-home-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 
   /* Code Block Colors - keep dark surface in dark mode */
   --color-code-bg: #0f172a;

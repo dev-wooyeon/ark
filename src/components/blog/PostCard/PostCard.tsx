@@ -7,16 +7,79 @@ interface PostCardProps {
   variant?: 'default' | 'featured';
 }
 
-function getCategoryBadgeClass(category: string): string {
+function CategoryIcon({ category }: { category: string }) {
   switch (category) {
     case 'Tech':
-      return 'text-[var(--color-category-tech-text)] bg-[var(--color-category-tech-bg)] border-[var(--color-category-tech-border)]';
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="4" width="18" height="14" rx="2" />
+          <path d="M8 20h8" />
+          <path d="M10 16v4" />
+          <path d="M14 16v4" />
+        </svg>
+      );
     case 'Series':
-      return 'text-[var(--color-category-series-text)] bg-[var(--color-category-series-bg)] border-[var(--color-category-series-border)]';
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12H6a2 2 0 0 0-2 2z" />
+          <path d="M8 8h8" />
+          <path d="M8 12h8" />
+        </svg>
+      );
     case 'Life':
-      return 'text-[var(--color-category-life-text)] bg-[var(--color-category-life-bg)] border-[var(--color-category-life-border)]';
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z" />
+          <path d="M8 7h7" />
+          <path d="M8 11h7" />
+        </svg>
+      );
     default:
-      return 'text-[var(--color-category-tech-text)] bg-[var(--color-category-tech-bg)] border-[var(--color-category-tech-border)]';
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m20 12-8 8-8-8 8-8 8 8z" />
+        </svg>
+      );
   }
 }
 
@@ -26,7 +89,6 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     month: 'long',
     day: 'numeric',
   });
-  const categoryBadgeClass = getCategoryBadgeClass(post.category);
 
   if (variant === 'featured') {
     return (
@@ -38,7 +100,10 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
           'hover:shadow-[var(--shadow-xl)] hover:-translate-y-1'
         )}
       >
-        <span className="text-sm font-medium opacity-80">{post.category}</span>
+        <span className="inline-flex items-center gap-1.5 text-sm font-medium opacity-85">
+          <CategoryIcon category={post.category} />
+          {post.category}
+        </span>
         <h2 className="mt-3 text-2xl md:text-3xl font-bold leading-tight">
           {post.title}
         </h2>
@@ -57,35 +122,33 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     <Link
       href={`/blog/${post.slug}`}
       className={clsx(
-        'group flex h-full flex-col rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6',
+        'group flex h-full cursor-pointer flex-col rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6',
         'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
-        'hover:-translate-y-0.5 hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)]'
+        'hover:-translate-y-0.5 hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)]',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]',
+        'active:translate-y-0 active:shadow-sm'
       )}
     >
-      <div className="mb-3 flex items-center gap-2">
-        <span
-          className={clsx(
-            'rounded-[4px] border px-2 py-1 text-xs font-medium',
-            categoryBadgeClass
-          )}
-        >
+      <div className="mb-4 flex items-center gap-2 text-xs text-[var(--color-text-tertiary)]">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
+          <CategoryIcon category={post.category} />
           {post.category}
         </span>
-        <time className="text-xs text-[var(--color-text-tertiary)]">
-          {formattedDate}
-        </time>
+        <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
+        <time>{formattedDate}</time>
+        {post.readingTime && (
+          <>
+            <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
+            <span>{post.readingTime}분 읽기</span>
+          </>
+        )}
       </div>
-      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-toss-blue)]">
+      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
         {post.title}
       </h3>
-      <p className="mt-2 flex-grow line-clamp-2 text-sm text-[var(--color-text-secondary)]">
+      <p className="mt-3 flex-grow line-clamp-2 text-sm text-[var(--color-text-secondary)]">
         {post.description}
       </p>
-      {post.readingTime && (
-        <div className="mt-4 text-xs text-[var(--color-text-tertiary)]">
-          {post.readingTime}분 읽기
-        </div>
-      )}
     </Link>
   );
 }

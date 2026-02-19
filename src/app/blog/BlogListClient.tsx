@@ -12,27 +12,39 @@ interface BlogListClientProps {
 export default function BlogListClient({ posts }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
 
-  const filteredPosts = useMemo(() => {
-    if (activeCategory === 'All') {
-      return posts.filter((post) => post.category !== 'Series' && !post.series);
-    }
+  const blogPosts = useMemo(
+    () => posts.filter((post) => post.category !== 'Series' && !post.series),
+    [posts]
+  );
 
-    if (activeCategory === 'Series') {
-      return posts.filter(
-        (post) => post.category === 'Series' || !!post.series
-      );
-    }
+  const postsByCategory = useMemo<Record<Category, FeedData[]>>(
+    () => ({
+      All: blogPosts,
+      Tech: blogPosts.filter((post) => post.category === 'Tech'),
+      Life: blogPosts.filter((post) => post.category === 'Life'),
+    }),
+    [blogPosts]
+  );
 
-    return posts.filter((post) => post.category === activeCategory);
-  }, [posts, activeCategory]);
+  const filteredPosts = postsByCategory[activeCategory];
+
+  const categoryCounts = useMemo(
+    () => ({
+      All: postsByCategory.All.length,
+      Tech: postsByCategory.Tech.length,
+      Life: postsByCategory.Life.length,
+    }),
+    [postsByCategory]
+  );
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="sticky top-0 md:top-16 z-20 mb-8 border-b border-[var(--color-grey-100)] bg-[var(--color-bg-primary)]/90 py-3 backdrop-blur-md">
         <CategoryFilter
-          categories={['All', 'Tech', 'Series', 'Life']}
+          categories={['All', 'Tech', 'Life']}
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
+          categoryCounts={categoryCounts}
         />
       </div>
       <PostList posts={filteredPosts} />
