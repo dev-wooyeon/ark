@@ -74,8 +74,10 @@ export default function MobileBottomNav({
           {navItems.map((item) => {
             const isActive = isActiveItem(item, pathname);
             const itemClassName = clsx(
-              'flex min-h-11 items-center justify-center rounded-[var(--radius-md)] px-1 py-1.5 transition-all',
-              isActive && 'bg-[var(--mobile-nav-active-bg)]'
+              'flex min-h-11 items-center justify-center rounded-[var(--radius-md)] border px-1 py-1.5 transition-all',
+              isActive
+                ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
+                : 'border-transparent'
             );
 
             const content = (
@@ -111,7 +113,7 @@ export default function MobileBottomNav({
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] rounded-[var(--radius-md)]"
+                  className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-bg)]"
                   onClick={() =>
                     trackEvent(AnalyticsEvents.click, {
                       target: 'mobile_bottom_nav',
@@ -129,7 +131,7 @@ export default function MobileBottomNav({
               <button
                 key={item.id}
                 type="button"
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] rounded-[var(--radius-md)]"
+                className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-bg)]"
                 onClick={item.onClick}
                 aria-label={item.label}
               >
