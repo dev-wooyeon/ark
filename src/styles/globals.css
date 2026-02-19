@@ -11,6 +11,10 @@
 /* Tailwind CSS */
 @import 'tailwindcss';
 
+:root {
+  --mobile-bottom-nav-height: 84px;
+}
+
 /* ===== Local Fonts ===== */
 
 /* JetBrains Mono - Code Font */
@@ -73,8 +77,8 @@
   *,
   *::before,
   *::after {
-    transition-property: background-color, border-color, color, fill, stroke,
-      box-shadow;
+    transition-property:
+      background-color, border-color, color, fill, stroke, box-shadow;
     transition-duration: var(--duration-150);
     transition-timing-function: var(--ease-default);
   }
@@ -237,6 +241,14 @@
   }
 }
 
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(
+      var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom)
+    );
+  }
+}
+
 /* ===== Focus Styles (Accessibility) ===== */
 :focus-visible {
   outline: 2px solid var(--color-toss-blue);
@@ -251,7 +263,6 @@
 
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -448,7 +459,7 @@
   z-index: 1;
 }
 
-.prose [data-rehype-pretty-code-title]+pre {
+.prose [data-rehype-pretty-code-title] + pre {
   margin-top: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -599,7 +610,9 @@
   background: var(--color-grey-50);
   padding: 0.625rem 0.75rem;
   opacity: 0.45;
-  transition: opacity 180ms ease, border-color 180ms ease;
+  transition:
+    opacity 180ms ease,
+    border-color 180ms ease;
 }
 
 .prose .workflow-step.is-active {
@@ -636,7 +649,6 @@
   font-size: var(--text-sm);
   color: var(--color-grey-700);
 }
-
 
 /* Shiki dual-theme mapping */
 .prose pre code span {
@@ -684,7 +696,6 @@
 
 /* ===== Custom Animations ===== */
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;
@@ -754,7 +765,6 @@
 }
 
 @keyframes cursor-blink {
-
   0%,
   100% {
     opacity: 1;
