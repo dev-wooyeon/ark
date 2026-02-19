@@ -306,14 +306,20 @@ export default function DPVisualization() {
                 disabled={isPlaying}
                 className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 disabled:bg-slate-600 disabled:cursor-not-allowed transition-all"
               >
-                {isPlaying ? '계산 중...' : '▶ 시작'}
+                {isPlaying ? (
+                  '계산 중...'
+                ) : (
+                  <>
+                    <span className="tossface mr-1">▶</span>시작
+                  </>
+                )}
               </button>
               <button
                 onClick={initializeTable}
                 disabled={isPlaying}
                 className="px-4 py-2 bg-slate-600 text-white rounded-lg font-semibold hover:bg-slate-500 disabled:opacity-50 transition-all"
               >
-                🔄 초기화
+                <span className="tossface mr-1">🔄</span>초기화
               </button>
             </div>
           </div>
@@ -328,7 +334,8 @@ export default function DPVisualization() {
           {/* Info */}
           <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
             <p className="text-purple-300 text-sm">
-              💡 <strong>동적 프로그래밍 (DP):</strong> 작은 부분 문제의 결과를
+              <span className="tossface mr-1">💡</span>
+              <strong>동적 프로그래밍 (DP):</strong> 작은 부분 문제의 결과를
               테이블에 저장하고 재사용하여, 중복 계산을 제거합니다. 피보나치는
               O(2ⁿ) → O(n)으로 최적화됩니다.
             </p>

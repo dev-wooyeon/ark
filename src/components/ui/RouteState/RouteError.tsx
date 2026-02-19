@@ -21,7 +21,7 @@ export default function RouteError({
       className={clsx('flex min-h-96 items-center justify-center', className)}
     >
       <EmptyState
-        icon={<span>⚠️</span>}
+        icon={<span className="tossface">⚠️</span>}
         title={title}
         description={description}
         variant="error"

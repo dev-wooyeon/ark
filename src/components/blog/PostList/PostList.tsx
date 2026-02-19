@@ -36,7 +36,7 @@ export default function PostList({ posts }: PostListProps) {
   if (posts.length === 0) {
     return (
       <EmptyState
-        icon={<span>📝</span>}
+        icon={<span className="tossface">📝</span>}
         title="아직 작성된 글이 없어요"
         description="곧 새로운 글로 찾아뵐게요"
       />

@@ -351,12 +351,20 @@ export default function GraphTraversalVisualization() {
                     : 'bg-green-500 text-white hover:bg-green-600'
                 } shadow-lg`}
               >
-                {isPlaying
-                  ? '⏸ 일시정지'
-                  : currentStep >= traversalPath.length &&
-                      traversalPath.length > 0
-                    ? '🔄 다시보기'
-                    : '▶ 재생 시작'}
+                {isPlaying ? (
+                  <>
+                    <span className="tossface mr-1">⏸</span>일시정지
+                  </>
+                ) : currentStep >= traversalPath.length &&
+                  traversalPath.length > 0 ? (
+                  <>
+                    <span className="tossface mr-1">🔄</span>다시보기
+                  </>
+                ) : (
+                  <>
+                    <span className="tossface mr-1">▶</span>재생 시작
+                  </>
+                )}
               </button>
             </div>
           </div>

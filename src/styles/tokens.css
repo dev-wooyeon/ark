@@ -68,8 +68,8 @@
 
   /* Font Family */
   --font-sans:
-    'Pretendard', 'TossFace', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, sans-serif;
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    sans-serif;
   --font-mono:
     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
 

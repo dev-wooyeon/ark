@@ -327,14 +327,20 @@ export default function SlidingWindowVisualization() {
                 disabled={isPlaying}
                 className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 disabled:bg-slate-600 disabled:cursor-not-allowed transition-all"
               >
-                {isPlaying ? '실행 중...' : '▶ 시작'}
+                {isPlaying ? (
+                  '실행 중...'
+                ) : (
+                  <>
+                    <span className="tossface mr-1">▶</span>시작
+                  </>
+                )}
               </button>
               <button
                 onClick={initializeArray}
                 disabled={isPlaying}
                 className="px-4 py-2 bg-slate-600 text-white rounded-lg font-semibold hover:bg-slate-500 disabled:opacity-50 transition-all"
               >
-                🔄 새 배열
+                <span className="tossface mr-1">🔄</span>새 배열
               </button>
             </div>
           </div>
@@ -369,7 +375,8 @@ export default function SlidingWindowVisualization() {
           {/* Info */}
           <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
             <p className="text-purple-300 text-sm">
-              💡 <strong>슬라이딩 윈도우:</strong> 고정 크기의 윈도우를 한 칸씩
+              <span className="tossface mr-1">💡</span>
+              <strong>슬라이딩 윈도우:</strong> 고정 크기의 윈도우를 한 칸씩
               이동하며, 이전 계산 결과를 재사용하여 O(n) 시간에 최대/최소값을
               찾습니다.
             </p>

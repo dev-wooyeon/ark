@@ -286,14 +286,20 @@ export default function TwoPointerVisualization() {
                 disabled={isPlaying}
                 className="px-6 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 disabled:bg-slate-600 disabled:cursor-not-allowed transition-all"
               >
-                {isPlaying ? '탐색 중...' : '▶ 탐색 시작'}
+                {isPlaying ? (
+                  '탐색 중...'
+                ) : (
+                  <>
+                    <span className="tossface mr-1">▶</span>탐색 시작
+                  </>
+                )}
               </button>
               <button
                 onClick={initializeArray}
                 disabled={isPlaying}
                 className="px-4 py-2 bg-slate-600 text-white rounded-lg font-semibold hover:bg-slate-500 disabled:opacity-50 transition-all"
               >
-                🔄 초기화
+                <span className="tossface mr-1">🔄</span>초기화
               </button>
             </div>
           </div>
@@ -308,7 +314,8 @@ export default function TwoPointerVisualization() {
           {/* Info */}
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
             <p className="text-blue-300 text-sm">
-              💡 <strong>투 포인터 알고리즘:</strong> 정렬된 배열에서 두
+              <span className="tossface mr-1">💡</span>
+              <strong>투 포인터 알고리즘:</strong> 정렬된 배열에서 두
               포인터를 양 끝에서 시작하여, 합이 목표값보다 작으면 왼쪽 포인터를
               오른쪽으로, 크면 오른쪽 포인터를 왼쪽으로 이동합니다.
             </p>

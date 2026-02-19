@@ -85,7 +85,7 @@ export default function ResumePreviewSection() {
               className="bg-[var(--color-bg-primary)] p-8 rounded-2xl shadow-soft border border-[var(--color-border)] relative z-10"
             >
               <h3 className="text-xl font-bold text-[var(--color-grey-900)] mb-6 flex items-center gap-2">
-                <span>🏢</span> Experience
+                <span className="tossface">🏢</span> Experience
               </h3>
 
               <div className="space-y-8 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-[var(--color-grey-100)]">
