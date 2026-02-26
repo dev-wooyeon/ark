@@ -77,7 +77,7 @@ export default function MobileBottomNav({
               'flex min-h-11 items-center justify-center rounded-[var(--radius-md)] border px-1 py-1.5 transition-all',
               isActive
                 ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
-                : 'border-transparent'
+                : 'border-transparent hover:bg-[var(--mobile-nav-hover-bg)]'
             );
 
             const content = (
@@ -113,7 +113,7 @@ export default function MobileBottomNav({
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-bg)]"
+                  className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
                   onClick={() =>
                     trackEvent(AnalyticsEvents.click, {
                       target: 'mobile_bottom_nav',
@@ -131,7 +131,7 @@ export default function MobileBottomNav({
               <button
                 key={item.id}
                 type="button"
-                className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-bg)]"
+                className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
                 onClick={item.onClick}
                 aria-label={item.label}
               >

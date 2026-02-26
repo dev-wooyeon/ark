@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseHeadingsFromMdx } from './markdown';
+import { getMdxSource, parseHeadingsFromMdx } from './markdown';
 
 describe('parseHeadingsFromMdx', () => {
   it('parses headings and keeps duplicate ids unique', () => {
@@ -31,5 +31,20 @@ describe('parseHeadingsFromMdx', () => {
 
   it('returns an empty array for invalid content', () => {
     expect(parseHeadingsFromMdx('')).toEqual([]);
+  });
+});
+
+describe('getMdxSource', () => {
+  it('returns markdown source for an existing slug', () => {
+    const source = getMdxSource('redis-deep-dive-02-core-data-types');
+
+    expect(typeof source).toBe('string');
+    expect(source).toContain('#');
+  });
+
+  it('returns null when source cannot be loaded', () => {
+    const source = getMdxSource('does-not-exist-post');
+
+    expect(source).toBeNull();
   });
 });

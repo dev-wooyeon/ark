@@ -7,8 +7,7 @@ export interface VisibilityState {
   bottomBarVisible: boolean;
 }
 
-const HOME_NAV_REVEAL_STORAGE_KEY = 'home_mobile_bottom_nav_revealed';
-const HOME_NAV_REVEAL_SCROLL_Y = 32;
+const HOME_NAV_REVEAL_SCROLL_Y = 40;
 
 const INITIAL_VISIBILITY: VisibilityState = {
   topHeaderVisible: true,
@@ -25,18 +24,22 @@ export function useScrollVisibility(pathname: string): VisibilityState {
   const visibilityRef = useRef<VisibilityState>(INITIAL_VISIBILITY);
 
   useEffect(() => {
+    document.body.style.setProperty(
+      '--mobile-bottom-nav-offset',
+      visibility.bottomBarVisible ? 'var(--mobile-bottom-nav-height)' : '0px'
+    );
+
+    return () => {
+      document.body.style.removeProperty('--mobile-bottom-nav-offset');
+    };
+  }, [visibility.bottomBarVisible]);
+
+  useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 767px)');
     const isHomePath = pathname === '/';
-    const shouldHideBottomOnScroll = isBlogPostPath(pathname);
-    let isHomeBottomNavRevealed = false;
+    const shouldHideBottomOnScroll =
+      isBlogPostPath(pathname) || isHomePath;
     let lastScrollY = window.scrollY;
-
-    try {
-      isHomeBottomNavRevealed =
-        window.sessionStorage.getItem(HOME_NAV_REVEAL_STORAGE_KEY) === '1';
-    } catch {
-      isHomeBottomNavRevealed = false;
-    }
 
     const updateVisibility = (next: VisibilityState) => {
       if (
@@ -50,29 +53,8 @@ export function useScrollVisibility(pathname: string): VisibilityState {
       setVisibility(next);
     };
 
-    const resolveHomeBottomVisibility = (currentScrollY: number) => {
-      if (!isHomePath) {
-        return null;
-      }
-
-      if (isHomeBottomNavRevealed) {
-        return true;
-      }
-
-      if (currentScrollY >= HOME_NAV_REVEAL_SCROLL_Y) {
-        isHomeBottomNavRevealed = true;
-
-        try {
-          window.sessionStorage.setItem(HOME_NAV_REVEAL_STORAGE_KEY, '1');
-        } catch {
-          // Intentionally ignore storage failures (private mode or restrictions).
-        }
-
-        return true;
-      }
-
-      return false;
-    };
+    const resolveHomeBottomVisibility = (currentScrollY: number) =>
+      isHomePath ? currentScrollY <= HOME_NAV_REVEAL_SCROLL_Y : null;
 
     const showAll = () => {
       const homeBottomVisible = resolveHomeBottomVisibility(window.scrollY);

@@ -11,6 +11,12 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build --webpack",
     "test": "vitest",
+    "test:unit": "vitest run src/**/*.test.ts src/**/*.test.tsx",
+    "test:components": "vitest run src/components/**/*.test.ts src/components/**/*.test.tsx src/lib/**/*.test.ts src/lib/**/*.test.tsx",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "npm run lint && npm run test:unit && npm run test:e2e",
+    "test:e2e": "npx playwright test",
+    "test:smoke": "vitest run src/lib/*.test.ts src/app/actions/*.test.ts && npx playwright test --grep @smoke",
     "new-post": "node scripts/new-post.js",
     "format": "prettier --write .",
     "lint:md": "markdownlint-cli2 --config config/markdownlint-cli2.jsonc '**/*.md' '**/*.mdx'",
@@ -64,6 +70,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -72,6 +79,7 @@
     "@types/react-dom": "^18.3.5",
     "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "autoprefixer": "^10.4.23",
     "chalk": "^5.6.2",
     "cspell": "^9.6.4",

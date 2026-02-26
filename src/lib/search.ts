@@ -12,11 +12,19 @@ type SearchablePost = Pick<
  * 블로그 포스트를 검색할 수 있게 액션 객체 배열을 반환합니다.
  */
 export const getSearchActions = (posts: SearchablePost[]): Action[] => {
+  const getSearchKeywords = (post: SearchablePost) => {
+    const normalizedTags = Array.isArray(post.tags) ? post.tags : [];
+
+    return [post.title, post.category, ...normalizedTags, post.description]
+      .filter(Boolean)
+      .join(' ');
+  };
+
   const postActions = posts.map((post) => ({
     id: post.slug,
     name: post.title,
     shortcut: [],
-    keywords: `${post.title} ${post.category} ${post.tags?.join(' ')} ${post.description}`,
+    keywords: getSearchKeywords(post),
     section: '블로그 포스트',
     perform: () => {
       trackEvent(AnalyticsEvents.click, {
