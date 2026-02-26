@@ -1,0 +1,11 @@
+`uv` reference notes for this repository:
+
+1) Current project toolchain is Node/TypeScript-first.
+2) Python is used only for specific analysis scripts:
+- scripts/analysis/build_nekaracuba_corpus.py
+- scripts/analysis/generate_toss_analysis.py
+
+If standardizing Python tooling with `uv`:
+- pin Python version
+- create a minimal `pyproject.toml` for analysis scripts
+- document commands under `docs/` and CI (if CI is introduced)

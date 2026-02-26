@@ -2,7 +2,7 @@
 
 # ✨ Eunu.log
 
-[![Next.js](https://img.shields.io/badge/Next.js-14+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-r150+-black?style=flat-square&logo=three.js)](https://threejs.org/)
 
@@ -20,11 +20,11 @@
 <tr>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=nextjs" width="48" height="48" alt="Next.js" />
-<br>Next.js 14+
+<br>Next.js 16+
 </td>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=react" width="48" height="48" alt="React" />
-<br>React 18+
+<br>React 19+
 </td>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
@@ -43,9 +43,9 @@
 
 **Core:**
 
-- **Framework:** Next.js 14+ (App Router, SSG)
+- **Framework:** Next.js 16+ (App Router, SSG/SSR)
 - **Language:** TypeScript (Strict Mode)
-- **Styling:** CSS Modules + CSS Variables
+- **Styling:** Tailwind CSS + CSS Variables (with selective CSS Modules)
 
 **Animation:**
 
@@ -54,8 +54,8 @@
 
 **Content:**
 
-- **Format:** Markdown + gray-matter
-- **Processing:** remark + rehype + syntax highlighting
+- **Format:** MDX + `meta.json` (folder-based content)
+- **Processing:** `@mdx-js/loader` + remark/rehype + syntax highlighting
 
 <br />
 
@@ -64,16 +64,16 @@
 ```
 eunu.log/
 ├── 📁 src/
-│   ├── 📁 app/                 # Next.js App Router
-│   │   ├── 📁 feeds/           # Blog feed pages
-│   │   └── 📁 resume/          # Resume page
+│   ├── 📁 app/                 # Next.js App Router pages/routes
+│   │   ├── 📁 blog/            # Blog list/detail routes
+│   │   ├── 📁 resume/          # Resume page
+│   │   ├── 📁 series/          # Series index page
+│   │   └── 📁 api/og/          # OG image route
 │   ├── 📁 components/
-│   │   ├── 📁 animations/      # Three.js components
-│   │   │   ├── HeroScene.tsx       # 3D sphere animation
-│   │   │   └── TextParticleScene.tsx  # Particle text effect
-│   │   ├── Header.tsx
-│   │   ├── Footer.tsx
-│   │   └── TableOfContents.tsx # Interactive TOC
+│   │   ├── 📁 blog/            # Post UI (TOC, comments, cards)
+│   │   ├── 📁 layout/          # Header, Footer, Container
+│   │   ├── 📁 ui/              # Reusable primitives
+│   │   └── 📁 visualization/   # Interactive algorithm visualizations
 │   ├── 📁 lib/                 # Utilities
 │   ├── 📁 styles/              # Global styles & variables
 │   └── 📁 types/               # TypeScript definitions
@@ -127,7 +127,7 @@ Supabase SQL Editor에서 `docs/supabase-view-count.sql`을 실행하면
 
 ```bash
 # Start development server
-npm run serve  # (alias: serve)
+npm run dev  # alias: npm run serve
 ```
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
@@ -200,6 +200,7 @@ npm run start
 ```json
 {
   "title": "포스트 제목",
+  "slug": "2025-01-20-my-post",
   "description": "간단한 설명",
   "date": "2025-01-20",
   "category": "Dev",

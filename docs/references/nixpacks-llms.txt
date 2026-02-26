@@ -1,0 +1,12 @@
+Nixpacks reference notes (project-specific):
+
+1) Current deployment assumption appears Vercel-based (no existing Nixpacks config in repo root).
+2) If Nixpacks adoption is needed, start with:
+- node provider
+- npm install
+- npm run build
+- npm run start
+
+Suggested baseline checks before adopting Nixpacks:
+- Ensure Next.js standalone/server output target is compatible with runtime.
+- Validate env vars for Supabase and GA in target hosting environment.

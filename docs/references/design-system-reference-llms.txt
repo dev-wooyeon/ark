@@ -1,0 +1,18 @@
+Design system references for LLM-assisted engineering in this repo:
+
+1) Primary token source:
+- src/styles/tokens.css
+
+2) Global application styles:
+- src/styles/globals.css
+- src/styles/tossface.css
+
+3) UI component examples:
+- src/components/ui/**
+- src/components/layout/**
+- docs/ui-components-guide.md
+- docs/tds-rebuild/**
+
+Notes:
+- Prefer existing CSS variables over introducing new one-off values.
+- Keep mobile safe-area handling intact.
