@@ -7,6 +7,7 @@ import JsonLd from '@/components/seo/JsonLd';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import KBarProvider from '@/components/providers/KBarProvider';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import UmamiAnalytics from '@/components/analytics/UmamiAnalytics';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import { getSortedFeedData } from '@/lib/mdx-feeds';
 
@@ -68,6 +69,7 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body>
         <GoogleAnalytics measurementId={gaMeasurementId} />
+        <UmamiAnalytics />
         <ThemeProvider>
           <GoogleAnalytics />
           <PageViewTracker />

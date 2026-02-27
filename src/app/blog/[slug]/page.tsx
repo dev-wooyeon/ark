@@ -11,6 +11,8 @@ import {
   ViewCounter,
 } from '@/components/blog';
 import PostViewTracker from '@/components/analytics/PostViewTracker';
+import DwellTimeTracker from '@/components/analytics/DwellTimeTracker';
+import ScrollDepthTracker from '@/components/analytics/ScrollDepthTracker';
 import JsonLd from '@/components/seo/JsonLd';
 import { useMDXComponents } from '@/mdx-components';
 
@@ -86,6 +88,8 @@ export default async function BlogPostPage({
         category={post.category}
         tags={post.tags}
       />
+      <DwellTimeTracker slug={post.slug} />
+      <ScrollDepthTracker slug={post.slug} />
 
       <article className="py-16">
         <Container size="md">
