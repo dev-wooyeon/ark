@@ -6,7 +6,7 @@ Last updated: 2026-02-26
 
 1. Tokens: `src/styles/tokens.css`
 2. Global style behavior: `src/styles/globals.css`
-3. Reusable component patterns: `src/components/ui/**`, `src/components/layout/**`
+3. Reusable component patterns: `src/shared/ui/**`, `src/shared/layout/**`
 
 ## Design Guardrails
 

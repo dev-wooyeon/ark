@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getSupabaseServerClient } from '@/lib/supabase';
+import { getSupabaseServerClient } from '@/shared/integrations/supabase';
 import { getViewCount, incrementView, trackView } from './view';
 
-vi.mock('@/lib/supabase', () => ({
+vi.mock('@/shared/integrations/supabase', () => ({
   getSupabaseServerClient: vi.fn(),
 }));
 

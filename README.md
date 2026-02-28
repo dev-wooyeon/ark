@@ -1,18 +1,15 @@
 <div align="center">
 
-# ✨ Eunu.log
+# eunu.log
 
 [![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-r150+-black?style=flat-square&logo=three.js)](https://threejs.org/)
 
 개인 블로그입니다!
 
 [Live Demo](https://eunu-log.vercel.app)
 
 </div>
-
----
 
 ## 🛠 Tech Stack
 
@@ -64,20 +61,24 @@
 ```
 eunu.log/
 ├── 📁 src/
-│   ├── 📁 app/                 # Next.js App Router pages/routes
-│   │   ├── 📁 blog/            # Blog list/detail routes
-│   │   ├── 📁 resume/          # Resume page
-│   │   ├── 📁 series/          # Series index page
-│   │   └── 📁 api/og/          # OG image route
+│   ├── 📁 app/                 # Route entry only (Next App Router)
+│   ├── 📁 core/                # App-level config/provider composition
+│   ├── 📁 domains/             # Domain contracts/types/schema
+│   ├── 📁 features/            # Feature modules (ui/model/services)
+│   │   ├── 📁 blog/
+│   │   ├── 📁 resume/
+│   │   ├── 📁 search/
+│   │   └── 📁 home/
+│   ├── 📁 shared/              # Reusable modules (analytics/integrations/layout/seo/testing/ui/types)
 │   ├── 📁 components/
-│   │   ├── 📁 blog/            # Post UI (TOC, comments, cards)
-│   │   ├── 📁 layout/          # Header, Footer, Container
-│   │   ├── 📁 ui/              # Reusable primitives
-│   │   └── 📁 visualization/   # Interactive algorithm visualizations
-│   ├── 📁 lib/                 # Utilities
-│   ├── 📁 styles/              # Global styles & variables
-│   └── 📁 types/               # TypeScript definitions
-├── 📁 content/                  # Blog posts (MDX + metadata)
+│   │   └── 📁 visualization/   # Interactive algorithm visualizations (kept separately)
+│   └── 📁 styles/              # Global styles & tokens
+├── 📁 tests/
+│   └── 📁 e2e/                 # Centralized Playwright suites
+├── 📁 internal/
+│   ├── 📁 config/              # Internal lint/spell configuration
+│   └── 📁 scripts/             # Internal automation/utility scripts
+├── 📁 posts/                    # Blog posts (MDX + metadata)
 │   └── 📁 [slug]/              # Each post in its own folder
 │       ├── index.mdx           # Post content
 │       └── meta.json           # Post metadata
@@ -120,7 +121,7 @@ cp .env.example .env.local
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
-Supabase SQL Editor에서 `docs/supabase-view-count.sql`을 실행하면
+Supabase SQL Editor에서 `docs/database/supabase-view-count.sql`을 실행하면
 조회수 집계를 위한 테이블/정책/함수가 생성됩니다.
 
 ### Development
@@ -152,10 +153,10 @@ npm run start
 
 ### Ops Docs
 
-- PR 운영 가이드: `docs/pr-workflow.md`
-- UI 컴포넌트 가이드: `docs/ui-components-guide.md`
-- GA4 이벤트 스키마: `docs/analytics-ga4-schema.md`
-- 주간 KPI 리포트 템플릿: `docs/analytics-kpi-weekly-template.md`
+- PR 운영 가이드: `docs/guides/pr-workflow.md`
+- UI 컴포넌트 가이드: `docs/guides/ui-components-guide.md`
+- GA4 이벤트 스키마: `docs/analytics/analytics-ga4-schema.md`
+- 주간 KPI 리포트 템플릿: `docs/analytics/analytics-kpi-weekly-template.md`
 
 <br />
 
@@ -194,7 +195,7 @@ npm run start
 
 ## 📝 Writing a Post
 
-1. `/content` 디렉토리에 slug 이름으로 폴더 생성 (예: `2025-01-20-my-post`)
+1. `/posts` 디렉토리에 slug 이름으로 폴더 생성 (예: `2025-01-20-my-post`)
 2. 폴더 내에 `meta.json` 파일 생성:
 
 ```json
@@ -217,6 +218,6 @@ npm run start
 
 <div align="center">
 
-**[⬆ Back to Top](#-eunulog)**
+**[⬆ Back to Top](#eunulog)**
 
 </div>

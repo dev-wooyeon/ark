@@ -1,6 +1,6 @@
 'use server';
 
-import { getSupabaseServerClient } from '@/lib/supabase';
+import { getSupabaseServerClient } from '@/shared/integrations/supabase';
 
 function normalizeSlug(slug: string): string | null {
   const value = slug.trim();

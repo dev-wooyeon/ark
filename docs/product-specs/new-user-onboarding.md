@@ -47,6 +47,6 @@ Out of scope:
 
 ## Suggested Implementation Notes
 
-1. Keep copy changes in content/config-driven locations where possible.
+1. Keep copy changes in posts/internal config-driven locations where possible.
 2. Reuse existing home section components before adding new primitives.
 3. Track CTA clicks through existing analytics utility.

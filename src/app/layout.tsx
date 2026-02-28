@@ -1,37 +1,37 @@
 import type { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
+import type { ReactNode } from 'react';
 import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
-import JsonLd from '@/components/seo/JsonLd';
-import ThemeProvider from '@/components/providers/ThemeProvider';
-import KBarProvider from '@/components/providers/KBarProvider';
-import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
-import UmamiAnalytics from '@/components/analytics/UmamiAnalytics';
-import PageViewTracker from '@/components/analytics/PageViewTracker';
-import { getSortedFeedData } from '@/lib/mdx-feeds';
+import AppProviders from '@/core/providers/AppProviders';
+import {
+  SITE_AUTHOR,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from '@/core/config/site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://eunu-log.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'eunu.log',
-    template: '%s | eunu.log',
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: '데이터와 시스템, 창의적인 것들을 만듭니다',
-  authors: [{ name: 'dev-wooyeon' }],
+  description: SITE_DESCRIPTION,
+  authors: [{ name: SITE_AUTHOR.name }],
   keywords: ['개발', '블로그', '기술', 'Next.js', 'React'],
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://eunu-log.vercel.app',
-    title: 'eunu.log',
-    description: '데이터와 시스템, 창의적인 것들을 만듭니다',
-    siteName: 'eunu.log',
+    url: SITE_URL,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'eunu.log',
-    description: '데이터와 시스템, 창의적인 것들을 만듭니다',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
   },
   robots: {
     index: true,
@@ -59,45 +59,31 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  // Get all posts for search
-  const posts = getSortedFeedData();
-  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/PretendardVariable.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/TossFaceFontWeb.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>
-        <GoogleAnalytics measurementId={gaMeasurementId} />
-        <UmamiAnalytics />
-        <ThemeProvider>
-          <GoogleAnalytics />
-          <PageViewTracker />
-          <KBarProvider posts={posts}>
-            <Suspense fallback={null}>
-              <PageViewTracker />
-            </Suspense>
-            <div id="app-root">{children}</div>
-            <div id="overlay-root" />
-          </KBarProvider>
-          <JsonLd
-            data={{
-              '@context': 'https://schema.org',
-              '@type': 'WebSite',
-              name: 'eunu.log',
-              url: 'https://eunu-log.vercel.app',
-              author: {
-                '@type': 'Person',
-                name: 'Eunu',
-                url: 'https://eunu-log.vercel.app/resume',
-                sameAs: [
-                  'https://github.com/dev-wooyeon',
-                  'mailto:une@kakao.com',
-                ],
-              },
-            }}
-          />
-        </ThemeProvider>
+        <AppProviders>
+          <div id="app-root">{children}</div>
+          <div id="overlay-root" />
+        </AppProviders>
       </body>
     </html>
   );

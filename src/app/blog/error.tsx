@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { RouteError } from '@/components/ui';
-import { AnalyticsEvents, trackEvent } from '@/lib/analytics';
+import { RouteError } from '@/shared/ui';
+import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
 
 interface BlogErrorProps {
   error: Error & { digest?: string };

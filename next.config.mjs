@@ -18,13 +18,28 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   images: {
     formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
+  },
+  async headers() {
+    return [
       {
-        protocol: 'https',
-        hostname: 'velog.velcdn.com',
-        pathname: '/**',
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
-    ],
+      {
+        source: '/images/posts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
   },
   webpack: (config, options) => {
     config.module.rules.push({

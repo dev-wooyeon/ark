@@ -5,27 +5,28 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --webpack",
-    "serve": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:css:syntax": "node internal/scripts/check-css-syntax.mjs",
     "analyze": "ANALYZE=true next build --webpack",
     "test": "vitest",
     "test:unit": "vitest run src/**/*.test.ts src/**/*.test.tsx",
-    "test:components": "vitest run src/components/**/*.test.ts src/components/**/*.test.tsx src/lib/**/*.test.ts src/lib/**/*.test.tsx",
+    "test:components": "vitest run src/features/**/*.test.ts src/features/**/*.test.tsx src/shared/**/*.test.ts src/shared/**/*.test.tsx",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "npm run lint && npm run test:unit && npm run test:e2e",
+    "test:ci": "npm run lint && npm run lint:css:syntax && npm run test:unit && npm run test:e2e",
     "test:e2e": "npx playwright test",
-    "test:smoke": "vitest run src/lib/*.test.ts src/app/actions/*.test.ts && npx playwright test --grep @smoke",
-    "new-post": "node scripts/new-post.js",
+    "test:smoke": "vitest run src/shared/**/*.test.ts src/app/actions/*.test.ts && npx playwright test --grep @smoke",
+    "new-post": "node internal/scripts/posts/new-post.js",
+    "localize:images": "node internal/scripts/posts/localize-post-images.mjs",
     "format": "prettier --write .",
-    "lint:md": "markdownlint-cli2 --config config/markdownlint-cli2.jsonc '**/*.md' '**/*.mdx'",
-    "lint:spell": "cspell --config config/cspell.json '**/*'",
+    "lint:md": "markdownlint-cli2 --config internal/config/.markdownlint-cli2.jsonc '**/*.md' '**/*.mdx'",
+    "lint:spell": "cspell --config internal/config/cspell.json '**/*'",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md,mdx}": "prettier --write",
-    "*.{md,mdx}": "markdownlint-cli2 --config config/markdownlint-cli2.jsonc"
+    "*.{md,mdx}": "markdownlint-cli2 --config internal/config/.markdownlint-cli2.jsonc"
   },
   "prettier": {
     "semi": true,

@@ -119,7 +119,7 @@
 - `@react-three/drei`, `@react-three/fiber`, `three`
 - `gsap`
 - `geist`
-- `src/components/animations/`
+- `src/components/visualization/`
 - `src/app/_components/` (Visualization 컴포넌트)
 
 **리다이렉트:**
@@ -187,7 +187,7 @@ eunu.log/
 │   ├── lib/                        # 기존 유지
 │   ├── types/                      # 기존 유지
 │   └── data/                       # 기존 유지
-└── content/                        # 14개 MDX 포스트 (기존 유지)
+└── posts/                          # 14개 MDX 포스트 (기존 유지)
 ```
 
 ---

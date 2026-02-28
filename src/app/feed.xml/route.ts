@@ -1,4 +1,4 @@
-import { getSortedFeedData } from '@/lib/mdx-feeds';
+import { getSortedFeedData } from '@/features/blog/services/post-repository';
 
 const SITE_URL = 'https://eunu-log.vercel.app';
 

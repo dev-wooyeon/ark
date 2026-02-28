@@ -11,19 +11,23 @@ export default defineConfig({
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
     alias: {
       '@': path.resolve(__dirname, './src'),
-      'server-only': path.resolve(__dirname, './src/__tests__/server-only.ts'),
+      'server-only': path.resolve(
+        __dirname,
+        './src/shared/testing/server-only.ts'
+      ),
     },
     coverage: {
       provider: 'v8',
       include: [
-        'src/lib/**/*.{ts,tsx}',
+        'src/core/**/*.{ts,tsx}',
+        'src/domains/**/*.{ts,tsx}',
+        'src/features/**/*.{ts,tsx}',
+        'src/shared/**/*.{ts,tsx}',
         'src/styles/**/*.{ts,tsx}',
-        'src/components/blog/**/*.{ts,tsx}',
-        'src/components/layout/**/*.{ts,tsx}',
-        'src/components/ui/**/*.{ts,tsx}',
+        'src/components/visualization/**/*.{ts,tsx}',
       ],
       exclude: [
-        'src/__tests__/**',
+        'src/shared/testing/**',
         '**/*.types.ts',
         '**/index.ts',
         '**/index.tsx',

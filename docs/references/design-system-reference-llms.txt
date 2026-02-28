@@ -8,9 +8,9 @@ Design system references for LLM-assisted engineering in this repo:
 - src/styles/tossface.css
 
 3) UI component examples:
-- src/components/ui/**
-- src/components/layout/**
-- docs/ui-components-guide.md
+- src/shared/ui/**
+- src/shared/layout/**
+- docs/guides/ui-components-guide.md
 - docs/tds-rebuild/**
 
 Notes:

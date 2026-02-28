@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getSortedFeedData } from '@/lib/mdx-feeds';
+import { getSortedFeedData } from '@/features/blog/services/post-repository';
 
 const URL = 'https://eunu-log.vercel.app';
 
