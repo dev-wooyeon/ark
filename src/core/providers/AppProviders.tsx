@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react';
 import ThemeProvider from '@/shared/providers/ThemeProvider';
 import KBarProvider from '@/features/search/ui/components/KBarProvider';
-import GoogleAnalytics from '@/shared/analytics/components/GoogleAnalytics';
 import UmamiAnalytics from '@/shared/analytics/components/UmamiAnalytics';
-import PageViewTracker from '@/shared/analytics/components/PageViewTracker';
 import { getSortedFeedData } from '@/features/blog/services/post-repository';
 import JsonLd from '@/shared/seo/JsonLd';
 import {
@@ -18,11 +16,9 @@ interface AppProvidersProps {
 
 export default function AppProviders({ children }: AppProvidersProps) {
   const posts = getSortedFeedData();
-  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
     <>
-      <GoogleAnalytics measurementId={gaMeasurementId} />
       <UmamiAnalytics />
       <JsonLd
         data={{
@@ -39,7 +35,6 @@ export default function AppProviders({ children }: AppProvidersProps) {
         }}
       />
       <ThemeProvider>
-        <PageViewTracker />
         <KBarProvider posts={posts}>{children}</KBarProvider>
       </ThemeProvider>
     </>
