@@ -7,6 +7,7 @@ import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import Logo from '@/shared/ui/Logo';
 import ThemeToggle from '@/shared/ui/ThemeToggle';
+import MotionModeToggle from '@/shared/motion/ui/MotionModeToggle';
 import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
 import MobileBottomNav from './MobileBottomNav';
 import { useScrollVisibility } from './useScrollVisibility';
@@ -53,7 +54,10 @@ export default function Header() {
             <span>eunu.log</span>
           </Link>
 
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <MotionModeToggle />
+            <ThemeToggle />
+          </div>
         </div>
       </motion.header>
 
@@ -106,6 +110,7 @@ function DesktopHeader({ pathname }: DesktopHeaderProps) {
 
           <div className="flex items-center gap-2">
             <SearchButton />
+            <MotionModeToggle />
             <ThemeToggle />
           </div>
         </div>
