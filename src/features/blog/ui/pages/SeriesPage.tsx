@@ -1,8 +1,9 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
 import { getSortedFeedData } from '@/features/blog/services/post-repository';
 import { Header, Container } from '@/shared/layout';
-import { getSeriesGroups, formatSeriesDate } from '@/features/blog/model/series-group';
+import { EmptyState } from '@/shared/ui';
+import { getSeriesSummaries } from '@/features/blog/model/series-group';
+import { SeriesHubList } from '@/features/blog/ui/components';
 
 export const metadata: Metadata = {
   title: 'Series',
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
 
 export default function SeriesPage() {
   const allPosts = getSortedFeedData();
-  const seriesGroups = getSeriesGroups(allPosts);
+  const seriesSummaries = getSeriesSummaries(allPosts);
+  const totalEpisodes = seriesSummaries.reduce(
+    (total, summary) => total + summary.postCount,
+    0
+  );
 
   return (
     <>
@@ -21,65 +26,30 @@ export default function SeriesPage() {
         <Container size="md">
           <header className="mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-grey-900)]">
-              Series
+              시리즈
             </h1>
             <p className="mt-4 text-lg text-[var(--color-grey-600)]">
               하나의 주제를 깊게 다룬 연재 글을 모아봤습니다
             </p>
+            <p className="mt-3 text-sm text-[var(--color-text-tertiary)]">
+              {seriesSummaries.length}개 시리즈 · {totalEpisodes}개 글
+            </p>
           </header>
 
-          {seriesGroups.length === 0 ? (
-            <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-8 text-center text-[var(--color-text-secondary)]">
-              등록된 시리즈가 아직 없습니다.
-            </div>
+          {seriesSummaries.length === 0 ? (
+            <EmptyState
+              icon={<span className="tossface">📚</span>}
+              title="아직 등록된 시리즈가 없어요"
+              description="새로운 시리즈를 준비 중입니다. 먼저 블로그의 다른 글을 둘러보세요."
+              size="sm"
+              action={{
+                label: '블로그 둘러보기',
+                href: '/blog',
+                variant: 'secondary',
+              }}
+            />
           ) : (
-            <div className="space-y-6">
-              {seriesGroups.map((series) => (
-                <section
-                  key={series.id}
-                  className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <span className="inline-flex rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
-                        Series
-                      </span>
-                      <h2 className="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">
-                        {series.title}
-                      </h2>
-                      <p className="mt-1 text-sm text-[var(--color-text-tertiary)]">
-                        총 {series.posts.length}편 · 최근 업데이트{' '}
-                        {formatSeriesDate(series.latestDate)}
-                      </p>
-                    </div>
-
-                    <Link
-                      href={`/blog/${series.posts[0]?.slug ?? ''}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-[var(--color-border)] px-3 py-1.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-border-hover)] hover:text-[var(--color-text-primary)]"
-                    >
-                      첫 글로 시작
-                      <span aria-hidden="true">→</span>
-                    </Link>
-                  </div>
-
-                  <ol className="mt-5 space-y-2">
-                    {series.posts.map((post) => (
-                      <li key={post.slug}>
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          className="flex items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-grey-50)] hover:text-[var(--color-text-primary)]"
-                        >
-                          <span className="w-6 text-[var(--color-text-tertiary)]">
-                            {post.series?.order}.
-                          </span>
-                          <span className="flex-1 truncate">{post.title}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-              ))}
-            </div>
+            <SeriesHubList seriesSummaries={seriesSummaries} />
           )}
         </Container>
       </main>
