@@ -79,6 +79,7 @@ export interface UseMotionModeResult {
   motionMode: MotionMode;
   effectiveMotionMode: EffectiveMotionMode;
   prefersReducedMotion: boolean;
+  isInitialized: boolean;
   setMotionMode: (motionMode: MotionMode) => void;
 }
 
@@ -87,20 +88,23 @@ export function useMotionMode(): UseMotionModeResult {
     useState<MotionMode>(DEFAULT_MOTION_MODE);
   const [prefersReducedMotion, setPrefersReducedMotion] =
     useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     setMotionModeState(readStoredMotionMode());
-
-    if (
-      typeof window === 'undefined' ||
-      typeof window.matchMedia !== 'function'
-    ) {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const hasMatchMedia =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function';
+    const mediaQuery = hasMatchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : null;
 
     const updateMedia = (event?: MediaQueryListEvent) => {
+      if (!mediaQuery) {
+        setPrefersReducedMotion(false);
+        return;
+      }
+
       setPrefersReducedMotion(event?.matches ?? mediaQuery.matches);
     };
 
@@ -121,12 +125,19 @@ export function useMotionMode(): UseMotionModeResult {
     };
 
     updateMedia();
-    mediaQuery.addEventListener('change', updateMedia);
+
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', updateMedia);
+    }
+
     window.addEventListener(MOTION_MODE_CHANGED_EVENT, handleModeChanged);
     window.addEventListener('storage', handleStorage);
+    setIsInitialized(true);
 
     return () => {
-      mediaQuery.removeEventListener('change', updateMedia);
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', updateMedia);
+      }
       window.removeEventListener(MOTION_MODE_CHANGED_EVENT, handleModeChanged);
       window.removeEventListener('storage', handleStorage);
     };
@@ -146,6 +157,7 @@ export function useMotionMode(): UseMotionModeResult {
     motionMode,
     effectiveMotionMode,
     prefersReducedMotion,
+    isInitialized,
     setMotionMode,
   };
 }

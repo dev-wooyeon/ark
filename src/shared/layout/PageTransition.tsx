@@ -18,7 +18,7 @@ export default function PageTransition({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { effectiveMotionMode } = useMotionMode();
+  const { effectiveMotionMode, isInitialized } = useMotionMode();
   const prevPathRef = useRef<string>(pathname);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
 
@@ -39,6 +39,7 @@ export default function PageTransition({
 
   const shouldTranslate = effectiveMotionMode === 'full';
   const shouldAnimate = effectiveMotionMode !== 'off';
+  const canRunTransition = shouldAnimate && isInitialized;
 
   if (!shouldAnimate) {
     return <div key={pathname}>{children}</div>;
@@ -63,14 +64,18 @@ export default function PageTransition({
   return (
     <motion.div
       key={pathname}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      initial={canRunTransition ? 'initial' : false}
+      animate={canRunTransition ? 'animate' : undefined}
+      exit={canRunTransition ? 'exit' : undefined}
       variants={variants}
-      transition={{
-        duration: shouldTranslate ? 0.3 : 0.15,
-        ease: [0.33, 1, 0.68, 1],
-      }}
+      transition={
+        canRunTransition
+          ? {
+              duration: shouldTranslate ? 0.3 : 0.15,
+              ease: [0.33, 1, 0.68, 1],
+            }
+          : undefined
+      }
     >
       {children}
     </motion.div>
