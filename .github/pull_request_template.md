@@ -1,3 +1,8 @@
+## PR 제목 규칙
+- 필수 형식: `{type}({domain}): {header}`
+- 예시: `feat(blog): 모바일 TOC 접근성 개선`
+- header는 되도록 한글로 작성
+
 ## 변경 내용
 - 
 

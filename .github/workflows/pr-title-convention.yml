@@ -1,0 +1,30 @@
+name: PR Title Convention
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate title format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "PR title: $PR_TITLE"
+
+          pattern='^(feat|fix|refactor|docs|test|chore|perf|style|build|ci|revert)\(([a-z0-9-]+)\): .+$'
+
+          if [[ ! "$PR_TITLE" =~ $pattern ]]; then
+            echo "::error title=Invalid PR title::PR 제목은 {type}({domain}): {header} 형식을 따라야 합니다. 예: feat(blog): 모바일 TOC 접근성 개선"
+            exit 1
+          fi
+
+          if [[ ! "$PR_TITLE" =~ [가-힣] ]]; then
+            echo "::notice title=Korean Header Recommended::header는 되도록 한글로 작성해주세요."
+          fi
