@@ -4,6 +4,10 @@ export const AnalyticsEvents = {
   search: 'search',
   error: 'error',
   theme: 'theme',
+  motion: 'motion_mode_changed',
+  visualizationStarted: 'visualization_started',
+  visualizationPaused: 'visualization_paused',
+  tocOpened: 'toc_opened',
 } as const;
 
 export type AnalyticsEventName =

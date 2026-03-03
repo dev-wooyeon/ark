@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRef, useEffect, useState } from 'react';
+import { useMotionMode } from '@/shared/motion/model/motion-mode';
 
 // 라우트 깊이 계산 (홈 = 0, /feed = 1, /feed/[slug] = 2)
 function getRouteDepth(pathname: string): number {
@@ -17,6 +18,7 @@ export default function PageTransition({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { effectiveMotionMode } = useMotionMode();
   const prevPathRef = useRef<string>(pathname);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
 
@@ -35,11 +37,18 @@ export default function PageTransition({
     prevPathRef.current = pathname;
   }, [pathname]);
 
+  const shouldTranslate = effectiveMotionMode === 'full';
+  const shouldAnimate = effectiveMotionMode !== 'off';
+
+  if (!shouldAnimate) {
+    return <div key={pathname}>{children}</div>;
+  }
+
   // 방향에 따른 애니메이션 설정
   const variants = {
     initial: {
       opacity: 0,
-      y: direction === 'forward' ? 20 : -20,
+      y: shouldTranslate ? (direction === 'forward' ? 20 : -20) : 0,
     },
     animate: {
       opacity: 1,
@@ -47,7 +56,7 @@ export default function PageTransition({
     },
     exit: {
       opacity: 0,
-      y: direction === 'forward' ? -20 : 20,
+      y: shouldTranslate ? (direction === 'forward' ? -20 : 20) : 0,
     },
   };
 
@@ -58,7 +67,10 @@ export default function PageTransition({
       animate="animate"
       exit="exit"
       variants={variants}
-      transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+      transition={{
+        duration: shouldTranslate ? 0.3 : 0.15,
+        ease: [0.33, 1, 0.68, 1],
+      }}
     >
       {children}
     </motion.div>

@@ -1,9 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import {
-  pathnameState,
-  setMockPathname,
-} from '@/shared/testing/route-mocks';
+import { pathnameState, setMockPathname } from '@/shared/testing/route-mocks';
 import Header from './Header';
 import { useScrollVisibility } from './useScrollVisibility';
 
@@ -50,6 +47,10 @@ vi.mock('./MobileBottomNav', () => ({
 
 vi.mock('@/shared/ui/ThemeToggle', () => ({
   default: () => <button aria-label="theme">theme</button>,
+}));
+
+vi.mock('@/shared/motion/ui/MotionModeToggle', () => ({
+  default: () => <button aria-label="motion">motion</button>,
 }));
 
 vi.mock('@/shared/ui/Logo', () => ({
