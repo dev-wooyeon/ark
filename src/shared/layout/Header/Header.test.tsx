@@ -49,10 +49,6 @@ vi.mock('@/shared/ui/ThemeToggle', () => ({
   default: () => <button aria-label="theme">theme</button>,
 }));
 
-vi.mock('@/shared/motion/ui/MotionModeToggle', () => ({
-  default: () => <button aria-label="motion">motion</button>,
-}));
-
 vi.mock('@/shared/ui/Logo', () => ({
   default: () => <div>Logo</div>,
 }));
