@@ -1,9 +1,12 @@
+@import url('https://static.toss.im/tossface-font/tossface.css');
+
+/* Local fallback when CDN is unavailable */
 @font-face {
   font-family: 'Tossface';
   src: url('/fonts/TossFaceFontWeb.otf') format('opentype');
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 :root {
