@@ -27,17 +27,17 @@ export default function HeroSection() {
         <div className="mt-8 flex gap-4">
           <Button
             as="a"
-            href="/blog"
+            href="/engineering"
             onClick={() =>
               trackEvent('cta_click', {
-                cta_name: 'view_blog',
+                cta_name: 'view_engineering',
                 cta_location: 'home_hero',
-                destination: '/blog',
+                destination: '/engineering',
               })
             }
             className="!bg-[rgba(0,12,30,0.8)] !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-[rgba(0,12,30,1)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           >
-            <span className="tossface mr-2">📝</span>블로그 보기
+            <span className="tossface mr-2">📝</span>Engineering 보기
           </Button>
           <Button
             as="a"

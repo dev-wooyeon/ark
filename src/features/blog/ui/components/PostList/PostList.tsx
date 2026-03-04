@@ -7,6 +7,7 @@ import type { FeedData } from '@/domains/post/model/types';
 
 interface PostListProps {
   posts: FeedData[];
+  layout?: 'grid' | 'list';
 }
 
 const containerVariants = {
@@ -32,7 +33,7 @@ const itemVariants = {
   },
 };
 
-export default function PostList({ posts }: PostListProps) {
+export default function PostList({ posts, layout = 'grid' }: PostListProps) {
   if (posts.length === 0) {
     return (
       <EmptyState
@@ -40,6 +41,23 @@ export default function PostList({ posts }: PostListProps) {
         title="아직 작성된 글이 없어요"
         description="곧 새로운 글로 찾아뵐게요"
       />
+    );
+  }
+
+  if (layout === 'list') {
+    return (
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="space-y-3"
+      >
+        {posts.map((post) => (
+          <motion.div key={post.slug} variants={itemVariants}>
+            <PostCard post={post} variant="list" />
+          </motion.div>
+        ))}
+      </motion.div>
     );
   }
 

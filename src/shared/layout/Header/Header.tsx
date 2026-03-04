@@ -12,8 +12,8 @@ import MobileBottomNav from './MobileBottomNav';
 import { useScrollVisibility } from './useScrollVisibility';
 
 const navItems = [
-  { href: '/blog', label: '블로그' },
-  { href: '/series', label: '시리즈' },
+  { href: '/engineering', label: 'Engineering' },
+  { href: '/life', label: 'Life' },
   { href: '/resume', label: '이력서' },
 ];
 

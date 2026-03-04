@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
 
@@ -13,52 +12,39 @@ interface MobileBottomNavProps {
 }
 
 interface MobileNavItem {
-  id: 'series' | 'blog' | 'home' | 'resume' | 'search';
+  id: 'home' | 'engineering' | 'life' | 'resume';
   label: string;
-  href?: string;
-  onClick?: () => void;
+  href: string;
 }
 
 export default function MobileBottomNav({
   pathname,
   visible,
 }: MobileBottomNavProps) {
-  const { query } = useKBar();
-
   const navItems = useMemo<MobileNavItem[]>(
     () => [
-      {
-        id: 'series',
-        label: '시리즈',
-        href: '/series',
-      },
-      {
-        id: 'blog',
-        label: '블로그',
-        href: '/blog',
-      },
       {
         id: 'home',
         label: '홈',
         href: '/',
       },
       {
+        id: 'engineering',
+        label: 'Engineering',
+        href: '/engineering',
+      },
+      {
+        id: 'life',
+        label: 'Life',
+        href: '/life',
+      },
+      {
         id: 'resume',
         label: '이력서',
         href: '/resume',
       },
-      {
-        id: 'search',
-        label: '검색',
-        onClick: () => {
-          query.toggle();
-          trackEvent(AnalyticsEvents.click, {
-            target: 'search_button_mobile',
-          });
-        },
-      },
     ],
-    [query]
+    []
   );
 
   return (
@@ -70,11 +56,11 @@ export default function MobileBottomNav({
       aria-label="모바일 하단 네비게이션"
     >
       <div className="mx-auto max-w-[800px] pointer-events-auto">
-        <div className="grid grid-cols-5 gap-1 px-2 py-2 rounded-[var(--radius-lg)] border border-[var(--mobile-nav-border)] bg-[var(--mobile-nav-bg)] shadow-[var(--mobile-nav-shadow)] backdrop-blur-xl">
+        <div className="grid grid-cols-4 gap-1.5 px-2.5 py-2 rounded-[var(--radius-lg)] border border-[var(--mobile-nav-border)] bg-[var(--mobile-nav-bg)] shadow-[var(--mobile-nav-shadow)] backdrop-blur-xl">
           {navItems.map((item) => {
             const isActive = isActiveItem(item, pathname);
             const itemClassName = clsx(
-              'flex min-h-11 items-center justify-center rounded-[var(--radius-md)] border px-1 py-1.5 transition-all',
+              'flex min-h-14 items-center justify-center rounded-[var(--radius-md)] border px-2 py-2 transition-all',
               isActive
                 ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
                 : 'border-transparent hover:bg-[var(--mobile-nav-hover-bg)]'
@@ -96,7 +82,7 @@ export default function MobileBottomNav({
                   </span>
                   <span
                     className={clsx(
-                      'text-[11px] font-medium leading-none',
+                      'text-[10px] font-semibold leading-none',
                       isActive
                         ? 'text-[var(--mobile-nav-active-text)]'
                         : 'text-[var(--mobile-nav-text)]'
@@ -108,35 +94,21 @@ export default function MobileBottomNav({
               </div>
             );
 
-            if (item.href) {
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
-                  onClick={() =>
-                    trackEvent(AnalyticsEvents.click, {
-                      target: 'mobile_bottom_nav',
-                      destination: item.href,
-                    })
-                  }
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  {content}
-                </Link>
-              );
-            }
-
             return (
-              <button
+              <Link
                 key={item.id}
-                type="button"
+                href={item.href}
                 className="rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
-                onClick={item.onClick}
-                aria-label={item.label}
+                onClick={() =>
+                  trackEvent(AnalyticsEvents.click, {
+                    target: 'mobile_bottom_nav',
+                    destination: item.href,
+                  })
+                }
+                aria-current={isActive ? 'page' : undefined}
               >
                 {content}
-              </button>
+              </Link>
             );
           })}
         </div>
@@ -146,10 +118,6 @@ export default function MobileBottomNav({
 }
 
 function isActiveItem(item: MobileNavItem, pathname: string): boolean {
-  if (!item.href) {
-    return false;
-  }
-
   if (item.href === '/') {
     return pathname === '/';
   }
@@ -159,7 +127,7 @@ function isActiveItem(item: MobileNavItem, pathname: string): boolean {
 
 function NavIcon({ id }: { id: MobileNavItem['id'] }) {
   switch (id) {
-    case 'series':
+    case 'engineering':
       return (
         <svg
           viewBox="0 0 24 24"
@@ -171,27 +139,10 @@ function NavIcon({ id }: { id: MobileNavItem['id'] }) {
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z" />
-          <path d="M8 7h7" />
-          <path d="M8 11h7" />
-        </svg>
-      );
-    case 'blog':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="4" y="3" width="16" height="18" rx="2" />
-          <path d="M8 7h8" />
-          <path d="M8 12h8" />
-          <path d="M8 17h5" />
+          <rect x="3" y="4" width="18" height="14" rx="2" />
+          <path d="M8 20h8" />
+          <path d="M10 16v4" />
+          <path d="M14 16v4" />
         </svg>
       );
     case 'home':
@@ -210,6 +161,23 @@ function NavIcon({ id }: { id: MobileNavItem['id'] }) {
           <path d="M5 9.5V21h14V9.5" />
         </svg>
       );
+    case 'life':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z" />
+          <path d="M8 7h8" />
+          <path d="M8 11h8" />
+        </svg>
+      );
     case 'resume':
       return (
         <svg
@@ -226,22 +194,6 @@ function NavIcon({ id }: { id: MobileNavItem['id'] }) {
           <path d="M8 8h8" />
           <path d="M8 12h8" />
           <path d="M8 16h5" />
-        </svg>
-      );
-    case 'search':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       );
     default:

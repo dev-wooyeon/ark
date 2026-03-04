@@ -120,8 +120,8 @@ function RenderResults() {
           >
             검색 초기화
           </button>
-          <a href="/blog" className={styles.recoveryButton}>
-            전체 글 보기
+          <a href="/engineering" className={styles.recoveryButton}>
+            Engineering 보기
           </a>
         </div>
       </div>
