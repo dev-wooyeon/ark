@@ -43,8 +43,8 @@ export default function SeriesPage() {
               description="새로운 시리즈를 준비 중입니다. 먼저 블로그의 다른 글을 둘러보세요."
               size="sm"
               action={{
-                label: 'Engineering 둘러보기',
-                href: '/engineering',
+                label: '블로그 둘러보기',
+                href: '/blog',
                 variant: 'secondary',
               }}
             />

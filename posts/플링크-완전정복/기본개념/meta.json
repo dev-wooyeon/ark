@@ -3,7 +3,7 @@
     "slug": "flink-basics",
     "description": "Flink의 스트림 처리 철학, Runtime 구조, 시간 개념, Stateful 처리, Checkpoint, Exactly-once 보장 원리를 정리했습니다.",
     "date": "2025-11-28",
-    "category": "Tech",
+    "category": "Series",
     "tags": [
         "Flink",
         "Stream Processing",

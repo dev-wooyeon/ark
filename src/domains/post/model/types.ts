@@ -1,14 +1,12 @@
 import type { MDXProps } from 'mdx/types';
 
-export type PostCategory = 'Tech' | 'Life';
-
 export interface FeedFrontmatter {
   title: string;
   slug: string;
   description: string;
   date: string;
   updated?: string;
-  category: PostCategory;
+  category: string;
   tags?: string[];
   image?: string;
   readingTime?: number;

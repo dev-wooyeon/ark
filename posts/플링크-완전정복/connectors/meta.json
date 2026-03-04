@@ -3,7 +3,7 @@
     "slug": "flink-connectors",
     "description": "Kafka, ClickHouse, Iceberg, JDBC 등 주요 Connector의 활용법과 실전 아키텍처를 정리했습니다.",
     "date": "2025-11-28",
-    "category": "Tech",
+    "category": "Series",
     "tags": [
         "Flink",
         "Kafka",

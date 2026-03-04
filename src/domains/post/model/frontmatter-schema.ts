@@ -5,7 +5,7 @@ export const FeedFrontmatterSchema = z.object({
   slug: z.string(),
   description: z.string(),
   date: z.string(),
-  category: z.enum(['Tech', 'Life']),
+  category: z.string(),
   tags: z.array(z.string()).optional(),
   image: z.string().optional(),
   readingTime: z.number().optional(),

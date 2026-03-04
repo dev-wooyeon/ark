@@ -3,7 +3,7 @@
   "slug": "redis-deep-dive-03-specialized-types",
   "description": "Bitmaps, HyperLogLog, Streams를 활용해 대규모 데이터를 낮은 비용으로 처리하는 전략을 정리합니다.",
   "date": "2026-02-13",
-  "category": "Tech",
+  "category": "Series",
   "tags": [
     "Redis",
     "Bitmaps",

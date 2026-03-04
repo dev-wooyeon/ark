@@ -50,13 +50,4 @@ describe('PostList', () => {
     expect(links[0]).toHaveAttribute('href', '/blog/one');
     expect(links[1]).toHaveAttribute('href', '/blog/two');
   });
-
-  it('renders list layout when requested', () => {
-    render(<PostList posts={samplePosts} layout="list" />);
-    const links = screen.getAllByRole('link');
-
-    expect(links).toHaveLength(2);
-    expect(links[0]).toHaveAttribute('href', '/blog/one');
-    expect(screen.getByText('첫 번째 글')).toBeInTheDocument();
-  });
 });

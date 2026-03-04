@@ -3,7 +3,7 @@
   "slug": "redis-deep-dive-08-engine-resp",
   "description": "Redis가 싱글 스레드 구조에서도 높은 처리량을 유지하는 이유와 RESP 프로토콜의 핵심을 정리합니다.",
   "date": "2026-02-13",
-  "category": "Tech",
+  "category": "Series",
   "tags": [
     "Redis",
     "Event Loop",

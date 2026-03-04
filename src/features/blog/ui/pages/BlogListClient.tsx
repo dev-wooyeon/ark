@@ -13,7 +13,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
 
   const blogPosts = useMemo(
-    () => posts.filter((post) => !post.series),
+    () => posts.filter((post) => post.category !== 'Series' && !post.series),
     [posts]
   );
 

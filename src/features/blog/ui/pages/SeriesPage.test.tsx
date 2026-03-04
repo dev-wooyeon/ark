@@ -60,7 +60,7 @@ describe('SeriesPage', () => {
             title: 'Redis 1',
             description: 'redis intro',
             date: '2026-02-01',
-            category: 'Tech',
+            category: 'Series',
             series: { id: 'redis', title: 'Redis 완전정복', order: 1 },
           },
           {
@@ -68,7 +68,7 @@ describe('SeriesPage', () => {
             title: 'Redis 2',
             description: 'redis advanced',
             date: '2026-02-07',
-            category: 'Tech',
+            category: 'Series',
             series: { id: 'redis', title: 'Redis 완전정복', order: 2 },
           },
         ],
@@ -93,11 +93,9 @@ describe('SeriesPage', () => {
     render(<SeriesPage />);
 
     expect(screen.getByText('아직 등록된 시리즈가 없어요')).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Engineering 둘러보기' })
-    ).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '블로그 둘러보기' })).toHaveAttribute(
       'href',
-      '/engineering'
+      '/blog'
     );
   });
 
@@ -117,7 +115,7 @@ describe('SeriesPage', () => {
             title: 'Flink 1',
             description: 'flink intro',
             date: '2026-02-08',
-            category: 'Tech',
+            category: 'Series',
             readingTime: 12,
             series: { id: 'flink', title: 'Flink 완전 정복', order: 1 },
           },

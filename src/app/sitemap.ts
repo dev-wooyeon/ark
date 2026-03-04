@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const routes = ['', '/engineering', '/life', '/resume', '/feed.xml'].map(
+  const routes = ['', '/blog', '/series', '/resume', '/feed.xml'].map(
     (route) => ({
       url: `${URL}${route}`,
       lastModified: new Date().toISOString().split('T')[0],
