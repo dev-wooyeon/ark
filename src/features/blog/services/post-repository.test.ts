@@ -21,6 +21,16 @@ describe('post repository utilities', () => {
     }
   });
 
+  it('fills image metadata from mdx content when meta image is missing', () => {
+    const posts = getSortedFeedData();
+
+    const hasExtractedImage = posts.some(
+      (post) => typeof post.image === 'string' && post.image.length > 0
+    );
+
+    expect(hasExtractedImage).toBe(true);
+  });
+
   it('returns series posts sorted by order', () => {
     const redisPosts = getSeriesPosts('redis-deep-dive');
 

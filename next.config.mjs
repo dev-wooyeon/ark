@@ -19,6 +19,20 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/engineering',
+        permanent: true,
+      },
+      {
+        source: '/series',
+        destination: '/engineering?type=series',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

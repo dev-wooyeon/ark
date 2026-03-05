@@ -41,7 +41,7 @@ export default function SeriesHubCard({ summary, seriesIndex }: SeriesHubCardPro
         )}
       </div>
 
-      <ol className="mt-5 space-y-2">
+      <ol className="m-0 mt-5 list-none space-y-2 p-0">
         {summary.posts.map((post) => {
           const order = post.series?.order ?? 0;
 

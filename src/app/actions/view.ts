@@ -20,6 +20,20 @@ function toCount(value: unknown): number | null {
   return null;
 }
 
+function normalizePositiveInt(value: number, fallback: number): number {
+  if (!Number.isFinite(value)) {
+    return fallback;
+  }
+
+  return Math.max(1, Math.floor(value));
+}
+
+export interface PopularViewEntry {
+  slug: string;
+  count: number;
+  updated_at: string;
+}
+
 async function readViewCount(slug: string): Promise<number | null> {
   const supabase = getSupabaseServerClient();
   if (!supabase) {
@@ -106,4 +120,65 @@ export async function trackView(slug: string): Promise<number | null> {
   }
 
   return readViewCount(normalizedSlug);
+}
+
+export async function getPopularViewsInRecentDays(
+  days: number,
+  limit: number
+): Promise<PopularViewEntry[]> {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) {
+    console.warn(
+      '[view-count] Supabase env is missing. Returning empty popular view list.'
+    );
+    return [];
+  }
+
+  const normalizedDays = normalizePositiveInt(days, 30);
+  const normalizedLimit = normalizePositiveInt(limit, 5);
+  const threshold = new Date(
+    Date.now() - normalizedDays * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  const { data, error } = await supabase
+    .from('views')
+    .select('slug,count,updated_at')
+    .gte('updated_at', threshold)
+    .order('count', { ascending: false })
+    .limit(normalizedLimit);
+
+  if (error) {
+    console.error('Error fetching popular view entries:', error);
+    return [];
+  }
+
+  if (!Array.isArray(data)) {
+    return [];
+  }
+
+  return data
+    .map((entry) => {
+      const count = toCount(entry.count);
+      const slug = typeof entry.slug === 'string' ? entry.slug.trim() : '';
+      const updatedAt =
+        typeof entry.updated_at === 'string' ? entry.updated_at : '';
+
+      if (!slug || count === null || !updatedAt) {
+        return null;
+      }
+
+      return {
+        slug,
+        count,
+        updated_at: updatedAt,
+      } satisfies PopularViewEntry;
+    })
+    .filter((entry): entry is PopularViewEntry => entry !== null)
+    .sort((a, b) => {
+      if (a.count === b.count) {
+        return a.updated_at < b.updated_at ? 1 : -1;
+      }
+
+      return b.count - a.count;
+    });
 }

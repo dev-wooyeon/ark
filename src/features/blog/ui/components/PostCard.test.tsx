@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react';
+import type { ImgHTMLAttributes } from 'react';
 import { describe, expect, it } from 'vitest';
 import PostCard from './PostCard/PostCard';
 import type { FeedData } from '@/domains/post/model/types';
+
+vi.mock('next/image', () => ({
+  default: (props: ImgHTMLAttributes<HTMLImageElement>) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img {...props} />
+  ),
+}));
 
 vi.mock('next/link', () => ({
   default: ({
@@ -60,5 +68,17 @@ describe('PostCard', () => {
     render(<PostCard post={withReading} />);
     expect(screen.getByText('12분 읽기')).toBeInTheDocument();
   });
-});
 
+  it('renders thumbnail in list variant when image exists', () => {
+    const withImage: FeedData = {
+      ...basePost,
+      image: '/images/test.png',
+    };
+
+    render(<PostCard post={withImage} variant="list" />);
+    expect(screen.getByRole('presentation')).toHaveAttribute(
+      'src',
+      '/images/test.png'
+    );
+  });
+});

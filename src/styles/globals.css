@@ -723,12 +723,35 @@
   }
 }
 
+@keyframes scroll-wheel-drag {
+  0% {
+    transform: translateY(-4px);
+    opacity: 0.25;
+  }
+
+  45% {
+    transform: translateY(-1px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(1px);
+    opacity: 0.3;
+  }
+}
+
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-spin {
   animation: spin 1s linear infinite;
+}
+
+.animate-scroll-wheel-drag {
+  animation: scroll-wheel-drag 1.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* ===== Utility Classes ===== */

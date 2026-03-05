@@ -95,14 +95,14 @@ export default async function BlogPostPage({
       <article className="py-16">
         <Container size="md">
           {/* Header */}
-          <header className="mb-12 text-center">
+          <header className="mb-10">
             <span className="inline-block px-3 py-1 text-sm font-medium text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 rounded-full mb-4">
               {post.category}
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-grey-900)] leading-tight">
               {post.title}
             </h1>
-            <div className="mt-6 flex items-center justify-center gap-4 text-sm text-[var(--color-grey-500)]">
+            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-grey-500)]">
               <time>{formattedDate}</time>
               {post.readingTime && (
                 <>
@@ -114,7 +114,7 @@ export default async function BlogPostPage({
               <ViewCounter slug={post.slug} />
             </div>
             {post.tags && (
-              <div className="mt-4 flex items-center justify-center gap-2 flex-wrap">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
                 {post.tags.map((tag) => (
                   <span
                     key={tag}

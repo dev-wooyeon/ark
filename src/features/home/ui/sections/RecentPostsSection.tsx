@@ -28,7 +28,7 @@ export default function RecentPostsSection({ posts }: RecentPostsSectionProps) {
             </p>
           </div>
           <Link
-            href="/blog"
+            href="/engineering"
             className="text-[var(--color-toss-blue)] font-medium hover:underline inline-flex items-center gap-1 shrink-0"
           >
             전체 글 보기
@@ -80,8 +80,8 @@ export default function RecentPostsSection({ posts }: RecentPostsSectionProps) {
         </motion.div>
 
         <div className="mt-12 text-center md:hidden">
-          <Button as="a" href="/blog" variant="secondary" fullWidth>
-            블로그 더 보기
+          <Button as="a" href="/engineering" variant="secondary" fullWidth>
+            Engineering 더 보기
           </Button>
         </div>
       </Container>

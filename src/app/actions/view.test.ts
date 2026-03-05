@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getSupabaseServerClient } from '@/shared/integrations/supabase';
-import { getViewCount, incrementView, trackView } from './view';
+import {
+  getPopularViewsInRecentDays,
+  getViewCount,
+  incrementView,
+  trackView,
+} from './view';
 
 vi.mock('@/shared/integrations/supabase', () => ({
   getSupabaseServerClient: vi.fn(),
@@ -17,14 +22,23 @@ type SupabaseLike = {
   __queryMock: {
     select: ReturnType<typeof vi.fn>;
     eq: ReturnType<typeof vi.fn>;
+    gte: ReturnType<typeof vi.fn>;
+    order: ReturnType<typeof vi.fn>;
+    limit: ReturnType<typeof vi.fn>;
     maybeSingle: ReturnType<typeof vi.fn>;
   };
 };
 
-function createQueryMock(payload: { data: unknown; error: { message: string } | null }) {
+function createQueryMock(payload: {
+  data: unknown;
+  error: { message: string } | null;
+}) {
   return {
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
+    gte: vi.fn().mockReturnThis(),
+    order: vi.fn().mockReturnThis(),
+    limit: vi.fn().mockResolvedValue(payload),
     maybeSingle: vi.fn().mockResolvedValue(payload),
   };
 }
@@ -168,5 +182,84 @@ describe('view actions', () => {
     const count = await trackView('my-post');
 
     expect(count).toBe(15);
+  });
+
+  it('fetches popular views with recent-day filter and descending count order', async () => {
+    const client = createSupabaseMock({
+      queryPayload: {
+        data: [
+          {
+            slug: 'a',
+            count: 10,
+            updated_at: '2026-03-05T00:00:00.000Z',
+          },
+          {
+            slug: 'b',
+            count: 10,
+            updated_at: '2026-03-04T00:00:00.000Z',
+          },
+        ],
+        error: null,
+      },
+      rpcPayload: { data: 0, error: null },
+    });
+    mockedGetSupabase.mockReturnValue(client);
+
+    const result = await getPopularViewsInRecentDays(30, 5);
+
+    expect(client.from).toHaveBeenCalledWith('views');
+    expect(client.__queryMock.select).toHaveBeenCalledWith(
+      'slug,count,updated_at'
+    );
+    expect(client.__queryMock.gte).toHaveBeenCalledWith(
+      'updated_at',
+      expect.any(String)
+    );
+    expect(client.__queryMock.order).toHaveBeenCalledWith('count', {
+      ascending: false,
+    });
+    expect(client.__queryMock.limit).toHaveBeenCalledWith(5);
+    expect(result).toEqual([
+      { slug: 'a', count: 10, updated_at: '2026-03-05T00:00:00.000Z' },
+      { slug: 'b', count: 10, updated_at: '2026-03-04T00:00:00.000Z' },
+    ]);
+  });
+
+  it('returns empty list when supabase is unavailable for popular query', async () => {
+    mockedGetSupabase.mockReturnValue(null);
+
+    const result = await getPopularViewsInRecentDays(30, 5);
+
+    expect(result).toEqual([]);
+  });
+
+  it('returns empty list when popular query fails', async () => {
+    const client = createSupabaseMock({
+      queryPayload: {
+        data: null,
+        error: { message: 'failed' },
+      },
+      rpcPayload: { data: 0, error: null },
+    });
+    mockedGetSupabase.mockReturnValue(client);
+
+    const result = await getPopularViewsInRecentDays(30, 5);
+
+    expect(result).toEqual([]);
+  });
+
+  it('normalizes invalid day/limit inputs for popular query', async () => {
+    const client = createSupabaseMock({
+      queryPayload: {
+        data: [],
+        error: null,
+      },
+      rpcPayload: { data: 0, error: null },
+    });
+    mockedGetSupabase.mockReturnValue(client);
+
+    await getPopularViewsInRecentDays(0, 0);
+
+    expect(client.__queryMock.limit).toHaveBeenCalledWith(1);
   });
 });

@@ -21,10 +21,7 @@ export const CommandPalette = () => {
       <KBarPositioner className={styles.positioner}>
         <KBarAnimator className={styles.animator}>
           <div className={styles.searchWrapper}>
-            <KBarSearch
-              className={styles.search}
-              defaultPlaceholder="무엇을 찾으시나요?"
-            />
+            <KBarSearch className={styles.search} />
             <button
               type="button"
               className={styles.closeButton}
@@ -120,8 +117,8 @@ function RenderResults() {
           >
             검색 초기화
           </button>
-          <a href="/blog" className={styles.recoveryButton}>
-            전체 글 보기
+          <a href="/engineering" className={styles.recoveryButton}>
+            Engineering 보기
           </a>
         </div>
       </div>
@@ -145,15 +142,7 @@ function RenderResults() {
                   <div className={styles.resultSubtitle}>{item.subtitle}</div>
                 )}
               </div>
-              {item.shortcut?.length ? (
-                <div className={styles.resultShortcuts}>
-                  {item.shortcut.map((sc) => (
-                    <kbd key={sc} className={styles.resultShortcut}>
-                      {sc}
-                    </kbd>
-                  ))}
-                </div>
-              ) : null}
+              {null}
             </div>
           )
         }

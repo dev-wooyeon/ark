@@ -106,6 +106,38 @@ function calculateReadingTime(content: string): number {
   return Math.ceil(length / 500) || 1; // 500 characters per minute, min 1 min
 }
 
+const CONTENT_IMAGE_SOURCE_REGEX =
+  /!\[[^\]]*]\(([^)\s]+(?:\s+"[^"]*")?)\)|<(?:img|Image)\b[^>]*?\bsrc=["']([^"']+)["'][^>]*?>/g;
+
+function normalizeImageSource(source: string): string {
+  const trimmedSource = source.trim();
+
+  if (
+    trimmedSource.startsWith('<') &&
+    trimmedSource.endsWith('>') &&
+    trimmedSource.length > 2
+  ) {
+    return trimmedSource.slice(1, -1);
+  }
+
+  const [urlToken] = trimmedSource.split(/\s+/);
+  return urlToken;
+}
+
+function extractFirstImageSource(content: string): string | undefined {
+  const matches = content.matchAll(CONTENT_IMAGE_SOURCE_REGEX);
+
+  for (const match of matches) {
+    const candidateSource = match[1] ?? match[2];
+
+    if (candidateSource) {
+      return normalizeImageSource(candidateSource);
+    }
+  }
+
+  return undefined;
+}
+
 // Load metadata from JSON file (folder path relative to posts/)
 function loadMetadata(folderPath: string): FeedFrontmatter | null {
   const metaPath = path.join(postsDirectory, folderPath, 'meta.json');
@@ -124,12 +156,20 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
       return null;
     }
 
-    // Auto-calculate reading time if not present
-    if (!metadata.readingTime) {
+    const needsMdxRead = !metadata.readingTime || !metadata.image;
+
+    if (needsMdxRead) {
       const mdxPath = path.join(postsDirectory, folderPath, 'index.mdx');
       const mdxContents = safeReadFile(mdxPath);
+
       if (mdxContents) {
-        metadata.readingTime = calculateReadingTime(mdxContents);
+        if (!metadata.readingTime) {
+          metadata.readingTime = calculateReadingTime(mdxContents);
+        }
+
+        if (!metadata.image) {
+          metadata.image = extractFirstImageSource(mdxContents);
+        }
       }
     }
 

@@ -23,6 +23,14 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'desktop-chrome',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1440, height: 900 },
+        colorScheme: 'light',
+      },
+    },
+    {
       name: 'mobile-chrome',
       use: {
         browserName: 'chromium',

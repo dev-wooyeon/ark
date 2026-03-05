@@ -74,8 +74,8 @@ vi.mock('framer-motion', () => ({
 
 describe('Header', () => {
   it('passes pathname and visibility state to MobileBottomNav', () => {
-    setMockPathname('/series');
-    pathnameState.value = '/series';
+    setMockPathname('/engineering');
+    pathnameState.value = '/engineering';
     mockUseScrollVisibility.mockReturnValue({
       topHeaderVisible: true,
       bottomBarVisible: false,
@@ -84,13 +84,13 @@ describe('Header', () => {
     const { getByTestId } = render(<Header />);
 
     const nav = getByTestId('mobile-bottom-nav');
-    expect(nav.dataset.pathname).toBe('/series');
+    expect(nav.dataset.pathname).toBe('/engineering');
     expect(nav.dataset.visible).toBe('false');
   });
 
   it('toggles pointer-events class when top header hides', () => {
-    setMockPathname('/blog');
-    pathnameState.value = '/blog';
+    setMockPathname('/engineering');
+    pathnameState.value = '/engineering';
     mockUseScrollVisibility.mockReturnValue({
       topHeaderVisible: false,
       bottomBarVisible: true,
@@ -103,8 +103,8 @@ describe('Header', () => {
   });
 
   it('renders desktop search button and calls kbar toggle on click', async () => {
-    setMockPathname('/blog');
-    pathnameState.value = '/blog';
+    setMockPathname('/engineering');
+    pathnameState.value = '/engineering';
     mockUseScrollVisibility.mockReturnValue({
       topHeaderVisible: true,
       bottomBarVisible: true,
@@ -113,7 +113,7 @@ describe('Header', () => {
     render(<Header />);
 
     act(() => {
-      screen.getByRole('button', { name: /검색/ }).click();
+      screen.getByRole('button', { name: '검색 열기' }).click();
     });
 
     expect(mockToggle).toHaveBeenCalledTimes(1);

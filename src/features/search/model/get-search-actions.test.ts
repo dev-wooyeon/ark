@@ -18,7 +18,7 @@ describe('getSearchActions', () => {
       {
         slug: 'redis-basics',
         title: 'Redis Basics',
-        category: 'Series',
+        category: 'Tech',
         tags: ['Redis', 'Caching'],
         description: 'Redis 기초 개념 정리',
       },
@@ -62,7 +62,7 @@ describe('getSearchActions', () => {
       {
         slug: 'redis-basics',
         title: 'Redis Basics',
-        category: 'Series',
+        category: 'Tech',
         tags: ['Redis'],
         description: 'Redis 기초',
       },
