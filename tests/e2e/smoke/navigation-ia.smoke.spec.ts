@@ -3,7 +3,6 @@ import { expect, test } from '@playwright/test';
 test.describe('Navigation IA', () => {
   test('@smoke 모바일 하단 네비 4탭이 동작해요', async ({ page }, testInfo) => {
     test.skip(!testInfo.project.use.isMobile, '모바일 프로젝트 전용 테스트예요.');
-
     await page.goto('/');
     await expect(
       page.getByRole('navigation', { name: '모바일 하단 네비게이션' })
