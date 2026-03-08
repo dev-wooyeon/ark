@@ -22,4 +22,11 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('@media (prefers-reduced-motion: reduce)');
     expect(globalsContent).toContain('animation-duration: 0.01ms !important');
   });
+
+  it('uses Tossface-aware font stack for article prose', () => {
+    expect(tokensContent).toContain('--font-sans-emoji:');
+    expect(tokensContent).toContain("'Pretendard', 'Tossface'");
+    expect(globalsContent).toContain('.prose {');
+    expect(globalsContent).toContain('font-family: var(--font-sans-emoji);');
+  });
 });

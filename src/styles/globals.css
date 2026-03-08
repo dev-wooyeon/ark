@@ -301,6 +301,7 @@
 /* ===== Prose (MDX Content) ===== */
 .prose {
   max-width: none;
+  font-family: var(--font-sans-emoji);
   color: var(--color-text-primary);
   font-size: var(--text-base);
   line-height: var(--leading-loose);
@@ -318,6 +319,7 @@
 .prose h4,
 .prose h5,
 .prose h6 {
+  font-family: var(--font-sans-emoji);
   color: var(--color-grey-900);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
