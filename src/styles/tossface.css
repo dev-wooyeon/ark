@@ -1,6 +1,45 @@
-@import url('https://static.toss.im/tossface-font/tossface.css');
+/* Emoji-only face for mixed text contexts such as prose and TOC. */
+@font-face {
+  font-family: 'Tossface Safe';
+  src: url('/fonts/TossFaceFontWeb.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+00A9,
+    U+00AE,
+    U+200D,
+    U+203C,
+    U+2049,
+    U+2122,
+    U+2139,
+    U+2194-2199,
+    U+21A9-21AA,
+    U+231A-231B,
+    U+2328,
+    U+23CF,
+    U+23E9-23F3,
+    U+23F8-23FA,
+    U+24C2,
+    U+25AA-25AB,
+    U+25B6,
+    U+25C0,
+    U+25FB-25FE,
+    U+2600-27BF,
+    U+2934-2935,
+    U+2B05-2B07,
+    U+2B1B-2B1C,
+    U+2B50,
+    U+2B55,
+    U+3030,
+    U+303D,
+    U+3297,
+    U+3299,
+    U+FE0F,
+    U+1F000-1FAFF;
+}
 
-/* Local fallback when CDN is unavailable */
+/* Full face for explicit emoji-only spans such as `.tossface`. */
 @font-face {
   font-family: 'Tossface';
   src: url('/fonts/TossFaceFontWeb.otf') format('opentype');

@@ -75,6 +75,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
                     ? 'bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] font-medium'
                     : 'text-[var(--color-grey-600)] hover:text-[var(--color-grey-900)] hover:bg-[var(--color-grey-100)]'
                 )}
+                style={{ fontFamily: 'var(--font-sans-emoji)' }}
               >
                 {item.text}
               </button>

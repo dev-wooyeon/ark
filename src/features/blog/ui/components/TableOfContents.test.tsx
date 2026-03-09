@@ -34,6 +34,9 @@ describe('TableOfContents', () => {
     const button = getByRole('button', { name: '첫번째 섹션' });
     fireEvent.click(button);
 
+    expect(button).toHaveStyle({
+      fontFamily: 'var(--font-sans-emoji)',
+    });
     expect(observeSpy).toHaveBeenCalledWith(header);
     expect(window.history.replaceState).toHaveBeenCalledWith(
       null,

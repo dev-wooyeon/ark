@@ -25,7 +25,7 @@ describe('globals styles', () => {
 
   it('uses Tossface-aware font stack for article prose', () => {
     expect(tokensContent).toContain('--font-sans-emoji:');
-    expect(tokensContent).toContain("'Pretendard', 'Tossface'");
+    expect(tokensContent).toContain("'Pretendard', 'Tossface Safe'");
     expect(globalsContent).toContain('.prose {');
     expect(globalsContent).toContain('font-family: var(--font-sans-emoji);');
   });
