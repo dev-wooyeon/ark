@@ -33,6 +33,18 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    if (process.env.NODE_ENV === 'production') {
+      return [];
+    }
+
+    return [
+      {
+        source: '/api/agentation-sync/:path*',
+        destination: 'http://localhost:4747/:path*',
+      },
+    ];
+  },
   async headers() {
     return [
       {

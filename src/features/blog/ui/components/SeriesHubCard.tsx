@@ -7,7 +7,10 @@ interface SeriesHubCardProps {
   seriesIndex: number;
 }
 
-export default function SeriesHubCard({ summary, seriesIndex }: SeriesHubCardProps) {
+export default function SeriesHubCard({
+  summary,
+  seriesIndex,
+}: SeriesHubCardProps) {
   const metaText = `총 ${summary.postCount}편 · 총 ${summary.totalReadingMinutes}분 · 최근 업데이트 ${formatSeriesDate(summary.latestDate)}`;
   const firstPostOrder = summary.posts[0]?.series?.order;
 
@@ -15,13 +18,12 @@ export default function SeriesHubCard({ summary, seriesIndex }: SeriesHubCardPro
     <section className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <span className="inline-flex rounded-full border border-[var(--color-category-series-border)] bg-[var(--color-category-series-bg)] px-2 py-1 text-xs font-medium text-[var(--color-category-series-text)]">
-            Series
-          </span>
-          <h2 className="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">
+          <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">
             {summary.title}
           </h2>
-          <p className="mt-1 text-sm text-[var(--color-text-tertiary)]">{metaText}</p>
+          <p className="mt-1 text-sm text-[var(--color-text-tertiary)]">
+            {metaText}
+          </p>
         </div>
 
         {summary.firstPostSlug && (
@@ -55,9 +57,11 @@ export default function SeriesHubCard({ summary, seriesIndex }: SeriesHubCardPro
                 postSlug={post.slug}
                 episodeOrder={order}
                 seriesIndex={seriesIndex}
-                className="flex min-h-11 items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-grey-50)] hover:text-[var(--color-text-primary)]"
+                className="flex min-h-10 items-center gap-3 rounded-[var(--radius-sm)] px-3 py-1.5 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-grey-50)] hover:text-[var(--color-text-primary)]"
               >
-                <span className="w-6 text-[var(--color-text-tertiary)]">{order}.</span>
+                <span className="w-6 text-[var(--color-text-tertiary)]">
+                  {order}.
+                </span>
                 <span className="flex-1 truncate">{post.title}</span>
               </SeriesTrackedLink>
             </li>

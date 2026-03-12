@@ -11,11 +11,12 @@
 npm run dev
 ```
 
-기본 엔드포인트는 `http://localhost:4747`이고,
+기본 엔드포인트는 same-origin 프록시인 `/api/agentation-sync`예요.
+Next 개발 서버가 내부에서 `http://localhost:4747`로 전달해서 CORS 없이 써요.
 필요하면 환경변수로 바꿔서 쓸 수 있어요.
 
 ```bash
-NEXT_PUBLIC_AGENTATION_ENDPOINT=http://localhost:4747
+NEXT_PUBLIC_AGENTATION_ENDPOINT=/api/agentation-sync
 ```
 
 ## 2. Codex MCP 서버 등록
@@ -57,8 +58,9 @@ npx agentation-mcp server
 개발 환경에서는 코멘트를 등록하면 webhook으로 자동 실행을 바로 트리거해요.
 
 - 기본 webhook URL: `/api/agentation/webhook`
-- 기본 동작: `annotation.add` 또는 `submit` 이벤트가 들어오면 `codex exec`를 자동 실행해요.
+- 기본 동작: `annotation.add` 또는 `submit` 이벤트가 들어오면 `codex exec`를 한 번 실행하고 종료해요. webhook에 담긴 코멘트, 세션, URL 같은 정보도 함께 프롬프트에 넣어서 바로 처리해요.
 - 중복 실행 방지: `.agentation/autorun.lock.json` 락 파일로 한 번에 한 프로세스만 실행해요.
+- stale 실행 정리: 기본 120초를 넘기거나 45초 동안 로그가 멈춘 autorun은 다음 webhook 요청이 들어오면 정리하고 새로 실행해요.
 - 로그 경로: `.agentation/autorun.log`
 
 환경변수로 동작을 조정할 수 있어요.
@@ -66,7 +68,9 @@ npx agentation-mcp server
 ```bash
 NEXT_PUBLIC_AGENTATION_WEBHOOK_URL=/api/agentation/webhook
 AGENTATION_AUTORUN_ENABLED=true
-AGENTATION_AUTORUN_COMMAND="codex exec --full-auto -C /Users/noah/workspace/personal/eunu.log 'watch mode로 계속 처리해줘'"
+AGENTATION_AUTORUN_COMMAND="codex exec --full-auto -C /Users/noah/workspace/personal/eunu.log '방금 등록된 annotation을 처리해줘'"
+AGENTATION_AUTORUN_MAX_AGE_MS=120000
+AGENTATION_AUTORUN_IDLE_TIMEOUT_MS=45000
 ```
 
 `AGENTATION_AUTORUN_COMMAND`를 지정하지 않으면 기본 `codex exec --full-auto` 명령을 사용해요.

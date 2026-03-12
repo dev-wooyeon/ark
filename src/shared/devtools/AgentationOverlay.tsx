@@ -2,7 +2,7 @@
 
 import { Agentation } from 'agentation';
 
-const DEFAULT_AGENTATION_ENDPOINT = 'http://localhost:4747';
+const DEFAULT_AGENTATION_ENDPOINT = '/api/agentation-sync';
 const DEFAULT_AGENTATION_WEBHOOK_URL = '/api/agentation/webhook';
 
 export default function AgentationOverlay() {

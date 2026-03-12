@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { closeSync, existsSync, openSync } from 'node:fs';
+import { closeSync, existsSync, openSync, statSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { NextResponse } from 'next/server';
@@ -12,6 +12,12 @@ type AgentationWebhookPayload = {
     id?: string;
     comment?: string;
     sessionId?: string;
+    timestamp?: number;
+    url?: string;
+    element?: string;
+    elementPath?: string;
+    nearbyText?: string;
+    selectedText?: string;
   };
   timestamp?: number;
   url?: string;
@@ -28,8 +34,42 @@ const AUTO_EVENTS = new Set(['annotation.add', 'submit']);
 const AUTORUN_DIR = path.join(process.cwd(), '.agentation');
 const LOCK_PATH = path.join(AUTORUN_DIR, 'autorun.lock.json');
 const LOG_PATH = path.join(AUTORUN_DIR, 'autorun.log');
+const AUTORUN_MAX_AGE_MS = Number(
+  process.env.AGENTATION_AUTORUN_MAX_AGE_MS ?? '120000'
+);
+const AUTORUN_IDLE_TIMEOUT_MS = Number(
+  process.env.AGENTATION_AUTORUN_IDLE_TIMEOUT_MS ?? '45000'
+);
 const DEFAULT_PROMPT =
-  'watch mode로 계속 처리해줘. Agentation pending annotation을 확인해서 코드 반영, 테스트 검증, resolve 처리까지 완료해줘.';
+  '방금 등록된 Agentation annotation 한 건을 처리해줘. webhook에 담긴 코멘트와 위치 정보를 기준으로 관련 코드만 최소 수정하고, 필요한 테스트만 검증한 뒤 resolve 처리하고 바로 종료해줘. 브라우저를 새로 열거나 추가 입력을 기다리거나 watch mode로 머물지 말아줘. pending 조회에서 바로 안 보여도 아래 정보를 기준으로 해당 요청을 찾아 처리해줘.';
+
+function buildAutorunPrompt(payload: AgentationWebhookPayload): string {
+  const annotation = payload.annotation;
+  const details = [
+    annotation?.id ? `- webhook annotation id: ${annotation.id}` : null,
+    annotation?.comment ? `- comment: ${annotation.comment}` : null,
+    annotation?.sessionId ? `- sessionId: ${annotation.sessionId}` : null,
+    annotation?.url || payload.url
+      ? `- url: ${annotation?.url ?? payload.url}`
+      : null,
+    annotation?.element ? `- element: ${annotation.element}` : null,
+    annotation?.elementPath ? `- elementPath: ${annotation.elementPath}` : null,
+    annotation?.nearbyText ? `- nearbyText: ${annotation.nearbyText}` : null,
+    annotation?.selectedText
+      ? `- selectedText: ${annotation.selectedText}`
+      : null,
+    annotation?.timestamp
+      ? `- annotation timestamp: ${annotation.timestamp}`
+      : null,
+    payload.timestamp ? `- event timestamp: ${payload.timestamp}` : null,
+  ].filter((value): value is string => Boolean(value));
+
+  if (details.length === 0) {
+    return DEFAULT_PROMPT;
+  }
+
+  return `${DEFAULT_PROMPT}\n\n다음 정보를 참고해줘:\n${details.join('\n')}`;
+}
 
 function isPidRunning(pid: number): boolean {
   try {
@@ -37,6 +77,24 @@ function isPidRunning(pid: number): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+function getLockAgeMs(lock: AutorunLock): number {
+  const startedAt = new Date(lock.startedAt).getTime();
+
+  if (Number.isNaN(startedAt)) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  return Date.now() - startedAt;
+}
+
+function getAutorunIdleMs(): number {
+  try {
+    return Date.now() - statSync(LOG_PATH).mtimeMs;
+  } catch {
+    return Number.POSITIVE_INFINITY;
   }
 }
 
@@ -61,8 +119,19 @@ async function clearStaleLock(lock: AutorunLock | null): Promise<void> {
   if (!lock) {
     return;
   }
-  if (isPidRunning(lock.pid)) {
+
+  const isRunning = isPidRunning(lock.pid);
+  const isExpired = getLockAgeMs(lock) > AUTORUN_MAX_AGE_MS;
+  const isIdle = getAutorunIdleMs() > AUTORUN_IDLE_TIMEOUT_MS;
+
+  if (isRunning && !isExpired && !isIdle) {
     return;
+  }
+
+  if (isRunning && (isExpired || isIdle)) {
+    try {
+      process.kill(lock.pid, 'SIGTERM');
+    } catch {}
   }
 
   if (existsSync(LOCK_PATH)) {
@@ -74,7 +143,7 @@ async function writeLockFile(lock: AutorunLock): Promise<void> {
   await writeFile(LOCK_PATH, JSON.stringify(lock, null, 2), 'utf8');
 }
 
-function runAutorunCommand(annotationId?: string) {
+function runAutorunCommand(payload: AgentationWebhookPayload) {
   const customCommand = process.env.AGENTATION_AUTORUN_COMMAND?.trim();
   const logFd = openSync(LOG_PATH, 'a');
   try {
@@ -88,9 +157,7 @@ function runAutorunCommand(annotationId?: string) {
       });
     }
 
-    const autoPrompt = annotationId
-      ? `${DEFAULT_PROMPT} 방금 등록된 annotation id는 ${annotationId}예요.`
-      : DEFAULT_PROMPT;
+    const autoPrompt = buildAutorunPrompt(payload);
 
     return spawn(
       'codex',
@@ -171,7 +238,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const child = runAutorunCommand(payload.annotation?.id);
+  const child = runAutorunCommand(payload);
   if (!child.pid) {
     return NextResponse.json(
       { ok: false, reason: 'failed to spawn autorun process' },
