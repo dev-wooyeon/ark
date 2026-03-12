@@ -72,6 +72,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     month: 'long',
     day: 'numeric',
   });
+  const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
 
   if (variant === 'featured') {
     return (
@@ -95,7 +96,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
         </p>
         <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
           <time>{formattedDate}</time>
-          {post.readingTime && <span>{post.readingTime}분 읽기</span>}
+          {readingTimeLabel && <span>{readingTimeLabel}</span>}
         </div>
       </Link>
     );
@@ -121,10 +122,10 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
               </span>
               <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
               <time>{formattedDate}</time>
-              {post.readingTime && (
+              {readingTimeLabel && (
                 <>
                   <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
-                  <span>{post.readingTime}분 읽기</span>
+                  <span>{readingTimeLabel}</span>
                 </>
               )}
             </div>
@@ -170,10 +171,10 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
         </span>
         <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
         <time>{formattedDate}</time>
-        {post.readingTime && (
+        {readingTimeLabel && (
           <>
             <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
-            <span>{post.readingTime}분 읽기</span>
+            <span>{readingTimeLabel}</span>
           </>
         )}
       </div>

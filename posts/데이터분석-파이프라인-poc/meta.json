@@ -1,7 +1,7 @@
 {
   "title": "데이터 분석 파이프라인 구축 PoC 회고",
   "slug": "data-analysis-pipeline-poc",
-  "description": "데이터 분석 파이프라인을 구축하였고 이를 발판으로 성장하기 위한 방법을 생각해본다.",
+  "description": "운영 DB 수작업 분석을 줄이기 위해 CDC 기반 분석 파이프라인 PoC를 설계한 과정을 돌아봐요.",
   "date": "2025-09-07",
   "category": "Tech",
   "tags": [

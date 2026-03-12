@@ -56,7 +56,7 @@ describe('PostCard', () => {
 
   it('omits reading time text when not provided', () => {
     render(<PostCard post={basePost} />);
-    expect(screen.queryByText('분 읽기')).not.toBeInTheDocument();
+    expect(screen.queryByText(/약 \d+분/)).not.toBeInTheDocument();
   });
 
   it('shows reading time when provided', () => {
@@ -66,7 +66,7 @@ describe('PostCard', () => {
     };
 
     render(<PostCard post={withReading} />);
-    expect(screen.getByText('12분 읽기')).toBeInTheDocument();
+    expect(screen.getByText('약 12분')).toBeInTheDocument();
   });
 
   it('renders thumbnail in list variant when image exists', () => {
