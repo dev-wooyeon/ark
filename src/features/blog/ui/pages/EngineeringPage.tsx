@@ -6,7 +6,7 @@ import EngineeringPageClient from './EngineeringPageClient';
 
 export const metadata: Metadata = {
   title: 'Engineering',
-  description: '기술 아티클과 시리즈를 한곳에서 탐색합니다',
+  description: '기술 글과 시리즈를 같은 흐름에서 살펴볼 수 있어요',
 };
 
 export default function EngineeringPage() {
@@ -25,7 +25,7 @@ export default function EngineeringPage() {
               Engineering
             </h1>
             <p className="mt-4 text-lg text-[var(--color-grey-600)]">
-              기술 아티클과 시리즈를 함께 탐색할 수 있게 구성했어요
+              기술 글과 시리즈를 같은 흐름에서 살펴볼 수 있어요
             </p>
           </header>
 

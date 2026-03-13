@@ -24,7 +24,7 @@ describe('ViewCounter', () => {
 
     render(<ViewCounter slug={slug} />);
 
-    await screen.findByText('42 조회수');
+    await screen.findByText('조회수 42회');
 
     expect(mockGetViewCount).toHaveBeenCalledWith(slug);
     expect(mockTrackView).not.toHaveBeenCalled();
@@ -36,7 +36,7 @@ describe('ViewCounter', () => {
 
     render(<ViewCounter slug={slug} />);
 
-    await screen.findByText('11 조회수');
+    await screen.findByText('조회수 11회');
 
     expect(mockTrackView).toHaveBeenCalledWith(slug);
     expect(sessionStorage.getItem(`viewed:${slug}`)).toBe('1');
@@ -48,6 +48,6 @@ describe('ViewCounter', () => {
 
     render(<ViewCounter slug={slug} />);
 
-    expect(await screen.findByText('조회수 집계 중')).toBeInTheDocument();
+    expect(await screen.findByText('조회수를 준비하고 있어요')).toBeInTheDocument();
   });
 });

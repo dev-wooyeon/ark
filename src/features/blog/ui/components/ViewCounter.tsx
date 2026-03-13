@@ -49,14 +49,14 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
   const baseStyle = 'inline-flex items-center';
 
   if (isLoading) {
-    return <span className={baseStyle}>... 조회수</span>;
+    return <span className={baseStyle}>조회수를 불러오고 있어요</span>;
   }
 
   if (views === null) {
-    return <span className={baseStyle}>조회수 집계 중</span>;
+    return <span className={baseStyle}>조회수를 준비하고 있어요</span>;
   }
 
   return (
-    <span className={baseStyle}>{views.toLocaleString('ko-KR')} 조회수</span>
+    <span className={baseStyle}>조회수 {views.toLocaleString('ko-KR')}회</span>
   );
 }

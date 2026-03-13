@@ -79,6 +79,7 @@ export default async function BlogPostPage({
     month: 'long',
     day: 'numeric',
   });
+  const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
 
   return (
     <>
@@ -104,10 +105,10 @@ export default async function BlogPostPage({
             </h1>
             <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-grey-500)]">
               <time>{formattedDate}</time>
-              {post.readingTime && (
+              {readingTimeLabel && (
                 <>
                   <span className="w-1 h-1 bg-[var(--color-grey-300)] rounded-full" />
-                  <span>{post.readingTime}분 읽기</span>
+                  <span>{readingTimeLabel}</span>
                 </>
               )}
               <span className="w-1 h-1 bg-[var(--color-grey-300)] rounded-full" />

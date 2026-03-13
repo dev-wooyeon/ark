@@ -182,7 +182,7 @@ export default function EngineeringPageClient({
                 아티클
               </h2>
               <p className="mt-2 text-sm text-[var(--color-grey-600)]">
-                Engineering 주제 글을 시간순으로 모아봤어요
+                기술 글을 시간순으로 모아뒀어요
               </p>
             </header>
             <PostList posts={pagedArticlePosts} layout="list" />
@@ -234,14 +234,14 @@ export default function EngineeringPageClient({
                 시리즈
               </h2>
               <p className="mt-2 text-sm text-[var(--color-grey-600)]">
-                하나의 주제를 깊게 다루는 연재 글을 모아봤어요
+                하나의 주제를 깊게 다룬 연재 글을 모아뒀어요
               </p>
             </header>
             {seriesSummaries.length === 0 ? (
               <EmptyState
                 icon={<span className="tossface">📚</span>}
                 title="시리즈를 준비하고 있어요"
-                description="다른 필터를 선택하면 아티클을 더 볼 수 있어요"
+                description="다른 필터에서 아티클을 먼저 볼 수 있어요"
                 size="sm"
               />
             ) : (
