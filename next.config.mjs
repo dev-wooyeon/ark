@@ -12,6 +12,9 @@ const prettyCodeOptions = {
   defaultLang: 'plaintext',
 };
 
+const agentationProxyTarget =
+  process.env.AGENTATION_PROXY_TARGET ?? 'http://127.0.0.1:4747';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -41,7 +44,7 @@ const nextConfig = {
     return [
       {
         source: '/api/agentation-sync/:path*',
-        destination: 'http://localhost:4747/:path*',
+        destination: `${agentationProxyTarget}/:path*`,
       },
     ];
   },
