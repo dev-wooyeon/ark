@@ -5,18 +5,31 @@
 
 ## 1. 프로젝트에서 오버레이 켜기
 
-개발 서버를 실행하면 화면 오른쪽 아래에 Agentation 툴바가 보여요.
+개발 서버를 실행하면 Next dev 서버와 Agentation 서버를 같이 띄워요.
+Agentation 서버가 정상 응답할 때만 화면 오른쪽 아래에 툴바가 보여요.
 
 ```bash
 npm run dev
 ```
 
 기본 엔드포인트는 same-origin 프록시인 `/api/agentation-sync`예요.
-Next 개발 서버가 내부에서 `http://localhost:4747`로 전달해서 CORS 없이 써요.
+Next 개발 서버가 내부에서 `http://127.0.0.1:4747`로 전달해서 CORS 없이 써요.
 필요하면 환경변수로 바꿔서 쓸 수 있어요.
 
 ```bash
 NEXT_PUBLIC_AGENTATION_ENDPOINT=/api/agentation-sync
+```
+
+Agentation 서버를 별도로만 띄우고 싶으면 아래 스크립트를 써요.
+
+```bash
+npm run dev:agentation
+```
+
+같이 자동 실행하지 않으려면 아래처럼 끌 수 있어요.
+
+```bash
+AGENTATION_AUTOSTART=false npm run dev
 ```
 
 ## 2. Codex MCP 서버 등록

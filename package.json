@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "node internal/scripts/dev-with-agentation.mjs",
+    "dev:next": "next dev --webpack",
+    "dev:agentation": "agentation-mcp server",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
