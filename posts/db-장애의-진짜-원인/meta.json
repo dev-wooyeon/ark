@@ -1,0 +1,15 @@
+{
+  "title": "DB 장애의 진짜 원인은 코드가 아니었다",
+  "slug": "db-outage-index-root-cause",
+  "description": "슬로우 쿼리와 rows_examined, EXPLAIN으로 병목을 좁히며 인덱스 설계 문제를 찾은 과정을 정리해요.",
+  "date": "2026-03-23",
+  "category": "Tech",
+  "tags": [
+    "Database",
+    "MySQL",
+    "Performance",
+    "Index",
+    "Troubleshooting"
+  ],
+  "featured": false
+}
