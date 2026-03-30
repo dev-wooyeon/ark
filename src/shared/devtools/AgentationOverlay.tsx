@@ -13,13 +13,17 @@ type AgentationHealthResponse = {
 };
 
 export default function AgentationOverlay() {
-  if (process.env.NODE_ENV !== 'development') {
-    return null;
-  }
-
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isAutomation =
+    typeof navigator !== 'undefined' && navigator.webdriver === true;
   const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
+    if (!isDevelopment || isAutomation) {
+      setIsAvailable(false);
+      return;
+    }
+
     let isMounted = true;
 
     async function checkAvailability() {
@@ -51,9 +55,9 @@ export default function AgentationOverlay() {
       isMounted = false;
       window.clearInterval(intervalId);
     };
-  }, []);
+  }, [isAutomation, isDevelopment]);
 
-  if (!isAvailable) {
+  if (!isDevelopment || isAutomation || !isAvailable) {
     return null;
   }
 

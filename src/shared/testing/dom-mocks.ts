@@ -1,19 +1,26 @@
 import { vi } from 'vitest';
 
-export function setupMatchMediaMock(matches: boolean, mediaQuery = '(max-width: 767px)') {
+export function setupMatchMediaMock(
+  matches: boolean,
+  mediaQuery = '(max-width: 767px)'
+) {
   const listeners = new Set<(event: MediaQueryListEvent) => void>();
 
   const createMatchMediaResult = (query: string) => ({
     matches: query === mediaQuery ? matches : false,
     media: query,
-    onchange: null as ((this: MediaQueryList, ev: MediaQueryListEvent) => any) | null,
+    onchange: null as
+      | ((this: MediaQueryList, ev: MediaQueryListEvent) => void)
+      | null,
     addListener: vi.fn(),
     removeListener: vi.fn(),
-    addEventListener: vi.fn((type: string, listener: EventListenerOrEventListenerObject | null) => {
-      if (type === 'change' && listener) {
-        listeners.add(listener as (event: MediaQueryListEvent) => void);
+    addEventListener: vi.fn(
+      (type: string, listener: EventListenerOrEventListenerObject | null) => {
+        if (type === 'change' && listener) {
+          listeners.add(listener as (event: MediaQueryListEvent) => void);
+        }
       }
-    }),
+    ),
     removeEventListener: vi.fn(
       (type: string, listener: EventListenerOrEventListenerObject | null) => {
         if (type === 'change' && listener) {
@@ -68,4 +75,3 @@ export function resetDomState() {
   setupScrollToMock();
   setWindowScrollY(0);
 }
-

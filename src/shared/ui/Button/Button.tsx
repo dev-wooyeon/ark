@@ -67,7 +67,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     );
 
     if ('as' in rest && rest.as === 'a') {
-      const { as, href, ...anchorProps } = rest;
+      const { as: _as, href, ...anchorProps } = rest;
       // Check if it's an external link
       const isExternal =
         typeof href === 'string' &&
@@ -98,7 +98,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       );
     }
 
-    const { as, ...buttonProps } = rest as ButtonAsButton;
+    const { as: _as, ...buttonProps } = rest as ButtonAsButton;
     return (
       <button
         {...buttonProps}

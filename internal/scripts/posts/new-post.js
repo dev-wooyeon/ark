@@ -72,7 +72,7 @@ async function main() {
         chalk.red(`Error: Directory posts/${slug} already exists!`)
       );
       process.exit(1);
-    } catch (e) {
+    } catch {
       // Directory doesn't exist, proceed
     }
 

@@ -1,8 +1,16 @@
 import type { MDXComponents } from 'mdx/types';
-import { isValidElement, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import {
+  isValidElement,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { ImageGrid, MermaidDiagram, ScrollWorkflow } from '@/features/blog/ui/components';
+import {
+  ImageGrid,
+  MermaidDiagram,
+  ScrollWorkflow,
+} from '@/features/blog/ui/components';
 
 // Dynamic imports for visualization components (code splitting)
 const BinarySearchVisualization = dynamic(() =>
@@ -47,7 +55,7 @@ function extractText(node: ReactNode): string {
   return '';
 }
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function getMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: (props) => (
       <h1

@@ -11,6 +11,19 @@ interface DPCell {
   status: 'empty' | 'calculating' | 'computed' | 'using';
 }
 
+function createInitialCells(limit: number): DPCell[] {
+  const newCells: DPCell[] = [];
+  for (let i = 0; i <= limit; i++) {
+    newCells.push({
+      index: i,
+      value: null,
+      status: 'empty',
+    });
+  }
+
+  return newCells;
+}
+
 // 3D Cell component
 function Cell3D({
   position,
@@ -182,15 +195,7 @@ export default function DPVisualization() {
 
   // Initialize DP table
   const initializeTable = () => {
-    const newCells: DPCell[] = [];
-    for (let i = 0; i <= n; i++) {
-      newCells.push({
-        index: i,
-        value: null,
-        status: 'empty',
-      });
-    }
-    setCells(newCells);
+    setCells(createInitialCells(n));
     setMessage('');
     setIsPlaying(false);
     setShowArrows(false);
@@ -199,7 +204,12 @@ export default function DPVisualization() {
   };
 
   useEffect(() => {
-    initializeTable();
+    setCells(createInitialCells(n));
+    setMessage('');
+    setIsPlaying(false);
+    setShowArrows(false);
+    setArrowFrom([]);
+    setArrowTo(-1);
   }, [n]);
 
   const sleep = (ms: number) =>
