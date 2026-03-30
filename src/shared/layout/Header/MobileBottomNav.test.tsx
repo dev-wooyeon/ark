@@ -1,4 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
+import { createElement, type ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import MobileBottomNav from './MobileBottomNav';
 
@@ -11,7 +12,7 @@ vi.mock('next/link', () => ({
     ...props
   }: {
     href: string;
-    children: React.ReactNode;
+    children: ReactNode;
   }) => (
     <a href={href} {...props}>
       {children}
@@ -25,9 +26,20 @@ vi.mock('framer-motion', () => ({
       children,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
+      initial?: unknown;
+      animate?: unknown;
+      transition?: unknown;
       [key: string]: unknown;
-    }) => <nav {...props}>{children}</nav>,
+    }) => {
+      const {
+        initial: _initial,
+        animate: _animate,
+        transition: _transition,
+        ...domProps
+      } = props;
+      return createElement('nav', domProps, children);
+    },
   },
 }));
 
@@ -47,7 +59,9 @@ describe('MobileBottomNav', () => {
     render(<MobileBottomNav pathname="/" visible />);
 
     expect(screen.getByRole('link', { name: '홈' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Engineering' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Engineering' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Life' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Resume' })).toBeInTheDocument();
   });
@@ -58,14 +72,18 @@ describe('MobileBottomNav', () => {
     const home = await screen.findByRole('link', { name: '홈' });
     expect(home).toHaveAttribute('aria-current', 'page');
 
-    const engineering = await screen.findByRole('link', { name: 'Engineering' });
+    const engineering = await screen.findByRole('link', {
+      name: 'Engineering',
+    });
     expect(engineering).not.toHaveAttribute('aria-current');
   });
 
   it('marks active item for nested engineering path', async () => {
     render(<MobileBottomNav pathname="/engineering/how-to-test" visible />);
 
-    const engineering = await screen.findByRole('link', { name: 'Engineering' });
+    const engineering = await screen.findByRole('link', {
+      name: 'Engineering',
+    });
     expect(engineering).toHaveAttribute('aria-current', 'page');
   });
 
@@ -77,7 +95,9 @@ describe('MobileBottomNav', () => {
 
     expect(lifeContent).toHaveClass('border-transparent');
     expect(lifeContent).toHaveClass('hover:bg-[var(--mobile-nav-hover-bg)]');
-    expect(lifeContent).toHaveClass('group-active:bg-[var(--mobile-nav-hover-bg)]');
+    expect(lifeContent).toHaveClass(
+      'group-active:bg-[var(--mobile-nav-hover-bg)]'
+    );
     expect(lifeContent).toHaveClass('min-h-14');
   });
 
@@ -85,8 +105,12 @@ describe('MobileBottomNav', () => {
     render(<MobileBottomNav pathname="/" visible />);
 
     const home = await screen.findByRole('link', { name: '홈' });
-    expect(home).toHaveClass('focus-visible:ring-[var(--mobile-nav-focus-ring)]');
-    expect(home).toHaveClass('focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]');
+    expect(home).toHaveClass(
+      'focus-visible:ring-[var(--mobile-nav-focus-ring)]'
+    );
+    expect(home).toHaveClass(
+      'focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]'
+    );
     expect(home).toHaveClass('touch-manipulation');
     expect(home).toHaveClass('active:scale-[0.97]');
   });
@@ -116,6 +140,8 @@ describe('MobileBottomNav', () => {
 
     const nav = screen.getByLabelText('모바일 하단 네비게이션');
     expect(nav).toHaveClass('fixed');
-    expect((nav as HTMLDivElement).getAttribute('aria-label')).toBe('모바일 하단 네비게이션');
+    expect((nav as HTMLDivElement).getAttribute('aria-label')).toBe(
+      '모바일 하단 네비게이션'
+    );
   });
 });

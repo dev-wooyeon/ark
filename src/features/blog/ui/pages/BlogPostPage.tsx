@@ -1,7 +1,14 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getFeedData, getAllFeedSlugs, getSeriesPosts } from '@/features/blog/services/post-repository';
-import { getMdxSource, parseHeadingsFromMdx } from '@/features/blog/services/markdown-parser';
+import {
+  getFeedData,
+  getAllFeedSlugs,
+  getSeriesPosts,
+} from '@/features/blog/services/post-repository';
+import {
+  getMdxSource,
+  parseHeadingsFromMdx,
+} from '@/features/blog/services/markdown-parser';
 import { Header, Container } from '@/shared/layout';
 import {
   ReadingProgress,
@@ -14,7 +21,7 @@ import PostViewTracker from '@/shared/analytics/components/PostViewTracker';
 import DwellTimeTracker from '@/shared/analytics/components/DwellTimeTracker';
 import ScrollDepthTracker from '@/shared/analytics/components/ScrollDepthTracker';
 import JsonLd from '@/shared/seo/JsonLd';
-import { useMDXComponents } from '@/features/blog/ui/mdx/components';
+import { getMDXComponents } from '@/features/blog/ui/mdx/components';
 import { SITE_URL } from '@/core/config/site';
 
 export async function generateStaticParams() {
@@ -80,6 +87,7 @@ export default async function BlogPostPage({
     day: 'numeric',
   });
   const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
+  const mdxComponents = getMDXComponents({});
 
   return (
     <>
@@ -140,7 +148,7 @@ export default async function BlogPostPage({
 
           {/* Content */}
           <div className="prose">
-            <Content components={useMDXComponents({})} />
+            <Content components={mdxComponents} />
           </div>
         </Container>
       </article>

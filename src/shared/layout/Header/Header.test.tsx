@@ -1,4 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
+import { createElement, type ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { pathnameState, setMockPathname } from '@/shared/testing/route-mocks';
 import Header from './Header';
@@ -15,7 +16,7 @@ vi.mock('next/link', () => ({
     ...props
   }: {
     href: string;
-    children: React.ReactNode;
+    children: ReactNode;
   }) => (
     <a href={href} {...props}>
       {children}
@@ -59,16 +60,40 @@ vi.mock('framer-motion', () => ({
       children,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
+      initial?: unknown;
+      animate?: unknown;
+      transition?: unknown;
       [key: string]: unknown;
-    }) => <header {...props}>{children}</header>,
+    }) => {
+      const {
+        initial: _initial,
+        animate: _animate,
+        transition: _transition,
+        ...domProps
+      } = props;
+      return createElement('header', domProps, children);
+    },
     div: ({
       children,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
+      initial?: unknown;
+      animate?: unknown;
+      exit?: unknown;
+      transition?: unknown;
       [key: string]: unknown;
-    }) => <div {...props}>{children}</div>,
+    }) => {
+      const {
+        initial: _initial,
+        animate: _animate,
+        exit: _exit,
+        transition: _transition,
+        ...domProps
+      } = props;
+      return createElement('div', domProps, children);
+    },
   },
 }));
 

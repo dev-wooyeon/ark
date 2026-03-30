@@ -27,7 +27,6 @@ function Node({
   isQueued: boolean;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
 
   useFrame(() => {
     if (meshRef.current) {
@@ -51,11 +50,7 @@ function Node({
 
   return (
     <group position={position}>
-      <mesh
-        ref={meshRef}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-      >
+      <mesh ref={meshRef}>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshStandardMaterial
           color={color}

@@ -93,8 +93,7 @@ export function useMotionMode(): UseMotionModeResult {
   useEffect(() => {
     setMotionModeState(readStoredMotionMode());
     const hasMatchMedia =
-      typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function';
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function';
     const mediaQuery = hasMatchMedia
       ? window.matchMedia('(prefers-reduced-motion: reduce)')
       : null;
@@ -105,7 +104,9 @@ export function useMotionMode(): UseMotionModeResult {
         return;
       }
 
-      setPrefersReducedMotion(event?.matches ?? mediaQuery.matches);
+      setPrefersReducedMotion(
+        event?.matches ?? getSystemPrefersReducedMotion()
+      );
     };
 
     const handleModeChanged = (event: Event) => {
