@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { createElement, type ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import MotionModeToggle from './MotionModeToggle';
 
@@ -26,15 +27,20 @@ vi.mock('framer-motion', () => ({
   motion: {
     button: ({
       children,
-      whileHover,
-      whileTap,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
       whileHover?: unknown;
       whileTap?: unknown;
       [key: string]: unknown;
-    }) => <button {...props}>{children}</button>,
+    }) => {
+      const {
+        whileHover: _whileHover,
+        whileTap: _whileTap,
+        ...domProps
+      } = props;
+      return createElement('button', domProps, children);
+    },
   },
 }));
 

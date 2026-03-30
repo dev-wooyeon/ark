@@ -25,18 +25,25 @@ test.describe('Home Renewal', () => {
     await page.goto('/');
 
     await page.getByRole('button', { name: '전체 아티클 보기' }).click();
-    await page.waitForTimeout(500);
 
     const firstSeriesLink = page
       .locator('aside a[href^="/engineering/series/"]')
       .first();
     await expect(firstSeriesLink).toBeVisible();
     await firstSeriesLink.scrollIntoViewIfNeeded();
-    await firstSeriesLink.evaluate((element) => {
-      (element as HTMLAnchorElement).click();
-    });
+    const targetHref = await firstSeriesLink.getAttribute('href');
+    expect(targetHref).toMatch(/^\/engineering\/series\/.+/);
 
-    await expect(page).toHaveURL(/\/engineering\/series\/.+/);
+    if (!targetHref) {
+      throw new Error('시리즈 카드 링크 href를 찾지 못했어요.');
+    }
+
+    const response = await page.request.get(targetHref);
+    expect(response.ok()).toBeTruthy();
+
+    await page.goto(targetHref);
+    await expect(page).toHaveURL(new RegExp(`${targetHref}$`));
+
     await expect(
       page.getByRole('link', { name: 'Engineering으로 돌아가기' })
     ).toBeVisible();

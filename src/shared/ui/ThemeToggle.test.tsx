@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { createElement, type ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { useTheme } from 'next-themes';
 import ThemeToggle from './ThemeToggle';
@@ -14,34 +15,42 @@ vi.mock('framer-motion', () => ({
   motion: {
     button: ({
       children,
-      whileHover,
-      whileTap,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
       whileHover?: unknown;
       whileTap?: unknown;
       [key: string]: unknown;
-    }) => <button {...props}>{children}</button>,
+    }) => {
+      const {
+        whileHover: _whileHover,
+        whileTap: _whileTap,
+        ...domProps
+      } = props;
+      return createElement('button', domProps, children);
+    },
     div: ({
       children,
-      initial,
-      animate,
-      exit,
-      transition,
       ...props
     }: {
-      children: React.ReactNode;
+      children: ReactNode;
       initial?: unknown;
       animate?: unknown;
       exit?: unknown;
       transition?: unknown;
       [key: string]: unknown;
-    }) => <div {...props}>{children}</div>,
+    }) => {
+      const {
+        initial: _initial,
+        animate: _animate,
+        exit: _exit,
+        transition: _transition,
+        ...domProps
+      } = props;
+      return createElement('div', domProps, children);
+    },
   },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock('@/shared/analytics/lib/analytics', () => ({

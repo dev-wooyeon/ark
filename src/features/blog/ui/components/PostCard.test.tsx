@@ -1,14 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import type { ImgHTMLAttributes } from 'react';
+import { createElement, type ImgHTMLAttributes, type ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
 import PostCard from './PostCard/PostCard';
 import type { FeedData } from '@/domains/post/model/types';
 
 vi.mock('next/image', () => ({
-  default: (props: ImgHTMLAttributes<HTMLImageElement>) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img {...props} />
-  ),
+  default: ({
+    alt,
+    fill: _fill,
+    priority: _priority,
+    ...props
+  }: ImgHTMLAttributes<HTMLImageElement> & {
+    fill?: boolean;
+    priority?: boolean;
+  }) => createElement('img', { ...props, alt: alt ?? '' }),
 }));
 
 vi.mock('next/link', () => ({
@@ -18,7 +23,7 @@ vi.mock('next/link', () => ({
     ...props
   }: {
     href: string;
-    children: React.ReactNode;
+    children: ReactNode;
   }) => (
     <a href={href} {...props}>
       {children}
@@ -48,7 +53,9 @@ describe('PostCard', () => {
   });
 
   it('renders featured variant styles', () => {
-    const { container } = render(<PostCard post={basePost} variant="featured" />);
+    const { container } = render(
+      <PostCard post={basePost} variant="featured" />
+    );
     const link = container.querySelector('a');
 
     expect(link).toHaveClass('bg-gradient-to-br');

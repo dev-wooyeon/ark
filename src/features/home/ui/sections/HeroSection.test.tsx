@@ -1,12 +1,20 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import type { ImgHTMLAttributes } from 'react';
+import { createElement, type ImgHTMLAttributes } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import type { FeedData } from '@/domains/post/model/types';
 import type { SeriesSummary } from '@/features/blog/model/series-group';
 import HeroSection from './HeroSection';
 
 vi.mock('next/image', () => ({
-  default: (props: ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />,
+  default: ({
+    alt,
+    fill: _fill,
+    priority: _priority,
+    ...props
+  }: ImgHTMLAttributes<HTMLImageElement> & {
+    fill?: boolean;
+    priority?: boolean;
+  }) => createElement('img', { ...props, alt: alt ?? '' }),
 }));
 
 vi.mock('@/shared/analytics/lib/analytics', () => ({
@@ -163,7 +171,9 @@ describe('HeroSection', () => {
       />
     );
 
-    const scrollButton = screen.getByRole('button', { name: '전체 아티클 보기' });
+    const scrollButton = screen.getByRole('button', {
+      name: '전체 아티클 보기',
+    });
     const scrollLabel = within(scrollButton).getByText('Scroll down');
 
     expect(scrollLabel).toHaveStyle({ fontSize: '10px' });

@@ -1,5 +1,5 @@
 import { act, render } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { useEffect, useState } from 'react';
 import { isBlogPostPath, useScrollVisibility } from './useScrollVisibility';
 import {
@@ -149,9 +149,9 @@ describe('useScrollVisibility', () => {
     let stateText = await findByTestId('visibility-state');
     expect(stateText).toHaveTextContent('T-T');
 
-    expect(document.body.style.getPropertyValue('--mobile-bottom-nav-offset')).toBe(
-      'var(--mobile-bottom-nav-height)'
-    );
+    expect(
+      document.body.style.getPropertyValue('--mobile-bottom-nav-offset')
+    ).toBe('var(--mobile-bottom-nav-height)');
 
     act(() => {
       setWindowScrollY(120);
@@ -159,7 +159,9 @@ describe('useScrollVisibility', () => {
     });
     stateText = await findByTestId('visibility-state');
     expect(stateText).toHaveTextContent('F-F');
-    expect(document.body.style.getPropertyValue('--mobile-bottom-nav-offset')).toBe('0px');
+    expect(
+      document.body.style.getPropertyValue('--mobile-bottom-nav-offset')
+    ).toBe('0px');
 
     act(() => {
       setWindowScrollY(0);
@@ -167,8 +169,8 @@ describe('useScrollVisibility', () => {
     });
     stateText = await findByTestId('visibility-state');
     expect(stateText).toHaveTextContent('T-T');
-    expect(document.body.style.getPropertyValue('--mobile-bottom-nav-offset')).toBe(
-      'var(--mobile-bottom-nav-height)'
-    );
+    expect(
+      document.body.style.getPropertyValue('--mobile-bottom-nav-offset')
+    ).toBe('var(--mobile-bottom-nav-height)');
   });
 });
