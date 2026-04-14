@@ -1,167 +1,289 @@
-# 1. 프롤로그
+데이터 엔지니어링 역량을 강화하는 과정에서 1BRC 같은 배치 중심 실험을 해봤지만, 기술이 돌아가는지만 확인하는 방식으로는 부족하다고 느꼈다.  
+핵심은 결과 자체보다 설계부터 운영 관측, 병목 분석, 복구 가능성까지 포함해 하나의 시스템을 끝까지 책임지며 현재 시스템에 맞는 기준을 스스로 세워보는 데 있다고 봤다.
 
-데이터 엔지니어링에 관심을 갖고 10억 행 챌린지(1BRC)를 해보면서, 단순히 기술이 돌아가는지만 확인하는 방식으로는 부족하다는 걸 느꼈어요.
+그 과정에서 특히 끌린 주제가 스트리밍 처리였다.  
+정확한 집계, 지연 이벤트 처리, 상태 보존, 운영 안정성을 한 번에 검증할 수 있기 때문이다. 그래서 스트림 처리의 핵심 문제가 비교적 압축적으로 드러나는 CTR 집계를 개인 프로젝트 주제로 잡았다.
 
-핵심은 결과 자체보다 설계부터 운영까지 책임지며, 현재 시스템에 맞는 기준을 스스로 세울 수 있어야 한다는 점이었어요.
+실시간 CTR 집계는 단순한 카운터 문제가 아니었다.  
+조회와 클릭 이벤트는 같은 시점에 도착하지 않았고, 파티션 분포도 고르지 않았으며, 집계 결과는 운영 화면과 분석 저장소가 동시에 신뢰할 수 있어야 했다.
 
-그 과정에서 스트리밍 데이터를 다루는 구조에 특히 끌렸어요.
-정확한 집계, 지연 이벤트 처리, 운영 안정성까지 함께 다뤄야 했기 때문이에요.
+이 글은 Flink 기반 CTR 파이프라인을 개인 프로젝트로 설계하면서 어떤 제약을 먼저 정의했고, 워터마크와 윈도우를 어떤 기준으로 결정했으며, 실제 병목을 어떻게 확인하고 수정했는지 정리한 기록이다.
 
-그래서 광고 도메인의 CTR을 주제로 잡았어요.
-이 글에서는 CTR 집계가 왜 스트림 처리에서 까다로운지, 어떤 기준으로 설계와 운영 결정을 내렸는지, 실제 구성과 테스트 전략까지 순서대로 정리해요.
+![CTR 파이프라인 전체 구조](/images/posts/실시간-CTR-파이프라인-구축기/c6caa47f9482.png)
 
-## 1.1 기능 파악
+프로젝트 저장소: [ctr-pipeline](https://github.com/dev-wooyeon/ctr-pipeline)
 
-CTR은 조회수와, 클릭의 각 데이터가 카프카 이벤트가 들어오면 서버에서 수신하고 데이터를 가공해요.
+## 왜 CTR 집계가 운영 문제인가
 
-그러나 이벤트는 항상 시간 순서대로 도착하지 않고, 네트워크 지연과 파티션 편향 문제도 존재한다는 점을 파악했어요.
+CTR은 보통 아래 두 이벤트를 합쳐 계산한다.
 
-따라서 정확한 윈도우 집계, 지연 이벤트 처리, 높은 처리량·낮은 지연을 동시에 만족하는 것이 중요하다고 판단했어요.
+- `impression`: 노출
+- `click`: 클릭
 
-## 1.2 아키텍처 설계
+문제는 이 두 이벤트가 항상 같은 순서로, 같은 지연으로 들어오지 않는다는 점이다.
 
-![](/images/posts/실시간-CTR-파이프라인-구축기/c6caa47f9482.png)
+- 네트워크 지연으로 클릭이 더 늦게 도착할 수 있다.
+- Kafka 파티션 분포가 한쪽으로 쏠릴 수 있다.
+- 집계는 짧은 윈도우 단위로 안정적으로 잘려야 한다.
+- 중복 또는 누락은 CTR 오차로 바로 이어진다.
 
-## 1.3 프로젝트 저장소
+즉, 이 시스템의 핵심은 "숫자를 빨리 계산하는 것"이 아니라 아래 조건을 동시에 만족시키는 것이었다.
 
-https://github.com/dev-wooyeon/demo-flink-product
+- 이벤트 순서가 어긋나도 결과를 설명할 수 있어야 한다.
+- 지연 이벤트를 받되, 레이턴시는 통제해야 한다.
+- 운영 API와 분석 저장소가 같은 결과를 기준으로 움직여야 한다.
+- 병목이 생겼을 때 Flink UI와 로그만으로 원인을 좁힐 수 있어야 한다.
 
----
+## 잘못 설계하면 어떤 비용이 생기는가
 
-# 2. 핵심 개념
+개인 프로젝트였지만, 의미 있는 검증을 하려면 운영 문제를 함께 가정해야 했다.
 
-## 2.1 CTR 계산이 스트림 처리에서 어려운 이유
+- 지연 클릭을 충분히 흡수하지 못하면 저성과 상품과 고성과 상품이 뒤바뀐 것처럼 보일 수 있다.
+- 집계 결과가 서빙 API와 분석 저장소에서 다르게 보이면, 숫자 자체보다 시스템 신뢰가 먼저 무너진다.
+- 파티션 분포와 병렬도가 맞지 않으면 처리량이 떨어지는 것보다 원인 추적 비용이 더 커진다.
+- 체크포인트가 불안정하면 장애 이후 어디까지 안전하게 처리됐는지 설명할 수 없게 된다.
 
-1. Impression·Click 간의 시계열 상관성이 필요해요.
+결국 CTR 오차는 단순한 비율 계산 실수가 아니라, 잘못된 운영 판단과 디버깅 비용으로 이어질 수 있다.  
+그래서 이 프로젝트에서는 빠른 데모보다 설명 가능한 결과와 복구 가능한 상태를 우선순위에 뒀다.
 
-2. 이벤트가 지연되거나 순서가 뒤바뀌어 도착할 수 있어요.
+## 시스템 요구사항과 제약
 
-3. CTR 계산은 짧은 시간 창(window) 단위로 이루어져야 해요.
+| 항목 | 기준 |
+| --- | --- |
+| 입력 소스 | Kafka `impression`, `click` 토픽 |
+| 집계 기준 | 상품 단위 CTR |
+| 목표 처리 | 초당 수천 건 이상 안정 처리 |
+| 정확성 | 중복/누락에 민감하므로 Exactly-once 우선 |
+| 지연 허용 | 늦게 도착한 이벤트를 일부 흡수해야 함 |
+| 결과 소비처 | Redis, ClickHouse, DuckDB, FastAPI |
+| 실험 환경 | MacBook Air M1, 메모리 제약이 있는 로컬 환경 |
 
-4. Out-of-order 이벤트를 배제하면 정확성이 떨어지고, 과도하게 허용하면 지연(latency)이 증가해요.
+여기서 중요한 제약은 "운영 수준의 판단을 로컬 환경에서도 검증해야 한다"는 점이었다.  
+리소스가 넉넉한 환경에서만 성립하는 구조는 초기에 잘못된 자신감을 만들 수 있다고 봤다.
 
-## 2.2 이벤트 시간(Event Time) 기반 처리
+### 실험 환경 상세
 
-Flink는 Processing Time 대신 Event Time 기반 처리를 권장해요.
+초기 실험은 아래 조합으로 진행했다.
 
-본 파이프라인은 아래 기준으로 설계했어요.
+- Kafka 3 broker
+- Flink JobManager 1, TaskManager 1
+- Redis + RedisInsight
+- ClickHouse
+- FastAPI serving layer
+- Superset
 
-1. 워터마크(Watermark): 최대 5초 지연을 허용
+즉, "단순히 Flink job 하나만 돌린다"가 아니라, 실제로 결과를 읽고 확인하는 운영 구성까지 함께 올린 상태에서 검증했다.
 
-2. 텀블링 윈도우(Tumbling Window): 10초
+## 설계 결정 요약
 
-3. Allowed Lateness: 추가 5초 허용
+| 의사결정 | 선택 | 이유 |
+| --- | --- | --- |
+| 시간 기준 | Event Time | 실제 발생 시각 기준으로 집계해야 정확도를 설명할 수 있기 때문이다. |
+| 윈도우 | 10초 Tumbling Window | 5초는 변동성이 컸고, 30초는 응답성이 너무 늦었다. |
+| 워터마크 | Out-of-Order 5초 | 정확도와 레이턴시를 동시에 맞춘 실험값이었다. |
+| 추가 지연 허용 | Allowed Lateness 5초 | 늦게 도착한 이벤트를 일정 수준 흡수하기 위해 필요했다. |
+| 상태 보존 | Checkpoint + Exactly-once | CTR 오차를 작게 보지 않기 위해 기본 전제로 잡았다. |
+| 싱크 전략 | Redis + ClickHouse + DuckDB | 서빙, 분석, 로컬 검증 목적을 분리했다. |
+| 병렬도 기준 | Kafka 파티션 수와 정합 유지 | Backpressure를 줄이기 위해 처리 단계의 균형을 맞췄다. |
 
-이 조합의 근거는 뒤의 Decision 섹션에서 상세히 설명해요.
+이 프로젝트에서 중요한 점은 "Flink를 썼다"가 아니었다.  
+각 파라미터가 어떤 운영 문제를 해결하기 위해 존재하는지 설명할 수 있게 만드는 것이 더 중요했다.
 
-## 2.3 상태(State) 기반 집계
+## 시스템 구성
 
-CTR 계산의 기초 단위는 EventCount(Impression, Click 누적)예요.
+### 전체 흐름
 
-윈도우마다 EventCount 상태가 만들어지고 업데이트돼요.
-
-코드는 Reference 섹션에서 제공해요.
-
-## 2.4 Exactly-Once보장
-
-CTR은 작은 누락이나 중복도 큰 오차가 되므로 Exactly-Once 처리 모드는 필수예요.
-
-본 프로젝트는 다음을 기반으로 Exactly-Once를 보장해요.
-
-1. Kafka offset을 체크포인트에 포함
-
-2. Flink CheckpointingMode EXACTLY_ONCE
-
-3. RETAIN_ON_CANCELLATION으로 안전한 상태 보존
-
-![](/images/posts/실시간-CTR-파이프라인-구축기/8dd7886a1d3c.png)
-
----
-
-# 3. 설계 의사결정
-
-## 3.1 윈도우 길이 선택
-
-아래는 실제 실험 기반 의사결정이에요.
-
-1. 5초
-
-   노이즈가 크고 CTR 값 변동이 지나치게 민감했어요.
-
-2. 10초
-
-   지연·정확성·계산 안정성 비교적 균형적이여서 최종 선택했어요.
-
-3. 30초
-
-   응답성이 너무 낮고 실시간 모니터링 용도로 부적합해 보였어요.
-
-## 3.2 Allowed Lateness 5초
-
-지연 이벤트를 수용하지 않으면 CTR 정확도가 떨어졌어요.
-
-5초는 실제 네트워크 지연 분포에서 95% 지점에 해당하여 선택했어요.
-
-## 3.3 워터마크 Out-of-Order 5초
-
-워터마크 지연을 늘리면 정확도는 증가하지만 레이턴시는 증가해요.
-
-본 파이프라인은 Throughput–Latency 트레이드오프 상 최적값을 5초로 설정했어요.
-
-## 3.4 멀티 싱크 전략 선택
-
-싱크는 Redis, ClickHouse, DuckDB의 세 가지로 분리하는 방식으로 전략을 설정하였습니더.
-
-1. Redis
-
-   서빙(실시간 API)용. 빠른(밀리초) 응답.
-
-2. ClickHouse
-
-   OLAP 및 히스토리 분석용. (MergeTree Engine을 사용)
-
-3. DuckDB
-
-   로컬 개발, 디버깅용
-
-## 3.5 병렬도(Parallelism)와 파티션 대응
-
-Kafka partitions = Flink 병렬도 = Sink 병렬도
-
-이 정합이 깨지는 순간 Backpressure가 발생한다는 점을 알 수 있었어요.
-
-실험 결과로,
-
-Parallelism 1에서는 Redis·ClickHouse가 포화되어 지연 급증했어요.
-
-하드웨어는 `Macbook Air M1`, `Memory 16GB` 였어요.
-
-### 3.5.1 당시 도커 컨테이너 상태
-
-| CONTAINER ID | NAME              | CPU %   | MEM USAGE / LIMIT   | MEM %  | NET I/O         | BLOCK I/O       |
-| ------------ | ----------------- | ------- | ------------------- | ------ | --------------- | --------------- |
-| 4e796f1fb8cb | kafka-ui          | 0.16%   | 307.5MiB / 3.827GiB | 7.85%  | 1.14MB / 2.85MB | 186MB / 117MB   |
-| cfef347c1c0b | kafka2            | 127.08% | 330.2MiB / 3.827GiB | 8.43%  | 859MB / 929MB   | 33.2MB / 319MB  |
-| 4288ee2e1646 | kafka3            | 41.49%  | 293.9MiB / 3.827GiB | 7.50%  | 698MB / 552MB   | 34.4MB / 318MB  |
-| fbf6b8aa4bc4 | kafka1            | 77.39%  | 345.4MiB / 3.827GiB | 8.81%  | 811MB / 817MB   | 81.9MB / 312MB  |
-| fb27f07ba10e | superset          | 1.26%   | 101.1MiB / 3.827GiB | 2.58%  | 53.9kB / 2.3MB  | 391MB / 163MB   |
-| 678f5e428704 | ctr-api           | 0.60%   | 23.31MiB / 3.827GiB | 0.59%  | 261kB / 272kB   | 60.9MB / 43.4MB |
-| 45b518fceab4 | flink-taskmanager | 55.83%  | 756.4MiB / 3.827GiB | 19.30% | 686MB / 262MB   | 175MB / 332MB   |
-| 46ebe361fcda | redisinsight      | 0.00%   | 26.65MiB / 3.827GiB | 0.68%  | 1.03MB / 65.8kB | 151MB / 67.2MB  |
-| c207c6890b09 | redis             | 0.51%   | 1.832MiB / 3.827GiB | 0.05%  | 264kB / 252kB   | 19.5MB / 2.98MB |
-| d9bd0b068af2 | flink-jobmanager  | 1.89%   | 767.4MiB / 3.827GiB | 19.58% | 168MB / 168MB   | 458MB / 459MB   |
-| ab8c8cfa95c5 | clickhouse        | 8.72%   | 310.9MiB / 3.827GiB | 7.93%  | 293kB / 209kB   | 558MB / 212MB   |
-| 5f09c7acfd18 | zookeeper         | 7.05%   | 80.93MiB / 3.827GiB | 2.07%  | 228kB / 203kB   | 70.2MB / 36.2MB |
-
-### 3.5.2 Flink BackPressure 확인
-
-![](/images/posts/실시간-CTR-파이프라인-구축기/7697dd66f3bb.png)
-
-Flink UI를 확인 했을 때 초당 812건의 데이터를 처리할 수 있는 것을 확인할 수 있었고, 25분 정도 돌려 보았을 때 120만건 정도 처리할 수 있었어요.
-
-### 3.5.3 K6 Serving API 부하 테스트
-
+```text
+Impressions / Clicks
+  -> Kafka
+  -> Flink
+  -> Redis / ClickHouse / DuckDB
+  -> FastAPI
 ```
+
+운영 확인도 함께 하기 위해 Kafka UI와 RedisInsight를 붙였다.  
+스트림 시스템은 내부 상태를 보지 못하면 장애 재현이 어려워지기 때문에, 초기부터 관측 도구를 같이 두는 편이 낫다고 판단했다.
+
+### 애플리케이션 구조
+
+```text
+flink-app/src/main/kotlin/com/example/ctr/
+├── domain/
+│   ├── model/
+│   │   ├── Event.kt
+│   │   ├── EventCount.kt
+│   │   └── CTRResult.kt
+│   └── service/
+│       ├── EventCountAggregator.kt
+│       └── CTRResultWindowProcessFunction.kt
+├── application/
+│   └── CtrJobService.kt
+├── infrastructure/
+│   ├── flink/
+│   │   ├── source/
+│   │   └── sink/
+│   └── config/
+└── CtrApplication.kt
+```
+
+구조는 의도적으로 세 층으로 나눴다.
+
+- `domain`: 순수 집계 규칙
+- `application`: Flink job orchestration
+- `infrastructure`: Kafka, Redis, ClickHouse, DuckDB 연동
+
+이렇게 나누면 집계 규칙 검증과 외부 시스템 검증을 분리할 수 있다.
+
+## 데이터 흐름과 상태 관리
+
+파이프라인의 기본 흐름은 아래와 같다.
+
+1. `impression`과 `click` 이벤트를 Kafka로 수집한다.
+2. Flink가 이벤트 시간을 기준으로 토픽을 소비한다.
+3. 상품 단위로 `keyBy` 한 뒤 10초 단위로 집계한다.
+4. 결과를 Redis, ClickHouse, DuckDB에 각각 쓴다.
+5. FastAPI는 Redis를 통해 최신 결과를 제공한다.
+
+### 이벤트 시간과 윈도우 상태
+
+CTR 계산은 윈도우마다 아래 상태를 유지하는 방식으로 구현했다.
+
+```kotlin
+data class EventCount(
+    val productId: String,
+    val impressions: Long,
+    val clicks: Long,
+    val windowStart: Long,
+    val windowEnd: Long
+)
+```
+
+이 모델은 단순하지만 중요한 장점이 있었다.
+
+- 집계 단위를 명확하게 표현할 수 있다.
+- 결과 저장소가 달라도 동일한 계약으로 전달할 수 있다.
+- 테스트에서 순수 로직 검증이 쉬워진다.
+
+### Exactly-once 경계
+
+CTR은 "한두 건 정도 차이"를 허용하기 어려운 지표였다.  
+그래서 초기부터 아래 조합을 기본값으로 잡았다.
+
+```kotlin
+env.enableCheckpointing(10_000)
+env.checkpointConfig.checkpointingMode = CheckpointingMode.EXACTLY_ONCE
+env.checkpointConfig.externalizedCheckpointCleanup =
+    CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION
+```
+
+![Exactly-once 보장 구성](/images/posts/실시간-CTR-파이프라인-구축기/8dd7886a1d3c.png)
+
+이 선택은 처리량보다 복구 가능성과 재현 가능성을 우선한 결정이었다.  
+체크포인트를 보존해두면 장애 후에도 "어디까지 안전하게 처리됐는가"를 판단할 수 있다.
+
+## 파라미터를 이렇게 결정했다
+
+### 10초 윈도우
+
+실험 초기에 5초, 10초, 30초를 비교했다.
+
+- 5초: CTR 값이 지나치게 흔들려 운영 지표로 보기 어려웠다.
+- 10초: 응답성과 안정성의 균형이 가장 좋았다.
+- 30초: 지표 안정성은 좋았지만 실시간 모니터링 용도로는 너무 느렸다.
+
+여기서 배운 점은 분명했다.  
+윈도우 길이는 기술 파라미터가 아니라 "누가 어떤 속도로 결과를 소비하는가"에 맞춰 정해야 한다.
+
+### 워터마크 5초
+
+워터마크를 너무 짧게 두면 늦게 도착한 클릭을 버리게 되고, 너무 길게 두면 결과가 너무 늦어진다.  
+이번 실험에서는 5초가 가장 현실적인 균형점이었다.
+
+- 5초 미만: 지연 이벤트 손실이 눈에 띄게 늘었다.
+- 5초: 정확도 저하를 줄이면서 결과 반영 속도도 유지했다.
+- 5초 초과: 레이턴시 증가 대비 체감 이득이 크지 않았다.
+
+### Allowed Lateness 5초
+
+워터마크만으로는 늦게 온 이벤트를 충분히 흡수하기 어려웠다.  
+그래서 추가로 5초를 더 허용해 늦은 클릭 일부를 집계에 반영했다.
+
+핵심은 "무한히 기다리는 것"이 아니라 "운영상 설명 가능한 선에서만 기다리는 것"이었다.
+
+## 트레이드오프를 비교하며 정리한 선택 기준
+
+이번 글에서 적은 최종 구성은 처음부터 정답으로 정해져 있던 것이 아니었다.  
+현재 남아 있는 기록 기준으로, 당시에는 여러 선택지를 비교하며 어떤 트레이드오프를 감수할지 먼저 정리해야 했다.
+
+| 선택지 | 고민한 트레이드오프 | 최종 판단 |
+| --- | --- | --- |
+| 5초 윈도우 | CTR 값 변동이 지나치게 커서 운영 지표로 보기 어려웠다. | 10초로 늘려 응답성과 안정성의 균형을 맞췄다. |
+| 30초 윈도우 | 지표는 더 안정적이지만 실시간 모니터링 용도로는 반응이 너무 늦었다. | 10초 윈도우를 유지했다. |
+| 더 짧은 워터마크 | 늦게 도착한 클릭 손실이 늘어 정확도 설명이 어려워졌다. | Out-of-Order 5초를 택했다. |
+| Processing Time 중심 집계 | 네트워크 지연이나 시스템 부하에 따라 늦은 이벤트가 쉽게 제외될 수 있었다. | Event Time 기준으로 고정했다. |
+| 단일 결과 저장소 | 빠른 조회는 가능해도 분석, 교차 검증, 로컬 디버깅을 한 번에 만족시키기 어려웠다. | Redis, ClickHouse, DuckDB로 역할을 분리했다. |
+| 파티션-병렬도 불일치 | Backpressure가 생겨도 어느 단계에서 막히는지 읽기가 어려웠다. | Kafka 파티션과 Flink, 싱크 병렬도를 정합시켰다. |
+
+## 운영 중 실제로 부딪힌 병목
+
+### 1. Backpressure
+
+가장 먼저 드러난 문제는 Backpressure였다.  
+Kafka 파티션, Flink 병렬도, 싱크 병렬도의 균형이 깨지면 특정 구간에서 처리량이 급격히 떨어졌다.
+
+![Flink Backpressure 확인 화면](/images/posts/실시간-CTR-파이프라인-구축기/7697dd66f3bb.png)
+
+당시 로컬에서 확인한 대표 컨테이너 상태는 아래와 같았다.
+
+| 이름 | CPU | 메모리 |
+| --- | --- | --- |
+| `kafka1` | 77.39% | 345.4MiB |
+| `kafka2` | 127.08% | 330.2MiB |
+| `kafka3` | 41.49% | 293.9MiB |
+| `flink-taskmanager` | 55.83% | 756.4MiB |
+| `flink-jobmanager` | 1.89% | 767.4MiB |
+| `clickhouse` | 8.72% | 310.9MiB |
+| `ctr-api` | 0.60% | 23.31MiB |
+
+로컬 환경에서도 이미 TaskManager와 JobManager가 각각 700MiB 이상을 쓰고 있었고, Kafka broker 3개까지 같이 떠 있는 상태였다.  
+즉, 단순히 "맥북이라 느리다"가 아니라, 실제로 전체 파이프라인 구성이 자원 압박을 만들고 있다는 점이 먼저 확인됐다.
+
+Flink UI 기준으로는 초당 약 812건 처리, 25분 실행 시 약 120만 건 처리가 가능했다.  
+문제는 평균 처리량보다도 특정 구간에서 병목이 몰릴 때 전체 파이프라인이 급격히 흔들린다는 점이었다.
+
+이 시점의 대응은 두 단계였다.
+
+1. 파티션 수를 3에서 6, 다시 12까지 늘렸다.
+2. Flink와 싱크 병렬도를 파티션 수와 맞췄다.
+
+이 변경 이후, 병목은 "Flink가 느리다"가 아니라 "정합이 깨진 단계가 있다"는 식으로 더 정확히 읽히기 시작했다.
+
+### 2. Serving API 병목
+
+로컬 부하 테스트에서는 집계보다 서빙 계층이 먼저 흔들렸다.
+
+부하 테스트 조건은 아래와 같았다.
+
+- 대상: FastAPI 기반 CTR 조회 API
+- 가상 사용자 수: 최대 20 VUs
+- 목표: `p(95) < 1000ms`
+- 실행 시간: 35초
+
+요약 수치만 보면 아래와 같다.
+
+```text
+p(95) = 6.41s
+avg = 1.89s
+dropped_iterations = 127
+http_req_failed = 0.00%
+```
+
+즉, 오류는 없었지만 느려서 목표 SLO를 전혀 맞추지 못한 상태였다.
+
+<details>
+<summary>K6 raw output</summary>
+
+```text
 █ THRESHOLDS
 
     http_req_duration
@@ -179,15 +301,11 @@ Flink UI를 확인 했을 때 초당 812건의 데이터를 처리할 수 있는
     checks_succeeded...: 100.00% 450 out of 450
     checks_failed......: 0.00%   0 out of 450
 
-    ✓ status is 200
-    ✓ json body is present
-
     CUSTOM
     response_time..................: avg=1.9s  min=6ms    med=1.12s max=8.42s p(90)=5.37s p(95)=6.41s
 
     HTTP
     http_req_duration..............: avg=1.89s min=6.09ms med=1.12s max=8.42s p(90)=5.37s p(95)=6.41s
-      { expected_response:true }...: avg=1.89s min=6.09ms med=1.12s max=8.42s p(90)=5.37s p(95)=6.41s
     http_req_failed................: 0.00%  0 out of 225
     http_reqs......................: 225    6.02747/s
 
@@ -196,177 +314,65 @@ Flink UI를 확인 했을 때 초당 812건의 데이터를 처리할 수 있는
     iteration_duration.............: avg=1.9s  min=6.78ms med=1.13s max=8.43s p(90)=5.38s p(95)=6.41s
     iterations.....................: 225    6.02747/s
     vus............................: 20     min=0        max=20
-    vus_max........................: 20     min=6        max=20
-
-    NETWORK
-    data_received..................: 194 kB 5.2 kB/s
-    data_sent......................: 18 kB  482 B/s
 
 running (0m37.3s), 00/20 VUs, 225 complete and 0 interrupted iterations
 ctr_load ✓ [======================================] 00/20 VUs  35s  10.00 iters/s
 ```
 
-로컬 환경이라 서빙 API의 응답이 1초내로 동작하는 것을 기대했지만 노트북이 혹사당하여 응답 자체가 지연된다는 점을 확인할 수 있었어요.
+</details>
 
----
+원인은 단순했다.
 
-# 4. 시스템 구성
+- Redis 조회 자체보다 API 계층과 직렬화 비용이 컸다.
+- 로컬 환경에서 불필요한 계층이 전체 실험 속도를 잡아먹고 있었다.
 
-![](/images/posts/실시간-CTR-파이프라인-구축기/a5cac3289908.png)
+이 문제는 이후 성능 개선 단계에서 Redis와 Serving API 구조를 다시 점검하는 계기가 됐다.  
+즉, 초기 아키텍처는 "기능적으로 돌아가는가"를 증명했지만, 운영 경로를 최적화하려면 서빙 계층 자체를 다시 설계해야 했다.
 
-## 4.1 전체 데이터 흐름
+### 3. 체크포인트 장애와 수정 과정
 
-Impressions/Clicks → Kafka → Flink → Redis/ClickHouse/DuckDB → FastAPI
+기존 기록에는 배포 직후 체크포인트 타임아웃이 연속으로 발생했다는 내용이 남아 있다.  
+정확한 timeout 수치까지 보존되지는 않았지만, 당시 핵심 문제는 로컬 자원 제약 환경에서 체크포인트 주기, 병렬도, 윈도우 상태 크기가 함께 맞물리며 복구 경계가 불안정해졌다는 점이었다.
 
-![](/images/posts/실시간-CTR-파이프라인-구축기/99dd367bd82c.png)
+당시에는 아래 세 가지 방향으로 조정했다.
 
-Flink는 웹 UI를 제공하고, Kafka랑 redis는 UI를 제공하지 않기 때문에, 직접 눈으로 보고 확인 할 수 있도록 각 provectuslabs/kafka-ui와 redis/redisinsight를 사용하여 확인 할 수 있었어요.
+1. 체크포인트 주기와 timeout을 완화했다.
+2. 병렬도를 다시 맞춰 특정 단계에 부하가 몰리지 않게 조정했다.
+3. 윈도우 상태를 줄여 체크포인트가 잡아야 할 상태 크기를 줄였다.
 
-## 4.2 Flink 파이프라인 단계
+이 사례가 중요한 이유는 성능 문제가 아니라 신뢰성 문제였기 때문이다.  
+Exactly-once를 선언하는 것과 실제로 복구 가능한 상태를 유지하는 것은 별개의 문제였고, 체크포인트가 흔들리면 그 차이가 바로 드러났다.
 
-![](/images/posts/실시간-CTR-파이프라인-구축기/bfc4e38df326.png)
+### 4. 파티션 Skew
 
-이벤트 생성부터 API 응답까지의 전체 흐름은,
+`productId` 분포가 고르지 않으면 특정 파티션에 lag가 몰렸다.  
+이런 Skew 문제는 스트림 처리에서 자주 보이지만, 실제로 겪고 나서야 "키 설계도 운영 설계"라는 점이 선명해졌다.
 
-Impression과 Click 이벤트가 각각 0.001초, 0.002초 간격으로 생성되어 Kafka 토픽으로 전송돼요.
+이번 단계에서는 파티션 수 확장과 병렬도 정합으로 대응했지만, 장기적으로는 아래 두 가지가 필요하다고 판단했다.
 
-이후 Flink가 두 토픽의 데이터를 소비해서 10초 윈도우 단위로 CTR을 계산하고, 결과를 Redis에 저장해요.
+- 키 분포 분석 자동화
+- 특정 상품군 쏠림을 고려한 샤딩 전략
 
-저장된 Redis의 결과는 FastAPI를 통해 Redis에서 데이터를 읽어 REST API로 제공하는 흐름이에요.
+## 변경 전후 비교표
 
-## 4.3 Flink 구성
+현재 소스에 남아 있는 기록만 기준으로, 주요 조정 전후를 정리하면 아래와 같다.  
+일부 항목은 정확한 수치 대신 당시 관찰 결과와 조정 방향을 기록했다.
 
-### 4.3.1 핵심 설정
+| 항목 | 변경 전 | 변경 후 | 관찰 결과 |
+| --- | --- | --- | --- |
+| 윈도우 길이 | 5초 | 10초 | 5초에서 보이던 변동성이 줄고 운영 지표로 읽기 쉬워졌다. |
+| 윈도우 길이 | 30초 | 10초 | 응답이 늦어지던 구성을 버리고 실시간 모니터링에 맞췄다. |
+| 이벤트 시간 처리 | Processing Time에 가까운 단순 처리 가정 | Event Time + Watermark + Allowed Lateness | 지연 이벤트를 설명 가능한 범위 안에서 반영할 수 있게 됐다. |
+| 파티션/병렬도 | Parallelism 1과 정합이 깨진 상태 | 파티션 3 -> 6 -> 12, 병렬도 정합 유지 | Backpressure 원인을 더 정확히 읽을 수 있게 됐다. |
+| 체크포인트 | 배포 직후 timeout 연속 발생 | 주기/timeout 완화, 병렬도 조정, 상태 축소 | 실험이 체크포인트 실패에 계속 막히지 않도록 안정화했다. |
+| 서빙 API | `p(95) < 1000ms` 목표 대비 `p95 = 6.41s` | 병목 원인을 API 계층과 직렬화 비용으로 식별 | 이후 성능 개선 단계에서 서빙 구조를 재검토하는 기준이 생겼다. |
 
-- 윈도우: 10초 Tumbling Window
-- 시간 기준: Event Time
-- 워터마크: 2초
-- Allowed Lateness: 5초
+## 검증 방법
 
-CTR 같이 집계하는 비지니스는 이벤트 발생 시간으로 집계하는 것이 맞다고 판단했어요.
+### 단위 테스트
 
-Processing TIme을 사용하면 네트워크 지연이나 시스템 부하로인해 늦게 도착하는 이벤트들이 제외되거나 예외 사항이 발생할 수 있기 때문이에요.
-
-Event Time을 사용하였으므로, 집계 시작 시간을 지정하기 위해 WaterMark를 2초로 설정하였고, Allowed Lateness는 5초를 할당했어요.
-
-### 4.3.2 디렉토리 구조
-
-```bash
-flink-app/src/main/kotlin/com/example/ctr/
-├── domain/                    # 순수 비즈니스 로직
-│   ├── model/
-│   │   ├── Event.kt           # 이벤트 도메인 모델
-│   │   ├── EventCount.kt      # 집계 상태
-│   │   └── CTRResult.kt       # CTR 계산 결과
-│   └── service/
-│       ├── EventCountAggregator.kt           # 이벤트 집계
-│       └── CTRResultWindowProcessFunction.kt # 윈도우 처리
-├── application/               # 애플리케이션 서비스
-│   └── CtrJobService.kt       # Flink Job 오케스트레이션
-├── infrastructure/            # 외부 시스템 연동
-│   ├── flink/
-│   │   ├── source/
-│   │   │   ├── KafkaSourceFactory.kt
-│   │   │   └── deserializer/
-│   │   │       └── EventDeserializationSchema.kt
-│   │   └── sink/
-│   │       ├── RedisSink.kt
-│   │       ├── ClickHouseSink.kt
-│   │       └── DuckDBSink.kt
-│   └── config/                # 설정
-│       ├── CtrJobProperties.kt
-│       ├── KafkaProperties.kt
-│       └── RedisProperties.kt
-└── CtrApplication.kt
-```
-
-## 4.4 인프라 구성
-
-**로컬 개발 환경과 프로덕션 환경의 일관성을 보장하기 위해 Docker Compose 기반으로 작성했어요.**
-
-```yaml
-services:
-  # Kafka 클러스터 (3 브로커)
-  kafka1:
-    image: confluentinc/cp-kafka:7.4.0
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
-
-  # Flink 클러스터
-  flink-jobmanager:
-    image: flink:1.18-scala_2.12-java17
-    volumes:
-      - ./flink-app/build/libs:/opt/flink/usrlib # ShadowJar로 Flink에 배포 가능한 단일 JAR 생성.
-
-  # Redis (서빙 레이어)
-  redis:
-    image: redis:7.0-alpine
-    command: redis-server --appendonly yes
-
-  # ClickHouse (분석 DB)
-  clickhouse:
-    image: clickhouse/clickhouse-server:23.8
-```
-
----
-
-# 5. 운영 및 장애 대응
-
-## 5.1 Backpressure 모니터링
-
-![](/images/posts/실시간-CTR-파이프라인-구축기/4a2f8371c29f.png)
-
-**실험 결과**
-
-1. Kafka 소비 지연 증가
-
-2. Redis RTT 증가
-
-3. ClickHouse INSERT 지연
-
-**조치 방법**
-
-1. 병렬도 증가
-
-2. Redis pipeline 적용
-
-3. ClickHouse batch size 조정.
-
-## 5.2 체크포인트 장애
-
-**문제**
-
-배포 직후 체크포인트 타임아웃 연속 발생.
-
-**해결**
-
-1. 주기·타임아웃 완화
-
-2. 병렬도 조정
-
-3. 상태 크기 감소(윈도우 상태 최소화)
-
-## 5.3 파티션 skew
-
-**문제**
-
-productId 분포 불균형으로 특정 파티션만 lag 증가.
-
-**해결**
-
-1. 파티션 3 → 6 → 12 증가
-2. 병렬도 정합 유지
-
----
-
-# 6. 테스트 전략
-
-## 6.1 단위 테스트
-
-CTR 계산 테스트 (EventCountAggregator, CTRResult)
-
-도메인 모델이 순수 로직이라 테스트 용이.
+핵심 계산은 순수 도메인 로직으로 유지했다.  
+그래서 0 나눗셈, 클릭 수 반영, 윈도우 경계 같은 기본 규칙을 빠르게 검증할 수 있었다.
 
 ```kotlin
 class CTRResultTest {
@@ -382,18 +388,13 @@ class CTRResultTest {
 
         assertThat(result.ctr).isEqualTo(0.1)
     }
-
-    @Test
-    fun `CTR 계산 - impression이 0인 경우`() {
-        val result = CTRResult.calculate("product1", 0, 0, 0L, 10000L)
-        assertThat(result.ctr).isEqualTo(0.0)
-    }
 }
 ```
 
-## 6.2 통합 테스트
+### 통합 테스트
 
-fromCollection → keyBy → window → aggregate 흐름 전체 검증.
+실제 검증 포인트는 `fromCollection -> keyBy -> window -> aggregate` 전체 흐름이었다.  
+윈도우와 이벤트 시간 처리는 코드 한 줄이 아니라 흐름 단위로 깨지는 경우가 많기 때문이다.
 
 ```kotlin
 @Test
@@ -402,8 +403,8 @@ fun `EventCountAggregator 통합 테스트`() {
     env.setParallelism(1)
 
     val events = listOf(
-        Event(eventType = "impression", productId = "p1", ...),
-        Event(eventType = "click", productId = "p1", ...)
+        Event(eventType = "impression", productId = "p1", eventTime = 1_000L),
+        Event(eventType = "click", productId = "p1", eventTime = 2_000L)
     )
 
     val result = env.fromCollection(events)
@@ -417,34 +418,21 @@ fun `EventCountAggregator 통합 테스트`() {
 }
 ```
 
----
+### 수동 검증
 
-# 7. API (Serving Layer)
+테스트만으로는 부족했다. 아래 경로는 눈으로도 검증했다.
 
-## 7.1 FastAPI 엔드포인트
+- Flink UI에서 Backpressure와 처리량 확인
+- Kafka UI로 토픽 적재 상태 확인
+- Redis 결과와 ClickHouse 결과를 비교
+- FastAPI 응답과 원시 이벤트 수를 샘플 대조
 
-```python
-# serving-api/main.py
-@app.get("/ctr/latest", summary="Get Latest CTR for All Products")
-def get_all_latest_ctr(redis: Redis = Depends(get_redis)):
-    ctr_hash = redis.hgetall("ctr:latest")
-    if not ctr_hash:
-        return {}
-    result = {key: json.loads(value) for key, value in ctr_hash.items()}
-    return result
+운영 화면에서 보는 최신 CTR 값과 ClickHouse 집계 결과가 어긋나지 않는지 확인하는 과정이 특히 중요했다.  
+결과 저장소가 둘 이상일 때는 "둘 다 동작한다"보다 "둘이 같은 계약을 보고 있는가"를 먼저 확인해야 한다.
 
-@app.get("/ctr/{product_id}")
-def get_ctr_by_product_id(product_id: str, redis: Redis = Depends(get_redis)):
-    latest_json = redis.hget("ctr:latest", product_id)
-    previous_json = redis.hget("ctr:previous", product_id)
+### 서빙 API 응답 예시
 
-    return {
-        "latest": json.loads(latest_json) if latest_json else None,
-        "previous": json.loads(previous_json) if previous_json else None
-    }
-```
-
-## 7.2 API 응답 예시
+실제 API는 아래 형태로 최신 CTR 상태를 제공했다.
 
 ```json
 {
@@ -455,77 +443,85 @@ def get_ctr_by_product_id(product_id: str, redis: Redis = Depends(get_redis)):
     "ctr": 0.0803,
     "windowStart": 1701360000000,
     "windowEnd": 1701360010000
-  },
-  "product2": {
-    "productId": "product2",
-    "impressions": 387,
-    "clicks": 15,
-    "ctr": 0.0388,
-    "windowStart": 1701360000000,
-    "windowEnd": 1701360010000
   }
 }
 ```
 
----
+이 응답 형태를 유지한 이유는 두 가지였다.
 
-# 8. 기술 선택 이유
+- 운영 화면에서 바로 읽기 쉬워야 한다.
+- 이전 윈도우와 현재 윈도우를 비교하는 확장이 가능해야 한다.
 
-## 8.1 Flink vs Spark Streaming
+스트림 시스템은 "테스트가 있으니 안전하다"보다 "관측 가능한 상태를 만들었는가"가 더 중요하다는 점을 이 단계에서 분명히 배웠다.
 
-1. 낮은 지연
+## 기술 선택 이유
 
-2. 정교한 이벤트 시간 처리
+### Flink를 택한 이유
 
-3. 풍부한 상태 관리
+CTR 집계에서는 아래 세 가지가 중요했다.
 
-   Spark는 마이크로배치가 강점이지만 CTR 같은 실시간 지표에는 부적합해 보였어요.
+- 낮은 지연
+- 이벤트 시간 처리
+- 상태 기반 집계
 
-## 8.2 Spring Boot
+Spark Streaming의 마이크로배치 모델보다 Flink의 이벤트 시간 처리와 상태 관리가 이 문제에 더 맞는다고 판단했다.
 
-Spring Boot는 과거 경험으로 익숙하고 Flink와 호환성이 좋아 선택했어요.
+### ClickHouse와 DuckDB를 같이 둔 이유
 
-특히 Flink 1.18 버전부터 JDK 17 지원했기에 더 적합하다고 판단했어요.
+- ClickHouse: 집계 결과를 장기적으로 분석하기 위한 OLAP 저장소
+- DuckDB: 로컬 디버깅과 가벼운 검증
 
-## 8.3 ClickHouse vs Snowflake/BigQuery
+실험 단계에서 운영용 분석 저장소와 개발용 확인 저장소를 분리해두면, 쿼리 검증 속도가 훨씬 빨라진다.
 
-오픈소스로 설치하여 사용하는 경우 서버 비용만 내면 되기 때문에 장점이라고 판단하였고,
+## 이 판단 기준이 다른 플랫폼 문제에도 적용되는 이유
 
-많은 대기업들에서 채택하여 Production환경에 사용될 만큼 안정적인 서비스라는 판단이 되었고
+이 프로젝트는 CTR 집계를 다뤘지만, 여기서 고정한 기준은 특정 도메인에만 묶이지 않는다.
 
-홈페이지 문서를 읽어보니 비교적 쉬운 접근성으로 판단되어 선택했어요.
+- 이벤트 순서와 지연을 어떤 기준으로 흡수할지 정하는 문제
+- 여러 소비처가 같은 결과를 보도록 계약을 맞추는 문제
+- 장애 이후 어디까지 안전하게 처리됐는지 설명할 수 있어야 하는 문제
+- 병목이 생겼을 때 코드가 아니라 처리 단계 단위로 원인을 좁히는 문제
 
-## 8.4 DuckDB 활용 이유
+이 네 가지는 스트림 집계뿐 아니라 CDC 파이프라인, IoT 이벤트 처리, 정산 집계처럼 비즈니스가 커질수록 내부가 복잡해지는 시스템에서 반복해서 등장한다.  
+그래서 이번 프로젝트의 가치는 CTR 수치를 계산했다는 사실보다, 복잡한 내부를 어떤 기준으로 정리하고 설명 가능한 상태로 만들지 실험했다는 데 있다.
 
-ClickHouse는 다른 부서에서 사용할 수 있음으로 운영 중에 데이터를 건드리는 것은 위험하다고 판단했고,
+## 한계와 다음 단계
 
-저비용 OLAP 및 디버깅 용도로 활용 가능할 것 같고, Observerlity를 고려했을 때 도입하는 것이 적당하다고 판단했어요.
+이번 구현은 파이프라인의 핵심 문제를 드러내는 데는 충분했지만, 아직 운영 수준이라고 보기는 어렵다.
 
----
+- 단일 노트북 기반 검증이라 다중 TaskManager 환경 성능이 부족하다.
+- `productId` 외 다차원 집계는 아직 설계하지 않았다.
+- 멀티 리전 수준의 지연 분포를 반영한 워터마크 재조정은 하지 못했다.
+- 장기적으로는 Lakehouse 계층과의 결합도 검토해야 한다.
 
-# 9. 한계와 다음 단계
+다음 단계는 아래 순서로 보는 것이 맞다고 판단했다.
 
-1. 단일 노트북 기반 실험으로 실제 M개 TaskManager 환경 성능 검증 부족
-   → 클라우드 기반 서버 구축 해보기
-2. productId 외의 다차원 기준(광고그룹, 캠페인 등) 집계는 미지원
+1. 클라우드 환경에서 병렬도와 체크포인트 안정성 재검증
+2. 다차원 집계 모델링
+3. 서빙 계층 단순화 또는 재설계
+4. 저장소 계층을 Lakehouse까지 확장할지 판단
 
-   → 광고 도메인에 대한 이해도 부족
+## 남긴 판단 기준
 
-3. 멀티 리전 또는 WAN 환경에서 워터마크 설정 재검토 필요
+이 프로젝트를 지나며 남은 기준은 세 가지다.
 
-   → 실제 업무 경험 필요해 보임
+- 스트림 처리 파라미터는 교과서값이 아니라 운영 소비 방식으로 정해야 한다.
+- Exactly-once는 비용이 들더라도, 설명할 수 없는 오차보다 싸다.
+- 병목은 코드 한 줄보다 처리 단계의 균형이 먼저 깨질 때 더 자주 발생한다.
 
-4. S3 기반 Lakehouse(Hudi·Iceberg) + ClickHouse Materialized View로 고도화 가능
+### 학습 과정에서 바뀐 기준
 
-   → minio 사용하여 로컬에서 테스트 해보기
+이 프로젝트는 Flink API를 익히는 데서 끝나지 않았다.  
+오히려 "기술이 돌아간다"와 "운영 가능한 기준을 설명할 수 있다" 사이의 차이를 확인하는 과정에 가까웠다.
 
----
+1BRC를 하면서도 느꼈지만, 결과가 나온다는 사실만으로는 충분하지 않았다.  
+왜 10초 윈도우를 택했는지, 왜 워터마크를 5초로 잡았는지, 그 판단이 어떤 부작용을 만들 수 있는지를 스스로 설명할 수 있어야 했다.
 
-## 10. 느낀점
+이 과정에서 특히 크게 배운 점은 공식 문서와 이론의 무게였다.  
+워터마크, Allowed Lateness, 체크포인트 같은 설정은 겉으로는 단순해 보여도 실제 동작 방식과 장애 양상을 이해하지 못하면 적절한 값을 잡기 어렵다. 설정 하나가 결과 정확도와 레이턴시에 직접 영향을 준다는 점도 더 분명해졌다.
 
-단순 호기심에 시작했지만 스트리밍 데이터 파이프라인을 구축해보며 많은 학습을 통해 역량을 쌓을 수 있었는데요.
-전에는 결과 중심적으로 학습을 이어가다 보니 왜 이렇게 설정해야하고 다르게 설정했을 떈 어떤 결과가 예측될지에 대한 이해가 많이 부족했다는 점을 깨달았어요.
-이번 경험을 통해 이론이나 특히 공식문서의 중요성을 한번 더 깨달았고, 간단한 설정 하나가 시스템에 어마무시한 영향을 끼친다는 점을 알 수 있었어요.
-앞으로는 이론 중심의 학습을 이어나가며 지속적으로 성장 가능한 시스템을 구축하기 위해 노력하는 과정을 익히려고 해요.
-Code Agent를 활용하여 도움을 받긴 했지만 학습을 하지 않았더라면 정확하게 지시를 하지 못한다는 사실도 깨달았고 결국 검증하고 책임지는건 사람이라는것을 한번 더 깨달을 수 있었던 프로젝트였어요.
-언젠가 치열하게 살아오며 쌓아온 역량들을 실무에서 사용할 수 있는 날을 기대하며, 포스팅을 마무리할게요.
+또 하나 남은 기준은 도구와 책임의 경계였다.  
+Code Agent 같은 도구는 구현과 탐색 속도를 높여주지만, 어떤 기준으로 설계할지 결정하고 결과를 검증하고 최종 책임을 지는 주체는 결국 사람이다. 이 프로젝트를 개인 포트폴리오로 남기는 이유도, 단순히 Flink를 사용했다는 사실보다 그런 판단과 검증의 과정을 증명하고 싶었기 때문이다.
+
+결국 이 프로젝트의 목적은 Flink 기능 시연이 아니었다.  
+실시간 지표를 운영 가능한 시스템으로 바꾸려면 어떤 판단을 먼저 고정해야 하는지, 그리고 그 판단을 어디까지 검증해야 하는지 확인하는 과정이었다.

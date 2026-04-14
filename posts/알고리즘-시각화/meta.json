@@ -11,5 +11,14 @@
     "Interview Prep",
     "Complete Guide"
   ],
-  "featured": true
+  "featured": false,
+  "visibility": "private",
+  "qualityReview": {
+    "philosophy": 1.5,
+    "design": 1.5,
+    "implementation": 1.5,
+    "brandFit": 1,
+    "notes": "비공개",
+    "reviewedAt": "2026-04-13"
+  }
 }

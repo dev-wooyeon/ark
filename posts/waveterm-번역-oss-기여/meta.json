@@ -10,5 +10,14 @@
     "Technical Writing",
     "Developer Experience"
   ],
-  "featured": false
+  "featured": false,
+  "visibility": "private",
+  "qualityReview": {
+    "philosophy": 2.5,
+    "design": 2.5,
+    "implementation": 2,
+    "brandFit": 2,
+    "notes": "비공개",
+    "reviewedAt": "2026-04-13"
+  }
 }

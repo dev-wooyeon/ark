@@ -11,5 +11,14 @@
     "Index",
     "Troubleshooting"
   ],
-  "featured": false
+  "featured": true,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 4.5,
+    "implementation": 4.5,
+    "brandFit": 4.5,
+    "notes": "핵심 유지",
+    "reviewedAt": "2026-04-13"
+  }
 }

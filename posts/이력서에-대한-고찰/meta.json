@@ -7,5 +7,6 @@
   "tags": [
     "이력서"
   ],
-  "featured": true
+  "featured": false,
+  "visibility": "public"
 }

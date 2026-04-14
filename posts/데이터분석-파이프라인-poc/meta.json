@@ -9,5 +9,14 @@
     "Engineering",
     "Review"
   ],
-  "featured": false
+  "featured": false,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3.5,
+    "implementation": 3,
+    "brandFit": 4,
+    "notes": "재작성 후 유지",
+    "reviewedAt": "2026-04-13"
+  }
 }

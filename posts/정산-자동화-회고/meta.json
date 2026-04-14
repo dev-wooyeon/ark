@@ -9,5 +9,15 @@
     "Payment",
     "Settlement",
     "Batch"
-  ]
+  ],
+  "visibility": "public",
+  "featured": true,
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 4.5,
+    "notes": "핵심 유지",
+    "reviewedAt": "2026-04-13"
+  }
 }

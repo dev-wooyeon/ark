@@ -9,5 +9,6 @@
     "Work",
     "Book"
   ],
-  "featured": false
+  "featured": false,
+  "visibility": "public"
 }

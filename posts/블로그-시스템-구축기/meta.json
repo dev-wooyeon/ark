@@ -10,5 +10,15 @@
     "MDX",
     "Three.js",
     "Design System"
-  ]
+  ],
+  "visibility": "public",
+  "featured": false,
+  "qualityReview": {
+    "philosophy": 3,
+    "design": 4,
+    "implementation": 4,
+    "brandFit": 2.5,
+    "notes": "보조 유지",
+    "reviewedAt": "2026-04-13"
+  }
 }

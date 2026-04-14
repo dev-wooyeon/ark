@@ -11,5 +11,15 @@
     "Codex",
     "ChatGPT",
     "Atlas"
-  ]
+  ],
+  "visibility": "private",
+  "featured": false,
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3,
+    "implementation": 2.5,
+    "brandFit": 2.5,
+    "notes": "비공개",
+    "reviewedAt": "2026-04-13"
+  }
 }

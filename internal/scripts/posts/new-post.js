@@ -38,12 +38,8 @@ async function main() {
       name: 'category',
       message: 'Select a category:',
       choices: [
-        { title: 'Dev', value: 'Dev' },
+        { title: 'Tech', value: 'Tech' },
         { title: 'Life', value: 'Life' },
-        { title: 'Travel', value: 'Travel' },
-        { title: 'Review', value: 'Review' },
-        { title: 'Insight', value: 'Insight' },
-        { title: 'Essay', value: 'Essay' },
       ],
       initial: 0,
     },
@@ -81,10 +77,20 @@ async function main() {
     // Create meta.json
     const metaData = {
       title,
+      slug,
       description,
       date,
       category,
+      visibility: 'public',
       tags: tags.map((t) => t.trim()).filter(Boolean),
+      qualityReview: {
+        philosophy: null,
+        design: null,
+        implementation: null,
+        brandFit: null,
+        reviewedAt: '',
+        notes: '',
+      },
     };
 
     await fs.writeFile(

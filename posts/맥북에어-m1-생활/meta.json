@@ -11,5 +11,14 @@
     "Redis",
     "Data Pipeline"
   ],
-  "featured": true
+  "featured": false,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 4,
+    "implementation": 4,
+    "brandFit": 4,
+    "notes": "핵심 유지",
+    "reviewedAt": "2026-04-13"
+  }
 }

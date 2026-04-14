@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
 import {
+  calculateReadingTime,
   getFeedData,
   getFolderSlug,
   getSeriesPosts,
@@ -12,6 +13,32 @@ import {
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 describe('post repository utilities', () => {
+  it('ignores fenced code blocks and hidden details when calculating reading time', () => {
+    const proseOnly = '가'.repeat(1400);
+    const content = `${proseOnly}
+
+\`\`\`text
+${'x'.repeat(5000)}
+\`\`\`
+
+<details>
+  <summary>hidden</summary>
+  ${'y'.repeat(5000)}
+</details>`;
+
+    expect(calculateReadingTime(content)).toBe(2);
+  });
+
+  it('weights markdown tables lighter than prose when calculating reading time', () => {
+    const proseContent = '가'.repeat(1000);
+    const tableContent = `| column |
+| --- |
+| ${'가'.repeat(1000)} |`;
+
+    expect(calculateReadingTime(proseContent)).toBe(2);
+    expect(calculateReadingTime(tableContent)).toBe(1);
+  });
+
   it('returns posts sorted by date in descending order', () => {
     const posts = getSortedFeedData();
 
@@ -32,7 +59,9 @@ describe('post repository utilities', () => {
   });
 
   it('returns series posts sorted by order', () => {
-    const redisPosts = getSeriesPosts('redis-deep-dive');
+    const redisPosts = getSeriesPosts('redis-deep-dive', {
+      includePrivate: true,
+    });
 
     expect(redisPosts.length).toBeGreaterThan(0);
     const orders = redisPosts.map((post) => post.series?.order ?? 0);
@@ -48,6 +77,33 @@ describe('post repository utilities', () => {
 
     expect(slugs.length).toBeGreaterThan(0);
     expect(slugs.every((item) => item.slug.length > 0)).toBe(true);
+  });
+
+  it('filters private posts out of the default listing and static params', () => {
+    const publicPosts = getSortedFeedData();
+    const allPosts = getSortedFeedData({ includePrivate: true });
+    const publicSlugs = new Set(publicPosts.map((post) => post.slug));
+    const privatePost = allPosts.find((post) => post.visibility === 'private');
+
+    expect(privatePost).toBeDefined();
+    expect(publicSlugs.has(privatePost!.slug)).toBe(false);
+
+    const publicStaticSlugs = new Set(getAllFeedSlugs().map((item) => item.slug));
+    expect(publicStaticSlugs.has(privatePost!.slug)).toBe(false);
+  });
+
+  it('returns private posts only when includePrivate is true', async () => {
+    const privateSlug = 'fixed-ai-dev-environment';
+
+    expect(getFolderSlug(privateSlug)).not.toBeNull();
+    expect(await getFeedData(privateSlug)).toBeNull();
+  });
+
+  it('filters private series posts from helper lookups', () => {
+    expect(getSeriesPosts('redis-deep-dive')).toEqual([]);
+    expect(
+      getSeriesPosts('redis-deep-dive', { includePrivate: true }).length
+    ).toBeGreaterThan(0);
   });
 
   it('returns null for non-existent posts folder slug', () => {

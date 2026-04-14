@@ -7,5 +7,6 @@
   "tags": [
     "페어 프로그래밍"
   ],
-  "featured": true
+  "featured": false,
+  "visibility": "public"
 }

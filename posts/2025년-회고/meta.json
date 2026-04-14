@@ -8,5 +8,6 @@
     "Career",
     "Work"
   ],
-  "featured": false
+  "featured": false,
+  "visibility": "public"
 }

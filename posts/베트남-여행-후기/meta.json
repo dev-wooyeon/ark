@@ -10,5 +10,7 @@
     "DaNang",
     "Insight",
     "Engineering"
-  ]
+  ],
+  "visibility": "public",
+  "featured": false
 }

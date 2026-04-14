@@ -10,6 +10,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const slugToFolderCache = new Map<string, string>();
 let cachedSortedFeedData: FeedData[] | null = null;
 
+export interface FeedQueryOptions {
+  includePrivate?: boolean;
+}
+
 // TOC item type
 export interface TocItem {
   id: string;
@@ -96,14 +100,66 @@ function validateFeedFrontmatter(
   return result.data;
 }
 
+const PROSE_CHARACTERS_PER_MINUTE = 700;
+const TABLE_READING_WEIGHT = 0.35;
+const FENCED_CODE_BLOCK_REGEX = /```[\s\S]*?```/g;
+const DETAILS_BLOCK_REGEX = /<details[\s\S]*?<\/details>/gi;
+const IMAGE_LINK_REGEX = /!\[.*?\]\(.*?\)/g;
+const MARKDOWN_LINK_REGEX = /\[(.*?)\]\(.*?\)/g;
+const HTML_TAG_REGEX = /<\/?[^>]+>/g;
+const MARKDOWN_DECORATION_REGEX = /[#*_`]/g;
+const LEADING_MARKER_REGEX = /^\s*[>\-+]\s?/gm;
+const TABLE_DELIMITER_REGEX = /^\|?[\s:-|]+\|?$/;
+
+function normalizeReadableLine(line: string): string {
+  return line
+    .replace(HTML_TAG_REGEX, ' ')
+    .replace(MARKDOWN_DECORATION_REGEX, ' ')
+    .replace(LEADING_MARKER_REGEX, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function weightedReadingLength(content: string): number {
+  const withoutHiddenContent = content
+    .replace(DETAILS_BLOCK_REGEX, ' ')
+    .replace(FENCED_CODE_BLOCK_REGEX, ' ')
+    .replace(IMAGE_LINK_REGEX, ' ')
+    .replace(MARKDOWN_LINK_REGEX, '$1');
+
+  const lines = withoutHiddenContent.split('\n');
+  let proseLength = 0;
+  let tableLength = 0;
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      continue;
+    }
+
+    if (line.startsWith('|')) {
+      if (TABLE_DELIMITER_REGEX.test(line)) {
+        continue;
+      }
+
+      const normalizedTableLine = normalizeReadableLine(
+        line.replace(/\|/g, ' ')
+      );
+      tableLength += normalizedTableLine.length;
+      continue;
+    }
+
+    proseLength += normalizeReadableLine(line).length;
+  }
+
+  return proseLength + Math.ceil(tableLength * TABLE_READING_WEIGHT);
+}
+
 // Calculate reading time from MDX content
-function calculateReadingTime(content: string): number {
-  const cleanContent = content
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Remove image links
-    .replace(/\[.*?\]\(.*?\)/g, '$1') // Keep text of links
-    .replace(/[#*`]/g, ''); // Remove basic markdown syntax
-  const length = cleanContent.length;
-  return Math.ceil(length / 500) || 1; // 500 characters per minute, min 1 min
+export function calculateReadingTime(content: string): number {
+  const length = weightedReadingLength(content);
+  return Math.max(1, Math.ceil(length / PROSE_CHARACTERS_PER_MINUTE));
 }
 
 const CONTENT_IMAGE_SOURCE_REGEX =
@@ -183,6 +239,21 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
   }
 }
 
+function isPublicPost(post: FeedData): boolean {
+  return (post.visibility ?? 'public') === 'public';
+}
+
+function filterVisiblePosts(
+  posts: FeedData[],
+  options: FeedQueryOptions = {}
+): FeedData[] {
+  if (options.includePrivate) {
+    return posts;
+  }
+
+  return posts.filter(isPublicPost);
+}
+
 // Get folder path from slug (using cache or scanning)
 export function getFolderSlug(slug: string): string | null {
   // Check cache first
@@ -191,7 +262,7 @@ export function getFolderSlug(slug: string): string | null {
   }
 
   // Populate slug cache by loading full feed index first
-  getSortedFeedData();
+  getSortedFeedData({ includePrivate: true });
   if (slugToFolderCache.has(slug)) {
     return slugToFolderCache.get(slug)!;
   }
@@ -214,14 +285,14 @@ export function getFolderSlug(slug: string): string | null {
 }
 
 // Get all feed slugs for static generation
-export function getAllFeedSlugs() {
-  return getSortedFeedData().map((feed) => ({ slug: feed.slug }));
+export function getAllFeedSlugs(options: FeedQueryOptions = {}) {
+  return getSortedFeedData(options).map((feed) => ({ slug: feed.slug }));
 }
 
 // Get sorted feed data for listing pages
-export function getSortedFeedData(): FeedData[] {
+export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
   if (isProduction && cachedSortedFeedData) {
-    return cachedSortedFeedData;
+    return filterVisiblePosts(cachedSortedFeedData, options);
   }
 
   if (!safeExists(postsDirectory)) {
@@ -257,11 +328,14 @@ export function getSortedFeedData(): FeedData[] {
     cachedSortedFeedData = sortedFeedData;
   }
 
-  return sortedFeedData;
+  return filterVisiblePosts(sortedFeedData, options);
 }
 
 // Get single feed data with MDX component
-export async function getFeedData(slug: string): Promise<Feed | null> {
+export async function getFeedData(
+  slug: string,
+  options: FeedQueryOptions = {}
+): Promise<Feed | null> {
   const folderPath = getFolderSlug(slug);
 
   if (!folderPath) {
@@ -273,6 +347,10 @@ export async function getFeedData(slug: string): Promise<Feed | null> {
 
   if (!metadata) {
     console.error(`Failed to load metadata for ${folderPath}`);
+    return null;
+  }
+
+  if (!options.includePrivate && metadata.visibility === 'private') {
     return null;
   }
 
@@ -291,10 +369,13 @@ export async function getFeedData(slug: string): Promise<Feed | null> {
 }
 
 // Get all posts in a series, sorted by order
-export function getSeriesPosts(seriesId: string): FeedData[] {
-  const allPosts = getSortedFeedData();
+export function getSeriesPosts(
+  seriesId: string,
+  options: FeedQueryOptions = {}
+): FeedData[] {
+  const allPosts = getSortedFeedData(options);
 
   return allPosts
-    .filter(post => post.series?.id === seriesId)
+    .filter((post) => post.series?.id === seriesId)
     .sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0));
 }

@@ -14,5 +14,7 @@
     "id": "redis-deep-dive",
     "title": "Redis 완전정복",
     "order": 2
-  }
+  },
+  "visibility": "private",
+  "featured": false
 }
