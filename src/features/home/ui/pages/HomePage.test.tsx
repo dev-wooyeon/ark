@@ -4,15 +4,10 @@ import type { FeedData } from '@/domains/post/model/types';
 import HomePage from './HomePage';
 
 const mockGetSortedFeedData = vi.fn<() => FeedData[]>(() => []);
-const mockGetSeriesSummaries = vi.fn(() => []);
 const mockGetPopularViewsInRecentDays = vi.fn(async () => []);
 
 vi.mock('@/features/blog/services/post-repository', () => ({
   getSortedFeedData: () => mockGetSortedFeedData(),
-}));
-
-vi.mock('@/features/blog/model/series-group', () => ({
-  getSeriesSummaries: (...args: unknown[]) => mockGetSeriesSummaries(...args),
 }));
 
 vi.mock('@/app/actions/view', () => ({
@@ -20,14 +15,10 @@ vi.mock('@/app/actions/view', () => ({
     mockGetPopularViewsInRecentDays(...args),
 }));
 
-vi.mock('@/shared/layout', () => ({
-  Header: () => <div data-testid="mock-header" />,
-}));
+const mockHomePageClient = vi.fn(() => <div data-testid="home-page-client" />);
 
-const mockHeroSection = vi.fn(() => <div data-testid="hero" />);
-
-vi.mock('@/features/home/ui/sections/HeroSection', () => ({
-  default: (props: unknown) => mockHeroSection(props),
+vi.mock('./HomePageClient', () => ({
+  default: (props: unknown) => mockHomePageClient(props),
 }));
 
 function createPost(index: number): FeedData {
@@ -41,7 +32,7 @@ function createPost(index: number): FeedData {
 }
 
 describe('HomePage', () => {
-  it('fills popular list with latest non-series posts when view data is empty', async () => {
+  it('passes posts and normalized popular views to the home client', async () => {
     mockGetSortedFeedData.mockReturnValue([
       createPost(1),
       createPost(2),
@@ -50,23 +41,28 @@ describe('HomePage', () => {
       createPost(5),
       createPost(6),
     ]);
-    mockGetSeriesSummaries.mockReturnValue([]);
-    mockGetPopularViewsInRecentDays.mockResolvedValue([]);
+    mockGetPopularViewsInRecentDays.mockResolvedValue([
+      {
+        slug: 'post-2',
+        count: 17,
+        updated_at: '2026-03-20T00:00:00.000Z',
+      },
+    ]);
 
     const element = await HomePage();
     render(element);
 
-    expect(screen.getByTestId('mock-header')).toBeInTheDocument();
-    expect(screen.getByTestId('hero')).toBeInTheDocument();
+    expect(screen.getByTestId('home-page-client')).toBeInTheDocument();
+    expect(mockGetPopularViewsInRecentDays).toHaveBeenCalledWith(30, 6);
 
-    const firstCallArgs = mockHeroSection.mock.calls[0]?.[0] as {
-      popularPosts: Array<{ post: FeedData; viewCount: number | null }>;
+    const firstCallArgs = mockHomePageClient.mock.calls[0]?.[0] as {
+      posts: FeedData[];
+      popularViews: Array<{ slug: string; count: number }>;
     };
 
-    expect(firstCallArgs.popularPosts).toHaveLength(5);
-    expect(
-      firstCallArgs.popularPosts.every((item) => item.viewCount === null)
-    ).toBe(true);
-    expect(firstCallArgs.popularPosts[0].post.slug).toBe('post-1');
+    expect(firstCallArgs.posts).toHaveLength(6);
+    expect(firstCallArgs.popularViews).toEqual([
+      { slug: 'post-2', count: 17 },
+    ]);
   });
 });

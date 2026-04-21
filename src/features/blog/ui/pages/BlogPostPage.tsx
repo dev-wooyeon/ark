@@ -9,7 +9,7 @@ import {
   getMdxSource,
   parseHeadingsFromMdx,
 } from '@/features/blog/services/markdown-parser';
-import { Header, Container } from '@/shared/layout';
+import { Container } from '@/shared/layout';
 import {
   ReadingProgress,
   TableOfContents,
@@ -92,7 +92,6 @@ export default async function BlogPostPage({
   return (
     <>
       <ReadingProgress />
-      <Header />
       <PostViewTracker
         slug={post.slug}
         category={post.category}
@@ -101,7 +100,7 @@ export default async function BlogPostPage({
       <DwellTimeTracker slug={post.slug} />
       <ScrollDepthTracker slug={post.slug} />
 
-      <article className="py-16">
+      <article className="py-10">
         <Container size="md">
           {/* Header */}
           <header className="mb-10">

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Header, Container } from '@/shared/layout';
+import { Container } from '@/shared/layout';
 import {
   experiences,
   personalInfo,
@@ -104,11 +104,8 @@ export default function ResumePage() {
   };
 
   return (
-    <>
-      <Header />
-
-      <main className="py-16 bg-[var(--color-bg-primary)]">
-        <Container size="md">
+    <main className="py-10 bg-[var(--color-bg-primary)]">
+      <Container size="md">
           {/* Profile Header */}
           <header className="mb-12">
             <h1 className="text-4xl font-bold text-[var(--color-text-primary)] mb-6">
@@ -171,7 +168,7 @@ export default function ResumePage() {
           </header>
 
           {/* Skills Section */}
-          <section className="mb-12">
+          <section id="skills" className="mb-12">
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2">
               <span className="tossface text-3xl">🛠️</span> Skills
             </h2>
@@ -188,7 +185,7 @@ export default function ResumePage() {
           </section>
 
           {/* Experience Section */}
-          <section className="space-y-16">
+          <section id="experience" className="space-y-16">
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
               <span className="tossface text-3xl">💼</span>
               Experience
@@ -281,7 +278,7 @@ export default function ResumePage() {
           </section>
 
           {/* Personal Projects Section */}
-          <section className="mt-16">
+          <section id="projects" className="mt-16">
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
               <span className="tossface text-3xl">🚀</span> Personal Projects
             </h2>
@@ -368,7 +365,7 @@ export default function ResumePage() {
           </section>
 
           {/* Education Section */}
-          <section className="mt-16">
+          <section id="education" className="mt-16">
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
               <span className="tossface text-3xl">🎓</span> Education
             </h2>
@@ -463,7 +460,6 @@ export default function ResumePage() {
             </div>
           </section>
         </Container>
-      </main>
-    </>
+    </main>
   );
 }

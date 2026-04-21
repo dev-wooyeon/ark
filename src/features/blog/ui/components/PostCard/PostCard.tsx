@@ -73,6 +73,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
     day: 'numeric',
   });
   const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
+  const visibleTags = post.tags?.slice(0, 3) ?? [];
 
   if (variant === 'featured') {
     return (
@@ -118,8 +119,13 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
             <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-tertiary)]">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
                 <CategoryIcon category={post.category} />
-                {post.series ? 'Series' : post.category}
+                {post.category}
               </span>
+              {post.series ? (
+                <span className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
+                  {post.series.title}
+                </span>
+              ) : null}
               <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
               <time>{formattedDate}</time>
               {readingTimeLabel && (
@@ -135,6 +141,18 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
             <p className="mt-1 text-sm text-[var(--color-text-secondary)] line-clamp-2">
               {post.description}
             </p>
+            {visibleTags.length > 0 ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {visibleTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-[var(--color-grey-50)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-tertiary)]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           {post.image ? (
             <div className="hidden h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] sm:block">

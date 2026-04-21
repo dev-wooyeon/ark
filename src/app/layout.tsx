@@ -4,6 +4,8 @@ import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
 import AppProviders from '@/core/providers/AppProviders';
+import { getSortedFeedData } from '@/features/blog/services/post-repository';
+import { AppShell } from '@/shared/layout';
 import {
   SITE_AUTHOR,
   SITE_DESCRIPTION,
@@ -61,6 +63,8 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
+  const posts = getSortedFeedData();
+
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
@@ -81,7 +85,9 @@ export default function RootLayout({
       </head>
       <body>
         <AppProviders>
-          <div id="app-root">{children}</div>
+          <div id="app-root">
+            <AppShell posts={posts}>{children}</AppShell>
+          </div>
           <div id="overlay-root" />
         </AppProviders>
       </body>
