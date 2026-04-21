@@ -18,17 +18,6 @@ vi.mock('@/features/blog/ui/components', () => ({
   PostList: ({ posts }: { posts: FeedData[] }) => (
     <div data-testid="post-list">{posts.map((post) => post.slug).join(',')}</div>
   ),
-  SeriesHubList: ({ seriesSummaries }: { seriesSummaries: Array<{ id: string }> }) => (
-    <div data-testid="series-list">
-      {seriesSummaries.map((summary) => summary.id).join(',')}
-    </div>
-  ),
-}));
-
-vi.mock('@/shared/ui', () => ({
-  EmptyState: ({ title }: { title: string }) => (
-    <div data-testid="empty-state">{title}</div>
-  ),
 }));
 
 function createArticle(index: number): FeedData {
@@ -70,72 +59,18 @@ describe('EngineeringPageClient', () => {
     mockReplace.mockClear();
   });
 
-  it('renders type filters and both sections by default', () => {
+  it('renders only the article section by default', () => {
     render(<EngineeringPageClient posts={samplePosts} />);
 
-    expect(screen.getByRole('button', { name: '전체' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '아티클' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '시리즈' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: '#Redis' })).not.toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 2, name: '아티클' })
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: '시리즈' })
-    ).toBeInTheDocument();
+    expect(screen.queryByText('시리즈')).not.toBeInTheDocument();
     expect(screen.getByTestId('post-list')).toHaveTextContent('tech-article-1');
+    expect(screen.getByTestId('post-list')).not.toHaveTextContent('series-ep1');
     expect(screen.getByTestId('post-list')).not.toHaveTextContent(
       'tech-article-6'
     );
-    expect(screen.getByTestId('series-list')).toHaveTextContent('flink-mastery');
-  });
-
-  it('shows only series section when type query is series', () => {
-    mockQueryString = 'type=series';
-
-    render(<EngineeringPageClient posts={samplePosts} />);
-
-    expect(
-      screen.queryByRole('heading', { level: 2, name: '아티클' })
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: '시리즈' })
-    ).toBeInTheDocument();
-  });
-
-  it('shows only article section when type query is article', () => {
-    mockQueryString = 'type=article';
-
-    render(<EngineeringPageClient posts={samplePosts} />);
-
-    expect(
-      screen.getByRole('heading', { level: 2, name: '아티클' })
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('heading', { level: 2, name: '시리즈' })
-    ).not.toBeInTheDocument();
-  });
-
-  it('updates URL query when type filter is clicked', () => {
-    render(<EngineeringPageClient posts={samplePosts} />);
-
-    fireEvent.click(screen.getByRole('button', { name: '시리즈' }));
-
-    expect(mockReplace).toHaveBeenCalledWith('/engineering?type=series', {
-      scroll: false,
-    });
-  });
-
-  it('clears type query when 전체 filter is clicked', () => {
-    mockQueryString = 'type=series';
-
-    render(<EngineeringPageClient posts={samplePosts} />);
-
-    fireEvent.click(screen.getByRole('button', { name: '전체' }));
-
-    expect(mockReplace).toHaveBeenCalledWith('/engineering', {
-      scroll: false,
-    });
   });
 
   it('updates page query when pagination button is clicked', () => {
@@ -159,17 +94,7 @@ describe('EngineeringPageClient', () => {
     );
   });
 
-  it('normalizes invalid type query to default URL', () => {
-    mockQueryString = 'type=unknown';
-
-    render(<EngineeringPageClient posts={samplePosts} />);
-
-    expect(mockReplace).toHaveBeenCalledWith('/engineering', {
-      scroll: false,
-    });
-  });
-
-  it('normalizes invalid page query to default URL', () => {
+  it('normalizes invalid page query to the last valid page', () => {
     mockQueryString = 'page=99';
 
     render(<EngineeringPageClient posts={samplePosts} />);
@@ -179,12 +104,12 @@ describe('EngineeringPageClient', () => {
     });
   });
 
-  it('removes legacy tag query and keeps valid type query', () => {
+  it('removes legacy type and tag query parameters', () => {
     mockQueryString = 'type=series&tag=Redis';
 
     render(<EngineeringPageClient posts={samplePosts} />);
 
-    expect(mockReplace).toHaveBeenCalledWith('/engineering?type=series', {
+    expect(mockReplace).toHaveBeenCalledWith('/engineering', {
       scroll: false,
     });
   });

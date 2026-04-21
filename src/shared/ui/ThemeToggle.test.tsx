@@ -29,7 +29,7 @@ vi.mock('framer-motion', () => ({
       } = props;
       return createElement('button', domProps, children);
     },
-    div: ({
+    span: ({
       children,
       ...props
     }: {
@@ -47,10 +47,14 @@ vi.mock('framer-motion', () => ({
         transition: _transition,
         ...domProps
       } = props;
-      return createElement('div', domProps, children);
+      return createElement('span', domProps, children);
     },
   },
   AnimatePresence: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock('@/shared/motion/model/motion-mode', () => ({
+  useEffectiveMotionMode: () => 'full',
 }));
 
 vi.mock('@/shared/analytics/lib/analytics', () => ({

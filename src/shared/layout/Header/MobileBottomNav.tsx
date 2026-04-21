@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { clsx } from 'clsx';
 import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
+import { AppSectionIcon } from '@/shared/ui/icons/AppSectionIcon';
 
 interface MobileBottomNavProps {
   pathname: string;
@@ -25,12 +26,12 @@ export default function MobileBottomNav({
     () => [
       {
         id: 'home',
-        label: '홈',
+        label: 'Home',
         href: '/',
       },
       {
         id: 'engineering',
-        label: 'Engineering',
+        label: 'Tech',
         href: '/engineering',
       },
       {
@@ -128,74 +129,13 @@ function isActiveItem(item: MobileNavItem, pathname: string): boolean {
 function NavIcon({ id }: { id: MobileNavItem['id'] }) {
   switch (id) {
     case 'engineering':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="3" y="4" width="18" height="14" rx="2" />
-          <path d="M8 20h8" />
-          <path d="M10 16v4" />
-          <path d="M14 16v4" />
-        </svg>
-      );
+      return <AppSectionIcon section="engineering" width={16} height={16} />;
     case 'home':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M3 10.5 12 3l9 7.5" />
-          <path d="M5 9.5V21h14V9.5" />
-        </svg>
-      );
+      return <AppSectionIcon section="home" width={16} height={16} />;
     case 'life':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z" />
-          <path d="M8 7h8" />
-          <path d="M8 11h8" />
-        </svg>
-      );
+      return <AppSectionIcon section="life" width={16} height={16} />;
     case 'resume':
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="4" y="3" width="16" height="18" rx="2" />
-          <path d="M8 8h8" />
-          <path d="M8 12h8" />
-          <path d="M8 16h5" />
-        </svg>
-      );
+      return <AppSectionIcon section="resume" width={16} height={16} />;
     default:
       return null;
   }

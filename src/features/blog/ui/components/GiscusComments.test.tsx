@@ -3,12 +3,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { useTheme } from 'next-themes';
 import { GiscusComments } from './GiscusComments';
 
+const mockGiscus = vi.fn(() => <div data-testid="giscus-embed" />);
+
 vi.mock('next-themes', () => ({
   useTheme: vi.fn(),
 }));
 
 vi.mock('@giscus/react', () => ({
-  default: () => <div data-testid="giscus-embed" />,
+  default: (props: unknown) => mockGiscus(props),
 }));
 
 describe('GiscusComments', () => {
@@ -38,6 +40,13 @@ describe('GiscusComments', () => {
 
     expect(screen.getByRole('heading', { level: 2, name: '댓글' })).toBeInTheDocument();
     expect(screen.getByTestId('giscus-embed')).toBeInTheDocument();
+    expect(mockGiscus).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mapping: 'specific',
+        term: 'redis',
+        theme: 'dark',
+      })
+    );
     expect(postMessage).toHaveBeenCalledWith(
       {
         giscus: {
@@ -52,4 +61,3 @@ describe('GiscusComments', () => {
     document.body.removeChild(iframe);
   });
 });
-

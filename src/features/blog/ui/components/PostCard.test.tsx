@@ -1,20 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { createElement, type ImgHTMLAttributes, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
 import PostCard from './PostCard/PostCard';
 import type { FeedData } from '@/domains/post/model/types';
-
-vi.mock('next/image', () => ({
-  default: ({
-    alt,
-    fill: _fill,
-    priority: _priority,
-    ...props
-  }: ImgHTMLAttributes<HTMLImageElement> & {
-    fill?: boolean;
-    priority?: boolean;
-  }) => createElement('img', { ...props, alt: alt ?? '' }),
-}));
 
 vi.mock('next/link', () => ({
   default: ({
@@ -76,17 +64,14 @@ describe('PostCard', () => {
     expect(screen.getByText('약 12분')).toBeInTheDocument();
   });
 
-  it('renders thumbnail in list variant when image exists', () => {
+  it('keeps list variant text-only even when image exists', () => {
     const withImage: FeedData = {
       ...basePost,
       image: '/images/test.png',
     };
 
     render(<PostCard post={withImage} variant="list" />);
-    expect(screen.getByRole('presentation')).toHaveAttribute(
-      'src',
-      '/images/test.png'
-    );
+    expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
   it('shows category, series title, and tags in list variant', () => {

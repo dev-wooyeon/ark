@@ -55,10 +55,10 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
 
   return (
     <nav
-      className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 w-64 max-h-[80vh]"
+      className="fixed right-8 top-20 bottom-8 hidden w-64 xl:block"
       aria-label="이 글의 목차"
     >
-      <div className="p-4 bg-[var(--color-grey-50)] rounded-[var(--radius-md)] max-h-[80vh] overflow-y-auto">
+      <div className="h-full overflow-y-auto rounded-[var(--radius-md)] bg-[var(--color-grey-50)] p-4">
         <h2 className="text-sm font-semibold text-[var(--color-grey-900)] mb-4 sticky top-0 bg-[var(--color-grey-50)] pb-2">
           이 글의 목차
         </h2>

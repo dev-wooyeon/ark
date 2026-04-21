@@ -50,7 +50,7 @@ export default function PostList({ posts, layout = 'grid' }: PostListProps) {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="space-y-3"
+        className="space-y-4"
       >
         {posts.map((post) => (
           <motion.div key={post.slug} variants={itemVariants}>

@@ -42,10 +42,21 @@
   padding: 0;
   outline: none;
   border: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
   background: transparent;
   color: var(--color-text-primary);
   font-size: var(--text-base);
   font-family: var(--font-sans);
+}
+
+.search:focus,
+.search:focus-visible,
+.search:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
 }
 
 .closeButton {

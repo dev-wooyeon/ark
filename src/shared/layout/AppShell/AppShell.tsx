@@ -3,14 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useMemo } from 'react';
 import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import type { FeedData } from '@/domains/post/model/types';
-import { getSeriesSummaries } from '@/features/blog/model/series-group';
 import { personalInfo } from '@/features/resume/model/resume-data';
+import MobileBottomNav from '@/shared/layout/Header/MobileBottomNav';
+import { AppSectionIcon } from '@/shared/ui/icons/AppSectionIcon';
 import ThemeToggle from '@/shared/ui/ThemeToggle';
+import ThemeTransitionWash from '@/shared/ui/ThemeTransitionWash';
 
 type AppSection = 'home' | 'engineering' | 'life' | 'resume';
 
@@ -33,99 +34,34 @@ interface ExternalLinkItem {
   icon: ReactNode;
 }
 
-const DESKTOP_PANEL_WIDTH = 'clamp(220px, 18vw, 280px)';
-
 const RAIL_NAV_ITEMS: RailNavItem[] = [
   {
     id: 'home',
     href: '/',
-    label: '홈',
+    label: 'Home',
     description: '전체 피드와 최근 글',
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M3 10.5 12 3l9 7.5" />
-        <path d="M5 9.5V21h14V9.5" />
-        <path d="M9 21v-6h6v6" />
-      </svg>
-    ),
+    icon: <AppSectionIcon section="home" width={16} height={16} />,
   },
   {
     id: 'engineering',
     href: '/engineering',
-    label: 'Engineering',
+    label: 'Tech',
     description: '기술 글과 시리즈',
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-      </svg>
-    ),
+    icon: <AppSectionIcon section="engineering" width={16} height={16} />,
   },
   {
     id: 'life',
     href: '/life',
     label: 'Life',
     description: '에세이와 회고',
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M12 21c-4.97 0-9-3.58-9-8 0-6 9-11 9-11s9 5 9 11c0 4.42-4.03 8-9 8Z" />
-        <path d="M12 21v-8" />
-      </svg>
-    ),
+    icon: <AppSectionIcon section="life" width={16} height={16} />,
   },
   {
     id: 'resume',
     href: '/resume',
     label: 'Resume',
     description: '경력과 프로젝트',
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="4" y="3" width="16" height="18" rx="2" />
-        <path d="M8 7h8" />
-        <path d="M8 11h8" />
-        <path d="M8 15h5" />
-      </svg>
-    ),
+    icon: <AppSectionIcon section="resume" width={16} height={16} />,
   },
 ];
 
@@ -155,7 +91,7 @@ const EXTERNAL_LINKS: ExternalLinkItem[] = [
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
@@ -175,7 +111,7 @@ const EXTERNAL_LINKS: ExternalLinkItem[] = [
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
@@ -187,13 +123,6 @@ const EXTERNAL_LINKS: ExternalLinkItem[] = [
     ),
   },
 ];
-
-function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('ko-KR', {
-    month: 'long',
-    day: 'numeric',
-  });
-}
 
 function resolveSection(pathname: string, posts: FeedData[]): AppSection {
   if (pathname.startsWith('/resume')) {
@@ -224,393 +153,148 @@ function resolveSection(pathname: string, posts: FeedData[]): AppSection {
   return 'home';
 }
 
-function PanelSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="space-y-3">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-[var(--color-grey-500)]">
-        {title}
-      </h2>
-      <div className="space-y-1.5">{children}</div>
-    </section>
-  );
-}
-
-function SidebarRow({
-  href,
-  title,
-  detail,
-  active = false,
-}: {
-  href: string;
-  title: string;
-  detail?: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={clsx(
-        'block border-l-2 py-2 pl-3 transition-colors',
-        active
-          ? 'border-[var(--color-toss-blue)] text-[var(--color-grey-900)]'
-          : 'border-transparent text-[var(--color-grey-600)] hover:text-[var(--color-grey-900)]'
-      )}
-    >
-      <p
-        className={clsx(
-          'text-sm leading-6',
-          active ? 'font-semibold' : 'font-medium'
-        )}
-      >
-        {title}
-      </p>
-      {detail ? (
-        <p className="mt-1 text-xs text-[var(--color-grey-500)]">{detail}</p>
-      ) : null}
-    </Link>
-  );
-}
-
 function SearchButton() {
   const { query } = useKBar();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      const activeElement = document.activeElement as HTMLElement | null;
+      const tagName = activeElement?.tagName;
+      const isEditable =
+        activeElement?.isContentEditable ||
+        tagName === 'INPUT' ||
+        tagName === 'TEXTAREA' ||
+        tagName === 'SELECT';
+
+      if (isEditable) {
+        return;
+      }
+
+      event.preventDefault();
+      query.toggle();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [query]);
 
   return (
     <button
       type="button"
       onClick={() => query.toggle()}
-      className="inline-flex h-11 w-full items-center gap-3 rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] px-4 text-sm text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
+      className="inline-flex h-11 w-full items-center justify-between gap-3 rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] px-4 text-sm text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
       aria-label="검색 열기"
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
-      <span className="truncate">검색어, 태그, 글 제목 검색</span>
+      <span className="flex min-w-0 items-center gap-3">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <span className="truncate">슬래시(/)를 눌러 검색</span>
+      </span>
     </button>
   );
 }
 
 export default function AppShell({ children, posts }: AppShellProps) {
   const pathname = usePathname();
-  const [desktopPanelOpen, setDesktopPanelOpen] = useState(true);
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
-
-  useEffect(() => {
-    setMobilePanelOpen(false);
-  }, [pathname]);
 
   const activeSection = useMemo(
     () => resolveSection(pathname, posts),
     [pathname, posts]
   );
 
-  const techPosts = useMemo(
-    () => posts.filter((post) => post.category === 'Tech'),
-    [posts]
-  );
-  const lifePosts = useMemo(
-    () => posts.filter((post) => post.category === 'Life'),
-    [posts]
-  );
-  const seriesSummaries = useMemo(() => getSeriesSummaries(techPosts), [techPosts]);
-
-  const sidebarContent = useMemo(() => {
-    switch (activeSection) {
-      case 'engineering':
-        return (
-          <>
-            <PanelSection title="Engineering">
-              <SidebarRow
-                href="/engineering"
-                title="기술 피드"
-                detail={`${techPosts.length}개의 기술 글`}
-                active={pathname === '/engineering'}
-              />
-              <SidebarRow
-                href="/series"
-                title="시리즈 모아보기"
-                detail={`${seriesSummaries.length}개 시리즈`}
-                active={pathname === '/series'}
-              />
-            </PanelSection>
-
-            <PanelSection title="최근 기술 글">
-              {techPosts.slice(0, 6).map((post) => (
-                <SidebarRow
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  title={post.title}
-                  detail={formatDate(post.date)}
-                  active={pathname === `/blog/${post.slug}`}
-                />
-              ))}
-            </PanelSection>
-          </>
-        );
-      case 'life':
-        return (
-          <>
-            <PanelSection title="Life">
-              <SidebarRow
-                href="/life"
-                title="에세이와 회고"
-                detail={`${lifePosts.length}개의 글`}
-                active={pathname === '/life'}
-              />
-            </PanelSection>
-
-            <PanelSection title="최근 Life 글">
-              {lifePosts.slice(0, 6).map((post) => (
-                <SidebarRow
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  title={post.title}
-                  detail={formatDate(post.date)}
-                  active={pathname === `/blog/${post.slug}`}
-                />
-              ))}
-            </PanelSection>
-          </>
-        );
-      case 'resume':
-        return (
-          <>
-            <PanelSection title="Resume">
-              <SidebarRow
-                href="/resume"
-                title={personalInfo.name}
-                detail={personalInfo.position}
-                active={pathname === '/resume'}
-              />
-            </PanelSection>
-
-            <PanelSection title="바로가기">
-              <SidebarRow href="/resume#skills" title="Skills" />
-              <SidebarRow href="/resume#experience" title="Experience" />
-              <SidebarRow href="/resume#projects" title="Projects" />
-              <SidebarRow href="/resume#education" title="Education" />
-            </PanelSection>
-          </>
-        );
-      case 'home':
-      default:
-        return (
-          <>
-            <PanelSection title="컬렉션">
-              <SidebarRow
-                href="/"
-                title="전체 피드"
-                detail={`${posts.length}개의 글`}
-                active={pathname === '/'}
-              />
-              <SidebarRow
-                href="/engineering"
-                title="Engineering"
-                detail={`${techPosts.length}개의 기술 글`}
-              />
-              <SidebarRow
-                href="/life"
-                title="Life"
-                detail={`${lifePosts.length}개의 회고와 에세이`}
-              />
-            </PanelSection>
-
-            <PanelSection title="최근 글">
-              {posts.slice(0, 7).map((post) => (
-                <SidebarRow
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  title={post.title}
-                  detail={formatDate(post.date)}
-                  active={pathname === `/blog/${post.slug}`}
-                />
-              ))}
-            </PanelSection>
-          </>
-        );
-    }
-  }, [activeSection, lifePosts, pathname, posts, seriesSummaries, techPosts]);
-
-  const desktopPanelWidth = desktopPanelOpen ? DESKTOP_PANEL_WIDTH : '0px';
-
   return (
-    <div className="min-h-screen bg-[var(--color-grey-50)] text-[var(--color-text-primary)] md:flex">
-      <aside className="hidden min-h-screen w-16 shrink-0 border-r border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] md:flex md:flex-col md:justify-between">
-        <div className="flex flex-col items-center gap-2 px-2 py-4">
-          {RAIL_NAV_ITEMS.map((item) => {
-            const isActive = item.id === activeSection;
+    <div className="min-h-screen bg-[var(--color-grey-50)] text-[var(--color-text-primary)] md:flex md:h-screen md:overflow-hidden">
+      <ThemeTransitionWash />
 
-            return (
-              <Link
-                key={item.id}
+      <aside className="hidden h-screen w-16 shrink-0 border-r border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] md:sticky md:top-0 md:flex">
+        <div className="flex h-full w-full flex-col justify-between">
+          <div className="flex flex-col items-center gap-2 px-1.5 py-3">
+            {RAIL_NAV_ITEMS.map((item) => {
+              const isActive = item.id === activeSection;
+
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  aria-label={item.label}
+                  className={clsx(
+                    'flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-1.5 transition-colors',
+                    isActive
+                      ? 'text-[var(--color-toss-blue)]'
+                      : 'text-[var(--color-grey-500)] hover:text-[var(--color-grey-900)]'
+                  )}
+                >
+                  <span
+                    className={clsx(
+                      'flex h-9 w-9 items-center justify-center rounded-xl border transition-colors',
+                      isActive
+                        ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white shadow-sm'
+                        : 'border-transparent hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)]'
+                    )}
+                  >
+                    {item.icon}
+                  </span>
+                  <span className="text-center text-xs leading-none tracking-tight">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-col items-center gap-2 px-2 py-4">
+            {EXTERNAL_LINKS.map((item) => (
+              <a
+                key={item.label}
                 href={item.href}
                 aria-label={item.label}
-                className={clsx(
-                  'flex h-11 w-11 items-center justify-center rounded-2xl border transition-colors',
-                  isActive
-                    ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white shadow-sm'
-                    : 'border-transparent text-[var(--color-grey-500)] hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]'
-                )}
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]"
               >
                 {item.icon}
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="flex flex-col items-center gap-2 px-2 py-4">
-          {EXTERNAL_LINKS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              aria-label={item.label}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]"
-            >
-              {item.icon}
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
         </div>
       </aside>
 
-      <aside
-        className="hidden shrink-0 overflow-hidden border-r border-[var(--color-grey-200)] bg-[var(--color-grey-50)] transition-[width] duration-200 md:flex"
-        style={{ width: desktopPanelWidth }}
-      >
-        <div
-          className={clsx(
-            'w-full min-w-0 px-4 py-6',
-            desktopPanelOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-          )}
-        >
-          {desktopPanelOpen ? sidebarContent : null}
-        </div>
-      </aside>
-
-      <div className="min-w-0 flex-1 bg-[var(--color-bg-primary)]">
+      <div className="min-w-0 flex-1 bg-[var(--color-bg-primary)] md:flex md:h-screen md:flex-col md:overflow-hidden">
         <header className="sticky top-0 z-[var(--z-sticky)] border-b border-[var(--color-grey-200)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md">
-          <div className="grid h-14 grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-3 px-4 md:grid-cols-[40px_minmax(320px,560px)_auto] md:justify-center md:px-6">
-            <button
-              type="button"
-              onClick={() => {
-                if (window.innerWidth >= 768) {
-                  setDesktopPanelOpen((current) => !current);
-                  return;
-                }
-
-                setMobilePanelOpen((current) => !current);
-              }}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] text-[var(--color-grey-600)] transition-colors hover:bg-[var(--color-grey-50)] hover:text-[var(--color-grey-900)]"
-              aria-label="사이드바 토글"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
-
-            <div className="w-full max-w-[560px] justify-self-center">
-              <SearchButton />
+          <div className="grid h-14 grid-cols-[1fr_minmax(0,560px)_1fr] items-center gap-3 px-4 md:px-6">
+            <div />
+            <div className="flex justify-center">
+              <div className="w-full max-w-xl">
+                <SearchButton />
+              </div>
             </div>
 
-            <div className="flex items-center justify-end">
+            <div className="flex justify-end">
               <ThemeToggle />
             </div>
           </div>
         </header>
 
-        <div className="min-h-[calc(100vh-56px)]">{children}</div>
+        <div className="min-h-[calc(100vh-56px)] pb-24 md:min-h-0 md:flex-1 md:overflow-y-auto md:pb-0">
+          {children}
+        </div>
       </div>
 
-      <AnimatePresence>
-        {mobilePanelOpen ? (
-          <>
-            <motion.button
-              type="button"
-              aria-label="모바일 사이드바 닫기"
-              className="fixed inset-0 z-[60] bg-black/30 md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobilePanelOpen(false)}
-            />
-            <motion.div
-              className="fixed inset-y-0 left-0 z-[61] flex w-full max-w-sm overflow-hidden border-r border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] md:hidden"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
-            >
-              <div className="flex w-16 shrink-0 flex-col justify-between border-r border-[var(--color-grey-200)] bg-[var(--color-grey-50)] px-2 py-4">
-                <div className="flex flex-col items-center gap-2">
-                  {RAIL_NAV_ITEMS.map((item) => {
-                    const isActive = item.id === activeSection;
-
-                    return (
-                      <Link
-                        key={item.id}
-                        href={item.href}
-                        aria-label={item.label}
-                        className={clsx(
-                          'flex h-11 w-11 items-center justify-center rounded-2xl border transition-colors',
-                          isActive
-                            ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white shadow-sm'
-                            : 'border-transparent text-[var(--color-grey-500)] hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]'
-                        )}
-                      >
-                        {item.icon}
-                      </Link>
-                    );
-                  })}
-                </div>
-
-                <div className="flex flex-col items-center gap-2">
-                  {EXTERNAL_LINKS.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      aria-label={item.label}
-                      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]"
-                    >
-                      {item.icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div className="min-w-0 flex-1 overflow-y-auto bg-[var(--color-grey-50)] px-4 py-6">
-                {sidebarContent}
-              </div>
-            </motion.div>
-          </>
-        ) : null}
-      </AnimatePresence>
+      <MobileBottomNav pathname={pathname} visible />
     </div>
   );
 }

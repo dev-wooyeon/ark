@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Container } from '@/shared/layout';
+import StaggerReveal from '@/shared/motion/ui/StaggerReveal';
 import {
   experiences,
   personalInfo,
@@ -106,96 +107,100 @@ export default function ResumePage() {
   return (
     <main className="py-10 bg-[var(--color-bg-primary)]">
       <Container size="md">
-          {/* Profile Header */}
-          <header className="mb-12">
-            <h1 className="text-4xl font-bold text-[var(--color-text-primary)] mb-6">
-              Resume
-            </h1>
+        {/* Profile Header */}
+        <header className="mb-12">
+          <h1 className="text-4xl font-bold text-[var(--color-text-primary)] mb-6">
+            Resume
+          </h1>
 
-            <div className="flex flex-col gap-2 mb-4">
-              <h2 className="text-2xl text-[var(--color-text-primary)]">
-                {personalInfo.name}
-              </h2>
-              <p className="text-xl text-[var(--color-text-secondary)] font-medium">
-                {personalInfo.position}
+          <div className="flex flex-col gap-2 mb-4">
+            <h2 className="text-2xl text-[var(--color-text-primary)]">
+              {personalInfo.name}
+            </h2>
+            <p className="text-xl text-[var(--color-text-secondary)] font-medium">
+              {personalInfo.position}
+            </p>
+            {personalInfo.introduction && (
+              <p className="text-[var(--color-text-secondary)] mt-2 leading-relaxed">
+                {personalInfo.introduction}
               </p>
-              {personalInfo.introduction && (
-                <p className="text-[var(--color-text-secondary)] mt-2 leading-relaxed">
-                  {personalInfo.introduction}
-                </p>
-              )}
-            </div>
+            )}
+          </div>
 
-            {/* Contact & Links */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-[var(--color-text-secondary)]">
+          {/* Contact & Links */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-[var(--color-text-secondary)]">
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+            >
+              <span className="tossface">📧</span>
+              {personalInfo.email}
+            </a>
+            {personalInfo.phone && (
               <a
-                href={`mailto:${personalInfo.email}`}
+                href={`tel:${personalInfo.phone}`}
                 className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
               >
-                <span className="tossface">📧</span>
-                {personalInfo.email}
+                <span className="tossface">📱</span>
+                {personalInfo.phone}
               </a>
-              {personalInfo.phone && (
-                <a
-                  href={`tel:${personalInfo.phone}`}
-                  className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
-                >
-                  <span className="tossface">📱</span>
-                  {personalInfo.phone}
-                </a>
-              )}
+            )}
+            <a
+              href={personalInfo.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+            >
+              <span className="tossface">🐱</span>
+              GitHub
+            </a>
+            {personalInfo.blog && (
               <a
-                href={personalInfo.github}
+                href={personalInfo.blog}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
               >
-                <span className="tossface">🐱</span>
-                GitHub
+                <span className="tossface">📝</span>
+                Blog
               </a>
-              {personalInfo.blog && (
-                <a
-                  href={personalInfo.blog}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
-                >
-                  <span className="tossface">📝</span>
-                  Blog
-                </a>
-              )}
-            </div>
-          </header>
+            )}
+          </div>
+        </header>
 
-          {/* Skills Section */}
-          <section id="skills" className="mb-12">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2">
-              <span className="tossface text-3xl">🛠️</span> Skills
-            </h2>
-            <div className="flex flex-wrap gap-3">
-              {personalInfo.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="px-4 py-2 bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] rounded-[var(--radius-md)] font-medium border border-[var(--color-border)]"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </section>
-
-          {/* Experience Section */}
-          <section id="experience" className="space-y-16">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-              <span className="tossface text-3xl">💼</span>
-              Experience
-              <span className="ml-2 text-base font-bold text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-3 py-0.5 rounded-full align-middle">
-                {years}년 +
+        {/* Skills Section */}
+        <section id="skills" className="mb-12">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2">
+            <span className="tossface text-3xl">🛠️</span> Skills
+          </h2>
+          <StaggerReveal className="flex flex-wrap gap-3" stagger={0.04}>
+            {personalInfo.skills.map((skill) => (
+              <span
+                key={skill}
+                className="px-4 py-2 bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] rounded-[var(--radius-md)] font-medium border border-[var(--color-border)] transition-all duration-[var(--duration-200)] hover:-translate-y-0.5 hover:border-[var(--color-toss-blue)]/30 hover:text-[var(--color-text-primary)] hover:shadow-sm"
+              >
+                {skill}
               </span>
-            </h2>
+            ))}
+          </StaggerReveal>
+        </section>
 
+        {/* Experience Section */}
+        <section id="experience" className="space-y-16">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
+            <span className="tossface text-3xl">💼</span>
+            Experience
+            <span className="ml-2 text-base font-bold text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-3 py-0.5 rounded-full align-middle">
+              {years}년 +
+            </span>
+          </h2>
+
+          <StaggerReveal className="space-y-10" stagger={0.1}>
             {experiences.map((exp, index) => (
-              <article key={index} className="relative pl-4 md:pl-0">
+              <article
+                key={index}
+                className="relative rounded-[var(--radius-lg)] border border-transparent px-4 py-5 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:px-6 md:py-6"
+              >
                 {/* Visual Timeline Line for mobile */}
                 <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-border)] md:hidden"></div>
 
@@ -223,11 +228,14 @@ export default function ResumePage() {
                   {/* Right Column: Projects */}
                   <div className="space-y-12">
                     {exp.projects.map((project, pIndex) => (
-                      <div key={pIndex} className="relative group">
-                        <h4 className="text-xl font-bold text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-toss-blue)] transition-colors">
+                      <div
+                        key={pIndex}
+                        className="group relative rounded-[var(--radius-md)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-bg-primary)] hover:shadow-sm"
+                      >
+                        <h4 className="mb-3 text-xl font-bold text-[var(--color-text-primary)] transition-[color,transform] duration-[var(--duration-200)] group-hover:translate-x-0.5 group-hover:text-[var(--color-toss-blue)]">
                           {project.title}
                         </h4>
-                        <p className="text-[var(--color-text-secondary)] leading-relaxed mb-4">
+                        <p className="mb-4 text-[var(--color-text-secondary)] leading-relaxed transition-transform duration-[var(--duration-200)] group-hover:translate-x-0.5">
                           {project.description}
                         </p>
 
@@ -275,18 +283,20 @@ export default function ResumePage() {
                 </div>
               </article>
             ))}
-          </section>
+          </StaggerReveal>
+        </section>
 
-          {/* Personal Projects Section */}
-          <section id="projects" className="mt-16">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-              <span className="tossface text-3xl">🚀</span> Personal Projects
-            </h2>
+        {/* Personal Projects Section */}
+        <section id="projects" className="mt-16">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
+            <span className="tossface text-3xl">🚀</span> Personal Projects
+          </h2>
 
+          <StaggerReveal className="space-y-10" stagger={0.1}>
             {personalProjects.map((project, index) => (
               <article
                 key={index}
-                className="relative pl-4 md:pl-0 mb-12 last:mb-0"
+                className="relative mb-12 rounded-[var(--radius-lg)] border border-transparent px-4 py-5 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm last:mb-0 md:px-6 md:py-6"
               >
                 {/* Visual Timeline Line for mobile */}
                 <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-border)] md:hidden"></div>
@@ -314,8 +324,8 @@ export default function ResumePage() {
 
                   {/* Right Column: Project Details */}
                   <div className="space-y-6">
-                    <div>
-                      <p className="text-[var(--color-text-secondary)] leading-relaxed mb-4">
+                    <div className="rounded-[var(--radius-md)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-bg-primary)] hover:shadow-sm">
+                      <p className="text-[var(--color-text-secondary)] leading-relaxed mb-4 transition-transform duration-[var(--duration-200)] hover:translate-x-0.5">
                         {project.description}
                       </p>
 
@@ -362,104 +372,105 @@ export default function ResumePage() {
                 </div>
               </article>
             ))}
-          </section>
+          </StaggerReveal>
+        </section>
 
-          {/* Education Section */}
-          <section id="education" className="mt-16">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-              <span className="tossface text-3xl">🎓</span> Education
-            </h2>
-            <div className="space-y-6">
-              {education.map((edu, index) => (
-                <div
-                  key={index}
-                  className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8"
-                >
-                  <div className="md:text-right">
-                    <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
-                      {edu.period}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
-                      {edu.school}
-                    </h3>
-                    <p className="text-[var(--color-text-secondary)] mt-1">
-                      {edu.degree} | {edu.major}
-                    </p>
-                    <span className="inline-block mt-2 px-2 py-1 bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] text-xs font-medium rounded">
-                      {edu.status}
-                    </span>
-                  </div>
+        {/* Education Section */}
+        <section id="education" className="mt-16">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
+            <span className="tossface text-3xl">🎓</span> Education
+          </h2>
+          <StaggerReveal className="space-y-6" stagger={0.08}>
+            {education.map((edu, index) => (
+              <div
+                key={index}
+                className="grid gap-4 rounded-[var(--radius-lg)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:grid-cols-[200px_1fr] md:gap-8"
+              >
+                <div className="md:text-right">
+                  <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
+                    {edu.period}
+                  </span>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Activities Section */}
-          <section className="mt-16">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-              <span className="tossface text-3xl">🌟</span> Activities
-            </h2>
-            <div className="space-y-8">
-              {activities.map((activity, index) => (
-                <div
-                  key={index}
-                  className="grid md:grid-cols-[200px_1fr] gap-4 md:gap-8"
-                >
-                  <div className="md:text-right">
-                    <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
-                      {activity.period}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-1">
-                      {activity.title}
-                    </h3>
-                    <p className="text-[var(--color-text-secondary)] font-medium mb-4">
-                      {activity.organization}
-                    </p>
-                    <ul className="space-y-2 pl-5 list-disc">
-                      {activity.description.map((desc, dIndex) => (
-                        <li
-                          key={dIndex}
-                          className="text-[var(--color-text-secondary)] text-base leading-relaxed"
-                        >
-                          {desc}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Certifications Section */}
-          <section className="mt-16 mb-16">
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-              <span className="tossface text-3xl">📜</span> Certifications
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {certifications.map((cert, index) => (
-                <div
-                  key={index}
-                  className="p-6 bg-[var(--color-bg-secondary)] rounded-[var(--radius-md)] border border-[var(--color-border)] transition-colors"
-                >
-                  <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-2">
-                    {cert.name}
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
+                    {edu.school}
                   </h3>
-                  <p className="text-[var(--color-text-secondary)] text-sm mb-1">
-                    {cert.issuer}
+                  <p className="text-[var(--color-text-secondary)] mt-1">
+                    {edu.degree} | {edu.major}
                   </p>
-                  <p className="text-[var(--color-text-tertiary)] text-sm">
-                    {cert.date}
-                  </p>
+                  <span className="inline-block mt-2 px-2 py-1 bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] text-xs font-medium rounded">
+                    {edu.status}
+                  </span>
                 </div>
-              ))}
-            </div>
-          </section>
-        </Container>
+              </div>
+            ))}
+          </StaggerReveal>
+        </section>
+
+        {/* Activities Section */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
+            <span className="tossface text-3xl">🌟</span> Activities
+          </h2>
+          <StaggerReveal className="space-y-8" stagger={0.08}>
+            {activities.map((activity, index) => (
+              <div
+                key={index}
+                className="grid gap-4 rounded-[var(--radius-lg)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:grid-cols-[200px_1fr] md:gap-8"
+              >
+                <div className="md:text-right">
+                  <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
+                    {activity.period}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-1">
+                    {activity.title}
+                  </h3>
+                  <p className="text-[var(--color-text-secondary)] font-medium mb-4">
+                    {activity.organization}
+                  </p>
+                  <ul className="space-y-2 pl-5 list-disc">
+                    {activity.description.map((desc, dIndex) => (
+                      <li
+                        key={dIndex}
+                        className="text-[var(--color-text-secondary)] text-base leading-relaxed"
+                      >
+                        {desc}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </StaggerReveal>
+        </section>
+
+        {/* Certifications Section */}
+        <section className="mt-16 mb-16">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
+            <span className="tossface text-3xl">📜</span> Certifications
+          </h2>
+          <StaggerReveal className="grid gap-6 md:grid-cols-2" stagger={0.08}>
+            {certifications.map((cert, index) => (
+              <div
+                key={index}
+                className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-6 transition-all duration-[var(--duration-200)] hover:-translate-y-0.5 hover:border-[var(--color-toss-blue)]/30 hover:shadow-sm"
+              >
+                <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-2">
+                  {cert.name}
+                </h3>
+                <p className="text-[var(--color-text-secondary)] text-sm mb-1">
+                  {cert.issuer}
+                </p>
+                <p className="text-[var(--color-text-tertiary)] text-sm">
+                  {cert.date}
+                </p>
+              </div>
+            ))}
+          </StaggerReveal>
+        </section>
+      </Container>
     </main>
   );
 }

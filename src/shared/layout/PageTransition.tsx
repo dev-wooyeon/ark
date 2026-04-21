@@ -40,6 +40,7 @@ export default function PageTransition({
   const shouldTranslate = effectiveMotionMode === 'full';
   const shouldAnimate = effectiveMotionMode !== 'off';
   const canRunTransition = shouldAnimate && isInitialized;
+  const shouldBlur = effectiveMotionMode === 'full';
 
   if (!shouldAnimate) {
     return <div key={pathname}>{children}</div>;
@@ -49,15 +50,21 @@ export default function PageTransition({
   const variants = {
     initial: {
       opacity: 0,
-      y: shouldTranslate ? (direction === 'forward' ? 20 : -20) : 0,
+      y: shouldTranslate ? (direction === 'forward' ? 18 : -18) : 0,
+      scale: shouldTranslate ? 0.992 : 1,
+      filter: shouldBlur ? 'blur(10px)' : 'blur(0px)',
     },
     animate: {
       opacity: 1,
       y: 0,
+      scale: 1,
+      filter: 'blur(0px)',
     },
     exit: {
       opacity: 0,
-      y: shouldTranslate ? (direction === 'forward' ? -20 : 20) : 0,
+      y: shouldTranslate ? (direction === 'forward' ? -14 : 14) : 0,
+      scale: shouldTranslate ? 1.006 : 1,
+      filter: shouldBlur ? 'blur(8px)' : 'blur(0px)',
     },
   };
 
@@ -76,6 +83,7 @@ export default function PageTransition({
             }
           : undefined
       }
+      style={{ willChange: 'transform, opacity, filter' }}
     >
       {children}
     </motion.div>

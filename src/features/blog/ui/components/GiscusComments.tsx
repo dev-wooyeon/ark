@@ -15,7 +15,7 @@ interface GiscusCommentsProps {
  * @note repo, repoId, category, categoryId 값을 실제 값으로 교체해야 합니다.
  * https://giscus.app 에서 설정 후 값을 확인하세요.
  */
-export function GiscusComments({ slug: _slug }: GiscusCommentsProps) {
+export function GiscusComments({ slug }: GiscusCommentsProps) {
   const { resolvedTheme } = useTheme();
   const giscusTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
@@ -40,21 +40,25 @@ export function GiscusComments({ slug: _slug }: GiscusCommentsProps) {
       <h2 className="text-xl font-bold text-[var(--color-grey-900)] mb-6">
         댓글
       </h2>
-      <Giscus
-        id="comments"
-        repo="dev-wooyeon/eunu-log"
-        repoId="R_kgDOQ9dweg"
-        category="Announcements"
-        categoryId="DIC_kwDOQ9dwes4C19H1"
-        mapping="title"
-        strict="0"
-        reactionsEnabled="1"
-        emitMetadata="0"
-        inputPosition="top"
-        theme={giscusTheme}
-        lang="ko"
-        loading="lazy"
-      />
+      <div className="min-h-40">
+        <Giscus
+          key={`${slug}-${giscusTheme}`}
+          id="comments"
+          repo="dev-wooyeon/eunu-log"
+          repoId="R_kgDOQ9dweg"
+          category="Announcements"
+          categoryId="DIC_kwDOQ9dwes4C19H1"
+          mapping="specific"
+          term={slug}
+          strict="1"
+          reactionsEnabled="1"
+          emitMetadata="0"
+          inputPosition="top"
+          theme={giscusTheme}
+          lang="ko"
+          loading="lazy"
+        />
+      </div>
     </section>
   );
 }

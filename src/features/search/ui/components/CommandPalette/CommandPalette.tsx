@@ -21,7 +21,10 @@ export const CommandPalette = () => {
       <KBarPositioner className={styles.positioner}>
         <KBarAnimator className={styles.animator}>
           <div className={styles.searchWrapper}>
-            <KBarSearch className={styles.search} />
+            <KBarSearch
+              className={styles.search}
+              defaultPlaceholder="검색어, 태그, 글 제목을 입력하세요"
+            />
             <button
               type="button"
               className={styles.closeButton}

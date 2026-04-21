@@ -217,8 +217,8 @@
 .dark {
   /* Inverted Grey Scale */
   --color-grey-50: #191f28;
-  --color-grey-100: #333d4b;
-  --color-grey-200: #4e5968;
+  --color-grey-100: #2a3441;
+  --color-grey-200: #3b4654;
   --color-grey-300: #6b7684;
   --color-grey-400: #8b95a1;
   --color-grey-500: #b0b8c1;
@@ -239,9 +239,9 @@
   --color-surface: #111827;
   --color-blue-500: #6bb3ff;
 
-  --color-border: #334155;
-  --color-border-hover: #243447;
-  --color-divider: #333d4b;
+  --color-border: #2c3644;
+  --color-border-hover: #364252;
+  --color-divider: #2f3947;
 
   /* Mobile Glass Navigation - Dark */
   --mobile-top-header-bg: rgba(25, 31, 40, 0.72);
