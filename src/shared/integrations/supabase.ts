@@ -33,6 +33,8 @@ export type SupabaseDatabase = {
       increment_view: {
         Args: {
           slug_input: string;
+          viewer_fingerprint_input?: string;
+          dedupe_window_seconds_input?: number;
         };
         Returns: number;
       };

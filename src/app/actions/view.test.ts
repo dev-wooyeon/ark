@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { cookies, headers } from 'next/headers';
 import { getSupabaseServerClient } from '@/shared/integrations/supabase';
 import {
   getPopularViewsInRecentDays,
@@ -9,6 +10,11 @@ import {
 
 vi.mock('@/shared/integrations/supabase', () => ({
   getSupabaseServerClient: vi.fn(),
+}));
+
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(),
+  headers: vi.fn(),
 }));
 
 interface RpcResult {
@@ -28,6 +34,15 @@ type SupabaseLike = {
     maybeSingle: ReturnType<typeof vi.fn>;
   };
 };
+
+interface CookieStoreLike {
+  get: ReturnType<typeof vi.fn>;
+  set: ReturnType<typeof vi.fn>;
+}
+
+interface HeaderStoreLike {
+  get: ReturnType<typeof vi.fn>;
+}
 
 function createQueryMock(payload: {
   data: unknown;
@@ -61,10 +76,41 @@ function createSupabaseMock(options: {
 }
 
 const mockedGetSupabase = vi.mocked(getSupabaseServerClient);
+const mockedCookies = vi.mocked(cookies);
+const mockedHeaders = vi.mocked(headers);
+
+function createCookieStoreMock(visitorId: string | null = null): CookieStoreLike {
+  return {
+    get: vi
+      .fn()
+      .mockReturnValue(
+        visitorId
+          ? { name: 'view_visitor_id', value: visitorId }
+          : null
+      ),
+    set: vi.fn(),
+  };
+}
+
+function createHeaderStoreMock(
+  entries: Record<string, string | null>
+): HeaderStoreLike {
+  return {
+    get: vi.fn((name: string) => entries[name] ?? null),
+  };
+}
 
 describe('view actions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedCookies.mockResolvedValue(createCookieStoreMock());
+    mockedHeaders.mockResolvedValue(
+      createHeaderStoreMock({
+        'x-forwarded-for': '203.0.113.10',
+        'user-agent': 'Vitest Browser',
+        'accept-language': 'ko-KR',
+      })
+    );
   });
 
   it('increments view when slug is valid and client exists', async () => {
@@ -166,9 +212,14 @@ describe('view actions', () => {
 
     const count = await trackView('my-post');
 
-    expect(client.rpc).toHaveBeenCalledWith('increment_view', {
-      slug_input: 'my-post',
-    });
+    expect(client.rpc).toHaveBeenCalledWith(
+      'increment_view',
+      expect.objectContaining({
+        slug_input: 'my-post',
+        viewer_fingerprint_input: expect.any(String),
+        dedupe_window_seconds_input: 86400,
+      })
+    );
     expect(count).toBe(9);
   });
 
@@ -182,6 +233,86 @@ describe('view actions', () => {
     const count = await trackView('my-post');
 
     expect(count).toBe(15);
+  });
+
+  it('includes fingerprint and dedupe window when tracking view', async () => {
+    const client = createSupabaseMock({
+      queryPayload: { data: { count: 1 }, error: null },
+      rpcPayload: { data: 5, error: null },
+    });
+    mockedGetSupabase.mockReturnValue(client);
+
+    await trackView('my-post');
+
+    expect(client.rpc).toHaveBeenCalledWith(
+      'increment_view',
+      expect.objectContaining({
+        slug_input: 'my-post',
+        viewer_fingerprint_input: expect.any(String),
+        dedupe_window_seconds_input: 86400,
+      })
+    );
+  });
+
+  it('falls back to legacy increment signature when rpc argument mismatch occurs', async () => {
+    const client = {
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        maybeSingle: vi
+          .fn()
+          .mockResolvedValueOnce({ data: { count: 12 }, error: null }),
+      }),
+      rpc: vi
+        .fn()
+        .mockResolvedValueOnce({
+          data: null,
+          error: {
+            message:
+              'Could not find the function public.increment_view(slug_input, viewer_fingerprint_input, dedupe_window_seconds_input)',
+          },
+        })
+        .mockResolvedValueOnce({ data: 12, error: null }),
+    };
+    mockedGetSupabase.mockReturnValue(client as unknown as SupabaseLike);
+
+    const count = await trackView('my-post');
+
+    expect(client.rpc).toHaveBeenNthCalledWith(
+      1,
+      'increment_view',
+      expect.objectContaining({
+        slug_input: 'my-post',
+        viewer_fingerprint_input: expect.any(String),
+        dedupe_window_seconds_input: 86400,
+      })
+    );
+    expect(client.rpc).toHaveBeenNthCalledWith(2, 'increment_view', {
+      slug_input: 'my-post',
+    });
+    expect(count).toBe(12);
+  });
+
+  it('uses fallback visitor cookie when request headers are unavailable', async () => {
+    const client = createSupabaseMock({
+      queryPayload: { data: { count: 1 }, error: null },
+      rpcPayload: { data: 2, error: null },
+    });
+    const cookieStore = createCookieStoreMock();
+    mockedGetSupabase.mockReturnValue(client);
+    mockedHeaders.mockResolvedValue(createHeaderStoreMock({}));
+    mockedCookies.mockResolvedValue(cookieStore);
+
+    await trackView('my-post');
+
+    expect(cookieStore.set).toHaveBeenCalledTimes(1);
+    expect(client.rpc).toHaveBeenCalledWith(
+      'increment_view',
+      expect.objectContaining({
+        slug_input: 'my-post',
+        viewer_fingerprint_input: expect.any(String),
+      })
+    );
   });
 
   it('fetches popular views with recent-day filter and descending count order', async () => {
