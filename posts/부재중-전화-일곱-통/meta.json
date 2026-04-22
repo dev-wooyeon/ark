@@ -10,5 +10,13 @@
     "Memento Mori"
   ],
   "visibility": "public",
-  "featured": false
+  "featured": false,
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 3.5,
+    "implementation": 3,
+    "brandFit": 4,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

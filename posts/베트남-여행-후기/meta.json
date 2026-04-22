@@ -1,7 +1,7 @@
 {
-  "title": "베트남 4박 5일 여행기: 엔지니어의 휴식",
+  "title": "베트남 4박 5일 여행 기록: 다낭과 호이안",
   "slug": "vietnam-travel",
-  "description": "짧은 다낭 여행에서 무엇이 실제 만족도를 높였는지와 개발자 시선에 남은 장면을 기록해요.",
+  "description": "짧은 다낭 여행에서 실제 만족도를 높인 선택과 개발자 시선에 남은 장면을 정리한다.",
   "date": "2026-02-05",
   "category": "Life",
   "tags": [
@@ -12,5 +12,13 @@
     "Engineering"
   ],
   "visibility": "public",
-  "featured": false
+  "featured": false,
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3,
+    "implementation": 2.5,
+    "brandFit": 3,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "title": "게임 삭제, 이력서 120건 난사, 새로운 가족을 맞이한 2025년 회고",
+  "title": "2025년 회고: 이직 준비와 가족의 변화를 지나며",
   "slug": "review-2025",
   "description": "버린 것과 얻은 것이 제 선택 기준을 어떻게 바꿨는지 2025년 회고로 정리해요.",
   "date": "2025-12-29",
@@ -9,5 +9,13 @@
     "Work"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 3.5,
+    "implementation": 3,
+    "brandFit": 3.5,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

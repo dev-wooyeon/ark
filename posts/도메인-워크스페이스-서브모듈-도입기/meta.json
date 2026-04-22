@@ -1,7 +1,7 @@
 {
-  "title": "분산된 MSA repo, AI 시대엔 이렇게 묶어 일합니다",
+  "title": "분산된 MSA 저장소를 워크스페이스로 묶어 운영한 기록",
   "slug": "msa-domain-workspace-submodule",
-  "description": "도메인 워크스페이스와 Git 서브모듈로 MSA 환경의 컨텍스트 스위칭 비용을 줄인 도입기예요.",
+  "description": "도메인 워크스페이스와 Git 서브모듈로 MSA 환경의 맥락 전환 비용을 줄인 도입 기준을 정리한다.",
   "date": "2026-02-26",
   "category": "Tech",
   "tags": [
@@ -18,6 +18,6 @@
     "implementation": 3.5,
     "brandFit": 4,
     "notes": "핵심 유지",
-    "reviewedAt": "2026-04-13"
+    "reviewedAt": "2026-04-22"
   }
 }

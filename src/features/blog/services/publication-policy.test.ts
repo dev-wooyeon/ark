@@ -4,7 +4,7 @@ import { getSortedFeedData } from './post-repository';
 
 const FEATURED_SLUGS = [
   'ctr-pipeline',
-  'db-outage-index-root-cause',
+  'db-outage-analysis-retrospective',
   'payment-system-design',
   'settlement-automation',
   'msa-domain-workspace-submodule',

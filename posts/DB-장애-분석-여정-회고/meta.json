@@ -1,7 +1,7 @@
 {
-  "title": "DB 장애의 진짜 원인은 코드가 아니었다",
-  "slug": "db-outage-index-root-cause",
-  "description": "슬로우 쿼리와 rows_examined, EXPLAIN으로 병목을 좁히며 인덱스 설계 문제를 찾은 과정을 정리해요.",
+  "title": "DB 장애 분석 회고",
+  "slug": "db-outage-analysis-retrospective",
+  "description": "슬로우 쿼리와 rows_examined, EXPLAIN으로 병목을 좁히며 인덱스 설계 문제를 확인한 과정을 정리한다.",
   "date": "2026-03-23",
   "category": "Tech",
   "tags": [
@@ -19,6 +19,6 @@
     "implementation": 4.5,
     "brandFit": 4.5,
     "notes": "핵심 유지",
-    "reviewedAt": "2026-04-13"
+    "reviewedAt": "2026-04-22"
   }
 }

@@ -1,7 +1,7 @@
 {
-  "title": "IoT 시스템을 글로벌 플랫폼으로 도약하기 위한 회고",
+  "title": "IoT 시스템을 플랫폼으로 전환한 설계 회고",
   "slug": "platform-system-review",
-  "description": "제주파크 맞춤 IoT 시스템을 멀티파크 플랫폼으로 전환하기 위해 도메인 경계, Hexagonal Architecture, 점진 전환 전략을 어떻게 정했는지 정리해요.",
+  "description": "제주파크 맞춤 IoT 시스템을 멀티파크 플랫폼으로 전환하기 위해 도메인 경계, Hexagonal Architecture, 점진 전환 전략을 어떻게 정했는지 정리한다.",
   "date": "2024-08-18",
   "category": "Tech",
   "tags": [

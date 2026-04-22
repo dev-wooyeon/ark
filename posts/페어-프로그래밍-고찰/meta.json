@@ -1,12 +1,20 @@
 {
-  "title": "흑백요리사와 페어 프로그래밍의 공통점: 왜 둘이 판단할 때 더 강해질까",
+  "title": "페어 프로그래밍에서 두 사람이 판단하는 방식에 대한 고찰",
   "slug": "pair-programming",
-  "description": "페어 프로그래밍을 같이 코딩하는 방식이 아니라 같이 판단하는 구조로 이해한 이유를 정리해요.",
+  "description": "페어 프로그래밍을 같이 코딩하는 방식이 아니라 같이 판단하는 구조로 이해한 이유를 정리한다.",
   "date": "2026-01-08",
   "category": "Life",
   "tags": [
     "페어 프로그래밍"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3,
+    "implementation": 2.5,
+    "brandFit": 3.5,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

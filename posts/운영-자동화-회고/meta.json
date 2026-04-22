@@ -1,7 +1,7 @@
 {
-  "title": "운영팀의 15초를 줄이는 개발이 가장 어려웠다: 운영 자동화 회고",
+  "title": "운영 자동화로 반복 업무를 줄인 기록",
   "slug": "operation-automation",
-  "description": "반복 업무 자동화와 성능 개선으로 운영팀의 시간을 줄인 문제 정의와 구현 과정을 돌아봐요.",
+  "description": "반복 업무 자동화와 성능 개선으로 운영팀의 시간을 줄인 문제 정의와 구현 기준을 돌아본다.",
   "date": "2026-01-25",
   "category": "Tech",
   "tags": [
@@ -17,7 +17,7 @@
     "design": 3.5,
     "implementation": 3,
     "brandFit": 4,
-    "notes": "재작성 후 유지",
-    "reviewedAt": "2026-04-13"
+    "notes": "보강 후 유지",
+    "reviewedAt": "2026-04-22"
   }
 }

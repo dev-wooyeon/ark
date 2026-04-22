@@ -1,7 +1,7 @@
 {
-  "title": "Next.js 16과 Three.js로 만드는 기술 블로그: 구축부터 최적화까지",
+  "title": "Next.js 16과 Three.js로 블로그를 구축하고 최적화한 기록",
   "slug": "blog-system-building",
-  "description": "MDX 기반 기술 블로그를 만들며 정리한 설계 원칙과 성능 최적화 과정을 소개해요.",
+  "description": "MDX 기반 기술 블로그를 만들며 정리한 설계 원칙, 시스템 구조, 성능 최적화 기준을 소개한다.",
   "date": "2026-01-28",
   "category": "Tech",
   "tags": [
@@ -18,7 +18,7 @@
     "design": 4,
     "implementation": 4,
     "brandFit": 2.5,
-    "notes": "보조 유지",
-    "reviewedAt": "2026-04-13"
+    "notes": "보강 후 유지",
+    "reviewedAt": "2026-04-22"
   }
 }

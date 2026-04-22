@@ -1,12 +1,20 @@
 {
-  "title": "합격하는 이력서의 비밀: 같은 재료로 전혀 다른 결과를 만들기 위한 방법 (feat. 흑백요리사)",
+  "title": "이력서에서 경험을 다르게 전달하는 방법",
   "slug": "resume-feat-sheff",
-  "description": "같은 경험도 전혀 다르게 읽히는 이유를 흑백요리사 비유로 풀어보며 이력서 해석 기준을 정리해요.",
+  "description": "같은 경험이 전혀 다르게 읽히는 이유를 흑백요리사 비유로 풀어 이력서 해석 기준을 정리한다.",
   "date": "2026-01-15",
   "category": "Life",
   "tags": [
     "이력서"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3,
+    "implementation": 2.5,
+    "brandFit": 3,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

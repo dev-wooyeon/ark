@@ -1,7 +1,7 @@
 {
-  "title": "함께 자라기를 읽고 느낀 점을 정리해보았다.",
+  "title": "함께 자라기 리뷰",
   "slug": "with-grow",
-  "description": "함께 자라기를 읽고 오래 남은 장면을 성장, 신뢰, 소통, 팀의 기준으로 다시 정리해요.",
+  "description": "함께 자라기를 읽고 오래 남은 장면을 성장, 신뢰, 소통, 팀의 기준으로 다시 정리한다.",
   "date": "2025-12-29",
   "category": "Life",
   "tags": [
@@ -10,5 +10,13 @@
     "Book"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3,
+    "design": 2.5,
+    "implementation": 2.5,
+    "brandFit": 2.5,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }

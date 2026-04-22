@@ -1,7 +1,7 @@
 {
-  "title": "3년간 근무한 첫 직장 SM 퇴사 회고록",
+  "title": "첫 직장 퇴사 회고",
   "slug": "first-company-review",
-  "description": "첫 직장에서 보낸 3년과 퇴사 과정이 제 일과 성장 기준을 어떻게 바꿨는지 돌아봐요.",
+  "description": "첫 직장에서 보낸 3년과 퇴사 과정이 일과 성장 기준을 어떻게 바꿨는지 돌아본다.",
   "date": "2023-06-07",
   "category": "Life",
   "tags": [
@@ -11,5 +11,13 @@
     "Work"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3,
+    "implementation": 2.5,
+    "brandFit": 3.5,
+    "notes": "보강 필요",
+    "reviewedAt": "2026-04-22"
+  }
 }
