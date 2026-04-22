@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import { createElement, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import MobileBottomNav from './MobileBottomNav';
 
@@ -20,29 +20,6 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-vi.mock('framer-motion', () => ({
-  motion: {
-    nav: ({
-      children,
-      ...props
-    }: {
-      children: ReactNode;
-      initial?: unknown;
-      animate?: unknown;
-      transition?: unknown;
-      [key: string]: unknown;
-    }) => {
-      const {
-        initial: _initial,
-        animate: _animate,
-        transition: _transition,
-        ...domProps
-      } = props;
-      return createElement('nav', domProps, children);
-    },
-  },
-}));
-
 vi.mock('@/shared/analytics/lib/analytics', () => {
   return {
     AnalyticsEvents: {
@@ -55,93 +32,83 @@ vi.mock('@/shared/analytics/lib/analytics', () => {
 });
 
 describe('MobileBottomNav', () => {
-  it('renders four mobile nav links', () => {
-    render(<MobileBottomNav pathname="/" visible />);
+  it('renders drawer links when open', () => {
+    render(<MobileBottomNav pathname="/" visible open />);
 
-    expect(screen.getByRole('link', { name: '홈' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Engineering' })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Life' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Resume' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Home/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Tech/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Life/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Resume/ })).toBeInTheDocument();
   });
 
   it('marks active item based on exact home path', async () => {
-    render(<MobileBottomNav pathname="/" visible />);
+    render(<MobileBottomNav pathname="/" visible open />);
 
-    const home = await screen.findByRole('link', { name: '홈' });
+    const home = await screen.findByRole('link', { name: /Home/ });
     expect(home).toHaveAttribute('aria-current', 'page');
 
-    const engineering = await screen.findByRole('link', {
-      name: 'Engineering',
-    });
-    expect(engineering).not.toHaveAttribute('aria-current');
+    const tech = await screen.findByRole('link', { name: /Tech/ });
+    expect(tech).not.toHaveAttribute('aria-current');
   });
 
   it('marks active item for nested engineering path', async () => {
-    render(<MobileBottomNav pathname="/engineering/how-to-test" visible />);
+    render(
+      <MobileBottomNav pathname="/engineering/how-to-test" visible open />
+    );
 
-    const engineering = await screen.findByRole('link', {
-      name: 'Engineering',
-    });
-    expect(engineering).toHaveAttribute('aria-current', 'page');
+    const tech = await screen.findByRole('link', { name: /Tech/ });
+    expect(tech).toHaveAttribute('aria-current', 'page');
   });
 
-  it('applies inactive hover style token for non-active items', async () => {
-    render(<MobileBottomNav pathname="/" visible />);
+  it('renders drawer shell when open', () => {
+    render(<MobileBottomNav pathname="/" visible open />);
 
-    const life = await screen.findByRole('link', { name: 'Life' });
-    const lifeContent = life.querySelector('div');
-
-    expect(lifeContent).toHaveClass('border-transparent');
-    expect(lifeContent).toHaveClass('hover:bg-[var(--mobile-nav-hover-bg)]');
-    expect(lifeContent).toHaveClass(
-      'group-active:bg-[var(--mobile-nav-hover-bg)]'
-    );
-    expect(lifeContent).toHaveClass('min-h-14');
+    expect(screen.getByLabelText('모바일 네비게이션')).toBeInTheDocument();
+    expect(screen.getByText('블로그 섹션과 외부 링크')).toBeInTheDocument();
   });
 
-  it('applies focus and touch token classes on each nav control', async () => {
-    render(<MobileBottomNav pathname="/" visible />);
+  it('calls close handler when backdrop is clicked', () => {
+    const handleOpenChange = vi.fn();
 
-    const home = await screen.findByRole('link', { name: '홈' });
-    expect(home).toHaveClass(
-      'focus-visible:ring-[var(--mobile-nav-focus-ring)]'
+    render(
+      <MobileBottomNav
+        pathname="/"
+        visible
+        open
+        onOpenChange={handleOpenChange}
+      />
     );
-    expect(home).toHaveClass(
-      'focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]'
-    );
-    expect(home).toHaveClass('touch-manipulation');
-    expect(home).toHaveClass('active:scale-[0.97]');
+
+    screen.getAllByRole('button', { name: '메뉴 닫기' })[0].click();
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
 
   it('tracks analytics on tab click', async () => {
     mockTrackEvent.mockClear();
 
     await act(async () => {
-      render(<MobileBottomNav pathname="/engineering" visible />);
+      render(<MobileBottomNav pathname="/engineering" visible open />);
       await Promise.resolve();
     });
 
-    const resume = screen.getByRole('link', { name: 'Resume' });
+    const resume = screen.getByRole('link', { name: /Resume/ });
     await act(async () => {
       await Promise.resolve();
       resume.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
 
     expect(mockTrackEvent).toHaveBeenCalledWith('click', {
-      target: 'mobile_bottom_nav',
+      target: 'mobile_nav_drawer',
       destination: '/resume',
     });
   });
 
-  it('applies motion offset class when hidden', () => {
-    render(<MobileBottomNav pathname="/" visible={false} />);
+  it('hides pointer events when closed', () => {
+    render(<MobileBottomNav pathname="/" visible open={false} />);
 
-    const nav = screen.getByLabelText('모바일 하단 네비게이션');
-    expect(nav).toHaveClass('fixed');
-    expect((nav as HTMLDivElement).getAttribute('aria-label')).toBe(
-      '모바일 하단 네비게이션'
-    );
+    const drawerRoot =
+      screen.getAllByRole('button', { name: '메뉴 닫기', hidden: true })[0]
+        .parentElement;
+    expect(drawerRoot).toHaveClass('pointer-events-none');
   });
 });

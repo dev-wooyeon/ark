@@ -9,8 +9,8 @@
 @import 'tailwindcss';
 
 :root {
-  --mobile-bottom-nav-height: 84px;
-  --mobile-bottom-nav-offset: var(--mobile-bottom-nav-height);
+  --mobile-bottom-nav-height: 0px;
+  --mobile-bottom-nav-offset: 0px;
 }
 
 /* ===== Local Fonts ===== */
@@ -245,12 +245,6 @@
   img {
     max-width: 100%;
     height: auto;
-  }
-}
-
-@media (max-width: 767px) {
-  body {
-    padding-bottom: calc(var(--mobile-bottom-nav-offset) + env(safe-area-inset-bottom));
   }
 }
 

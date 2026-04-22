@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import type { FeedData } from '@/domains/post/model/types';
@@ -212,11 +212,16 @@ function SearchButton() {
 
 export default function AppShell({ children, posts }: AppShellProps) {
   const pathname = usePathname();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const activeSection = useMemo(
     () => resolveSection(pathname, posts),
     [pathname, posts]
   );
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-[var(--color-grey-50)] text-[var(--color-text-primary)] md:flex md:h-screen md:overflow-hidden">
@@ -224,7 +229,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
 
       <aside className="hidden h-screen w-16 shrink-0 border-r border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] md:sticky md:top-0 md:flex">
         <div className="flex h-full w-full flex-col justify-between">
-          <div className="flex flex-col items-center gap-2 px-1.5 py-3">
+          <div className="flex flex-col items-center gap-1 px-1 py-3">
             {RAIL_NAV_ITEMS.map((item) => {
               const isActive = item.id === activeSection;
 
@@ -234,7 +239,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
                   href={item.href}
                   aria-label={item.label}
                   className={clsx(
-                    'flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-1.5 transition-colors',
+                    'flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-2 transition-colors',
                     isActive
                       ? 'text-[var(--color-toss-blue)]'
                       : 'text-[var(--color-grey-500)] hover:text-[var(--color-grey-900)]'
@@ -242,7 +247,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
                 >
                   <span
                     className={clsx(
-                      'flex h-9 w-9 items-center justify-center rounded-xl border transition-colors',
+                      'flex h-10 w-10 items-center justify-center rounded-xl border transition-colors',
                       isActive
                         ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white shadow-sm'
                         : 'border-transparent hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)]'
@@ -250,7 +255,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
                   >
                     {item.icon}
                   </span>
-                  <span className="text-center text-xs leading-none tracking-tight">
+                  <span className="text-center text-xs font-medium leading-none tracking-tight">
                     {item.label}
                   </span>
                 </Link>
@@ -275,7 +280,40 @@ export default function AppShell({ children, posts }: AppShellProps) {
 
       <div className="min-w-0 flex-1 bg-[var(--color-bg-primary)] md:flex md:h-screen md:flex-col md:overflow-hidden">
         <header className="sticky top-0 z-[var(--z-sticky)] border-b border-[var(--color-grey-200)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md">
-          <div className="grid h-14 grid-cols-[1fr_minmax(0,560px)_1fr] items-center gap-3 px-4 md:px-6">
+          <div className="flex h-14 items-center gap-3 px-4 md:hidden">
+            <button
+              type="button"
+              aria-label={mobileNavOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav-drawer"
+              onClick={() => setMobileNavOpen((current) => !current)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="4" y1="7" x2="20" y2="7" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="17" x2="20" y2="17" />
+              </svg>
+            </button>
+
+            <div className="min-w-0 flex-1">
+              <SearchButton />
+            </div>
+
+            <ThemeToggle />
+          </div>
+
+          <div className="hidden h-14 grid-cols-[1fr_minmax(0,560px)_1fr] items-center gap-3 px-6 md:grid">
             <div />
             <div className="flex justify-center">
               <div className="w-full max-w-xl">
@@ -294,7 +332,12 @@ export default function AppShell({ children, posts }: AppShellProps) {
         </div>
       </div>
 
-      <MobileBottomNav pathname={pathname} visible />
+      <MobileBottomNav
+        pathname={pathname}
+        visible
+        open={mobileNavOpen}
+        onOpenChange={setMobileNavOpen}
+      />
     </div>
   );
 }
