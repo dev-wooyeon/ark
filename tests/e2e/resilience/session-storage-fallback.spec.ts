@@ -17,8 +17,8 @@ test.describe('Storage fallback', () => {
     });
 
     await page.goto('/');
-    await expect(page.getByText('안녕하세요, 우연입니다')).toBeVisible();
+    await expect(page.getByRole('button', { name: /All/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: '최신순' })).toBeVisible();
     expect(errors.join('\n')).not.toContain('Failed to set the value');
   });
 });
-

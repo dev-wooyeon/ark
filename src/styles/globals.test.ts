@@ -8,9 +8,10 @@ const tokensPath = path.resolve(process.cwd(), 'src/styles/tokens.css');
 const tokensContent = fs.readFileSync(tokensPath, 'utf8');
 
 describe('globals styles', () => {
-  it('uses variable based mobile bottom offset', () => {
-    expect(globalsContent).toContain('padding-bottom: calc(var(--mobile-bottom-nav-offset) + env(safe-area-inset-bottom));');
-    expect(globalsContent).toContain('--mobile-bottom-nav-offset: var(--mobile-bottom-nav-height);');
+  it('defines mobile navigation state variables at root', () => {
+    expect(globalsContent).toContain(':root {');
+    expect(globalsContent).toContain('--mobile-bottom-nav-height: 0px;');
+    expect(globalsContent).toContain('--mobile-bottom-nav-offset: 0px;');
   });
 
   it('defines mobile-nav related z-index custom properties', () => {

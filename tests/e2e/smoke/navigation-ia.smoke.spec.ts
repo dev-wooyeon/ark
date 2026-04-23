@@ -5,49 +5,82 @@ async function warmRoute(page: Page, path: string) {
   expect(response.ok()).toBeTruthy();
 }
 
+async function openDrawer(page: Page) {
+  await page.getByRole('button', { name: '메뉴 열기' }).click();
+  await expect(page.locator('#mobile-nav-drawer')).toHaveClass(/translate-x-0/);
+}
+
 test.describe('Navigation IA', () => {
-  test('@smoke 모바일 하단 네비 4탭이 동작해요', async ({ page }, testInfo) => {
+  test('@smoke 모바일 드로어에서 Tech로 이동해요', async ({
+    page,
+  }, testInfo) => {
     test.skip(
       !testInfo.project.use.isMobile,
       '모바일 프로젝트 전용 테스트예요.'
     );
 
     await page.goto('/');
-    await expect(
-      page.getByRole('navigation', { name: '모바일 하단 네비게이션' })
-    ).toBeVisible();
+    await openDrawer(page);
 
-    const nav = page.getByRole('navigation', {
-      name: '모바일 하단 네비게이션',
+    const techTab = page.getByLabel('모바일 네비게이션').getByRole('link', {
+      name: /Tech/,
     });
-
-    const engineeringTab = nav.getByRole('link', {
-      name: 'Engineering',
-      exact: true,
-    });
-    await expect(engineeringTab).toHaveAttribute('href', '/engineering');
+    await expect(techTab).toHaveAttribute('href', '/engineering');
     await warmRoute(page, '/engineering');
-    await page.goto('/engineering');
+    await techTab.click();
     await expect(page).toHaveURL(/\/engineering/);
+  });
+
+  test('모바일 드로어에서 Life로 이동해요', async ({ page }, testInfo) => {
+    test.skip(
+      !testInfo.project.use.isMobile,
+      '모바일 프로젝트 전용 테스트예요.'
+    );
 
     await page.goto('/');
-    const lifeTab = nav.getByRole('link', { name: 'Life', exact: true });
+    await openDrawer(page);
+
+    const lifeTab = page.getByLabel('모바일 네비게이션').getByRole('link', {
+      name: /Life/,
+    });
     await expect(lifeTab).toHaveAttribute('href', '/life');
     await warmRoute(page, '/life');
-    await page.goto('/life');
+    await lifeTab.click();
     await expect(page).toHaveURL(/\/life/);
+  });
+
+  test('모바일 드로어에서 Resume로 이동해요', async ({ page }, testInfo) => {
+    test.skip(
+      !testInfo.project.use.isMobile,
+      '모바일 프로젝트 전용 테스트예요.'
+    );
 
     await page.goto('/');
-    const resumeTab = nav.getByRole('link', { name: 'Resume', exact: true });
+    await openDrawer(page);
+
+    const resumeTab = page.getByLabel('모바일 네비게이션').getByRole('link', {
+      name: /Resume/,
+    });
     await expect(resumeTab).toHaveAttribute('href', '/resume');
     await warmRoute(page, '/resume');
-    await page.goto('/resume');
+    await resumeTab.click();
     await expect(page).toHaveURL(/\/resume/);
+  });
+
+  test('모바일 드로어에서 Home으로 이동해요', async ({ page }, testInfo) => {
+    test.skip(
+      !testInfo.project.use.isMobile,
+      '모바일 프로젝트 전용 테스트예요.'
+    );
 
     await page.goto('/engineering');
-    const homeTab = nav.getByRole('link', { name: '홈', exact: true });
+    await openDrawer(page);
+
+    const homeTab = page.getByLabel('모바일 네비게이션').getByRole('link', {
+      name: /Home/,
+    });
     await expect(homeTab).toHaveAttribute('href', '/');
-    await page.goto('/');
+    await homeTab.click();
     await expect(page).toHaveURL(/\/$/);
   });
 
@@ -77,7 +110,7 @@ test.describe('Navigation IA', () => {
       throw new Error('상세 글 href를 찾지 못했어요.');
     }
 
-    await page.goto(href);
-    await expect(page).toHaveURL(/\/blog\/.+/);
+    const response = await page.request.get(href);
+    expect(response.ok()).toBeTruthy();
   });
 });

@@ -11,5 +11,3 @@ export type {
 
 export { RouteError } from './RouteState';
 export type { RouteErrorProps } from './RouteState';
-
-export { default as Logo } from './Logo';

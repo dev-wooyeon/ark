@@ -1,96 +1,57 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Mobile navigation', () => {
   test.beforeEach(({}, testInfo) => {
     test.skip(!testInfo.project.use.isMobile, '모바일 프로젝트 전용 테스트예요.');
   });
 
-  test('@smoke 홈 진입 즉시 하단 내비 표시', async ({ page }) => {
-    await page.goto('/');
-    const nav = page.getByRole('navigation', {
-      name: '모바일 하단 네비게이션',
-    });
-
-    await expect(nav).toBeVisible();
-
-    const rectBefore = await nav.boundingBox();
-    expect(rectBefore).not.toBeNull();
-    expect(rectBefore?.y).toBeGreaterThan(0);
-
-    const transform = await nav.evaluate((el) => getComputedStyle(el).transform);
-    expect(transform === 'none' || transform.includes('matrix')).toBeTruthy();
-  });
-
-  test('스크롤 0/20/31/100에서 하단바 상태가 일관되게 전환되는지', async ({
+  test('@smoke 홈 진입 시 메뉴 버튼으로 모바일 드로어를 열 수 있어요', async ({
     page,
   }) => {
     await page.goto('/');
-    const nav = page.getByRole('navigation', {
-      name: '모바일 하단 네비게이션',
-    });
 
-    const getBottomOffset = () =>
-      page.evaluate(() =>
-        document.body.style.getPropertyValue('--mobile-bottom-nav-offset').trim()
-      );
+    const menuButton = page.getByRole('button', { name: '메뉴 열기' });
+    await expect(menuButton).toBeVisible();
 
-    await page.evaluate(() => {
-      window.scrollTo(0, 0);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
+    await menuButton.click();
 
-    await page.evaluate(() => {
-      window.scrollTo(0, 20);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
-
-    await page.evaluate(() => {
-      window.scrollTo(0, 31);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
-
-    await page.evaluate(() => {
-      window.scrollTo(0, 100);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    await expect.poll(getBottomOffset).toBe('0px');
-
-    await page.evaluate(() => {
-      window.scrollTo(0, 0);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
-
-    const finalTransform = await nav.evaluate((el) => getComputedStyle(el).transform);
-    expect(finalTransform).toMatch(/none|matrix/);
+    const nav = page.getByLabel('모바일 네비게이션');
+    await expect(nav).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Home/ })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Tech/ })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Life/ })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Resume/ })).toBeVisible();
   });
 
-  test('스크롤 동작 후 라우트 복귀해도 바텀바 규칙이 재적용되는지', async ({ page }) => {
+  test('모바일 드로어는 닫기 버튼으로 닫혀요', async ({ page }) => {
     await page.goto('/');
-    const getBottomOffset = () =>
-      page.evaluate(() =>
-        document.body.style.getPropertyValue('--mobile-bottom-nav-offset').trim()
-      );
+    await page.getByRole('button', { name: '메뉴 열기' }).click();
 
-    await page.evaluate(() => {
-      window.scrollTo(0, 120);
-      window.dispatchEvent(new Event('scroll'));
+    const nav = page.locator('#mobile-nav-drawer');
+    await expect(nav).toHaveClass(/translate-x-0/);
+
+    await nav.getByRole('button', { name: '메뉴 닫기' }).click();
+    await expect(nav).toHaveClass(/-translate-x-full/);
+  });
+
+  test('모바일 드로어에서 이동하면 자동으로 닫혀요', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: '메뉴 열기' }).click();
+
+    const nav = page.locator('#mobile-nav-drawer');
+    await nav.getByRole('link', { name: /Tech/ }).click();
+
+    await expect(page).toHaveURL(/\/engineering/);
+    await expect(nav).toHaveClass(/-translate-x-full/);
+  });
+
+  test('모바일에서 홈 본문 하단 여백이 과하게 남지 않아요', async ({ page }) => {
+    await page.goto('/');
+
+    const bottomPadding = await page.locator('main').evaluate((element) => {
+      return getComputedStyle(element).paddingBottom;
     });
-    await expect.poll(getBottomOffset).toBe('0px');
 
-    await page.goto('/engineering');
-    await page.waitForLoadState('networkidle');
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
-
-    await page.goto('/life');
-    await page.waitForLoadState('networkidle');
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
-
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await expect.poll(getBottomOffset).toBe('var(--mobile-bottom-nav-height)');
+    expect(parseFloat(bottomPadding)).toBeLessThanOrEqual(40);
   });
 });

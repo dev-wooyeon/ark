@@ -1,29 +1,29 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Theme regression', () => {
-  test('테마 토글 후 모바일 nav 스타일 토큰이 유지되는지', async ({
+  test('테마 토글 후 모바일 드로어 라벨과 링크가 유지되는지', async ({
     page,
   }, testInfo) => {
     test.skip(
       testInfo.project.name === 'desktop-chrome',
-      '모바일 하단 네비 전용 시나리오'
+      '모바일 드로어 전용 시나리오'
     );
 
     await page.goto('/');
     const themeButton = page.getByRole('button', { name: /모드로 전환/ });
     await expect(themeButton).toBeVisible();
 
-    const classBefore = await page.evaluate(
-      () => document.documentElement.className
-    );
+    const classBefore = await page.evaluate(() => {
+      return document.documentElement.className;
+    });
     const themeLabelBefore = await themeButton.getAttribute('aria-label');
 
     await themeButton.click();
     await page.waitForTimeout(400);
 
-    const classAfter = await page.evaluate(
-      () => document.documentElement.className
-    );
+    const classAfter = await page.evaluate(() => {
+      return document.documentElement.className;
+    });
     const themeLabelAfter = await themeButton.getAttribute('aria-label');
 
     expect(classAfter.length).toBeGreaterThanOrEqual(0);
@@ -31,21 +31,29 @@ test.describe('Theme regression', () => {
       classAfter !== classBefore || themeLabelBefore !== themeLabelAfter
     ).toBeTruthy();
 
-    const activeItem = page.getByRole('link', { name: '홈' });
-    await expect(activeItem).toBeVisible();
+    await page.getByRole('button', { name: '메뉴 열기' }).click();
+
+    const homeItem = page
+      .getByLabel('모바일 네비게이션')
+      .getByRole('link', { name: /Home/ });
+    await expect(homeItem).toBeVisible();
   });
 
-  test('focus visible outline class가 라우트 전환 후에도 존재', async ({
+  test('모바일 드로어 링크에 focus-visible 클래스가 유지돼요', async ({
     page,
   }, testInfo) => {
     test.skip(
       testInfo.project.name === 'desktop-chrome',
-      '모바일 하단 네비 전용 시나리오'
+      '모바일 드로어 전용 시나리오'
     );
 
     await page.goto('/');
+    await page.getByRole('button', { name: '메뉴 열기' }).click();
 
-    const homeItem = page.getByRole('link', { name: '홈' });
+    const homeItem = page
+      .getByLabel('모바일 네비게이션')
+      .getByRole('link', { name: /Home/ });
+
     await homeItem.focus();
     const focusedClass = await homeItem.getAttribute('class');
 
