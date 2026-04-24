@@ -1,95 +1,101 @@
+<div align="center">
+
 # eunu.log
+
+[![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+개인 블로그입니다.
 
 [라이브 데모](https://eunu-log.vercel.app)
 
-`eunu.log`는 장문 기술 글과 실무 회고를 다루는 Next.js 기반 개인 블로그다.
-MDX 콘텐츠 파이프라인, 시리즈형 글 구조, 분석 이벤트 추적, 이력서와
-검색 경험까지 한 저장소에서 관리한다.
+</div>
 
-## 핵심 구성
+## 🛠 기술 스택
 
-- **런타임:** Next.js App Router, React 19, TypeScript strict mode
-- **콘텐츠:** `posts/**/index.mdx + meta.json`, 커스텀 webpack MDX 로더
-- **UI:** Tailwind CSS, CSS variables, 필요한 구간만 CSS Modules 사용
-- **시각화:** Three.js, `@react-three/fiber`, `@react-three/drei`,
-  Framer Motion
-- **품질:** ESLint, Prettier, Vitest, Playwright
-- **데이터/분석:** Supabase 기반 조회수 집계, Umami 이벤트 추적
+<table>
+<tr>
+<td align="center" width="96">
+<img src="https://skillicons.dev/icons?i=nextjs" width="48" height="48" alt="Next.js" />
+<br>Next.js
+</td>
+<td align="center" width="96">
+<img src="https://skillicons.dev/icons?i=react" width="48" height="48" alt="React" />
+<br>React
+</td>
+<td align="center" width="96">
+<img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
+<br>TypeScript
+</td>
+<td align="center" width="96">
+<img src="https://skillicons.dev/icons?i=threejs" width="48" height="48" alt="Three.js" />
+<br>Three.js
+</td>
+<td align="center" width="96">
+<img src="https://skillicons.dev/icons?i=tailwind" width="48" height="48" alt="CSS" />
+<br>Tailwind
+</td>
+</tr>
+</table>
 
-## 개발 시작
+**코어 스택:**
 
-```bash
-npm install
-npm run dev
-```
+- **프레임워크:** Next.js 16+ (App Router, SSG/SSR)
+- **언어:** TypeScript (Strict Mode)
+- **스타일링:** Tailwind CSS + CSS Variables (필요한 영역에만 CSS Modules 사용)
 
-기본 개발 서버는 `internal/scripts/dev-with-agentation.mjs`를 통해 실행된다.
-순수 Next.js 개발 서버가 필요하면 `npm run dev:next`를 사용한다.
+**애니메이션:**
 
-## 자주 쓰는 명령어
+- **3D:** Three.js + @react-three/fiber + @react-three/drei
+- **모션:** Framer Motion
 
-```bash
-npm run dev
-npm run dev:next
-npm run build
-npm run lint
-npm run lint:css:syntax
-npm run test:unit
-npm run test:components
-npm run test:e2e
-```
+**콘텐츠 처리:**
 
-## 콘텐츠 모델
+- **포맷:** MDX + `meta.json` (폴더 기반 콘텐츠 구조)
+- **파이프라인:** `@mdx-js/loader` + remark/rehype + syntax highlighting
 
-블로그 글은 폴더 단위로 관리한다.
-중첩 디렉터리를 지원하므로 시리즈 글도 같은 규칙으로 다룬다.
+<br />
+
+## 🏗 시스템 아키텍처
+
+현재 운영 기준 아키텍처는 아래와 같습니다.
+
+![flow](/public/flow.png)
+
+핵심 포인트:
+
+- 블로그 앱(`eunu.log`)과 분석 대시보드(`Umami`)는 각각 Vercel에 분리 배포합니다.
+- 블로그 코드에서는 `NEXT_PUBLIC_UMAMI_URL`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID`만 설정하면 Umami 스크립트가 자동 로드됩니다.
+- Umami 커스텀 이벤트는 스크립트 초기화 전 큐에 적재되고, 로드 완료 후 자동으로 flush됩니다.
+
+<br />
+
+## 📂 프로젝트 구조
 
 ```text
-posts/
-├── 어떤-글/
-│   ├── index.mdx
-│   └── meta.json
-└── 시리즈/
-    └── 에피소드/
-        ├── index.mdx
-        └── meta.json
+eunu.log/
+├── 📁 src/
+│   ├── 📁 app/                 # 라우트 엔트리 전용 (Next App Router)
+│   ├── 📁 core/                # 앱 전역 설정/프로바이더 조합
+│   ├── 📁 domains/             # 도메인 계약/타입/스키마
+│   ├── 📁 features/            # 기능 모듈(ui/model/services)
+│   │   ├── 📁 blog/
+│   │   ├── 📁 resume/
+│   │   ├── 📁 search/
+│   │   └── 📁 home/
+│   ├── 📁 shared/              # 공용 모듈(analytics/integrations/layout/seo/testing/ui/types)
+│   ├── 📁 components/
+│   │   └── 📁 visualization/   # 인터랙티브 알고리즘 시각화 전용
+│   └── 📁 styles/              # 전역 스타일과 토큰
+├── 📁 tests/
+│   └── 📁 e2e/                 # Playwright E2E 테스트
+├── 📁 internal/
+│   ├── 📁 config/              # 내부 lint/spell 설정
+│   └── 📁 scripts/             # 내부 자동화/유틸 스크립트
+├── 📁 posts/                   # 블로그 글(MDX + 메타데이터)
+│   └── 📁 [slug]/              # 글 단위 폴더
+│       ├── index.mdx           # 글 본문
+│       └── meta.json           # 글 메타데이터
+├── 📁 public/                  # 정적 에셋
+└── 📁 docs/                    # 문서
 ```
-
-- 메타데이터 스키마: `src/domains/post/model/frontmatter-schema.ts`
-- 콘텐츠 로더: `src/features/blog/services/post-repository.ts`
-- MDX 파이프라인: `next.config.mjs`
-
-## 프로젝트 구조
-
-```text
-src/
-├── app/                     # App Router 엔트리
-├── core/                    # 전역 설정과 provider 조합
-├── domains/                 # 도메인 계약, 타입, 스키마
-├── features/                # blog, home, resume, search
-├── shared/                  # analytics, layout, seo, ui, testing
-├── components/visualization/# 시각화 전용 컴포넌트
-└── styles/                  # 글로벌 스타일과 디자인 토큰
-
-internal/
-├── config/                  # lint, spell, markdown 설정
-└── scripts/                 # 개발/콘텐츠 자동화 스크립트
-
-tests/e2e/                   # Playwright 시나리오
-docs/                        # 설계, 운영, 품질 문서
-```
-
-## 문서
-
-- 저장소 개요와 아키텍처: `ARCHITECTURE.md`
-- 문서 인덱스: `docs/README.md`
-- 프런트엔드 기준: `docs/FRONTEND.md`
-- 디자인 기준: `docs/DESIGN.md`
-- 블로그 품질 기준: `docs/blog-quality-guide.md`
-
-## 작업 원칙
-
-- 콘텐츠 구조는 `posts/**/index.mdx + meta.json` 형태를 유지한다.
-- MDX는 `next.config.mjs`의 커스텀 webpack 규칙을 유지한다.
-- 시각화가 무거운 UI는 `src/components/visualization/`에 둔다.
-- `any`와 임의 Tailwind 값은 추가하지 않는다.
