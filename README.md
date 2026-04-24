@@ -5,7 +5,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-개인 블로그입니다.
+기록 목적의 블로그
 
 [라이브 데모](https://eunu-log.vercel.app)
 
