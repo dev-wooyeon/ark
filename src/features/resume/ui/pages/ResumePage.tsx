@@ -1,475 +1,592 @@
 import { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Container } from '@/shared/layout';
-import StaggerReveal from '@/shared/motion/ui/StaggerReveal';
 import {
+  activities,
+  certifications,
+  education,
   experiences,
   personalInfo,
   personalProjects,
-  education,
-  activities,
-  certifications,
 } from '@/features/resume/model/resume-data';
 import { orderExperienceStages } from '@/features/resume/model/order-experience-stages';
 
 export const metadata: Metadata = {
-  title: 'Resume',
-  description: `${personalInfo.name}의 이력서`,
+  title: 'CV',
+  description: `${personalInfo.name}의 CV`,
 };
 
-export default function ResumePage() {
-  // Calculate years of experience (Start: Dec 2019)
-  const startDate = new Date(2019, 12); // Month is 0-indexed (11 = Dec)
+const heroStatement = '반복되는 운영 업무를 데이터 구조와 자동화로 바꿉니다';
+
+const heroSummary =
+  '해동검도 4단과 세계대회 본선을 준비하며 같은 동작을 수백, 수천 번 반복했습니다. 필요한 반복의 가치는 알지만, 개발자가 된 뒤 사람이 매번 확인하고 옮기는 반복이 장애와 비용으로 이어지는 장면은 그냥 넘기기 어려웠습니다. 백엔드 엔지니어로 일하며 서비스의 완성도는 기능 수보다 데이터가 얼마나 정확하게 쌓이고, 일관된 기준으로 흐르며, 여러 팀이 믿고 사용할 수 있는 구조를 갖추는지에 달려 있다는 점을 체감했습니다.';
+
+const motivationStatement =
+  '그래서 제 관심은 API를 하나 더 만드는 일보다, 귀찮고 위험한 반복을 데이터 흐름과 자동화 안으로 옮겨 운영 가능한 구조로 바꾸는 데 있습니다.';
+
+function calculateCareerYears(): number {
+  const careerStart = new Date(2019, 11, 1);
   const now = new Date();
-  let years = now.getFullYear() - startDate.getFullYear();
-  const m = now.getMonth() - startDate.getMonth();
-  if (m < 0 || (m === 0 && now.getDate() < startDate.getDate())) {
+  let years = now.getFullYear() - careerStart.getFullYear();
+  const monthDiff = now.getMonth() - careerStart.getMonth();
+
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && now.getDate() < careerStart.getDate())
+  ) {
     years--;
   }
 
-  // Calculate period duration from "YYYY.MM - YYYY.MM" or "YYYY.MM - 재직 중" format
-  const calculateDuration = (period: string): string => {
-    const parts = period.split(' - ');
-    if (parts.length !== 2) return '';
+  return years;
+}
 
-    const parseDate = (str: string): Date | null => {
-      if (str.includes('재직 중')) return new Date();
-      const [year, month] = str.split('.').map(Number);
-      if (!year || !month) return null;
-      return new Date(year, month - 1);
-    };
+function calculateDuration(period: string): string {
+  const [start, end] = period.split(' - ');
 
-    const startDate = parseDate(parts[0]);
-    const endDate = parseDate(parts[1]);
+  if (!start || !end) {
+    return '';
+  }
 
-    if (!startDate || !endDate) return '';
-
-    const months =
-      (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-      (endDate.getMonth() - startDate.getMonth()) +
-      1;
-    const calcYears = Math.floor(months / 12);
-    const calcMonths = months % 12;
-
-    if (calcYears > 0 && calcMonths > 0) {
-      return `${calcYears}년 ${calcMonths}개월`;
-    } else if (calcYears > 0) {
-      return `${calcYears}년`;
-    } else {
-      return `${calcMonths}개월`;
+  const parseDate = (value: string): Date | null => {
+    if (value.includes('재직 중')) {
+      return new Date();
     }
+
+    const [year, month] = value.split('.').map(Number);
+
+    if (!year || !month) {
+      return null;
+    }
+
+    return new Date(year, month - 1, 1);
   };
 
-  const renderTextWithCode = (text: string): ReactNode[] => {
-    const segments = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
-    return segments
-      .filter((segment) => segment.length > 0)
-      .map((segment, index) => {
-        if (segment.startsWith('```') && segment.endsWith('```')) {
-          const code = segment.slice(3, -3).trim();
-          return (
-            <pre
-              key={`${segment}-${index}`}
-              className="mt-2 mb-2 overflow-x-auto bg-[var(--color-bg-secondary)] px-3 py-2 rounded-[var(--radius-sm)] border border-[var(--color-border)]"
-            >
-              <code className="text-sm font-mono">{code}</code>
-            </pre>
-          );
-        }
+  const startDate = parseDate(start);
+  const endDate = parseDate(end);
 
-        if (segment.startsWith('`') && segment.endsWith('`')) {
-          return (
-            <code
-              key={`${segment}-${index}`}
-              className="px-1 py-0.5 rounded bg-[var(--color-bg-secondary)] border border-[var(--color-border)] text-sm font-mono"
-            >
-              {segment.slice(1, -1)}
-            </code>
-          );
-        }
+  if (!startDate || !endDate) {
+    return '';
+  }
 
-        return <span key={`${segment}-${index}`}>{segment}</span>;
-      });
-  };
+  const totalMonths =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth()) +
+    1;
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
 
-  const renderStageDetail = (detailLines: string[]): ReactNode => {
-    return (
-      <ul className="m-0 list-disc space-y-1 pl-5">
-        {detailLines.map((line, lineIndex) => (
-          <li key={`${line}-${lineIndex}`} className="leading-relaxed">
-            {renderTextWithCode(line)}
-          </li>
-        ))}
-      </ul>
-    );
-  };
+  if (years > 0 && months > 0) {
+    return `${years}년 ${months}개월`;
+  }
+
+  if (years > 0) {
+    return `${years}년`;
+  }
+
+  return `${months}개월`;
+}
+
+function renderTextWithCode(text: string): ReactNode[] {
+  const segments = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
+
+  return segments
+    .filter((segment) => segment.length > 0)
+    .map((segment, index) => {
+      if (segment.startsWith('```') && segment.endsWith('```')) {
+        const code = segment.slice(3, -3).trim();
+
+        return (
+          <pre
+            key={`${segment}-${index}`}
+            className="mt-2 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2"
+          >
+            <code className="text-sm">{code}</code>
+          </pre>
+        );
+      }
+
+      if (segment.startsWith('`') && segment.endsWith('`')) {
+        return (
+          <code
+            key={`${segment}-${index}`}
+            className="rounded border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-1.5 py-0.5 text-sm"
+          >
+            {segment.slice(1, -1)}
+          </code>
+        );
+      }
+
+      return <span key={`${segment}-${index}`}>{segment}</span>;
+    });
+}
+
+function renderDetailList(detailLines: string[]): ReactNode {
+  return (
+    <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+      {detailLines.map((line, index) => (
+        <li key={`${line}-${index}`} className="m-0 pl-1">
+          {renderTextWithCode(line)}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function renderProjectLinks(
+  links: { label: string; href: string; external?: boolean }[] | undefined
+): ReactNode {
+  if (!links || links.length === 0) {
+    return null;
+  }
 
   return (
-    <main className="py-10 bg-[var(--color-bg-primary)]">
-      <Container size="md">
-        {/* Profile Header */}
-        <header className="mb-12">
-          <h1 className="text-4xl font-bold text-[var(--color-text-primary)] mb-6">
-            Resume
-          </h1>
+    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--color-text-secondary)]">
+      {links.map((link) => (
+        <a
+          key={`${link.label}-${link.href}`}
+          href={link.href}
+          target={link.external ? '_blank' : '_self'}
+          rel={link.external ? 'noopener noreferrer' : undefined}
+          className="underline decoration-[var(--color-border)] underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  );
+}
 
-          <div className="flex flex-col gap-2 mb-4">
-            <h2 className="text-2xl text-[var(--color-text-primary)]">
-              {personalInfo.name}
-            </h2>
-            <p className="text-xl text-[var(--color-text-secondary)] font-medium">
-              {personalInfo.position}
-            </p>
-            {personalInfo.introduction && (
-              <p className="text-[var(--color-text-secondary)] mt-2 leading-relaxed">
-                {personalInfo.introduction}
-              </p>
-            )}
-          </div>
+function SectionTitle({
+  title,
+  description,
+}: {
+  title: string;
+  description?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-2 border-b border-[var(--color-border)] pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">
+        {title}
+      </h2>
+      {description ? (
+        <p className="text-sm text-[var(--color-text-tertiary)]">
+          {description}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
-          {/* Contact & Links */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-[var(--color-text-secondary)]">
+export default function ResumePage() {
+  const careerYears = calculateCareerYears();
+  const professionalProjects = experiences.flatMap((experience) =>
+    experience.projects.map((project) => ({
+      company: experience.company,
+      role: experience.role,
+      period: experience.period,
+      project,
+    }))
+  );
+  const profileLinks = [
+    {
+      label: 'Email',
+      value: (
+        <a
+          href={`mailto:${personalInfo.email}`}
+          className="transition-colors hover:text-[var(--color-text-primary)]"
+        >
+          {personalInfo.email}
+        </a>
+      ),
+    },
+    personalInfo.phone
+      ? {
+          label: 'Phone',
+          value: (
             <a
-              href={`mailto:${personalInfo.email}`}
-              className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+              href={`tel:${personalInfo.phone}`}
+              className="transition-colors hover:text-[var(--color-text-primary)]"
             >
-              <span className="tossface">📧</span>
-              {personalInfo.email}
+              {personalInfo.phone}
             </a>
-            {personalInfo.phone && (
-              <a
-                href={`tel:${personalInfo.phone}`}
-                className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
-              >
-                <span className="tossface">📱</span>
-                {personalInfo.phone}
-              </a>
-            )}
+          ),
+        }
+      : null,
+    {
+      label: 'GitHub',
+      value: (
+        <a
+          href={personalInfo.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-[var(--color-text-primary)]"
+        >
+          {personalInfo.github.replace('https://', '')}
+        </a>
+      ),
+    },
+    personalInfo.blog
+      ? {
+          label: 'Blog',
+          value: (
             <a
-              href={personalInfo.github}
+              href={personalInfo.blog}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
+              className="transition-colors hover:text-[var(--color-text-primary)]"
             >
-              <span className="tossface">🐱</span>
-              GitHub
+              {personalInfo.blog.replace('https://', '')}
             </a>
-            {personalInfo.blog && (
-              <a
-                href={personalInfo.blog}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-[var(--color-toss-blue)] transition-colors"
-              >
-                <span className="tossface">📝</span>
-                Blog
-              </a>
-            )}
-          </div>
-        </header>
+          ),
+        }
+      : null,
+  ].filter(Boolean);
 
-        {/* Skills Section */}
-        <section id="skills" className="mb-12">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2">
-            <span className="tossface text-3xl">🛠️</span> Skills
-          </h2>
-          <StaggerReveal className="flex flex-wrap gap-3" stagger={0.04}>
-            {personalInfo.skills.map((skill) => (
-              <span
-                key={skill}
-                className="px-4 py-2 bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] rounded-[var(--radius-md)] font-medium border border-[var(--color-border)] transition-all duration-[var(--duration-200)] hover:-translate-y-0.5 hover:border-[var(--color-toss-blue)]/30 hover:text-[var(--color-text-primary)] hover:shadow-sm"
-              >
-                {skill}
-              </span>
-            ))}
-          </StaggerReveal>
-        </section>
-
-        {/* Experience Section */}
-        <section id="experience" className="space-y-16">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-            <span className="tossface text-3xl">💼</span>
-            Experience
-            <span className="ml-2 text-base font-bold text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 px-3 py-0.5 rounded-full align-middle">
-              {years}년 +
-            </span>
-          </h2>
-
-          <StaggerReveal className="space-y-10" stagger={0.1}>
-            {experiences.map((exp, index) => (
-              <article
-                key={index}
-                className="relative rounded-[var(--radius-lg)] border border-transparent px-4 py-5 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:px-6 md:py-6"
-              >
-                {/* Visual Timeline Line for mobile */}
-                <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-border)] md:hidden"></div>
-
-                <div className="grid md:grid-cols-[200px_1fr] gap-8">
-                  {/* Left Column: Company & Period */}
-                  <div className="space-y-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-[var(--color-text-primary)]">
-                        {exp.company}
-                      </h3>
-                      <p className="text-[var(--color-text-secondary)] font-medium text-sm">
-                        {exp.role}
+  return (
+    <main className="bg-[var(--color-bg-primary)] py-12 md:py-16">
+      <Container size="xl">
+        <div className="bg-[var(--color-bg-primary)]">
+          <header className="border-y border-[var(--color-border)] py-10 md:py-14">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+              <div className="space-y-7">
+                <div className="space-y-5">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-5">
+                    <h1 className="text-4xl font-semibold text-[var(--color-text-primary)] md:text-5xl">
+                      {personalInfo.name}
+                    </h1>
+                    <div className="space-y-2 sm:pt-1 md:pt-2">
+                      <p className="m-0 text-lg text-[var(--color-text-secondary)]">
+                        {personalInfo.position}
                       </p>
-                    </div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-sm text-[var(--color-text-tertiary)]">
-                        {exp.period}
-                      </span>
-                      <span className="text-xs text-[var(--color-toss-blue)] font-medium">
-                        {calculateDuration(exp.period)}
-                      </span>
+                      <p className="m-0 text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                        Backend · Data Pipelines · Operations Automation
+                      </p>
                     </div>
                   </div>
 
-                  {/* Right Column: Projects */}
-                  <div className="space-y-12">
-                    {exp.projects.map((project, pIndex) => (
-                      <div
-                        key={pIndex}
-                        className="group relative rounded-[var(--radius-md)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-bg-primary)] hover:shadow-sm"
-                      >
-                        <h4 className="mb-3 text-xl font-bold text-[var(--color-text-primary)] transition-[color,transform] duration-[var(--duration-200)] group-hover:translate-x-0.5 group-hover:text-[var(--color-toss-blue)]">
-                          {project.title}
-                        </h4>
-                        <p className="mb-4 text-[var(--color-text-secondary)] leading-relaxed transition-transform duration-[var(--duration-200)] group-hover:translate-x-0.5">
-                          {project.description}
-                        </p>
+                  <div className="max-w-4xl space-y-4">
+                    <h2 className="break-keep text-base font-medium leading-7 text-[var(--color-text-primary)]">
+                      {heroStatement}
+                    </h2>
+                    <p className="max-w-3xl break-keep text-base leading-7 text-[var(--color-text-secondary)]">
+                      {heroSummary}
+                    </p>
+                    <p className="max-w-3xl break-keep border-l-2 border-[var(--color-text-primary)] pl-4 text-base leading-7 text-[var(--color-text-primary)]">
+                      {motivationStatement}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-                        <dl className="mb-6 space-y-3">
+              <div className="space-y-5 lg:border-l lg:border-[var(--color-border)] lg:pl-8">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                  Contact
+                </p>
+                <dl className="grid content-start gap-y-5 text-sm text-[var(--color-text-secondary)] sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1">
+                  {profileLinks.map((item) => {
+                    if (!item) {
+                      return null;
+                    }
+
+                    return (
+                      <div key={item.label} className="space-y-1">
+                        <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                          {item.label}
+                        </dt>
+                        <dd className="m-0 whitespace-nowrap">{item.value}</dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              </div>
+            </div>
+          </header>
+
+          <div className="grid gap-12 py-12 md:py-14 lg:grid-cols-3">
+            <aside className="space-y-10 lg:col-span-1">
+              <section className="space-y-4">
+                <SectionTitle
+                  title="Profile"
+                  description={`실무 경력 ${careerYears}년+`}
+                />
+                <div className="space-y-4 text-sm leading-6 text-[var(--color-text-secondary)]">
+                  <p>
+                    결제·정산·IoT 도메인에서 Java 기반 서버와 백오피스 시스템을
+                    설계하고 운영해온 {careerYears}년차 소프트웨어
+                    엔지니어입니다. 거래·정산·송금 도메인의 책임을 분리하고, IoT
+                    환경의 실시간 이벤트를 안정적으로 처리하는 흐름을
+                    다뤄왔습니다.
+                  </p>
+                  <p>
+                    복잡한 문제를 그대로 두지 않고 데이터 구조, 처리 방식, 운영
+                    방식으로 나누어 해결합니다. 반복되는 운영 요청과 수작업
+                    리스크를 표준화와 자동화로 흡수해 팀이 더 빠르고 안정적으로
+                    일할 수 있는 구조를 만드는 방식으로 일합니다.
+                  </p>
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <SectionTitle title="Skills" />
+                <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+                  {personalInfo.skillGroups.map((group) => (
+                    <section key={group.category} className="space-y-2">
+                      <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                        {group.category}
+                      </h3>
+                      <ul className="m-0 list-none space-y-1 p-0 text-sm leading-6 text-[var(--color-text-secondary)]">
+                        {group.skills.map((skill) => (
+                          <li key={skill} className="m-0">
+                            {skill}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <SectionTitle title="Activities" />
+
+                <div className="space-y-5">
+                  {activities.map((activity) => (
+                    <article
+                      key={`${activity.organization}-${activity.period}`}
+                      className="space-y-3 border-b border-[var(--color-border)] pb-5 last:border-b-0 last:pb-0"
+                    >
+                      <div className="space-y-1">
+                        <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
+                          {activity.title}
+                        </p>
+                        <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+                          {activity.organization}
+                        </p>
+                        <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
+                          {activity.period}
+                        </p>
+                      </div>
+
+                      <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+                        {activity.description.map((description, index) => (
+                          <li
+                            key={`${activity.organization}-${index}`}
+                            className="m-0 pl-1"
+                          >
+                            {description}
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <SectionTitle title="Education" />
+                <div className="space-y-5">
+                  {education.map((item) => (
+                    <article
+                      key={`${item.school}-${item.period}`}
+                      className="space-y-1 text-sm"
+                    >
+                      <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
+                        {item.school}
+                      </p>
+                      <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+                        {item.degree} · {item.major}
+                      </p>
+                      <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
+                        {item.period} · {item.status}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <SectionTitle title="Certifications" />
+                <div className="space-y-4">
+                  {certifications.map((certification) => (
+                    <article
+                      key={`${certification.name}-${certification.date}`}
+                      className="space-y-1 text-sm"
+                    >
+                      <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
+                        {certification.name}
+                      </p>
+                      <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+                        {certification.issuer}
+                      </p>
+                      <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
+                        {certification.date}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </aside>
+
+            <div className="space-y-12 lg:col-span-2">
+              <section className="space-y-8">
+                <SectionTitle
+                  title="Experience"
+                  description="회사, 역할, 기간, 담당 범위를 먼저 정리했습니다."
+                />
+
+                <div className="space-y-8">
+                  {experiences.map((experience) => (
+                    <article
+                      key={`${experience.company}-${experience.period}`}
+                      className="space-y-4 border-b border-[var(--color-border)] pb-8 last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="space-y-1">
+                          <h3 className="text-2xl font-semibold text-[var(--color-text-primary)]">
+                            {experience.company}
+                          </h3>
+                          <p className="text-sm text-[var(--color-text-secondary)]">
+                            {experience.role}
+                          </p>
+                        </div>
+                        <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
+                          <p>{experience.period}</p>
+                          <p>{calculateDuration(experience.period)}</p>
+                        </div>
+                      </div>
+
+                      <p className="break-keep text-sm leading-6 text-[var(--color-text-secondary)]">
+                        {experience.summary}
+                      </p>
+
+                      <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+                        {experience.highlights.map((highlight) => (
+                          <li
+                            key={`${experience.company}-${highlight}`}
+                            className="m-0 pl-1"
+                          >
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="space-y-8">
+                <SectionTitle
+                  title="Projects"
+                  description="주요 프로젝트는 문제, 선택, 구현, 결과 중심으로 분리했습니다."
+                />
+
+                <div className="space-y-10">
+                  {professionalProjects.map(
+                    ({ company, role, period, project }) => (
+                      <article
+                        key={`${company}-${project.title}`}
+                        className="space-y-4 border-b border-[var(--color-border)] pb-10 last:border-b-0 last:pb-0"
+                      >
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                              {company}
+                            </p>
+                            <div className="space-y-1">
+                              <h3 className="text-xl font-medium text-[var(--color-text-primary)]">
+                                {project.title}
+                              </h3>
+                              <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
+                                {project.description}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
+                            <p>{role}</p>
+                            <p>{period}</p>
+                          </div>
+                        </div>
+
+                        <dl className="space-y-5">
                           {orderExperienceStages(project.stages).map(
-                            (stage, stageIndex) => (
+                            (stage) => (
                               <div
-                                key={`${project.title}-${stage.key}-${stageIndex}`}
-                                className="space-y-1.5"
+                                key={`${project.title}-${stage.key}`}
+                                className="space-y-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:space-y-0"
                               >
-                                <dt className="text-sm font-bold text-[var(--color-toss-blue)]">
+                                <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
                                   {stage.label}
                                 </dt>
-                                <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
-                                  {renderStageDetail(stage.detail)}
+                                <dd className="m-0 sm:col-span-3">
+                                  {renderDetailList(stage.detail)}
                                 </dd>
                               </div>
                             )
                           )}
                         </dl>
 
-                        {project.links && project.links.length > 0 && (
-                          <div className="flex gap-3 mt-4">
-                            {project.links.map((link, lIndex) => (
-                              <a
-                                key={lIndex}
-                                href={link.href}
-                                target={link.external ? '_blank' : '_self'}
-                                rel={link.external ? 'noopener noreferrer' : ''}
-                                className="text-sm font-medium text-[var(--color-text-primary)] hover:text-[var(--color-toss-blue)] flex items-center gap-1.5 transition-colors bg-[var(--color-bg-secondary)] px-3 py-2 rounded-[var(--radius-sm)] hover:bg-[var(--color-toss-blue)]/10"
-                              >
-                                {link.external ? (
-                                  <span className="tossface text-sm">🔗</span>
-                                ) : (
-                                  <span className="tossface text-sm">📄</span>
-                                )}
-                                {link.label}
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                        {renderProjectLinks(project.links)}
+                      </article>
+                    )
+                  )}
                 </div>
-              </article>
-            ))}
-          </StaggerReveal>
-        </section>
+              </section>
 
-        {/* Personal Projects Section */}
-        <section id="projects" className="mt-16">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-            <span className="tossface text-3xl">🚀</span> Personal Projects
-          </h2>
+              <section className="space-y-8">
+                <SectionTitle
+                  title="Personal Projects"
+                  description="개인 실험도 동일하게 문제, 설계, 검증 기준으로 정리했습니다."
+                />
 
-          <StaggerReveal className="space-y-10" stagger={0.1}>
-            {personalProjects.map((project, index) => (
-              <article
-                key={index}
-                className="relative mb-12 rounded-[var(--radius-lg)] border border-transparent px-4 py-5 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm last:mb-0 md:px-6 md:py-6"
-              >
-                {/* Visual Timeline Line for mobile */}
-                <div className="absolute left-0 top-2 bottom-0 w-[2px] bg-[var(--color-border)] md:hidden"></div>
+                <div className="space-y-8">
+                  {personalProjects.map((project) => (
+                    <article
+                      key={`${project.title}-${project.period}`}
+                      className="space-y-4 border-b border-[var(--color-border)] pb-8 last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="space-y-1">
+                          <h3 className="text-xl font-medium text-[var(--color-text-primary)]">
+                            {project.title}
+                          </h3>
+                          <p className="text-sm text-[var(--color-text-secondary)]">
+                            {project.role}
+                          </p>
+                        </div>
+                        <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
+                          <p>{project.period}</p>
+                          <p>{calculateDuration(project.period)}</p>
+                        </div>
+                      </div>
 
-                <div className="grid md:grid-cols-[200px_1fr] gap-8">
-                  {/* Left Column: Role & Period */}
-                  <div className="space-y-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-[var(--color-text-primary)]">
-                        {project.title}
-                      </h3>
-                      <p className="text-[var(--color-text-secondary)] font-medium text-sm">
-                        {project.role}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-sm text-[var(--color-text-tertiary)]">
-                        {project.period}
-                      </span>
-                      <span className="text-xs text-[var(--color-toss-blue)] font-medium">
-                        {calculateDuration(project.period)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Project Details */}
-                  <div className="space-y-6">
-                    <div className="rounded-[var(--radius-md)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-bg-primary)] hover:shadow-sm">
-                      <p className="text-[var(--color-text-secondary)] leading-relaxed mb-4 transition-transform duration-[var(--duration-200)] hover:translate-x-0.5">
+                      <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
                         {project.description}
                       </p>
 
-                      <dl className="space-y-3 mb-6">
-                        {orderExperienceStages(project.stages).map(
-                          (stage, aIndex) => (
-                            <div
-                              key={`${project.title}-${stage.key}-${aIndex}`}
-                              className="space-y-1.5"
-                            >
-                              <dt className="text-sm font-bold text-[var(--color-toss-blue)]">
-                                {stage.label}
-                              </dt>
-                              <dd className="m-0 text-base leading-relaxed text-[var(--color-text-secondary)]">
-                                {renderStageDetail(stage.detail)}
-                              </dd>
-                            </div>
-                          )
-                        )}
+                      <dl className="space-y-5">
+                        {orderExperienceStages(project.stages).map((stage) => (
+                          <div
+                            key={`${project.title}-${stage.key}`}
+                            className="space-y-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:space-y-0"
+                          >
+                            <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                              {stage.label}
+                            </dt>
+                            <dd className="m-0 sm:col-span-3">
+                              {renderDetailList(stage.detail)}
+                            </dd>
+                          </div>
+                        ))}
                       </dl>
 
-                      {project.links && project.links.length > 0 && (
-                        <div className="flex gap-3 mt-4">
-                          {project.links.map((link, lIndex) => (
-                            <a
-                              key={lIndex}
-                              href={link.href}
-                              target={link.external ? '_blank' : '_self'}
-                              rel={link.external ? 'noopener noreferrer' : ''}
-                              className="text-sm font-medium text-[var(--color-text-primary)] hover:text-[var(--color-toss-blue)] flex items-center gap-1.5 transition-colors bg-[var(--color-bg-secondary)] px-3 py-2 rounded-[var(--radius-sm)] hover:bg-[var(--color-toss-blue)]/10"
-                            >
-                              {link.external ? (
-                                <span className="tossface text-sm">🔗</span>
-                              ) : (
-                                <span className="tossface text-sm">📄</span>
-                              )}
-                              {link.label}
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      {renderProjectLinks(project.links)}
+                    </article>
+                  ))}
                 </div>
-              </article>
-            ))}
-          </StaggerReveal>
-        </section>
-
-        {/* Education Section */}
-        <section id="education" className="mt-16">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-            <span className="tossface text-3xl">🎓</span> Education
-          </h2>
-          <StaggerReveal className="space-y-6" stagger={0.08}>
-            {education.map((edu, index) => (
-              <div
-                key={index}
-                className="grid gap-4 rounded-[var(--radius-lg)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:grid-cols-[200px_1fr] md:gap-8"
-              >
-                <div className="md:text-right">
-                  <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
-                    {edu.period}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
-                    {edu.school}
-                  </h3>
-                  <p className="text-[var(--color-text-secondary)] mt-1">
-                    {edu.degree} | {edu.major}
-                  </p>
-                  <span className="inline-block mt-2 px-2 py-1 bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] text-xs font-medium rounded">
-                    {edu.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </StaggerReveal>
-        </section>
-
-        {/* Activities Section */}
-        <section className="mt-16">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-            <span className="tossface text-3xl">🌟</span> Activities
-          </h2>
-          <StaggerReveal className="space-y-8" stagger={0.08}>
-            {activities.map((activity, index) => (
-              <div
-                key={index}
-                className="grid gap-4 rounded-[var(--radius-lg)] border border-transparent px-4 py-4 transition-all duration-[var(--duration-200)] hover:border-[var(--color-border)] hover:bg-[var(--color-grey-50)] hover:shadow-sm md:grid-cols-[200px_1fr] md:gap-8"
-              >
-                <div className="md:text-right">
-                  <span className="inline-block px-3 py-1 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] text-sm font-medium rounded-full">
-                    {activity.period}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-1">
-                    {activity.title}
-                  </h3>
-                  <p className="text-[var(--color-text-secondary)] font-medium mb-4">
-                    {activity.organization}
-                  </p>
-                  <ul className="space-y-2 pl-5 list-disc">
-                    {activity.description.map((desc, dIndex) => (
-                      <li
-                        key={dIndex}
-                        className="text-[var(--color-text-secondary)] text-base leading-relaxed"
-                      >
-                        {desc}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </StaggerReveal>
-        </section>
-
-        {/* Certifications Section */}
-        <section className="mt-16 mb-16">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8 flex items-center gap-2 border-b border-[var(--color-border)] pb-4">
-            <span className="tossface text-3xl">📜</span> Certifications
-          </h2>
-          <StaggerReveal className="grid gap-6 md:grid-cols-2" stagger={0.08}>
-            {certifications.map((cert, index) => (
-              <div
-                key={index}
-                className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-6 transition-all duration-[var(--duration-200)] hover:-translate-y-0.5 hover:border-[var(--color-toss-blue)]/30 hover:shadow-sm"
-              >
-                <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-2">
-                  {cert.name}
-                </h3>
-                <p className="text-[var(--color-text-secondary)] text-sm mb-1">
-                  {cert.issuer}
-                </p>
-                <p className="text-[var(--color-text-tertiary)] text-sm">
-                  {cert.date}
-                </p>
-              </div>
-            ))}
-          </StaggerReveal>
-        </section>
+              </section>
+            </div>
+          </div>
+        </div>
       </Container>
     </main>
   );
