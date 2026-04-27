@@ -2,6 +2,8 @@ export interface Experience {
   company: string;
   role: string;
   period: string;
+  summary: string;
+  highlights: string[];
   projects: ExperienceProject[];
 }
 
@@ -49,8 +51,13 @@ export interface PersonalInfo {
   phone?: string;
   github: string;
   blog?: string;
-  skills: string[];
+  skillGroups: SkillGroup[];
   introduction?: string;
+}
+
+export interface SkillGroup {
+  category: string;
+  skills: string[];
 }
 
 export interface Education {
