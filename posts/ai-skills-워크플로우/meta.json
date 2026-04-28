@@ -1,0 +1,24 @@
+{
+  "title": "Git Flow 반복 작업을 AI Skill로 줄인 과정",
+  "slug": "ai-skills-workflow",
+  "description": "브랜치 생성, 커밋 분리, SSH 계정 확인, 푸시까지 반복하던 Git Flow를 Codex Skill로 만들고 팀에 공유한 과정을 정리한다.",
+  "date": "2026-04-28",
+  "category": "Tech",
+  "tags": [
+    "AI Workflow",
+    "Developer Experience",
+    "Codex",
+    "Automation",
+    "Technical Writing"
+  ],
+  "featured": false,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 3.5,
+    "design": 3.5,
+    "implementation": 3.5,
+    "brandFit": 3.5,
+    "notes": "발행",
+    "reviewedAt": "2026-04-28"
+  }
+}
