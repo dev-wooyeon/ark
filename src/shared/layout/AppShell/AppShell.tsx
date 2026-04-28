@@ -156,32 +156,6 @@ function resolveSection(pathname: string, posts: FeedData[]): AppSection {
 function SearchButton() {
   const { query } = useKBar();
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) {
-        return;
-      }
-
-      const activeElement = document.activeElement as HTMLElement | null;
-      const tagName = activeElement?.tagName;
-      const isEditable =
-        activeElement?.isContentEditable ||
-        tagName === 'INPUT' ||
-        tagName === 'TEXTAREA' ||
-        tagName === 'SELECT';
-
-      if (isEditable) {
-        return;
-      }
-
-      event.preventDefault();
-      query.toggle();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [query]);
-
   return (
     <button
       type="button"
@@ -212,6 +186,7 @@ function SearchButton() {
 
 export default function AppShell({ children, posts }: AppShellProps) {
   const pathname = usePathname();
+  const { query } = useKBar();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const activeSection = useMemo(
@@ -222,6 +197,32 @@ export default function AppShell({ children, posts }: AppShellProps) {
   useEffect(() => {
     setMobileNavOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+
+      const activeElement = document.activeElement as HTMLElement | null;
+      const tagName = activeElement?.tagName;
+      const isEditable =
+        activeElement?.isContentEditable ||
+        tagName === 'INPUT' ||
+        tagName === 'TEXTAREA' ||
+        tagName === 'SELECT';
+
+      if (isEditable) {
+        return;
+      }
+
+      event.preventDefault();
+      query.toggle();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [query]);
 
   return (
     <div className="min-h-screen bg-[var(--color-grey-50)] text-[var(--color-text-primary)] md:flex md:h-screen md:overflow-hidden">
