@@ -23,6 +23,7 @@ export const CommandPalette = () => {
           <div className={styles.searchWrapper}>
             <KBarSearch
               className={styles.search}
+              aria-label="검색어, 태그, 글 제목 입력"
               defaultPlaceholder="검색어, 태그, 글 제목을 입력하세요"
             />
             <button
