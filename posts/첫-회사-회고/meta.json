@@ -1,5 +1,5 @@
 {
-  "title": "첫 직장 퇴사 회고",
+  "title": "첫 직장 퇴사 회고: 일하는 기준을 바꾼 3년",
   "slug": "first-company-review",
   "description": "첫 직장에서 보낸 3년과 퇴사 과정이 일과 성장 기준을 어떻게 바꿨는지 돌아본다.",
   "date": "2023-06-07",
@@ -8,6 +8,7 @@
     "Career",
     "Resignation",
     "Retrospective",
+    "회고",
     "Work"
   ],
   "featured": false,
@@ -17,7 +18,7 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3.5,
-    "notes": "보강 필요",
-    "reviewedAt": "2026-04-22"
+    "notes": "6W1H 기준 보강 완료",
+    "reviewedAt": "2026-05-06"
   }
 }

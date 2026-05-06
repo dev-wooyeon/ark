@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
@@ -83,13 +85,24 @@ ${'x'.repeat(5000)}
     const publicPosts = getSortedFeedData();
     const allPosts = getSortedFeedData({ includePrivate: true });
     const publicSlugs = new Set(publicPosts.map((post) => post.slug));
-    const privatePost = allPosts.find((post) => post.visibility === 'private');
+    const privatePosts = allPosts.filter(
+      (post) => post.visibility === 'private'
+    );
 
-    expect(privatePost).toBeDefined();
-    expect(publicSlugs.has(privatePost!.slug)).toBe(false);
+    expect(privatePosts.length).toBeGreaterThan(0);
 
-    const publicStaticSlugs = new Set(getAllFeedSlugs().map((item) => item.slug));
-    expect(publicStaticSlugs.has(privatePost!.slug)).toBe(false);
+    const publicStaticSlugs = new Set(
+      getAllFeedSlugs().map((item) => item.slug)
+    );
+    for (const post of privatePosts) {
+      expect(publicSlugs.has(post.slug), `${post.slug} leaked to listing`).toBe(
+        false
+      );
+      expect(
+        publicStaticSlugs.has(post.slug),
+        `${post.slug} leaked to static params`
+      ).toBe(false);
+    }
   });
 
   it('returns private posts only when includePrivate is true', async () => {
@@ -117,11 +130,9 @@ ${'x'.repeat(5000)}
   });
 
   it('returns empty feed list when reading posts directory fails', () => {
-    const readdirSpy = vi
-      .spyOn(fs, 'readdirSync')
-      .mockImplementation(() => {
-        throw new Error('Posts directory unavailable');
-      });
+    const readdirSpy = vi.spyOn(fs, 'readdirSync').mockImplementation(() => {
+      throw new Error('Posts directory unavailable');
+    });
 
     try {
       expect(getAllFeedSlugs()).toEqual([]);
@@ -144,23 +155,27 @@ ${'x'.repeat(5000)}
         }
         return [];
       });
-    const existsSpy = vi.spyOn(fs, 'existsSync').mockImplementation((target) => {
+    const existsSpy = vi
+      .spyOn(fs, 'existsSync')
+      .mockImplementation((target) => {
         const targetPath = String(target);
         return (
           targetPath ===
-          path.join(postsDirectory, 'broken-folder', 'index.mdx') ||
-        targetPath === path.join(postsDirectory, 'broken-folder', 'meta.json')
-      );
-    });
+            path.join(postsDirectory, 'broken-folder', 'index.mdx') ||
+          targetPath === path.join(postsDirectory, 'broken-folder', 'meta.json')
+        );
+      });
     const statSpy = vi
       .spyOn(fs, 'statSync')
-      .mockImplementation(() => ({ isDirectory: () => true } as fs.Stats));
+      .mockImplementation(() => ({ isDirectory: () => true }) as fs.Stats);
     const readFileSpy = vi
       .spyOn(fs, 'readFileSync')
       .mockImplementation((target) => {
         const targetPath = String(target);
 
-        if (targetPath === path.join(postsDirectory, 'broken-folder', 'meta.json')) {
+        if (
+          targetPath === path.join(postsDirectory, 'broken-folder', 'meta.json')
+        ) {
           return '{invalid-json';
         }
 

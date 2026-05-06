@@ -1,11 +1,12 @@
 {
-  "title": "페어 프로그래밍에서 두 사람이 판단하는 방식에 대한 고찰",
+  "title": "페어 프로그래밍은 함께 판단하는 구조다",
   "slug": "pair-programming",
   "description": "페어 프로그래밍을 같이 코딩하는 방식이 아니라 같이 판단하는 구조로 이해한 이유를 정리한다.",
   "date": "2026-01-08",
   "category": "Life",
   "tags": [
-    "페어 프로그래밍"
+    "페어 프로그래밍",
+    "Collaboration"
   ],
   "featured": false,
   "visibility": "public",
@@ -14,7 +15,7 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3.5,
-    "notes": "보강 필요",
-    "reviewedAt": "2026-04-22"
+    "notes": "6W1H 기준 보강 완료",
+    "reviewedAt": "2026-05-06"
   }
 }
