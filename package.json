@@ -20,6 +20,7 @@
     "test:e2e": "npx playwright test",
     "test:smoke": "vitest run src/shared/**/*.test.ts src/app/actions/*.test.ts && npx playwright test --grep @smoke",
     "new-post": "node internal/scripts/posts/new-post.js",
+    "content:audit": "node internal/scripts/posts/audit-post-quality.mjs",
     "localize:images": "node internal/scripts/posts/localize-post-images.mjs",
     "format": "prettier --write .",
     "lint:md": "markdownlint-cli2 --config internal/config/.markdownlint-cli2.jsonc '**/*.md' '**/*.mdx'",
