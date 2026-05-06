@@ -29,6 +29,8 @@ export default function ThemeToggle() {
   const nextTheme = isDark ? 'light' : 'dark';
   const isFullMotion = effectiveMotionMode === 'full';
   const isReducedMotion = effectiveMotionMode === 'reduced';
+  const isMotionOff = effectiveMotionMode === 'off';
+  const symbolDuration = isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.24;
 
   return (
     <motion.button
@@ -67,7 +69,7 @@ export default function ThemeToggle() {
           scale: isDark ? 1.02 : 0.98,
         }}
         transition={{
-          duration: isReducedMotion ? 0.12 : 0.28,
+          duration: isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.28,
           ease: [0.22, 1, 0.36, 1],
         }}
         style={{
@@ -89,16 +91,20 @@ export default function ThemeToggle() {
         }}
         transition={{
           x: {
-            type: 'spring',
-            stiffness: 360,
-            damping: 24,
+            ...(isMotionOff
+              ? { duration: 0 }
+              : {
+                  type: 'spring' as const,
+                  stiffness: 360,
+                  damping: 24,
+                }),
           },
           scaleX: {
-            duration: isReducedMotion ? 0.12 : 0.26,
+            duration: isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.26,
             ease: [0.22, 1, 0.36, 1],
           },
           rotate: {
-            duration: isReducedMotion ? 0.12 : 0.26,
+            duration: isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.26,
             ease: [0.22, 1, 0.36, 1],
           },
         }}
@@ -118,7 +124,7 @@ export default function ThemeToggle() {
             opacity: isDark ? 0.45 : 1,
           }}
           transition={{
-            duration: isReducedMotion ? 0.12 : 0.24,
+            duration: symbolDuration,
             ease: [0.22, 1, 0.36, 1],
           }}
         >
@@ -131,7 +137,9 @@ export default function ThemeToggle() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={isDark ? 'text-[var(--color-grey-400)]' : 'text-amber-500'}
+            className={
+              isDark ? 'text-[var(--color-grey-400)]' : 'text-amber-500'
+            }
           >
             <circle cx="12" cy="12" r="4" />
             <path d="M12 2v2" />
@@ -155,7 +163,7 @@ export default function ThemeToggle() {
             opacity: isDark ? 1 : 0.45,
           }}
           transition={{
-            duration: isReducedMotion ? 0.12 : 0.24,
+            duration: symbolDuration,
             ease: [0.22, 1, 0.36, 1],
           }}
         >
@@ -164,7 +172,11 @@ export default function ThemeToggle() {
             height="16"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className={isDark ? 'text-[var(--color-toss-blue)]' : 'text-[var(--color-grey-400)]'}
+            className={
+              isDark
+                ? 'text-[var(--color-toss-blue)]'
+                : 'text-[var(--color-grey-400)]'
+            }
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
           </svg>
