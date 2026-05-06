@@ -1,39 +1,61 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { PostCard } from '../PostCard';
 import { EmptyState } from '@/shared/ui';
 import type { FeedData } from '@/domains/post/model/types';
+import {
+  useEffectiveMotionMode,
+  type EffectiveMotionMode,
+} from '@/shared/motion/model/motion-mode';
 
 interface PostListProps {
   posts: FeedData[];
   layout?: 'grid' | 'list';
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
+function getContainerVariants(
+  effectiveMotionMode: EffectiveMotionMode
+): Variants {
+  return {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: effectiveMotionMode === 'reduced' ? 0.03 : 0.08,
+      },
     },
-  },
-};
+  };
+}
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 300,
-      damping: 30,
+function getItemVariants(effectiveMotionMode: EffectiveMotionMode): Variants {
+  const shouldTranslate = effectiveMotionMode === 'full';
+
+  return {
+    hidden: {
+      opacity: 0,
+      y: shouldTranslate ? 20 : 0,
     },
-  },
-};
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: effectiveMotionMode === 'reduced' ? 0.16 : 0.28,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+}
+
+const layoutClassNames = {
+  grid: 'grid gap-6 md:grid-cols-2',
+  list: 'space-y-4',
+} satisfies Record<NonNullable<PostListProps['layout']>, string>;
 
 export default function PostList({ posts, layout = 'grid' }: PostListProps) {
+  const effectiveMotionMode = useEffectiveMotionMode();
+
   if (posts.length === 0) {
     return (
       <EmptyState
@@ -44,13 +66,31 @@ export default function PostList({ posts, layout = 'grid' }: PostListProps) {
     );
   }
 
+  if (effectiveMotionMode === 'off') {
+    return (
+      <div className={layoutClassNames[layout]}>
+        {posts.map((post) => (
+          <div key={post.slug} className={layout === 'grid' ? 'h-full' : ''}>
+            <PostCard
+              post={post}
+              variant={layout === 'list' ? 'list' : 'default'}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const containerVariants = getContainerVariants(effectiveMotionMode);
+  const itemVariants = getItemVariants(effectiveMotionMode);
+
   if (layout === 'list') {
     return (
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="space-y-4"
+        className={layoutClassNames.list}
       >
         {posts.map((post) => (
           <motion.div key={post.slug} variants={itemVariants}>
@@ -66,7 +106,7 @@ export default function PostList({ posts, layout = 'grid' }: PostListProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid gap-6 md:grid-cols-2"
+      className={layoutClassNames.grid}
     >
       {posts.map((post) => (
         <motion.div key={post.slug} variants={itemVariants} className="h-full">

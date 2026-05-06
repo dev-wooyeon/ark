@@ -20,7 +20,7 @@ export default function KBarProvider({
   return (
     <KBarProviderLib actions={actions}>
       {children}
-      <CommandPalette />
+      <CommandPalette posts={posts} />
     </KBarProviderLib>
   );
 }

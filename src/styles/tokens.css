@@ -84,9 +84,9 @@
     'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     sans-serif;
   --font-sans-emoji:
-    'Pretendard', 'Tossface Safe', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji',
-    sans-serif;
+    'Pretendard', 'Tossface Safe', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Noto Color Emoji', sans-serif;
   --font-mono:
     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
 
@@ -123,6 +123,7 @@
   --leading-normal: 1.5;
   --leading-relaxed: 1.6;
   --leading-loose: 1.8;
+  --leading-prose: 1.72;
 
   /* Letter Spacing */
   --tracking-tight: -0.02em;
@@ -280,4 +281,26 @@
   --color-category-life-bg: rgba(120, 138, 255, 0.22);
   --color-category-life-border: rgba(163, 176, 255, 0.48);
   --color-category-life-text: #d0d8ff;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-text-secondary: #333d4b;
+    --color-text-tertiary: #4e5968;
+    --color-border: #b0b8c1;
+    --color-border-hover: #8b95a1;
+    --color-divider: #d1d6db;
+    --color-toss-blue: #1b64da;
+    --color-toss-blue-dark: #0f4fb8;
+  }
+
+  .dark {
+    --color-text-secondary: #f2f4f6;
+    --color-text-tertiary: #e5e8eb;
+    --color-border: #6b7684;
+    --color-border-hover: #b0b8c1;
+    --color-divider: #6b7684;
+    --color-toss-blue: #8cc7ff;
+    --color-toss-blue-dark: #b7d9ff;
+  }
 }

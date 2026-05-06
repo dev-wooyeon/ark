@@ -60,8 +60,8 @@
 }
 
 .closeButton {
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: var(--radius-full);
   background: color-mix(
     in srgb,
@@ -81,7 +81,67 @@
   border-color: var(--color-toss-blue);
   color: var(--color-toss-blue);
   background: var(--color-bg-primary);
-  outline: none;
+  outline: 2px solid var(--color-toss-blue);
+  outline-offset: 2px;
+}
+
+.scopeBar {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.scopeButton {
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-150) var(--ease-default),
+    border-color var(--duration-150) var(--ease-default),
+    color var(--duration-150) var(--ease-default);
+}
+
+.scopeButton:hover,
+.scopeButton:focus-visible {
+  border-color: var(--color-toss-blue);
+  color: var(--color-toss-blue);
+  outline: 2px solid var(--color-toss-blue);
+  outline-offset: 2px;
+}
+
+.scopeButtonActive {
+  border-color: var(--color-toss-blue);
+  background: var(--color-toss-blue);
+  color: white;
+}
+
+.scopeButtonActive:hover,
+.scopeButtonActive:focus-visible {
+  color: white;
+}
+
+.recommendationPanel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.recommendationLabel {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-tertiary);
 }
 
 .results {
@@ -111,6 +171,7 @@
 
 .resultItem {
   padding: var(--space-3) var(--space-5);
+  min-height: 3.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -181,13 +242,14 @@
 }
 
 .suggestionButton {
+  min-height: 2.75rem;
   border: 1px solid var(--color-border);
   background: var(--color-bg-secondary);
   color: var(--color-text-primary);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   border-radius: var(--radius-full);
-  padding: var(--space-1) var(--space-3);
+  padding: 0 var(--space-4);
   cursor: pointer;
   transition: all var(--duration-150) var(--ease-default);
 }
@@ -196,7 +258,8 @@
 .suggestionButton:focus-visible {
   border-color: var(--color-toss-blue);
   color: var(--color-toss-blue);
-  outline: none;
+  outline: 2px solid var(--color-toss-blue);
+  outline-offset: 2px;
 }
 
 .recoveryActions {
@@ -206,9 +269,13 @@
 }
 
 .recoveryButton {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: var(--space-1) var(--space-3);
+  padding: 0 var(--space-4);
   background: transparent;
   color: var(--color-text-secondary);
   font-size: var(--text-sm);
@@ -221,7 +288,8 @@
 .recoveryButton:focus-visible {
   border-color: var(--color-toss-blue);
   color: var(--color-toss-blue);
-  outline: none;
+  outline: 2px solid var(--color-toss-blue);
+  outline-offset: 2px;
 }
 
 @media (max-width: 767px) {
@@ -240,6 +308,21 @@
   }
 
   .searchWrapper {
+    padding: var(--space-3);
+  }
+
+  .scopeBar {
+    padding: var(--space-3);
+  }
+
+  .scopeButton {
+    min-height: 2.75rem;
+  }
+
+  .recommendationPanel {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
     padding: var(--space-3);
   }
 

@@ -160,7 +160,7 @@ function SearchButton() {
     <button
       type="button"
       onClick={() => query.toggle()}
-      className="inline-flex h-11 w-full items-center justify-between gap-3 rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] px-4 text-sm text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
+      className="inline-flex h-11 w-full items-center justify-between gap-3 rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] px-4 text-sm text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
       aria-label="검색 열기"
     >
       <span className="flex min-w-0 items-center gap-3">
@@ -288,7 +288,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
               aria-expanded={mobileNavOpen}
               aria-controls="mobile-nav-drawer"
               onClick={() => setMobileNavOpen((current) => !current)}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
             >
               <svg
                 width="18"

@@ -11,10 +11,47 @@ import {
   useMatches,
 } from 'kbar';
 import styles from './CommandPalette.module.css';
+import type { FeedData } from '@/domains/post/model/types';
 import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
+import { getRecommendedSearchTerms } from '@/features/search/model/search-recommendations';
 
-export const CommandPalette = () => {
-  const { query } = useKBar();
+type SearchScopeId = 'all' | 'tech' | 'life' | 'resume';
+
+interface SearchScope {
+  id: SearchScopeId;
+  label: string;
+  query: string;
+}
+
+interface CommandPaletteProps {
+  posts?: FeedData[];
+}
+
+const SEARCH_SCOPES: SearchScope[] = [
+  { id: 'all', label: '전체', query: '' },
+  { id: 'tech', label: 'Tech', query: 'Tech' },
+  { id: 'life', label: 'Life', query: 'Life' },
+  { id: 'resume', label: 'Resume', query: 'Resume' },
+];
+
+function getActiveSearchScope(normalizedQuery: string): SearchScopeId {
+  const matchedScope = SEARCH_SCOPES.find(
+    (scope) => scope.query.toLowerCase() === normalizedQuery.toLowerCase()
+  );
+
+  return matchedScope?.id ?? 'all';
+}
+
+export const CommandPalette = ({ posts = [] }: CommandPaletteProps) => {
+  const { query, searchQuery } = useKBar((state) => ({
+    searchQuery: state.searchQuery,
+  }));
+  const normalizedQuery = searchQuery.trim();
+  const activeScope = getActiveSearchScope(normalizedQuery);
+  const recommendedTerms = React.useMemo(
+    () => getRecommendedSearchTerms(posts),
+    [posts]
+  );
 
   return (
     <KBarPortal>
@@ -23,8 +60,8 @@ export const CommandPalette = () => {
           <div className={styles.searchWrapper}>
             <KBarSearch
               className={styles.search}
-              aria-label="검색어, 태그, 글 제목 입력"
-              defaultPlaceholder="검색어, 태그, 글 제목을 입력하세요"
+              aria-label="전체 글, 태그, 섹션 검색"
+              defaultPlaceholder="글 제목, 태그, 섹션 검색"
             />
             <button
               type="button"
@@ -48,14 +85,78 @@ export const CommandPalette = () => {
               </svg>
             </button>
           </div>
-          <RenderResults />
+          <SearchScopeBar
+            activeScope={activeScope}
+            onSelect={(scope) => query.setSearch(scope.query)}
+          />
+          {normalizedQuery.length === 0 && (
+            <div className={styles.recommendationPanel}>
+              <p className={styles.recommendationLabel}>추천 키워드</p>
+              <SearchSuggestionButtons
+                terms={recommendedTerms}
+                onSelect={query.setSearch}
+              />
+            </div>
+          )}
+          <RenderResults recommendedTerms={recommendedTerms} />
         </KBarAnimator>
       </KBarPositioner>
     </KBarPortal>
   );
 };
 
-function RenderResults() {
+function SearchScopeBar({
+  activeScope,
+  onSelect,
+}: {
+  activeScope: SearchScopeId;
+  onSelect: (scope: SearchScope) => void;
+}) {
+  return (
+    <div className={styles.scopeBar} aria-label="검색 범위">
+      {SEARCH_SCOPES.map((scope) => {
+        const isActive = scope.id === activeScope;
+
+        return (
+          <button
+            key={scope.id}
+            type="button"
+            className={`${styles.scopeButton} ${isActive ? styles.scopeButtonActive : ''}`}
+            onClick={() => onSelect(scope)}
+            aria-pressed={isActive}
+          >
+            {scope.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function SearchSuggestionButtons({
+  terms,
+  onSelect,
+}: {
+  terms: string[];
+  onSelect: (term: string) => void;
+}) {
+  return (
+    <div className={styles.suggestionGroup} role="list">
+      {terms.map((keyword) => (
+        <button
+          key={keyword}
+          type="button"
+          className={styles.suggestionButton}
+          onClick={() => onSelect(keyword)}
+        >
+          {keyword}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function RenderResults({ recommendedTerms }: { recommendedTerms: string[] }) {
   const { results } = useMatches();
   const { query, searchQuery } = useKBar((state) => ({
     searchQuery: state.searchQuery,
@@ -101,18 +202,10 @@ function RenderResults() {
         <p className={styles.noResultDescription}>
           다른 키워드로 검색하거나 추천 키워드를 선택해 보세요.
         </p>
-        <div className={styles.suggestionGroup} role="list">
-          {['Redis', 'Flink', '회고'].map((keyword) => (
-            <button
-              key={keyword}
-              type="button"
-              className={styles.suggestionButton}
-              onClick={() => query.setSearch(keyword)}
-            >
-              {keyword}
-            </button>
-          ))}
-        </div>
+        <SearchSuggestionButtons
+          terms={recommendedTerms}
+          onSelect={query.setSearch}
+        />
         <div className={styles.recoveryActions}>
           <button
             type="button"

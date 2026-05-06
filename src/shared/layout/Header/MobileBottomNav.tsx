@@ -111,7 +111,7 @@ export default function MobileBottomNav({
             type="button"
             aria-label="메뉴 닫기"
             onClick={() => onOpenChange?.(false)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)]"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
           >
             <svg
               width="18"
@@ -133,58 +133,58 @@ export default function MobileBottomNav({
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
-          {navItems.map((item) => {
-            const isActive = isActiveItem(item, pathname);
+            {navItems.map((item) => {
+              const isActive = isActiveItem(item, pathname);
 
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                onClick={() => {
-                  onOpenChange?.(false);
-                  trackEvent(AnalyticsEvents.click, {
-                    target: 'mobile_nav_drawer',
-                    destination: item.href,
-                  });
-                }}
-                className={clsx(
-                  'flex items-center gap-3 rounded-2xl border px-3 py-3 transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]',
-                  isActive
-                    ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
-                    : 'border-transparent hover:bg-[var(--mobile-nav-hover-bg)]'
-                )}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <span
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  onClick={() => {
+                    onOpenChange?.(false);
+                    trackEvent(AnalyticsEvents.click, {
+                      target: 'mobile_nav_drawer',
+                      destination: item.href,
+                    });
+                  }}
                   className={clsx(
-                    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border',
+                    'flex items-center gap-3 rounded-2xl border px-3 py-3 transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]',
                     isActive
-                      ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
-                      : 'border-[var(--color-border)] bg-[var(--color-grey-50)] text-[var(--mobile-nav-text)]'
+                      ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
+                      : 'border-transparent hover:bg-[var(--mobile-nav-hover-bg)]'
                   )}
-                  aria-hidden="true"
+                  aria-current={isActive ? 'page' : undefined}
                 >
-                  <NavIcon id={item.id} />
-                </span>
-                <span className="min-w-0">
                   <span
                     className={clsx(
-                      'block text-sm font-semibold',
+                      'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border',
                       isActive
-                        ? 'text-[var(--mobile-nav-active-text)]'
-                        : 'text-[var(--color-text-primary)]'
+                        ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
+                        : 'border-[var(--color-border)] bg-[var(--color-grey-50)] text-[var(--mobile-nav-text)]'
                     )}
+                    aria-hidden="true"
                   >
-                    {item.label}
+                    <NavIcon id={item.id} />
                   </span>
-                  <span className="mt-0.5 block text-xs text-[var(--color-grey-500)]">
-                    {getDescription(item.id)}
+                  <span className="min-w-0">
+                    <span
+                      className={clsx(
+                        'block text-sm font-semibold',
+                        isActive
+                          ? 'text-[var(--mobile-nav-active-text)]'
+                          : 'text-[var(--color-text-primary)]'
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-[var(--color-grey-500)]">
+                      {getDescription(item.id)}
+                    </span>
                   </span>
-                </span>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
           </div>
         </nav>
 
