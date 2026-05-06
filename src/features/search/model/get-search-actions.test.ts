@@ -24,11 +24,23 @@ describe('getSearchActions', () => {
       },
     ]);
 
-    expect(actions).toHaveLength(1);
-    expect(actions[0].id).toBe('redis-basics');
-    expect(actions[0].name).toBe('Redis Basics');
-    expect(actions[0].section).toBe('블로그 포스트');
-    expect(actions[0].keywords).toContain('Redis');
+    const postAction = actions.find((action) => action.id === 'redis-basics');
+
+    expect(postAction).toBeDefined();
+    expect(postAction?.name).toBe('Redis Basics');
+    expect(postAction?.section).toBe('블로그 포스트');
+    expect(postAction?.keywords).toContain('Redis');
+  });
+
+  it('includes section navigation actions for scoped search', () => {
+    const actions = getSearchActions([]);
+
+    expect(actions.map((action) => action.id)).toEqual([
+      'go-engineering',
+      'go-life',
+      'go-resume',
+    ]);
+    expect(actions[2].keywords).toContain('이력서');
   });
 
   it('handles missing tag arrays without crashing', () => {
@@ -42,23 +54,39 @@ describe('getSearchActions', () => {
       },
     ]);
 
-    expect(actions).toHaveLength(1);
-    expect(actions[0].keywords).toBe('No Tags Life Tags missing post');
+    const postAction = actions.find((action) => action.id === 'no-tags');
+
+    expect(postAction?.keywords).toBe('No Tags Life Tags missing post');
   });
 
   it('keeps post list order as provided', () => {
     const actions = getSearchActions([
-      { slug: 'second', title: 'B', category: 'Tech', tags: ['A'], description: 'B' },
-      { slug: 'first', title: 'A', category: 'Tech', tags: ['A'], description: 'A' },
+      {
+        slug: 'second',
+        title: 'B',
+        category: 'Tech',
+        tags: ['A'],
+        description: 'B',
+      },
+      {
+        slug: 'first',
+        title: 'A',
+        category: 'Tech',
+        tags: ['A'],
+        description: 'A',
+      },
     ]);
 
-    expect(actions.map((action) => action.id)).toEqual(['second', 'first']);
+    expect(actions.map((action) => action.id).slice(3)).toEqual([
+      'second',
+      'first',
+    ]);
   });
 
   it('tracks and navigates when action is performed', () => {
     mockTrackEvent.mockClear();
 
-    const [action] = getSearchActions([
+    const action = getSearchActions([
       {
         slug: 'redis-basics',
         title: 'Redis Basics',
@@ -66,15 +94,15 @@ describe('getSearchActions', () => {
         tags: ['Redis'],
         description: 'Redis 기초',
       },
-    ]);
+    ]).find((candidate) => candidate.id === 'redis-basics');
 
-    action.perform?.();
+    action?.perform?.();
 
     expect(mockTrackEvent).toHaveBeenCalledWith('click', {
       target: 'command_palette_result',
       post_slug: 'redis-basics',
     });
-    expect(typeof action.perform).toBe('function');
-    expect(() => action.perform?.()).not.toThrow();
+    expect(typeof action?.perform).toBe('function');
+    expect(() => action?.perform?.()).not.toThrow();
   });
 });

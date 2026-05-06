@@ -30,7 +30,7 @@ export default function CategoryFilter({
           key={category}
           onClick={() => onCategoryChange(category)}
           className={clsx(
-            'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]',
+            'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]',
             'active:translate-y-px',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]',
             activeCategory === category
