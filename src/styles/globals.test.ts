@@ -30,4 +30,16 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('.prose {');
     expect(globalsContent).toContain('font-family: var(--font-sans-emoji);');
   });
+
+  it('uses mobile-readable prose sizing and spacing tokens', () => {
+    expect(tokensContent).toContain('--leading-prose: 1.72;');
+    expect(globalsContent).toContain('font-size: var(--text-md);');
+    expect(globalsContent).toContain('line-height: var(--leading-prose);');
+    expect(globalsContent).toContain('@media (max-width: 767px)');
+  });
+
+  it('defines high contrast color overrides', () => {
+    expect(tokensContent).toContain('@media (prefers-contrast: more)');
+    expect(globalsContent).toContain('@media (prefers-contrast: more)');
+  });
 });
