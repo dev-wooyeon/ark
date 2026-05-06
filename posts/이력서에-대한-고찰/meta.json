@@ -1,11 +1,12 @@
 {
-  "title": "이력서에서 경험을 다르게 전달하는 방법",
+  "title": "이력서에서 경험을 해석해 전달하는 방법",
   "slug": "resume-feat-sheff",
   "description": "같은 경험이 전혀 다르게 읽히는 이유를 흑백요리사 비유로 풀어 이력서 해석 기준을 정리한다.",
   "date": "2026-01-15",
   "category": "Life",
   "tags": [
-    "이력서"
+    "이력서",
+    "Career"
   ],
   "featured": false,
   "visibility": "public",
@@ -14,7 +15,7 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3,
-    "notes": "보강 필요",
-    "reviewedAt": "2026-04-22"
+    "notes": "6W1H 기준 보강 완료",
+    "reviewedAt": "2026-05-06"
   }
 }

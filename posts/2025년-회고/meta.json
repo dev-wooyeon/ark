@@ -6,7 +6,8 @@
   "category": "Life",
   "tags": [
     "Career",
-    "Work"
+    "Work",
+    "회고"
   ],
   "featured": false,
   "visibility": "public",
@@ -15,7 +16,7 @@
     "design": 3.5,
     "implementation": 3,
     "brandFit": 3.5,
-    "notes": "보강 필요",
-    "reviewedAt": "2026-04-22"
+    "notes": "2차 보강 및 문장 리라이팅 완료",
+    "reviewedAt": "2026-05-06"
   }
 }

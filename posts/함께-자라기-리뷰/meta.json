@@ -1,5 +1,5 @@
 {
-  "title": "함께 자라기 리뷰",
+  "title": "함께 자라기 리뷰: 성장하는 팀의 기준",
   "slug": "with-grow",
   "description": "함께 자라기를 읽고 오래 남은 장면을 성장, 신뢰, 소통, 팀의 기준으로 다시 정리한다.",
   "date": "2025-12-29",
@@ -7,7 +7,8 @@
   "tags": [
     "Career",
     "Work",
-    "Book"
+    "Book",
+    "성장"
   ],
   "featured": false,
   "visibility": "public",
@@ -16,7 +17,7 @@
     "design": 2.5,
     "implementation": 2.5,
     "brandFit": 2.5,
-    "notes": "보강 필요",
-    "reviewedAt": "2026-04-22"
+    "notes": "2차 보강 및 문장 리라이팅 완료",
+    "reviewedAt": "2026-05-06"
   }
 }
