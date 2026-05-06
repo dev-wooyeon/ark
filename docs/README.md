@@ -21,6 +21,7 @@ becomes part of the maintained workflow.
   - `docs/QUALITY_SCORE.md`
   - `docs/blog-quality-guide.md`
 - Delivery/process:
+  - `docs/adr/README.md`
   - `docs/PLANS.md`
   - `docs/exec-plans/active/README.md`
   - `docs/exec-plans/completed/README.md`
@@ -28,7 +29,6 @@ becomes part of the maintained workflow.
   - `docs/guides/agentation-workflow.md`
   - `docs/guides/pr-workflow.md`
   - `docs/guides/testing-guide.md`
-  - `docs/guides/ai-collaboration.md`
   - `docs/guides/ui-components-guide.md`
 - Product/domain:
   - `docs/PRODUCT_SENSE.md`

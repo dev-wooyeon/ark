@@ -1,6 +1,6 @@
 # ARCHITECTURE
 
-Last updated: 2026-02-27
+Last updated: 2026-05-06
 
 ## System Summary
 
@@ -9,7 +9,7 @@ Last updated: 2026-02-27
 - File-based MDX content under `posts/**`.
 - Static generation for blog routes.
 - Server-side view counting via Supabase RPC.
-- Client-side analytics via GA4 trackers.
+- Client-side analytics via Umami trackers.
 - Token-driven UI styling (Tailwind + CSS variables).
 
 ## Runtime Topology
@@ -80,7 +80,7 @@ Last updated: 2026-02-27
 
 ### Analytics and SEO
 
-- GA4 event helpers in `src/shared/analytics/lib/analytics.ts`.
+- Umami event helpers in `src/shared/analytics/lib/analytics.ts`.
 - Trackers in `src/shared/analytics/components/*`.
 - Structured data via `JsonLd` component in layout and post page.
 
@@ -127,7 +127,10 @@ Last updated: 2026-02-27
 
 ## Decisions to Preserve
 
+복원한 아키텍처 결정의 상세 기록은 `docs/adr/README.md`에 둔다.
+
 1. Keep folder-based content (`posts/**`) with `meta.json + index.mdx`.
 2. Keep Zod schema validation in content ingestion path.
 3. Keep token-first styling and avoid one-off visual constants where possible.
 4. Keep route-level separation for feed, OG, and view-count concerns.
+5. Keep Umami analytics separate from Supabase-backed public view counts.

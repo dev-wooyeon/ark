@@ -1,0 +1,46 @@
+# Architecture Decision Records
+
+Last updated: 2026-05-06
+
+이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
+ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
+도왔든, ADR의 목적은 제품과 엔지니어링 선택의 맥락을 남기는 것이다.
+
+## 범위
+
+- 검토한 히스토리: 2026-01-20 `521eae7`부터 2026-04-28 `939601a`까지.
+- 글 발행, 문장 수정, 단일 버그 수정은 오래 유지될 시스템 제약을 만들지
+  않는 한 ADR로 승격하지 않는다.
+- 현재도 유효한 결정인지 확인하기 위해 `ARCHITECTURE.md`, `AGENTS.md`,
+  기존 문서, 현재 소스 구조를 함께 대조했다.
+
+## 기록
+
+| ID | 상태 | 결정 |
+| --- | --- | --- |
+| [0001](0001-use-nextjs-app-router.md) | Accepted | 블로그 런타임으로 Next.js App Router를 사용한다 |
+| [0002](0002-keep-custom-mdx-webpack-pipeline.md) | Accepted | 커스텀 MDX webpack 파이프라인을 유지한다 |
+| [0003](0003-store-posts-as-folder-mdx-and-meta.md) | Accepted | 글을 중첩 가능한 `index.mdx`와 `meta.json` 폴더로 저장한다 |
+| [0004](0004-preserve-feature-first-source-structure.md) | Accepted | feature-first 소스 구조를 유지한다 |
+| [0005](0005-use-token-first-tailwind-styling.md) | Accepted | token-first Tailwind 스타일링을 사용한다 |
+| [0006](0006-isolate-visualization-heavy-components.md) | Accepted | 시각화 중심 컴포넌트를 격리한다 |
+| [0007](0007-use-umami-and-supabase-view-counts.md) | Accepted | Umami 분석과 Supabase 조회수를 함께 사용한다 |
+| [0008](0008-enforce-publication-policy-in-content-ingestion.md) | Accepted | 콘텐츠 수집 경로에서 공개 정책을 강제한다 |
+| [0009](0009-use-app-shell-for-primary-navigation.md) | Accepted | 주요 탐색과 레이아웃에 AppShell을 사용한다 |
+
+## 작성 조건
+
+아래 조건 중 하나라도 해당하면 ADR을 작성하거나 갱신한다.
+
+1. 선택지가 2개 이상이고 트레이드오프가 존재한 경우.
+2. 반복적으로 따라야 할 규칙이나 경계를 정의한 경우.
+3. 테스트 전략이나 검증 방식이 결정의 핵심이었던 경우.
+
+## 유지 규칙
+
+1. 오래 유지될 제약을 만들거나 뒤집는 변경에는 새 ADR을 추가한다.
+2. 과거를 지우기 위해 기존 ADR을 고쳐 쓰지 않는다. 이전 결정을 대체하는
+   새 ADR을 작성한다.
+3. `Related History`에 커밋 해시를 남겨 이후 독자가 원 변경을 확인할 수
+   있게 한다.
+4. ADR을 추가하면 이 인덱스와 `docs/README.md`를 함께 갱신한다.
