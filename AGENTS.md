@@ -55,6 +55,7 @@ ADR 작성 기준:
 - `npm run build`: production build 생성
 - `npm run lint`: source file ESLint 실행
 - `npm run lint:css:syntax`: CSS syntax rule 검사
+- `npm run verify:docs`: ADR과 핵심 문서 하네스 검사
 - `npm run test:unit`: Vitest unit test 실행
 - `npm run test:components`: component 중심 Vitest test 실행
 - `npm run test:e2e`: Playwright scenario 실행
