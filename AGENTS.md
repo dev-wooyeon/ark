@@ -6,14 +6,15 @@
 - 현재 MDX 파이프라인을 보존한다. MDX는 `next.config.mjs`의 `@mdx-js/loader`
   기반 커스텀 webpack rule에 남겨둔다. 전체 콘텐츠 파이프라인을 의도적으로
   마이그레이션하지 않는 한 Next.js 내장 MDX로 바꾸지 않는다.
-- 시각화 중심 UI는 `src/components/visualization/`에 둔다. 명확한
-  아키텍처 이유 없이 다른 폴더로 옮기지 않는다.
+- 시각화 중심 UI는 `shared/visualization/`에 둔다. 블로그 MDX가 재사용하는
+  시각화 컴포넌트는 도메인 코드가 아니라 shared 시각화 모듈로 관리한다.
 - `any`를 사용하지 않는다. 구체 타입을 쓰거나 `unknown`과 narrowing을
   사용한다.
 - `p-[13px]` 같은 arbitrary Tailwind value를 사용하지 않는다. 표준 utility,
   shared token, 기존 스타일 패턴을 사용한다.
-- feature-first 구조를 flat shared folder 구조로 바꾸지 않는다.
-  `src/features/`, `src/shared/`, `src/domains/`를 책임별로 유지한다.
+- DDD의 전략적 설계 개념을 차용한 domain-first modular monolith 구조를
+  유지한다. 주요 도메인은 `src`와 같은 최상위 모듈로 분리하고, `src/app`은
+  Next.js route adapter로 제한한다.
 - 블로그 콘텐츠 구조는 `posts/**/index.mdx`와 주변 `meta.json`으로 유지한다.
   중첩된 series 디렉터리도 보존한다.
 - 변경이 아래 ADR 작성 조건에 걸리면 반드시 ADR을 작성하거나 갱신한다.
@@ -38,16 +39,20 @@ ADR 작성 기준:
 
 ## 프로젝트 구조
 
-- `src/app/`: Next.js App Router 페이지, 레이아웃, 핸들러
-- `src/core/`: 앱 수준 provider와 설정 조합
-- `src/domains/`: feature 사이에서 공유되는 계약과 스키마
-- `src/features/`: blog, home, resume, search 같은 feature 모듈
-- `src/shared/`: 재사용 가능한 UI, layout, analytics, SEO, provider
-- `src/components/visualization/`: animation과 시각화 중심 컴포넌트
-- `src/styles/`: design token과 global style
+- `src/app/`: Next.js App Router route adapter, route handler, metadata entry
+- `blog/`: 글 도메인. post schema, repository, publication policy, series,
+  blog UI, view-count use case
+- `resume/`: 이력서 도메인. resume data, ordering, resume UI
+- `search/`: 검색 도메인. command palette, search action, recommendation
+- `site/`: 도메인 조합 layer. home, AppShell, navigation, provider, site config
+- `platform/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper,
+  devtool integration
+- `shared/`: 도메인 지식 없는 UI primitive, motion helper, testing helper,
+  visualization widget
+- `styles/`: design token과 global style
 - `posts/`: 중첩 가능한 `index.mdx`와 `meta.json` 기반 블로그 콘텐츠
 - `tests/`: Playwright E2E 테스트
-- `internal/`: script와 tool configuration
+- `tooling/`: script와 tool configuration
 
 ## 개발 명령
 

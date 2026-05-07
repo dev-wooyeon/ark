@@ -2,4 +2,4 @@ export {
   generateStaticParams,
   generateMetadata,
   default,
-} from '@/features/blog/ui/pages/BlogPostPage';
+} from '@/blog/ui/pages/BlogPostPage';

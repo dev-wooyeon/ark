@@ -1,6 +1,6 @@
 # ARCHITECTURE
 
-Last updated: 2026-05-06
+Last updated: 2026-05-07
 
 ## System Summary
 
@@ -21,7 +21,7 @@ Last updated: 2026-05-06
 - Rendering mix:
   - Static prerendered route params via `generateStaticParams` for post pages.
   - Server route handlers for feed and OG image.
-  - Server actions for view counting.
+  - Domain-owned server actions for view counting.
 
 ### Edge Runtime
 
@@ -40,12 +40,12 @@ Last updated: 2026-05-06
 - Route handlers:
   - `/feed.xml` (`src/app/feed.xml/route.ts`)
   - `/api/og` (`src/app/api/og/route.tsx`)
-- Server action:
-  - `src/app/actions/view.ts` for increment/read view count.
+- `src/app` imports page adapters from top-level domain modules and does not own
+  domain policy.
 
-### Content Layer (`posts/**` + `src/features/blog/services`)
+### Content Layer (`posts/**` + `blog/services`)
 
-- `src/features/blog/services/post-repository.ts` recursively discovers valid post folders (`index.mdx` + `meta.json`).
+- `blog/services/post-repository.ts` recursively discovers valid post folders (`index.mdx` + `meta.json`).
 - `meta.json` is validated with Zod (`FeedFrontmatterSchema`).
 - MDX is loaded by dynamic import per folder path.
 - Reading time is auto-derived from MDX when metadata omits it.
@@ -57,22 +57,23 @@ Last updated: 2026-05-06
   - `remark-gfm`
   - `rehype-slug`
   - `rehype-pretty-code`
-- `src/features/blog/services/markdown-parser.ts` parses MDX headings for TOC data.
-- `src/features/blog/ui/mdx/components.tsx` maps MDX nodes to UI components and interactive visualization widgets.
+- `blog/services/markdown-parser.ts` parses MDX headings for TOC data.
+- `blog/ui/mdx/components.tsx` maps MDX nodes to UI components and interactive visualization widgets.
 
-### Feature/Shared Layer (`src/features` + `src/shared` + `src/styles`)
+### Domain-first Modular Monolith
 
-- Feature-first organization:
-  - `src/features/blog`, `src/features/resume`, `src/features/search`, `src/features/home`
-  - `src/shared/analytics`, `src/shared/layout`, `src/shared/ui`, `src/shared/providers`, `src/shared/seo`
-  - `src/components/visualization` is intentionally preserved for heavy visualization widgets.
-- Design tokens in `src/styles/tokens.css`.
-- Global base styles and typography in `src/styles/globals.css`.
-- Theming via `next-themes` provider.
+- `blog/`: post schema, repository, publication policy, series, blog UI, view-count use case.
+- `resume/`: resume data, ordering, resume UI.
+- `search/`: command palette, search action, search recommendation.
+- `site/`: home composition, AppShell, navigation, providers, site config.
+- `platform/`: Supabase integration, Umami analytics, SEO helper, devtools.
+- `shared/`: domain-agnostic UI, layout primitive, motion helper, testing helper, visualization widget.
+- `styles/`: design tokens, global base styles, local font CSS.
+- Theming via `next-themes` provider in `site/providers`.
 
 ### Data and Integrations
 
-- Supabase client setup in `src/shared/integrations/supabase.ts`.
+- Supabase client setup in `platform/integrations/supabase.ts`.
 - View count data model:
   - table: `public.views`
   - rpc: `increment_view(slug_input text) -> bigint`
@@ -80,8 +81,8 @@ Last updated: 2026-05-06
 
 ### Analytics and SEO
 
-- Umami event helpers in `src/shared/analytics/lib/analytics.ts`.
-- Trackers in `src/shared/analytics/components/*`.
+- Umami event helpers in `platform/analytics/lib/analytics.ts`.
+- Trackers in `platform/analytics/components/*`.
 - Structured data via `JsonLd` component in layout and post page.
 
 ## Request/Data Flows
@@ -92,7 +93,7 @@ Last updated: 2026-05-06
 2. Request to `/blog/[slug]` resolves post via `getFeedData(slug)`.
 3. MDX source is parsed for heading structure (TOC).
 4. MDX component renders with mapped custom components.
-5. Client tracker records post view; server action can persist counter in Supabase.
+5. Client tracker records post view; `blog/api/view.ts` can persist counter in Supabase.
 
 ### Feed Flow
 
@@ -109,10 +110,11 @@ Last updated: 2026-05-06
 
 ## Testing and Quality
 
-- Unit/component tests: Vitest + Testing Library (`src/**/*.test.ts(x)`).
+- Unit/component tests: Vitest + Testing Library across top-level modules and `src/app`.
 - E2E tests: Playwright mobile-focused projects (`tests/e2e/**/*.spec.ts`).
 - Linting/formatting: ESLint, Prettier, markdownlint, cspell.
-- Coverage focus includes `src/features`, `src/shared`, `src/styles`, and selected route domains.
+- Coverage focus includes `blog`, `resume`, `search`, `site`, `platform`,
+  `shared`, `styles`, and selected route adapters.
 
 ## Current Architecture Risks
 
@@ -120,8 +122,8 @@ Last updated: 2026-05-06
    - AGENTS and README mention older stack assumptions; package versions are newer.
 2. Provider boundary drift:
    - Route/layout changes can reintroduce duplicated tracker mounts if `AppProviders` is bypassed.
-3. Content/animation docs drift:
-   - Documented `src/components/animations` path does not exist in current tree.
+3. Boundary enforcement drift:
+   - Module boundaries are physical and documented, but lint-level enforcement is not yet configured.
 4. SEO endpoint mismatch risk:
    - Post JSON-LD image URL differs from the actual OG route path/domain conventions.
 
@@ -134,3 +136,4 @@ Last updated: 2026-05-06
 3. Keep token-first styling and avoid one-off visual constants where possible.
 4. Keep route-level separation for feed, OG, and view-count concerns.
 5. Keep Umami analytics separate from Supabase-backed public view counts.
+6. Keep top-level domain modules as documented in ADR 0011.

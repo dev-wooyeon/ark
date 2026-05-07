@@ -1,7 +1,11 @@
 # 0006. 시각화 중심 컴포넌트를 격리한다
 
 Date: 2026-01-28
-Status: Accepted
+Status: Accepted, path amended by [0011](0011-adopt-frontend-modular-monolith.md)
+
+Note: ADR 0011 moves the physical visualization path from
+`src/components/visualization/**` to `shared/visualization/**` while preserving
+the isolation decision.
 
 ## 배경
 
