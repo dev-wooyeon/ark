@@ -11,6 +11,7 @@
 - `npm run test:components` : UI 컴포넌트 중심 테스트 실행
 - `npm run test:smoke` : 유닛 smoke + Playwright smoke
 - `npm run test:e2e` : 전체 Playwright 시나리오
+- `npm run verify:docs` : ADR과 핵심 문서 하네스 검사
 
 ## 단위 테스트 체크리스트
 
@@ -54,6 +55,24 @@
 
 - `src/styles/tokens.test.ts`
 - `src/styles/globals.test.ts`
+
+## 문서 하네스
+
+`npm run verify:docs`는 전체 Markdown 문서를 한 번에 검사하지 않는다. 현재
+저장소에는 과거 글과 일부 guide에 남은 markdownlint 이슈가 있기 때문이다.
+대신 의사결정과 작업 경계를 잡는 핵심 문서만 안정적으로 검증한다.
+
+검증 범위:
+
+1. `docs/README.md`에 명시된 문서 경로가 실제로 존재하는지 확인한다.
+2. `AGENTS.md`와 `docs/adr/README.md`가 같은 ADR 작성 조건을 포함하는지
+   확인한다.
+3. `docs/adr/*.md` 파일이 ADR 인덱스에 등록되어 있는지 확인한다.
+4. `AGENTS.md`, `ARCHITECTURE.md`, `docs/README.md`, `docs/adr/*.md`에
+   markdownlint를 실행한다.
+
+문서 변경이 ADR, 저장소 규칙, 문서 인덱스에 닿으면 최소 검증으로
+`npm run verify:docs`를 실행한다.
 
 ## Playwright 체크리스트
 
