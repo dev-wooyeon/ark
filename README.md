@@ -75,23 +75,19 @@
 ```text
 eunu.log/
 ├── 📁 src/
-│   ├── 📁 app/                 # 라우트 엔트리 전용 (Next App Router)
-│   ├── 📁 core/                # 앱 전역 설정/프로바이더 조합
-│   ├── 📁 domains/             # 도메인 계약/타입/스키마
-│   ├── 📁 features/            # 기능 모듈(ui/model/services)
-│   │   ├── 📁 blog/
-│   │   ├── 📁 resume/
-│   │   ├── 📁 search/
-│   │   └── 📁 home/
-│   ├── 📁 shared/              # 공용 모듈(analytics/integrations/layout/seo/testing/ui/types)
-│   ├── 📁 components/
-│   │   └── 📁 visualization/   # 인터랙티브 알고리즘 시각화 전용
-│   └── 📁 styles/              # 전역 스타일과 토큰
+│   └── 📁 app/                 # Next.js route adapter
+├── 📁 blog/                    # 글 도메인
+├── 📁 resume/                  # 이력서 도메인
+├── 📁 search/                  # 검색 도메인
+├── 📁 site/                    # 홈, AppShell, provider, site config
+├── 📁 platform/                # Supabase, Umami, SEO, devtool integration
+├── 📁 shared/                  # 도메인 지식 없는 UI/모션/테스트/시각화
+├── 📁 styles/                  # 전역 스타일과 토큰
 ├── 📁 tests/
 │   └── 📁 e2e/                 # Playwright E2E 테스트
-├── 📁 internal/
-│   ├── 📁 config/              # 내부 lint/spell 설정
-│   └── 📁 scripts/             # 내부 자동화/유틸 스크립트
+├── 📁 tooling/
+│   ├── 📁 config/              # lint/spell 설정
+│   └── 📁 scripts/             # 자동화/유틸 스크립트
 ├── 📁 posts/                   # 블로그 글(MDX + 메타데이터)
 │   └── 📁 [slug]/              # 글 단위 폴더
 │       ├── index.mdx           # 글 본문

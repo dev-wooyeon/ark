@@ -3,8 +3,8 @@
 1) Current project toolchain is Node/TypeScript-first.
 2) Python is used only for specific analysis scripts:
 
-- internal/scripts/research/build_nekaracuba_corpus.py
-- internal/scripts/research/generate_toss_analysis.py
+- tooling/scripts/research/build_nekaracuba_corpus.py
+- tooling/scripts/research/generate_toss_analysis.py
 
 If standardizing Python tooling with `uv`:
 
