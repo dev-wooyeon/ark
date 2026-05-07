@@ -88,7 +88,7 @@ function runMarkdownlint() {
     path.join(ROOT, 'node_modules', '.bin', 'markdownlint-cli2'),
     [
       '--config',
-      path.join('internal', 'config', '.markdownlint-cli2.jsonc'),
+      path.join('tooling', 'config', '.markdownlint-cli2.jsonc'),
       ...markdownlintTargets,
     ],
     {

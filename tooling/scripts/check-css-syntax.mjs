@@ -3,7 +3,7 @@ import path from 'path';
 import postcss from 'postcss';
 
 const ROOT = process.cwd();
-const TARGET_DIR = path.join(ROOT, 'src');
+const TARGET_DIRS = ['src', 'blog', 'search', 'shared', 'site', 'styles'];
 
 async function collectCssFiles(dirPath) {
   const entries = await fs.readdir(dirPath, { withFileTypes: true });
@@ -42,10 +42,27 @@ async function validateCssFile(filePath) {
 }
 
 async function main() {
-  const cssFiles = await collectCssFiles(TARGET_DIR);
+  const existingTargetDirs = await Promise.all(
+    TARGET_DIRS.map(async (targetDir) => {
+      const fullPath = path.join(ROOT, targetDir);
+      try {
+        const stats = await fs.stat(fullPath);
+        return stats.isDirectory() ? fullPath : null;
+      } catch {
+        return null;
+      }
+    })
+  );
+  const cssFiles = (
+    await Promise.all(
+      existingTargetDirs
+        .filter((entry) => entry !== null)
+        .map((targetDir) => collectCssFiles(targetDir))
+    )
+  ).flat();
 
   if (cssFiles.length === 0) {
-    console.log('No CSS files found under src/.');
+    console.log('No CSS files found under configured source directories.');
     return;
   }
 
