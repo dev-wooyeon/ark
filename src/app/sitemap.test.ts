@@ -1,7 +1,7 @@
 // @vitest-environment node
 
 import { describe, expect, it } from 'vitest';
-import { getSortedFeedData } from '@/features/blog/services/post-repository';
+import { getSortedFeedData } from '@/blog/services/post-repository';
 import sitemap from './sitemap';
 
 const URL = 'https://eunu-log.vercel.app';
