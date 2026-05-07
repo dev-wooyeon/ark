@@ -1,1 +1,1 @@
-export { metadata, default } from '@/features/resume/ui/pages/ResumePage';
+export { metadata, default } from '@/resume/ui/pages/ResumePage';

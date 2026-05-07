@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { RouteError } from '@/shared/ui';
-import { AnalyticsEvents, trackEvent } from '@/shared/analytics/lib/analytics';
+import { AnalyticsEvents, trackEvent } from '@/platform/analytics/lib/analytics';
 
 interface BlogPostErrorProps {
   error: Error & { digest?: string };

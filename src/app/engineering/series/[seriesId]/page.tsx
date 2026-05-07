@@ -1,4 +1,4 @@
-import EngineeringSeriesPage from '@/features/blog/ui/pages/EngineeringSeriesPage';
+import EngineeringSeriesPage from '@/blog/ui/pages/EngineeringSeriesPage';
 
 export default async function EngineeringSeriesRoutePage({
   params,

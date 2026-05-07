@@ -1,7 +1,10 @@
 # 0005. Token-first Tailwind 스타일링을 사용한다
 
 Date: 2026-01-27
-Status: Accepted
+Status: Accepted, path amended by [0011](0011-adopt-frontend-modular-monolith.md)
+
+Note: ADR 0011 moves the physical style path from `src/styles/**` to `styles/**`
+while preserving the token-first styling decision.
 
 ## 배경
 

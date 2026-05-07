@@ -17,44 +17,39 @@
 
 ### lib
 
-- `src/shared/analytics/lib/analytics.test.ts`
+- `platform/analytics/lib/analytics.test.ts`
   - GA ID 부재/부재 조건에서 이벤트 미발송
   - trackEvent, trackPageView 실 발송 가드
 
-- `src/features/blog/services/post-repository.test.ts`
+- `blog/services/post-repository.test.ts`
   - 정렬/시리즈 조회/SKU 슬러그 수집
 
-- `src/features/search/model/get-search-actions.test.ts`
+- `search/model/get-search-actions.test.ts`
   - 키워드 생성/nullable tags 처리
 
-- `src/features/blog/services/markdown-parser.test.ts`
+- `blog/services/markdown-parser.test.ts`
   - TOC ID 생성 및 중복 처리
 
-### app actions
+### blog api
 
-- `src/app/actions/view.test.ts`
+- `blog/api/view.test.ts`
   - 슬러그 정규화
   - Supabase 미연결 환경 fallback
   - RPC 실패 시 읽기 fallback 동작
 
 ### components
 
-- `src/shared/layout/Header/useScrollVisibility.test.ts`
-  - 홈/블로그 경로별 top/bottom visibility 동작, 스크롤 임계값
-  - 바텀바 오프셋 CSS 변수 동기화
-- `src/shared/layout/Header/MobileBottomNav.test.tsx`
+- `site/navigation/MobileBottomNav.test.tsx`
   - 아이템 수, active 상태, 토큰 기반 class, search action, analytics tracking
-- `src/shared/layout/Header/Header.test.tsx`
-  - 헤더 하위 컴포넌트 연결 및 top header 상태 반영
-- `src/features/blog/ui/components/*.test.tsx`
+- `blog/ui/components/*.test.tsx`
   - PostCard/PostList/CategoryFilter 상태별 렌더/이벤트
-- `src/shared/ui/*.test.tsx`
+- `shared/ui/*.test.tsx`
   - Button/EmptyState/Route state 상태 검증
 
 ### styles
 
-- `src/styles/tokens.test.ts`
-- `src/styles/globals.test.ts`
+- `styles/tokens.test.ts`
+- `styles/globals.test.ts`
 
 ## 문서 하네스
 

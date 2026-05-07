@@ -1,6 +1,6 @@
 # FRONTEND
 
-Last updated: 2026-02-27
+Last updated: 2026-05-07
 
 ## Stack
 
@@ -11,17 +11,19 @@ Last updated: 2026-02-27
 
 ## Frontend Architecture
 
-1. Route layer: `src/app/**`
-2. Feature layer: `src/features/**`
-3. Shared layer: `src/shared/**` (+ visualization: `src/components/visualization/**`)
-4. Styles/tokens: `src/styles/**`
+1. Route adapter layer: `src/app/**`
+2. Domain modules: `blog/**`, `resume/**`, `search/**`
+3. Composition layer: `site/**`
+4. Runtime/integration layer: `platform/**`
+5. Domain-agnostic primitives: `shared/**`
+6. Styles/tokens: `styles/**`
 
 ## Frontend Rules
 
-1. Keep boundaries clear between feature modules (`blog`, `resume`, `search`, `home`) and shared modules (`layout`, `ui`, `analytics`, `providers`, `seo`).
+1. Keep boundaries clear between domain modules (`blog`, `resume`, `search`) and composition/infrastructure modules (`site`, `platform`, `shared`).
 2. Avoid duplicated global trackers/providers in root layout.
-3. Use typed contracts from `src/domains/**/model/types.ts` and `src/shared/types/*`.
-4. Keep MDX custom component mappings centralized in `src/features/blog/ui/mdx/components.tsx`.
+3. Keep domain contracts inside the owning domain module, for example `blog/model/types.ts`.
+4. Keep MDX custom component mappings centralized in `blog/ui/mdx/components.tsx`.
 
 ## Test Expectations
 

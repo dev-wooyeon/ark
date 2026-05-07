@@ -1,12 +1,12 @@
 # DESIGN
 
-Last updated: 2026-02-26
+Last updated: 2026-05-07
 
 ## Source of Truth
 
-1. Tokens: `src/styles/tokens.css`
-2. Global style behavior: `src/styles/globals.css`
-3. Reusable component patterns: `src/shared/ui/**`, `src/shared/layout/**`
+1. Tokens: `styles/tokens.css`
+2. Global style behavior: `styles/globals.css`
+3. Reusable component patterns: `shared/ui/**`, `shared/layout/**`
 
 ## Design Guardrails
 

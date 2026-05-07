@@ -1,1 +1,1 @@
-export { metadata, default } from '@/features/blog/ui/pages/SeriesPage';
+export { metadata, default } from '@/blog/ui/pages/SeriesPage';

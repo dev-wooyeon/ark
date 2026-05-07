@@ -17,7 +17,7 @@ markdownlint 이슈 때문에, 현재 상태에서는 문서 변경 검증용 ha
 ## 결정
 
 핵심 문서만 대상으로 하는 `npm run verify:docs`를 추가한다. 이 command는
-`internal/scripts/verify-docs.mjs`를 실행하며 다음을 검증한다.
+`tooling/scripts/verify-docs.mjs`를 실행하며 다음을 검증한다.
 
 - `docs/README.md`에 등록된 명시적 문서 경로가 실제로 존재하는지 확인한다.
 - `AGENTS.md`와 `docs/adr/README.md`가 같은 ADR 작성 조건을 포함하는지

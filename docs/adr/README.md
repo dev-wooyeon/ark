@@ -21,13 +21,14 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0001](0001-use-nextjs-app-router.md) | Accepted | 블로그 런타임으로 Next.js App Router를 사용한다 |
 | [0002](0002-keep-custom-mdx-webpack-pipeline.md) | Accepted | 커스텀 MDX webpack 파이프라인을 유지한다 |
 | [0003](0003-store-posts-as-folder-mdx-and-meta.md) | Accepted | 글을 중첩 가능한 `index.mdx`와 `meta.json` 폴더로 저장한다 |
-| [0004](0004-preserve-feature-first-source-structure.md) | Accepted | feature-first 소스 구조를 유지한다 |
+| [0004](0004-preserve-feature-first-source-structure.md) | Superseded | feature-first 소스 구조를 유지한다 |
 | [0005](0005-use-token-first-tailwind-styling.md) | Accepted | token-first Tailwind 스타일링을 사용한다 |
 | [0006](0006-isolate-visualization-heavy-components.md) | Accepted | 시각화 중심 컴포넌트를 격리한다 |
 | [0007](0007-use-umami-and-supabase-view-counts.md) | Accepted | Umami 분석과 Supabase 조회수를 함께 사용한다 |
 | [0008](0008-enforce-publication-policy-in-content-ingestion.md) | Accepted | 콘텐츠 수집 경로에서 공개 정책을 강제한다 |
 | [0009](0009-use-app-shell-for-primary-navigation.md) | Accepted | 주요 탐색과 레이아웃에 AppShell을 사용한다 |
 | [0010](0010-use-targeted-documentation-harness.md) | Accepted | 핵심 문서 검증에 targeted documentation harness를 사용한다 |
+| [0011](0011-adopt-frontend-modular-monolith.md) | Accepted | Domain-first Modular Monolith를 사용한다 |
 
 ## 작성 조건
 

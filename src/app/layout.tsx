@@ -3,15 +3,15 @@ import type { ReactNode } from 'react';
 import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
-import AppProviders from '@/core/providers/AppProviders';
-import { getSortedFeedData } from '@/features/blog/services/post-repository';
-import { AppShell } from '@/shared/layout';
+import AppProviders from '@/site/providers/AppProviders';
+import { getSortedFeedData } from '@/blog/services/post-repository';
+import { AppShell } from '@/site/shell/AppShell';
 import {
   SITE_AUTHOR,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
-} from '@/core/config/site';
+} from '@/site/config/site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

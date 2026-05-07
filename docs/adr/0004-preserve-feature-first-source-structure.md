@@ -1,7 +1,7 @@
 # 0004. Feature-first 소스 구조를 유지한다
 
 Date: 2026-02-28
-Status: Accepted
+Status: Superseded by [0011](0011-adopt-frontend-modular-monolith.md)
 
 ## 배경
 

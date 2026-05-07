@@ -1,4 +1,4 @@
-import { getSortedFeedData } from '@/features/blog/services/post-repository';
+import { getSortedFeedData } from '@/blog/services/post-repository';
 
 const SITE_URL = 'https://eunu-log.vercel.app';
 

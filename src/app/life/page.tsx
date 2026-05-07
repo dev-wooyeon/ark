@@ -1,1 +1,1 @@
-export { metadata, default } from '@/features/blog/ui/pages/LifePage';
+export { metadata, default } from '@/blog/ui/pages/LifePage';

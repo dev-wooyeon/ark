@@ -1,7 +1,11 @@
 # 0009. 주요 탐색에 AppShell을 사용한다
 
 Date: 2026-04-21
-Status: Accepted
+Status: Accepted, path amended by [0011](0011-adopt-frontend-modular-monolith.md)
+
+Note: ADR 0011 moves AppShell from `src/shared/layout/AppShell/**` to
+`site/shell/AppShell/**` while preserving the single app-shell navigation
+decision.
 
 ## 배경
 
