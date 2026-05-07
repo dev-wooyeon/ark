@@ -318,6 +318,7 @@
   line-height: var(--leading-tight);
   margin-top: 3rem;
   margin-bottom: 1.125rem;
+  scroll-margin-top: 6rem;
 }
 
 .prose h1 {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { clsx } from 'clsx';
 
 interface TocItem {
@@ -15,8 +16,17 @@ interface TableOfContentsProps {
 
 export default function TableOfContents({ items }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
+    setPortalRoot(document.body);
+  }, []);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -38,35 +48,23 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
     return () => observer.disconnect();
   }, [items]);
 
-  const handleClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -100;
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+  if (items.length === 0 || !portalRoot) return null;
 
-      // Update URL hash without jumping and without adding to history
-      window.history.replaceState(null, '', `#${id}`);
-    }
-  };
-
-  if (items.length === 0) return null;
-
-  return (
+  return createPortal(
     <nav
-      className="fixed right-8 top-20 bottom-8 hidden w-64 xl:block"
+      className="fixed right-8 top-20 hidden w-64 xl:block"
       aria-label="이 글의 목차"
     >
-      <div className="h-full overflow-y-auto rounded-[var(--radius-md)] bg-[var(--color-grey-50)] p-4">
+      <div className="rounded-[var(--radius-md)] bg-[var(--color-grey-50)] p-4">
         <h2 className="text-sm font-semibold text-[var(--color-grey-900)] mb-4 sticky top-0 bg-[var(--color-grey-50)] pb-2">
           이 글의 목차
         </h2>
-        <ul className="flex flex-col gap-1">
+        <ul className="m-0 flex list-none flex-col gap-1 p-0">
           {items.map((item) => (
             <li key={item.id}>
-              <button
-                onClick={() => handleClick(item.id)}
+              <a
+                href={`#${item.id}`}
+                aria-current={activeId === item.id ? 'location' : undefined}
                 className={clsx(
                   'block w-full text-left text-sm py-1.5 px-3 rounded-[6px]',
                   'transition-colors duration-[var(--duration-150)]',
@@ -78,12 +76,13 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
                 style={{ fontFamily: 'var(--font-sans-emoji)' }}
               >
                 {item.text}
-              </button>
+              </a>
             </li>
           ))}
         </ul>
       </div>
-    </nav>
+    </nav>,
+    portalRoot
   );
 }
 

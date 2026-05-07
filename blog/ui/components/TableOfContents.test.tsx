@@ -1,19 +1,14 @@
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { setupScrollToMock } from '@/shared/testing/dom-mocks';
 import { TableOfContents } from './TableOfContents';
 
 describe('TableOfContents', () => {
-  it('renders items and scrolls/hashes when clicked', () => {
-    setupScrollToMock();
-
+  it('renders native hash links and observes headings', () => {
     const item = { id: 'section-1', text: '첫번째 섹션', level: 2 };
     const header = document.createElement('h2');
     header.id = item.id;
-    header.getBoundingClientRect = () => ({ top: 320 } as DOMRect);
     document.body.appendChild(header);
 
-    window.history.replaceState = vi.fn();
     const observeSpy = vi.fn();
     const disconnectSpy = vi.fn();
 
@@ -29,23 +24,19 @@ describe('TableOfContents', () => {
     window.IntersectionObserver =
       MockIntersectionObserver as unknown as typeof window.IntersectionObserver;
 
-    const { getByRole } = render(<TableOfContents items={[item]} />);
+    const { container, getByRole } = render(<TableOfContents items={[item]} />);
 
-    const button = getByRole('button', { name: '첫번째 섹션' });
-    fireEvent.click(button);
+    const link = getByRole('link', { name: '첫번째 섹션' });
+    fireEvent.click(link);
 
-    expect(button).toHaveStyle({
+    expect(container.querySelector('nav')).toBeNull();
+    expect(document.body.querySelector('nav')).not.toHaveClass('bottom-8');
+    expect(document.body.querySelector('nav > div')).not.toHaveClass('h-full');
+    expect(document.body.querySelector('ul')).toHaveClass('m-0', 'p-0');
+    expect(link).toHaveAttribute('href', `#${item.id}`);
+    expect(link).toHaveStyle({
       fontFamily: 'var(--font-sans-emoji)',
     });
     expect(observeSpy).toHaveBeenCalledWith(header);
-    expect(window.history.replaceState).toHaveBeenCalledWith(
-      null,
-      '',
-      `#${item.id}`
-    );
-    expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 220,
-      behavior: 'smooth',
-    });
   });
 });
