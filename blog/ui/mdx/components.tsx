@@ -1,6 +1,7 @@
 import { createHeadingIdGenerator } from '@/blog/model/heading';
 import type { MDXComponents } from 'mdx/types';
 import {
+  createElement,
   isValidElement,
   type ComponentPropsWithoutRef,
   type ReactNode,
@@ -62,22 +63,21 @@ function mergeClassName(baseClassName: string, className?: string): string {
 
 export function getMDXComponents(components: MDXComponents): MDXComponents {
   const nextHeadingId = createHeadingIdGenerator();
-  const createHeading = <T extends 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'>(
-    tag: T,
+  const createHeading = (
+    tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
     baseClassName: string
   ) => {
-    const Heading = (props: ComponentPropsWithoutRef<T>) => {
-      const Tag = tag;
+    const Heading = (props: ComponentPropsWithoutRef<'h1'>) => {
       const generatedId = nextHeadingId(extractText(props.children));
 
-      return (
-        <Tag
-          {...props}
-          id={generatedId ?? props.id}
-          className={mergeClassName(baseClassName, props.className)}
-        >
-          {props.children}
-        </Tag>
+      return createElement(
+        tag,
+        {
+          ...props,
+          id: generatedId ?? props.id,
+          className: mergeClassName(baseClassName, props.className),
+        },
+        props.children
       );
     };
 
