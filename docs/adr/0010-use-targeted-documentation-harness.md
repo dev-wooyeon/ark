@@ -3,6 +3,9 @@
 Date: 2026-05-07
 Status: Accepted
 
+참고: ADR 0013에서 `ARCHITECTURE.md`를 제거했다. 현재 harness는 `AGENTS.md`,
+`docs/README.md`, `docs/adr/*.md`를 검사한다.
+
 ## 배경
 
 ADR 작성 조건이 `AGENTS.md`와 `docs/adr/README.md`에 추가되면서, 문서 규칙도
@@ -23,8 +26,7 @@ markdownlint 이슈 때문에, 현재 상태에서는 문서 변경 검증용 ha
 - `AGENTS.md`와 `docs/adr/README.md`가 같은 ADR 작성 조건을 포함하는지
   확인한다.
 - `docs/adr/*.md` 파일이 ADR 인덱스에 등록되어 있는지 확인한다.
-- `AGENTS.md`, `ARCHITECTURE.md`, `docs/README.md`, `docs/adr/*.md`에
-  markdownlint를 실행한다.
+- `AGENTS.md`, `docs/README.md`, `docs/adr/*.md`에 markdownlint를 실행한다.
 
 `npm run test:ci`에도 `npm run verify:docs`를 포함한다.
 

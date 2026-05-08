@@ -74,17 +74,17 @@
 
 ```text
 eunu.log/
-├── 📁 src/
-│   └── 📁 app/                 # Next.js route adapter
+├── 📁 app/                     # Next.js route adapter
 ├── 📁 blog/                    # 글 도메인
 ├── 📁 resume/                  # 이력서 도메인
 ├── 📁 search/                  # 검색 도메인
 ├── 📁 site/                    # 홈, AppShell, provider, site config
-├── 📁 platform/                # Supabase, Umami, SEO, devtool integration
-├── 📁 shared/                  # 도메인 지식 없는 UI/모션/테스트/시각화
+├── 📁 infra/                   # Supabase, Umami, SEO integration
+├── 📁 ui/                      # 도메인 지식 없는 UI/레이아웃/모션
 ├── 📁 styles/                  # 전역 스타일과 토큰
 ├── 📁 tests/
-│   └── 📁 e2e/                 # Playwright E2E 테스트
+│   ├── 📁 e2e/                 # Playwright E2E 테스트
+│   └── 📁 support/             # Vitest support helper
 ├── 📁 tooling/
 │   ├── 📁 config/              # lint/spell 설정
 │   └── 📁 scripts/             # 자동화/유틸 스크립트
