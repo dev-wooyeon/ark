@@ -16,7 +16,6 @@ const adrTriggerRules = [
 
 const markdownlintTargets = [
   'AGENTS.md',
-  'ARCHITECTURE.md',
   'docs/README.md',
   ...fs
     .readdirSync(ADR_DIR)

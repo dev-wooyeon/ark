@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { setupScrollToMock } from '@/shared/testing/dom-mocks';
+import { setupScrollToMock } from '@/tests/support/dom-mocks';
 import { TableOfContents } from './TableOfContents';
 
 describe('TableOfContents', () => {

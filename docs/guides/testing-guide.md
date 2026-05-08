@@ -17,7 +17,7 @@
 
 ### lib
 
-- `platform/analytics/lib/analytics.test.ts`
+- `infra/analytics/lib/analytics.test.ts`
   - GA ID 부재/부재 조건에서 이벤트 미발송
   - trackEvent, trackPageView 실 발송 가드
 
@@ -43,7 +43,7 @@
   - 아이템 수, active 상태, 토큰 기반 class, search action, analytics tracking
 - `blog/ui/components/*.test.tsx`
   - PostCard/PostList/CategoryFilter 상태별 렌더/이벤트
-- `shared/ui/*.test.tsx`
+- `ui/**/*.test.tsx`
   - Button/EmptyState/Route state 상태 검증
 
 ### styles
@@ -63,8 +63,7 @@
 2. `AGENTS.md`와 `docs/adr/README.md`가 같은 ADR 작성 조건을 포함하는지
    확인한다.
 3. `docs/adr/*.md` 파일이 ADR 인덱스에 등록되어 있는지 확인한다.
-4. `AGENTS.md`, `ARCHITECTURE.md`, `docs/README.md`, `docs/adr/*.md`에
-   markdownlint를 실행한다.
+4. `AGENTS.md`, `docs/README.md`, `docs/adr/*.md`에 markdownlint를 실행한다.
 
 문서 변경이 ADR, 저장소 규칙, 문서 인덱스에 닿으면 최소 검증으로
 `npm run verify:docs`를 실행한다.

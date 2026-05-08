@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 import {
   activities,
   certifications,

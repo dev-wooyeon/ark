@@ -14,7 +14,7 @@ import {
   type HomePopularView,
   type HomeSortOrder,
 } from '@/site/home/model/home-feed';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 
 interface HomePageClientProps {
   posts: FeedData[];

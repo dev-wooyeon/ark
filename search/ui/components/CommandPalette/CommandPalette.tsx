@@ -12,7 +12,7 @@ import {
 } from 'kbar';
 import styles from './CommandPalette.module.css';
 import type { FeedData } from '@/blog/model/types';
-import { AnalyticsEvents, trackEvent } from '@/platform/analytics/lib/analytics';
+import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 import { getRecommendedSearchTerms } from '@/search/model/search-recommendations';
 
 type SearchScopeId = 'all' | 'tech' | 'life' | 'resume';

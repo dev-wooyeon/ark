@@ -3,7 +3,16 @@ import path from 'path';
 import postcss from 'postcss';
 
 const ROOT = process.cwd();
-const TARGET_DIRS = ['src', 'blog', 'search', 'shared', 'site', 'styles'];
+const TARGET_DIRS = [
+  'app',
+  'blog',
+  'infra',
+  'resume',
+  'search',
+  'ui',
+  'site',
+  'styles',
+];
 
 async function collectCssFiles(dirPath) {
   const entries = await fs.readdir(dirPath, { withFileTypes: true });

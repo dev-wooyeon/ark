@@ -3,9 +3,9 @@
 Generated from:
 
 - `docs/database/supabase-view-count.sql`
-- `platform/integrations/supabase.ts`
+- `infra/integrations/supabase.ts`
 
-Last updated: 2026-05-07
+Last updated: 2026-05-08
 
 ## Table: `public.views`
 
@@ -47,7 +47,7 @@ Last updated: 2026-05-07
 
 ## Type Mapping (App)
 
-`platform/integrations/supabase.ts` defines:
+`infra/integrations/supabase.ts` defines:
 
 - Table row type for `views`.
 - RPC signature:

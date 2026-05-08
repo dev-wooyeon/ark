@@ -2,7 +2,7 @@
 
 import { createHash, randomUUID } from 'node:crypto';
 import { cookies, headers } from 'next/headers';
-import { getSupabaseServerClient } from '@/platform/integrations/supabase';
+import { getSupabaseServerClient } from '@/infra/integrations/supabase';
 
 const VIEW_DEDUPE_WINDOW_SECONDS = 60 * 60 * 24;
 const VIEW_FINGERPRINT_SALT =
@@ -97,7 +97,9 @@ async function createViewerFingerprint(): Promise<string> {
   const userAgent = readHeaderValue(headerStore, ['user-agent']);
   const acceptLanguage = readHeaderValue(headerStore, ['accept-language']);
   const secChUa = readHeaderValue(headerStore, ['sec-ch-ua']);
-  const secChUaPlatform = readHeaderValue(headerStore, ['sec-ch-ua-platform']);
+  const secChUaPlatform = readHeaderValue(headerStore, [
+    'sec-ch-ua-infrastructure',
+  ]);
 
   const signatureParts = [
     ipAddress,

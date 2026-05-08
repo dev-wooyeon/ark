@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRef, useEffect, useState } from 'react';
-import { useMotionMode } from '@/shared/motion/model/motion-mode';
+import { useMotionMode } from '@/ui/motion/model/motion-mode';
 
 // 라우트 깊이 계산 (홈 = 0, /feed = 1, /feed/[slug] = 2)
 function getRouteDepth(pathname: string): number {
