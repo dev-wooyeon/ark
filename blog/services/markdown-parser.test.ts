@@ -29,6 +29,38 @@ describe('parseHeadingsFromMdx', () => {
     });
   });
 
+  it('normalizes markdown-heavy headings and skips non-renderable cases', () => {
+    const mdx = `
+### **🚀 성능 증명 (로컬 벤치마크)**
+### [Redis](https://redis.io) \`Pipeline\`
+### **🎯**
+\`\`\`md
+## code block heading
+\`\`\`
+### **🚀 성능 증명 (로컬 벤치마크)**
+`;
+
+    const headings = parseHeadingsFromMdx(mdx);
+
+    expect(headings).toEqual([
+      {
+        id: '성능-증명-로컬-벤치마크',
+        text: '🚀 성능 증명 (로컬 벤치마크)',
+        level: 3,
+      },
+      {
+        id: 'redis-pipeline',
+        text: 'Redis Pipeline',
+        level: 3,
+      },
+      {
+        id: '성능-증명-로컬-벤치마크-1',
+        text: '🚀 성능 증명 (로컬 벤치마크)',
+        level: 3,
+      },
+    ]);
+  });
+
   it('returns an empty array for invalid content', () => {
     expect(parseHeadingsFromMdx('')).toEqual([]);
   });
