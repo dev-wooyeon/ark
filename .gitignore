@@ -41,5 +41,4 @@ next-env.d.ts
 .husky/
 .sisyphus/
 .claude/
-/.agentation/
 .idea

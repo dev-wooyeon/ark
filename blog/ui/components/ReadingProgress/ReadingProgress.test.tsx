@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { resetDomState, setWindowScrollY } from '@/shared/testing/dom-mocks';
+import { resetDomState, setWindowScrollY } from '@/tests/support/dom-mocks';
 import ReadingProgress from './ReadingProgress';
 
 vi.mock('framer-motion', () => ({

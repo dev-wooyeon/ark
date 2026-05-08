@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { cookies, headers } from 'next/headers';
-import { getSupabaseServerClient } from '@/platform/integrations/supabase';
+import { getSupabaseServerClient } from '@/infra/integrations/supabase';
 import {
   getPopularViewsInRecentDays,
   getViewCount,
@@ -8,7 +8,7 @@ import {
   trackView,
 } from './view';
 
-vi.mock('@/platform/integrations/supabase', () => ({
+vi.mock('@/infra/integrations/supabase', () => ({
   getSupabaseServerClient: vi.fn(),
 }));
 

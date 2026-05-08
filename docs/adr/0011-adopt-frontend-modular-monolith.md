@@ -3,6 +3,10 @@
 Date: 2026-05-07
 Status: Accepted
 
+참고: ADR 0012는 route adapter를 `src/app/`에서 `app/`으로 이동했고, ADR 0013은
+이 domain-first modular monolith 결정을 유지하면서 모호한 지원 모듈 이름을
+정리했다.
+
 ## 배경
 
 기존 구조는 `src/features`, `src/domains`, `src/core`, `src/shared` 안에서
@@ -22,34 +26,33 @@ DDD의 전략적 설계 개념을 차용한 domain-first modular monolith를 사
 
 최상위 모듈 경계는 다음과 같이 둔다.
 
-- `src/app/`: Next.js App Router route adapter, route handler, metadata entry.
+- `app/`: Next.js App Router route adapter, route handler, metadata entry.
 - `posts/`: 블로그 원문 콘텐츠 저장소. `index.mdx`와 `meta.json` 구조를 유지한다.
 - `blog/`: 글 도메인. post schema, repository, publication policy, series,
-  blog UI, view-count use case를 소유한다.
+  blog UI, RSS feed serialization, view-count use case를 소유한다.
 - `resume/`: 이력서 도메인. resume data, ordering, resume UI를 소유한다.
 - `search/`: 검색 도메인. command palette, search action, recommendation을
   소유한다.
 - `site/`: 도메인 조합 layer. home, AppShell, navigation, provider, site config를
   소유한다.
-- `platform/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper,
-  devtool integration을 소유한다.
-- `shared/`: 도메인 지식이 없는 UI primitive, motion helper, testing helper,
-  visualization widget만 둔다.
+- `infra/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper를
+  소유한다.
+- `ui/`: 도메인 지식이 없는 UI primitive, layout primitive, motion helper만 둔다.
 - `styles/`: design token과 global style을 둔다.
 
-의존 방향은 `src/app -> site -> domain -> platform/shared`를 기본으로 한다.
+의존 방향은 `app -> site -> domain -> infra/ui`를 기본으로 한다.
 `blog`는 `posts/`를 읽을 수 있는 유일한 도메인 모듈이다. `site`는 여러 도메인을
 조합할 수 있지만, 도메인 내부 정책을 대신 구현하지 않는다.
 
 ## 결과
 
 - 저장소 최상단에서 주요 도메인과 조합/인프라 책임이 구분된다.
-- `src/app`은 Next.js route adapter 역할에 집중한다.
+- `app`은 Next.js route adapter 역할에 집중한다.
 - 기존 `src/features`, `src/domains`, `src/core`, `src/shared` 경계는 이 결정으로
   대체된다.
 - 단순 폴더 이동만으로 경계가 보장되지는 않는다. import 경계는 public API와
   테스트로 우선 관리하고, lint 기반 강제는 별도 결정으로 추가할 수 있다.
-- `shared`로 올리는 코드는 도메인 언어를 포함하지 않아야 한다.
+- `ui`로 올리는 코드는 도메인 언어를 포함하지 않아야 한다.
 
 ## 검토한 대안
 

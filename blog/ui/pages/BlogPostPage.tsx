@@ -9,7 +9,7 @@ import {
   getMdxSource,
   parseHeadingsFromMdx,
 } from '@/blog/services/markdown-parser';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 import {
   ReadingProgress,
   TableOfContents,
@@ -17,10 +17,10 @@ import {
   SeriesNavigation,
   ViewCounter,
 } from '@/blog/ui/components';
-import PostViewTracker from '@/platform/analytics/components/PostViewTracker';
-import DwellTimeTracker from '@/platform/analytics/components/DwellTimeTracker';
-import ScrollDepthTracker from '@/platform/analytics/components/ScrollDepthTracker';
-import JsonLd from '@/platform/seo/JsonLd';
+import PostViewTracker from '@/infra/analytics/components/PostViewTracker';
+import DwellTimeTracker from '@/infra/analytics/components/DwellTimeTracker';
+import ScrollDepthTracker from '@/infra/analytics/components/ScrollDepthTracker';
+import JsonLd from '@/infra/seo/JsonLd';
 import { getMDXComponents } from '@/blog/ui/mdx/components';
 import { SITE_URL } from '@/site/config/site';
 

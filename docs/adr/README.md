@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-05-07
+Last updated: 2026-05-08
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -11,8 +11,8 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 - 검토한 히스토리: 2026-01-20 `521eae7`부터 2026-04-28 `939601a`까지.
 - 글 발행, 문장 수정, 단일 버그 수정은 오래 유지될 시스템 제약을 만들지
   않는 한 ADR로 승격하지 않는다.
-- 현재도 유효한 결정인지 확인하기 위해 `ARCHITECTURE.md`, `AGENTS.md`,
-  기존 문서, 현재 소스 구조를 함께 대조했다.
+- 현재도 유효한 결정인지 확인하기 위해 `AGENTS.md`, `README.md`, 기존 문서,
+  현재 소스 구조를 함께 대조했다.
 
 ## 기록
 
@@ -29,6 +29,8 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0009](0009-use-app-shell-for-primary-navigation.md) | Accepted | 주요 탐색과 레이아웃에 AppShell을 사용한다 |
 | [0010](0010-use-targeted-documentation-harness.md) | Accepted | 핵심 문서 검증에 targeted documentation harness를 사용한다 |
 | [0011](0011-adopt-frontend-modular-monolith.md) | Accepted | Domain-first Modular Monolith를 사용한다 |
+| [0012](0012-use-root-app-route-adapter.md) | Accepted | Next.js route adapter를 루트 `app/`에 둔다 |
+| [0013](0013-clarify-support-boundaries-and-docs.md) | Accepted | 지원 모듈, 유지 문서, 공개 route 경계를 명확히 한다 |
 
 ## 작성 조건
 

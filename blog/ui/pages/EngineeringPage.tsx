@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 import EngineeringPageClient from './EngineeringPageClient';
 
 export const metadata: Metadata = {

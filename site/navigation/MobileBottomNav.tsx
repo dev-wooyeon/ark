@@ -3,8 +3,9 @@
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { clsx } from 'clsx';
-import { AnalyticsEvents, trackEvent } from '@/platform/analytics/lib/analytics';
-import { AppSectionIcon } from '@/shared/ui/icons/AppSectionIcon';
+import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
+import { SITE_FEED_PATH } from '@/site/config/site';
+import { AppSectionIcon } from '@/ui/icons/AppSectionIcon';
 
 interface MobileBottomNavProps {
   pathname: string;
@@ -201,7 +202,7 @@ export default function MobileBottomNav({
               onNavigate={() => onOpenChange?.(false)}
             />
             <ExternalLink
-              href="/feed.xml"
+              href={SITE_FEED_PATH}
               label="RSS"
               onNavigate={() => onOpenChange?.(false)}
             />

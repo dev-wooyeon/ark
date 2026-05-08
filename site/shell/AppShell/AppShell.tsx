@@ -8,10 +8,11 @@ import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
 import type { FeedData } from '@/blog/model/types';
 import { personalInfo } from '@/resume/model/resume-data';
+import { SITE_FEED_PATH } from '@/site/config/site';
 import MobileBottomNav from '@/site/navigation/MobileBottomNav';
-import { AppSectionIcon } from '@/shared/ui/icons/AppSectionIcon';
-import ThemeToggle from '@/shared/ui/ThemeToggle';
-import ThemeTransitionWash from '@/shared/ui/ThemeTransitionWash';
+import { AppSectionIcon } from '@/ui/icons/AppSectionIcon';
+import ThemeToggle from '@/ui/ThemeToggle';
+import ThemeTransitionWash from '@/ui/ThemeTransitionWash';
 
 type AppSection = 'home' | 'engineering' | 'life' | 'resume';
 
@@ -102,7 +103,7 @@ const EXTERNAL_LINKS: ExternalLinkItem[] = [
     ),
   },
   {
-    href: '/feed.xml',
+    href: SITE_FEED_PATH,
     label: 'RSS',
     icon: (
       <svg
@@ -270,6 +271,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
                 key={item.label}
                 href={item.href}
                 aria-label={item.label}
+                title={item.label}
                 className="flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-100)] hover:bg-[var(--color-bg-primary)] hover:text-[var(--color-grey-900)]"
               >
                 {item.icon}

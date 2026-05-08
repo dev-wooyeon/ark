@@ -3,10 +3,15 @@ import typography from '@tailwindcss/typography';
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './feeds/**/*.{md,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './blog/**/*.{js,ts,jsx,tsx,mdx}',
+    './infra/**/*.{js,ts,jsx,tsx,mdx}',
+    './resume/**/*.{js,ts,jsx,tsx,mdx}',
+    './search/**/*.{js,ts,jsx,tsx,mdx}',
+    './ui/**/*.{js,ts,jsx,tsx,mdx}',
+    './site/**/*.{js,ts,jsx,tsx,mdx}',
+    './styles/**/*.{css,js,ts}',
+    './posts/**/*.{md,mdx}',
   ],
   theme: {
     extend: {

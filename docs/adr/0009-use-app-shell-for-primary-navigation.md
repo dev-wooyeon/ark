@@ -3,7 +3,7 @@
 Date: 2026-04-21
 Status: Accepted, path amended by [0011](0011-adopt-frontend-modular-monolith.md)
 
-Note: ADR 0011 moves AppShell from `src/shared/layout/AppShell/**` to
+Note: ADR 0011 moves AppShell from `src/ui/layout/AppShell/**` to
 `site/shell/AppShell/**` while preserving the single app-shell navigation
 decision.
 
@@ -18,7 +18,7 @@ motion toggle이 제거됐다.
 
 ## 결정
 
-앱 경험의 주요 레이아웃과 탐색 프레임으로 `src/shared/layout/AppShell/**`을
+앱 경험의 주요 레이아웃과 탐색 프레임으로 `src/ui/layout/AppShell/**`을
 사용한다. feature page는 navigation chrome을 다시 만들지 않고 이 shell
 안에 조합된다.
 
