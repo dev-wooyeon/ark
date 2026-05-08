@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import { Container } from '@/shared/layout';
-import { EmptyState } from '@/shared/ui';
+import { Container } from '@/ui/layout';
+import { EmptyState } from '@/ui';
 import { getSeriesSummaries } from '@/blog/model/series-group';
 import { SeriesHubList } from '@/blog/ui/components';
 

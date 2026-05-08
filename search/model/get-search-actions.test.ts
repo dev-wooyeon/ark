@@ -3,7 +3,7 @@ import { getSearchActions } from './get-search-actions';
 
 const mockTrackEvent = vi.fn();
 
-vi.mock('@/platform/analytics/lib/analytics', () => ({
+vi.mock('@/infra/analytics/lib/analytics', () => ({
   AnalyticsEvents: {
     click: 'click',
     theme: 'theme',

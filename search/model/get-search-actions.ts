@@ -1,6 +1,6 @@
 import { Action } from 'kbar';
 import { FeedData } from '@/blog/model/types';
-import { AnalyticsEvents, trackEvent } from '@/platform/analytics/lib/analytics';
+import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 
 type SearchablePost = Pick<
   FeedData,

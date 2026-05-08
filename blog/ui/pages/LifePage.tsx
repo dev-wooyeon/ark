@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 import { PostList } from '@/blog/ui/components';
 
 export const metadata: Metadata = {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { useEffectiveMotionMode } from '@/shared/motion/model/motion-mode';
+import { useEffectiveMotionMode } from '@/ui/motion/model/motion-mode';
 
 export default function ReadingProgress() {
   const [isVisible, setIsVisible] = useState(false);

@@ -6,7 +6,7 @@ import LifePage from './LifePage';
 
 const mockGetSortedFeedData = vi.fn<() => FeedData[]>(() => []);
 
-vi.mock('@/shared/layout', () => ({
+vi.mock('@/ui/layout', () => ({
   Header: () => <div data-testid="mock-header" />,
   Container: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));

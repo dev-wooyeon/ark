@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { clsx } from 'clsx';
 import { FeedData } from '@/blog/model/types';
-import { CategoryIcon } from '@/shared/ui/icons/AppSectionIcon';
+import { CategoryIcon } from '@/ui/icons/AppSectionIcon';
 
 interface PostCardProps {
   post: FeedData;
