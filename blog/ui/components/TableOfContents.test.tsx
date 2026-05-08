@@ -30,8 +30,11 @@ describe('TableOfContents', () => {
     fireEvent.click(link);
 
     expect(container.querySelector('nav')).toBeNull();
-    expect(document.body.querySelector('nav')).not.toHaveClass('bottom-8');
-    expect(document.body.querySelector('nav > div')).not.toHaveClass('h-full');
+    expect(document.body.querySelector('nav')).toHaveClass('bottom-8');
+    expect(document.body.querySelector('nav > div')).toHaveClass(
+      'h-full',
+      'overflow-y-auto'
+    );
     expect(document.body.querySelector('ul')).toHaveClass('m-0', 'p-0');
     expect(link).toHaveAttribute('href', `#${item.id}`);
     expect(link).toHaveStyle({

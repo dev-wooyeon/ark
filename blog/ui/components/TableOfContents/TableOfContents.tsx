@@ -52,10 +52,10 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
 
   return createPortal(
     <nav
-      className="fixed right-8 top-20 hidden w-64 xl:block"
+      className="fixed right-8 top-20 bottom-8 hidden w-64 xl:block"
       aria-label="이 글의 목차"
     >
-      <div className="rounded-[var(--radius-md)] bg-[var(--color-grey-50)] p-4">
+      <div className="h-full overflow-y-auto rounded-[var(--radius-md)] bg-[var(--color-grey-50)] p-4">
         <h2 className="text-sm font-semibold text-[var(--color-grey-900)] mb-4 sticky top-0 bg-[var(--color-grey-50)] pb-2">
           이 글의 목차
         </h2>
