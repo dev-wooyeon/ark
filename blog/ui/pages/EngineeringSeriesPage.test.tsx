@@ -9,7 +9,7 @@ const mockNotFound = vi.fn(() => {
   throw new Error('NOT_FOUND');
 });
 
-vi.mock('@/shared/layout', () => ({
+vi.mock('@/ui/layout', () => ({
   Header: () => <div data-testid="mock-header" />,
   Container: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));

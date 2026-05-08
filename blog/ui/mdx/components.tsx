@@ -14,32 +14,32 @@ import {
 
 // Dynamic imports for visualization components (code splitting)
 const BinarySearchVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.BinarySearchVisualization,
   }))
 );
 const DPVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.DPVisualization,
   }))
 );
 const GraphTraversalVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.GraphTraversalVisualization,
   }))
 );
 const SlidingWindowVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.SlidingWindowVisualization,
   }))
 );
 const SortingVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.SortingVisualization,
   }))
 );
 const TwoPointerVisualization = dynamic(() =>
-  import('@/shared/visualization').then((mod) => ({
+  import('@/blog/ui/visualization').then((mod) => ({
     default: mod.TwoPointerVisualization,
   }))
 );

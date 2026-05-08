@@ -3,12 +3,12 @@
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { PostCard } from '../PostCard';
-import { EmptyState } from '@/shared/ui';
+import { EmptyState } from '@/ui';
 import type { FeedData } from '@/blog/model/types';
 import {
   useEffectiveMotionMode,
   type EffectiveMotionMode,
-} from '@/shared/motion/model/motion-mode';
+} from '@/ui/motion/model/motion-mode';
 
 interface PostListProps {
   posts: FeedData[];

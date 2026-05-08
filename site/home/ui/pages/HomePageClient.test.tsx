@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { FeedData } from '@/blog/model/types';
 import HomePageClient from './HomePageClient';
 
-vi.mock('@/shared/layout', () => ({
+vi.mock('@/ui/layout', () => ({
   Container: ({
     children,
     className,

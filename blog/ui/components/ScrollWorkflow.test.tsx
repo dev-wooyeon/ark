@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { resetDomState, setWindowScrollY } from '@/shared/testing/dom-mocks';
+import { resetDomState, setWindowScrollY } from '@/tests/support/dom-mocks';
 import { ScrollWorkflow } from './ScrollWorkflow';
 
 function createSection(id: string, top: number) {

@@ -23,7 +23,7 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-vi.mock('@/shared/layout', () => ({
+vi.mock('@/ui/layout', () => ({
   Header: () => <div data-testid="mock-header" />,
   Container: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
@@ -86,7 +86,7 @@ describe('SeriesPage', () => {
     );
   });
 
-  it('renders shared empty state when no series exists', () => {
+  it('renders ui empty state when no series exists', () => {
     mockGetSortedFeedData.mockReturnValue([]);
     mockGetSeriesSummaries.mockReturnValue([]);
 

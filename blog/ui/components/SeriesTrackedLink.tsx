@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import type { MouseEvent, ReactNode } from 'react';
 import { clsx } from 'clsx';
-import { AnalyticsEvents, trackEvent } from '@/platform/analytics/lib/analytics';
+import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 
 type SeriesTrackedTarget = 'series_hub_start' | 'series_hub_episode';
 

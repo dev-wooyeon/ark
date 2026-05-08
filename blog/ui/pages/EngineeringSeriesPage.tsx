@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getSeriesSummaries } from '@/blog/model/series-group';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import { Container } from '@/shared/layout';
+import { Container } from '@/ui/layout';
 
 interface EngineeringSeriesPageProps {
   seriesId: string;

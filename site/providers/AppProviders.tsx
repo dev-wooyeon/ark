@@ -1,11 +1,10 @@
 import type { ReactNode } from 'react';
 import ThemeProvider from '@/site/providers/ThemeProvider';
 import KBarProvider from '@/search/ui/components/KBarProvider';
-import UmamiAnalytics from '@/platform/analytics/components/UmamiAnalytics';
+import UmamiAnalytics from '@/infra/analytics/components/UmamiAnalytics';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import JsonLd from '@/platform/seo/JsonLd';
+import JsonLd from '@/infra/seo/JsonLd';
 import { SITE_AUTHOR, SITE_NAME, SITE_URL } from '@/site/config/site';
-import AgentationOverlay from '@/platform/devtools/AgentationOverlay';
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -32,10 +31,7 @@ export default function AppProviders({ children }: AppProvidersProps) {
         }}
       />
       <ThemeProvider>
-        <KBarProvider posts={posts}>
-          {children}
-          <AgentationOverlay />
-        </KBarProvider>
+        <KBarProvider posts={posts}>{children}</KBarProvider>
       </ThemeProvider>
     </>
   );
