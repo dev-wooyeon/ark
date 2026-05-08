@@ -1,19 +1,10 @@
+import {
+  createHeadingIdGenerator,
+  normalizeHeadingText,
+} from '@/blog/model/heading';
 import { getFolderSlug, type TocItem } from '@/blog/services/post-repository';
 import fs from 'fs';
 import path from 'path';
-
-// 헤딩 텍스트를 ID로 변환하는 함수
-function generateHeadingId(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(
-      /[^\w\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uD7B0-\uD7FF\s-]/g,
-      ''
-    ) // 한글, 영문, 숫자, 공백, 하이픈 제외 제거 (특수문자/이모지 제거)
-    .trim()
-    .replace(/\s+/g, '-') // 공백을 하이픈으로
-    .replace(/-+/g, '-'); // 연속된 하이픈 하나로
-}
 
 // MDX 소스에서 헤딩 파싱 (렌더링된 HTML이 아닌 원본 MDX에서)
 export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
@@ -23,29 +14,51 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
       return [];
     }
 
-    // Regex to match markdown headings (## Heading, ### Heading, etc.)
-    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
     const tocItems: TocItem[] = [];
-    const idCounts: Record<string, number> = {};
+    const nextHeadingId = createHeadingIdGenerator();
+    const lines = mdxContent.split(/\r?\n/);
+    let activeFence: { marker: '`' | '~'; length: number } | null = null;
 
-    let match;
-    while ((match = headingRegex.exec(mdxContent)) !== null) {
-      const level = match[1].length; // Number of # symbols
-      const text = match[2].trim();
+    for (const line of lines) {
+      const fenceMatch = /^\s*(`{3,}|~{3,})/.exec(line);
 
-      if (!text) continue;
+      if (fenceMatch) {
+        const fenceMarker = fenceMatch[1][0] as '`' | '~';
+        const fenceLength = fenceMatch[1].length;
 
-      // Generate unique ID
-      let id = generateHeadingId(text);
-      if (idCounts[id] !== undefined) {
-        const count = idCounts[id];
-        idCounts[id] = count + 1;
-        id = `${id}-${count}`;
-      } else {
-        idCounts[id] = 1;
+        if (!activeFence) {
+          activeFence = {
+            marker: fenceMarker,
+            length: fenceLength,
+          };
+        } else if (
+          activeFence.marker === fenceMarker &&
+          fenceLength >= activeFence.length
+        ) {
+          activeFence = null;
+        }
+
+        continue;
       }
 
-      // Flat structure - just push all headings
+      if (activeFence) {
+        continue;
+      }
+
+      const headingMatch = /^(#{1,6})\s+(.+)$/.exec(line);
+
+      if (!headingMatch) {
+        continue;
+      }
+
+      const level = headingMatch[1].length;
+      const text = normalizeHeadingText(headingMatch[2]);
+      const id = nextHeadingId(text);
+
+      if (!text || !id) {
+        continue;
+      }
+
       tocItems.push({
         id,
         text,

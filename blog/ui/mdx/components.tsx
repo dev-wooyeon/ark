@@ -1,5 +1,7 @@
+import { createHeadingIdGenerator } from '@/blog/model/heading';
 import type { MDXComponents } from 'mdx/types';
 import {
+  createElement,
   isValidElement,
   type ComponentPropsWithoutRef,
   type ReactNode,
@@ -55,31 +57,59 @@ function extractText(node: ReactNode): string {
   return '';
 }
 
+function mergeClassName(baseClassName: string, className?: string): string {
+  return className ? `${baseClassName} ${className}` : baseClassName;
+}
+
 export function getMDXComponents(components: MDXComponents): MDXComponents {
+  const nextHeadingId = createHeadingIdGenerator();
+  const createHeading = (
+    tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
+    baseClassName: string
+  ) => {
+    const Heading = (props: ComponentPropsWithoutRef<'h1'>) => {
+      const generatedId = nextHeadingId(extractText(props.children));
+
+      return createElement(
+        tag,
+        {
+          ...props,
+          id: generatedId ?? props.id,
+          className: mergeClassName(baseClassName, props.className),
+        },
+        props.children
+      );
+    };
+
+    Heading.displayName = `MdxHeading(${tag})`;
+
+    return Heading;
+  };
+
   return {
-    h1: (props) => (
-      <h1
-        {...props}
-        className="text-3xl font-bold mt-16 mb-8 text-[var(--color-grey-900)]"
-      >
-        {props.children}
-      </h1>
+    h1: createHeading(
+      'h1',
+      'text-3xl font-bold mt-16 mb-8 text-[var(--color-grey-900)]'
     ),
-    h2: (props) => (
-      <h2
-        {...props}
-        className="mt-12 mb-6 text-2xl font-bold text-[var(--color-grey-900)]"
-      >
-        {props.children}
-      </h2>
+    h2: createHeading(
+      'h2',
+      'mt-12 mb-6 text-2xl font-bold text-[var(--color-grey-900)]'
     ),
-    h3: (props) => (
-      <h3
-        {...props}
-        className="mt-8 mb-4 text-xl font-bold text-[var(--color-grey-900)]"
-      >
-        {props.children}
-      </h3>
+    h3: createHeading(
+      'h3',
+      'mt-8 mb-4 text-xl font-bold text-[var(--color-grey-900)]'
+    ),
+    h4: createHeading(
+      'h4',
+      'mt-8 mb-4 text-lg font-bold text-[var(--color-grey-900)]'
+    ),
+    h5: createHeading(
+      'h5',
+      'mt-8 mb-4 text-base font-bold text-[var(--color-grey-900)]'
+    ),
+    h6: createHeading(
+      'h6',
+      'mt-8 mb-4 text-base font-bold text-[var(--color-grey-900)]'
     ),
     p: (props) => (
       <p
