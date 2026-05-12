@@ -4,6 +4,7 @@
   "description": "3개월간 월평균 1억 토큰 이상을 쓰며 느낀 AI 활용의 다음 과제와 검증 기준을 정리한다.",
   "date": "2026-05-12",
   "category": "Tech",
+  "image": "/images/posts/ai-workflow-after-100m-tokens/ai-workflow-illustration.png",
   "tags": [
     "AI",
     "AI Workflow",
