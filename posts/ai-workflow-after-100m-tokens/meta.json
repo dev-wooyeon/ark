@@ -1,0 +1,25 @@
+{
+  "title": "월 1억 토큰을 쓰며 정리한 AI 활용 기준",
+  "slug": "ai-workflow-after-100m-tokens",
+  "description": "AI를 검색창이 아니라 컨텍스트 실행 시스템으로 쓰기 위해 토큰, 프롬프트, 컨텍스트, RAG, 에이전트, 하네스 관점을 정리한다.",
+  "date": "2026-05-12",
+  "category": "Tech",
+  "image": "/images/posts/ai-workflow-after-100m-tokens/ai-workflow-illustration.png",
+  "tags": [
+    "AI",
+    "AI Workflow",
+    "Developer Experience",
+    "Prompt Engineering",
+    "Context Engineering"
+  ],
+  "featured": false,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 4,
+    "notes": "발행",
+    "reviewedAt": "2026-05-12"
+  }
+}
