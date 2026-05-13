@@ -387,6 +387,41 @@
   color: var(--color-grey-400);
 }
 
+.prose .resource-links {
+  display: grid;
+  gap: 0.875rem;
+  margin: 1.125rem 0 1.75rem;
+}
+
+.prose .resource-links dt {
+  margin: 0;
+  color: var(--color-grey-700);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+}
+
+.prose .resource-links dd {
+  position: relative;
+  margin: -0.375rem 0 0 1rem;
+  color: var(--color-grey-700);
+  line-height: var(--leading-prose);
+}
+
+.prose .resource-links dd + dd {
+  margin-top: -0.625rem;
+}
+
+.prose .resource-links dd::before {
+  content: '';
+  position: absolute;
+  top: 0.85em;
+  left: -0.875rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--color-grey-400);
+}
+
 .prose blockquote {
   border-left: 3px solid var(--color-toss-blue);
   padding: 1.125rem 1.25rem;
