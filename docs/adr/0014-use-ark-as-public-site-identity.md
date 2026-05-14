@@ -23,18 +23,19 @@ Status: Accepted
 - 패키지 이름은 배포 가능한 Vercel project name 규칙과 맞게 기술 식별자
   `ark`를 사용한다.
 - 설명 문구는 "오래 건너갈 생각들을 싣는 개인의 방주"를 기준으로 한다.
-- 사이트 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있게 하고, 외부 Vercel
-  project/domain rename 전까지는 기존 운영 도메인을 기본값으로 둔다.
-- 작성자 정체성, GitHub 계정, Giscus repository 연결은 운영 리소스 rename이
-  끝나기 전까지 기존 값을 유지한다.
+- 사이트 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있게 하고, 기본 운영
+  도메인은 `https://ark-log.vercel.app`로 둔다.
+- 작성자 정체성과 GitHub 계정은 기존 값을 유지하되, repository와 Giscus 연결은
+  `dev-wooyeon/ark`를 사용한다.
 
 ## 결과
 
 - metadata, RSS, OG image, footer, README에서 공개 이름이 `Ark` 또는 `아크`로
   일관된다.
-- 외부 도메인과 댓글 시스템은 실제 rename 전에 깨지지 않는다.
-- Vercel project를 `ark`로 rename하거나 custom domain을 붙이면
-  `NEXT_PUBLIC_SITE_URL`만 갱신해 canonical URL을 바꿀 수 있다.
+- Vercel project, GitHub repository, Giscus repository 이름이 `ark`로
+  정렬된다.
+- 운영 도메인을 바꿀 때는 `NEXT_PUBLIC_SITE_URL`만 갱신해 canonical URL을
+  바꿀 수 있다.
 - 기존 motion 설정은 `ark:*` storage key로 이동하되, 기존 `eunulog:*` 값을
   읽어 사용자 설정을 보존한다.
 

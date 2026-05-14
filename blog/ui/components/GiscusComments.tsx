@@ -20,7 +20,9 @@ export function GiscusComments({ slug }: GiscusCommentsProps) {
   const giscusTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
   useEffect(() => {
-    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    const iframe = document.querySelector<HTMLIFrameElement>(
+      'iframe.giscus-frame'
+    );
     if (!iframe) return;
 
     iframe.contentWindow?.postMessage(
@@ -44,7 +46,7 @@ export function GiscusComments({ slug }: GiscusCommentsProps) {
         <Giscus
           key={`${slug}-${giscusTheme}`}
           id="comments"
-          repo="dev-wooyeon/eunu-log"
+          repo="dev-wooyeon/ark"
           repoId="R_kgDOQ9dweg"
           category="Announcements"
           categoryId="DIC_kwDOQ9dwes4C19H1"

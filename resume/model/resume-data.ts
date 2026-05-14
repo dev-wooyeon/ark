@@ -15,7 +15,7 @@ export const personalInfo: PersonalInfo = {
   email: 'une@kakao.com',
   phone: '+82 01029139706',
   github: 'https://github.com/dev-wooyeon',
-  blog: 'https://eunu-log.vercel.app',
+  blog: 'https://ark-log.vercel.app',
   skillGroups: [
     {
       category: '언어',
