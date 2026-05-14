@@ -7,13 +7,12 @@
 
 아크는 오래 건너갈 생각들을 싣는 개인의 방주입니다.
 
-[라이브 데모](https://eunu-log.vercel.app)
+[라이브 데모](https://ark-log.vercel.app)
 
 </div>
 
-운영 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있습니다. Vercel project와
-repository rename이 끝나기 전까지 기본값은 현재 Vercel 배포 도메인을
-사용합니다.
+운영 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있습니다. 기본 운영 도메인은
+`https://ark-log.vercel.app`입니다.
 
 브랜드 표기는 영문 `Ark`, 한글 `아크`로 고정합니다. package, repository,
 Vercel project 같은 기술 식별자에는 소문자 `ark`를 사용합니다.

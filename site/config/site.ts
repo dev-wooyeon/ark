@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = 'https://eunu-log.vercel.app';
+const DEFAULT_SITE_URL = 'https://ark-log.vercel.app';
 
 export const SITE_BRAND = {
   englishName: 'Ark',
