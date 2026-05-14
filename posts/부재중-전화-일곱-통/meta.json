@@ -1,15 +1,10 @@
 {
-  "title": "부재중 전화 일곱 통이 남긴 가족의 기준",
+  "title": "부재중 전화 일곱 통",
   "slug": "seven-missed-calls",
-  "description": "외할아버지의 죽음을 마주한 밤 이후, 죽음을 기억하는 일이 오늘을 더 선명하게 만든다는 생각을 기록합니다.",
+  "description": "외할아버지의 장례를 다녀오며, 가족에게 연락을 미루지 않겠다고 생각한 날의 기록.",
   "date": "2026-03-16",
   "category": "Life",
-  "tags": [
-    "Family",
-    "가족",
-    "Reflection",
-    "Memento Mori"
-  ],
+  "tags": ["Family", "가족", "Reflection", "Memento Mori"],
   "visibility": "public",
   "featured": false,
   "qualityReview": {
@@ -17,7 +12,7 @@
     "design": 3.5,
     "implementation": 3,
     "brandFit": 4,
-    "notes": "2차 보강 및 문장 리라이팅 완료",
-    "reviewedAt": "2026-05-06"
+    "notes": "공개 글 문체 퇴고 완료",
+    "reviewedAt": "2026-05-14"
   }
 }
