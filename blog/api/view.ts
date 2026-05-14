@@ -3,10 +3,12 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { cookies, headers } from 'next/headers';
 import { getSupabaseServerClient } from '@/infra/integrations/supabase';
+import { SITE_BRAND } from '@/site/config/site';
 
 const VIEW_DEDUPE_WINDOW_SECONDS = 60 * 60 * 24;
 const VIEW_FINGERPRINT_SALT =
-  process.env.VIEW_FINGERPRINT_SALT ?? 'eunu-log-view-fingerprint-v1';
+  process.env.VIEW_FINGERPRINT_SALT ??
+  `${SITE_BRAND.technicalName}-view-fingerprint-v1`;
 const VIEW_FALLBACK_VISITOR_COOKIE = 'view_visitor_id';
 const VIEW_FALLBACK_VISITOR_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 

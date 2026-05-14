@@ -1,12 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { SITE_BRAND } from '@/site/config/site';
 
 export type MotionMode = 'auto' | 'reduced' | 'off';
 export type EffectiveMotionMode = 'full' | 'reduced' | 'off';
 
-export const MOTION_MODE_STORAGE_KEY = 'eunulog:motion-mode';
-export const MOTION_MODE_CHANGED_EVENT = 'eunulog:motion-mode-changed';
+export const MOTION_MODE_STORAGE_KEY = `${SITE_BRAND.technicalName}:motion-mode`;
+export const MOTION_MODE_CHANGED_EVENT = `${SITE_BRAND.technicalName}:motion-mode-changed`;
+const LEGACY_MOTION_MODE_STORAGE_KEY = 'eunulog:motion-mode';
 
 const DEFAULT_MOTION_MODE: MotionMode = 'auto';
 
@@ -34,6 +36,14 @@ function readStoredMotionMode(): MotionMode {
     const storedMode = window.localStorage.getItem(MOTION_MODE_STORAGE_KEY);
     if (storedMode && isMotionMode(storedMode)) {
       return storedMode;
+    }
+
+    const legacyStoredMode = window.localStorage.getItem(
+      LEGACY_MOTION_MODE_STORAGE_KEY
+    );
+    if (legacyStoredMode && isMotionMode(legacyStoredMode)) {
+      window.localStorage.setItem(MOTION_MODE_STORAGE_KEY, legacyStoredMode);
+      return legacyStoredMode;
     }
   } catch {
     // Storage access can fail in private contexts; fall back safely.

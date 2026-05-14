@@ -1,3 +1,5 @@
+import { SITE_NAME } from '@/site/config/site';
+
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/dev-wooyeon' },
   { name: 'Email', href: 'mailto:une@kakao.com' },
@@ -9,7 +11,7 @@ export default function Footer() {
       <div className="max-w-[1200px] mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[var(--color-grey-500)]">
-            © {new Date().getFullYear()} eunu.log. All rights reserved.
+            © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
           <div className="flex gap-6">
             {socialLinks.map((link) => (

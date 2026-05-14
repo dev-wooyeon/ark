@@ -1,15 +1,22 @@
 <div align="center">
 
-# eunu-log
+# Ark
 
 [![Next.js](https://img.shields.io/badge/Next.js-16+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-기록 목적의 블로그
+아크는 오래 건너갈 생각들을 싣는 개인의 방주입니다.
 
 [라이브 데모](https://eunu-log.vercel.app)
 
 </div>
+
+운영 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있습니다. Vercel project와
+repository rename이 끝나기 전까지 기본값은 현재 Vercel 배포 도메인을
+사용합니다.
+
+브랜드 표기는 영문 `Ark`, 한글 `아크`로 고정합니다. package, repository,
+Vercel project 같은 기술 식별자에는 소문자 `ark`를 사용합니다.
 
 ## 🛠 기술 스택
 
@@ -64,7 +71,7 @@
 
 핵심 포인트:
 
-- 블로그 앱(`eunu.log`)과 분석 대시보드(`Umami`)는 각각 Vercel에 분리 배포합니다.
+- 블로그 앱(`아크`)과 분석 대시보드(`Umami`)는 각각 Vercel에 분리 배포합니다.
 - 블로그 코드에서는 `NEXT_PUBLIC_UMAMI_URL`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID`만 설정하면 Umami 스크립트가 자동 로드됩니다.
 - Umami 커스텀 이벤트는 스크립트 초기화 전 큐에 적재되고, 로드 완료 후 자동으로 flush됩니다.
 
@@ -73,7 +80,7 @@
 ## 📂 프로젝트 구조
 
 ```text
-eunu.log/
+ark/
 ├── 📁 app/                     # Next.js route adapter
 ├── 📁 blog/                    # 글 도메인
 ├── 📁 resume/                  # 이력서 도메인

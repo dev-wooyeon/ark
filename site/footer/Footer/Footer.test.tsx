@@ -6,7 +6,11 @@ describe('Footer', () => {
   it('renders legal text and social links', () => {
     render(<Footer />);
 
-    expect(screen.getByText(/eunu\.log/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `© ${new Date().getFullYear()} Ark. All rights reserved.`
+      )
+    ).toBeInTheDocument();
 
     const github = screen.getByRole('link', { name: 'GitHub' });
     const email = screen.getByRole('link', { name: 'Email' });
@@ -15,4 +19,3 @@ describe('Footer', () => {
     expect(email).toHaveAttribute('href', 'mailto:une@kakao.com');
   });
 });
-

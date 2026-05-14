@@ -1,11 +1,12 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
+import { SITE_NAME } from '@/site/config/site';
 
 export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const title = searchParams.get('title') || 'eunu.log';
+  const title = searchParams.get('title') || SITE_NAME;
   const date = searchParams.get('date');
   const tags = searchParams.get('tags')?.split(',') || [];
 
@@ -104,7 +105,7 @@ export async function GET(req: NextRequest) {
             fontFamily: '"Noto Sans KR"',
           }}
         >
-          eunu.log
+          {SITE_NAME}
         </div>
       </div>
     </div>,
