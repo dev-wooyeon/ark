@@ -1,6 +1,26 @@
-export const SITE_URL = 'https://eunu-log.vercel.app';
-export const SITE_NAME = 'eunu.log';
-export const SITE_DESCRIPTION = '데이터와 시스템, 창의적인 것들을 만듭니다';
+const DEFAULT_SITE_URL = 'https://eunu-log.vercel.app';
+
+export const SITE_BRAND = {
+  englishName: 'Ark',
+  koreanName: '아크',
+  technicalName: 'ark',
+} as const;
+
+function normalizeSiteUrl(url: string): string {
+  return url.replace(/\/+$/, '');
+}
+
+function getSiteUrl(): string {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  return normalizeSiteUrl(
+    configuredUrl && configuredUrl.length > 0 ? configuredUrl : DEFAULT_SITE_URL
+  );
+}
+
+export const SITE_URL = getSiteUrl();
+export const SITE_NAME = SITE_BRAND.englishName;
+export const SITE_KOREAN_NAME = SITE_BRAND.koreanName;
+export const SITE_DESCRIPTION = `${SITE_KOREAN_NAME}는 오래 건너갈 생각들을 싣는 개인의 방주입니다`;
 export const SITE_FEED_PATH = '/rss.xml';
 export const SITE_FEED_URL = `${SITE_URL}${SITE_FEED_PATH}`;
 

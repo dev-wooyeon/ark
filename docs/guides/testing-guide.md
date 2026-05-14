@@ -1,4 +1,4 @@
-# Testing Guide for eunu.log
+# Testing Guide for Ark
 
 ## Test Stack
 
