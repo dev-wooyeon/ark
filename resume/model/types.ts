@@ -58,6 +58,18 @@ export interface PersonalInfo {
 export interface SkillGroup {
   category: string;
   skills: string[];
+  description?: string;
+}
+
+export interface ResumeHighlight {
+  label: string;
+  value: string;
+  description: string;
+}
+
+export interface WorkingPrinciple {
+  title: string;
+  description: string;
 }
 
 export interface Education {

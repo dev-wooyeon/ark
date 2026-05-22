@@ -8,21 +8,26 @@ import {
   experiences,
   personalInfo,
   personalProjects,
+  resumeHighlights,
+  workingPrinciples,
 } from '@/resume/model/resume-data';
 import { orderExperienceStages } from '@/resume/model/order-experience-stages';
+import type { Activity } from '@/resume/model/types';
 
 export const metadata: Metadata = {
   title: 'CV',
   description: `${personalInfo.name}의 CV`,
 };
 
-const heroStatement = '반복되는 운영 업무를 데이터 구조와 자동화로 바꿉니다';
+const heroStatement = '반복되는 운영을 데이터 구조와 자동화로 바꾸는 엔지니어';
 
-const heroSummary =
-  '해동검도 4단과 세계대회 본선을 준비하며 같은 동작을 수백, 수천 번 반복했습니다. 필요한 반복의 가치는 알지만, 개발자가 된 뒤 사람이 매번 확인하고 옮기는 반복이 장애와 비용으로 이어지는 장면은 그냥 넘기기 어려웠습니다. 백엔드 엔지니어로 일하며 서비스의 완성도는 기능 수보다 데이터가 얼마나 정확하게 쌓이고, 일관된 기준으로 흐르며, 여러 팀이 믿고 사용할 수 있는 구조를 갖추는지에 달려 있다는 점을 체감했습니다.';
+const heroSummary = [
+  '해동검도 4단과 세계대회 본선을 준비하며 같은 동작을 수백, 수천 번 반복했습니다. 그 경험 덕분에 필요한 반복의 가치는 압니다.',
+  '하지만 개발자가 된 뒤에는 사람이 매번 확인하고 옮기는 반복이 장애와 비용으로 바뀌는 장면을 자주 봤습니다. 저는 그런 반복을 데이터 구조와 자동화 안으로 옮기는 일에 끌립니다.',
+];
 
 const motivationStatement =
-  '그래서 제 관심은 API를 하나 더 만드는 일보다, 귀찮고 위험한 반복을 데이터 흐름과 자동화 안으로 옮겨 운영 가능한 구조로 바꾸는 데 있습니다.';
+  'API를 하나 더 만드는 일보다 데이터 기준, 처리 흐름, 운영 방식을 정리해 팀이 믿고 쓰는 구조를 만드는 데 관심이 있습니다.';
 
 function calculateCareerYears(): number {
   const careerStart = new Date(2019, 11, 1);
@@ -156,6 +161,42 @@ function renderProjectLinks(
   );
 }
 
+function renderActivityList(activityItems: Activity[]): ReactNode {
+  return (
+    <div className="space-y-5">
+      {activityItems.map((activity) => (
+        <article
+          key={`${activity.organization}-${activity.period}`}
+          className="space-y-3 border-b border-[var(--color-border)] pb-5 last:border-b-0 last:pb-0"
+        >
+          <div className="space-y-1">
+            <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
+              {activity.title}
+            </p>
+            <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+              {activity.organization}
+            </p>
+            <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
+              {activity.period}
+            </p>
+          </div>
+
+          <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+            {activity.description.map((description, index) => (
+              <li
+                key={`${activity.organization}-${index}`}
+                className="m-0 pl-1"
+              >
+                {description}
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function SectionTitle({
   title,
   description,
@@ -186,6 +227,12 @@ export default function ResumePage() {
       period: experience.period,
       project,
     }))
+  );
+  const writingActivities = activities.filter((activity) =>
+    ['유쾌한 스프링방 스터디 6기', '인프런'].includes(activity.organization)
+  );
+  const backgroundActivities = activities.filter(
+    (activity) => !writingActivities.includes(activity)
   );
   const profileLinks = [
     {
@@ -268,13 +315,38 @@ export default function ResumePage() {
                     <h2 className="break-keep text-base font-medium leading-7 text-[var(--color-text-primary)]">
                       {heroStatement}
                     </h2>
-                    <p className="max-w-3xl break-keep text-base leading-7 text-[var(--color-text-secondary)]">
-                      {heroSummary}
-                    </p>
+                    <div className="max-w-3xl space-y-3">
+                      {heroSummary.map((paragraph) => (
+                        <p
+                          key={paragraph}
+                          className="break-keep text-base leading-7 text-[var(--color-text-secondary)]"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
                     <p className="max-w-3xl break-keep border-l-2 border-[var(--color-text-primary)] pl-4 text-base leading-7 text-[var(--color-text-primary)]">
                       {motivationStatement}
                     </p>
                   </div>
+
+                  <dl className="grid gap-5 border-t border-[var(--color-border)] pt-6 sm:grid-cols-2">
+                    {resumeHighlights.map((highlight) => (
+                      <div key={highlight.label} className="space-y-1">
+                        <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                          {highlight.label}
+                        </dt>
+                        <dd className="m-0 space-y-1">
+                          <p className="text-base font-semibold text-[var(--color-text-primary)]">
+                            {highlight.value}
+                          </p>
+                          <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
+                            {highlight.description}
+                          </p>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
               </div>
 
@@ -303,37 +375,36 @@ export default function ResumePage() {
           </header>
 
           <div className="grid gap-12 py-12 md:py-14 lg:grid-cols-3">
-            <aside className="space-y-10 lg:col-span-1">
+            <aside className="order-last space-y-10 lg:order-first lg:col-span-1">
               <section className="space-y-4">
                 <SectionTitle
                   title="Profile"
                   description={`실무 경력 ${careerYears}년+`}
                 />
                 <div className="space-y-4 text-sm leading-6 text-[var(--color-text-secondary)]">
+                  <p>{personalInfo.introduction}</p>
                   <p>
                     결제·정산·IoT 도메인에서 Java 기반 서버와 백오피스 시스템을
-                    설계하고 운영해온 {careerYears}년차 소프트웨어
-                    엔지니어입니다. 거래·정산·송금 도메인의 책임을 분리하고, IoT
-                    환경의 실시간 이벤트를 안정적으로 처리하는 흐름을
-                    다뤄왔습니다.
-                  </p>
-                  <p>
-                    복잡한 문제를 그대로 두지 않고 데이터 구조, 처리 방식, 운영
-                    방식으로 나누어 해결합니다. 반복되는 운영 요청과 수작업
-                    리스크를 표준화와 자동화로 흡수해 팀이 더 빠르고 안정적으로
-                    일할 수 있는 구조를 만드는 방식으로 일합니다.
+                    설계하고 운영해온 {careerYears}년차 엔지니어입니다. 반복되는
+                    운영 요청과 수작업 리스크를 표준화와 자동화로 흡수하는
+                    방식으로 일합니다.
                   </p>
                 </div>
               </section>
 
               <section className="space-y-4">
                 <SectionTitle title="Skills" />
-                <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+                <div className="space-y-5">
                   {personalInfo.skillGroups.map((group) => (
-                    <section key={group.category} className="space-y-2">
+                    <section key={group.category} className="space-y-2.5">
                       <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
                         {group.category}
                       </h3>
+                      {group.description ? (
+                        <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
+                          {group.description}
+                        </p>
+                      ) : null}
                       <ul className="m-0 list-none space-y-1 p-0 text-sm leading-6 text-[var(--color-text-secondary)]">
                         {group.skills.map((skill) => (
                           <li key={skill} className="m-0">
@@ -347,39 +418,11 @@ export default function ResumePage() {
               </section>
 
               <section className="space-y-4">
-                <SectionTitle title="Activities" />
-
-                <div className="space-y-5">
-                  {activities.map((activity) => (
-                    <article
-                      key={`${activity.organization}-${activity.period}`}
-                      className="space-y-3 border-b border-[var(--color-border)] pb-5 last:border-b-0 last:pb-0"
-                    >
-                      <div className="space-y-1">
-                        <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
-                          {activity.title}
-                        </p>
-                        <p className="m-0 text-sm text-[var(--color-text-secondary)]">
-                          {activity.organization}
-                        </p>
-                        <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
-                          {activity.period}
-                        </p>
-                      </div>
-
-                      <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {activity.description.map((description, index) => (
-                          <li
-                            key={`${activity.organization}-${index}`}
-                            className="m-0 pl-1"
-                          >
-                            {description}
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
-                </div>
+                <SectionTitle
+                  title="Writing & Mentoring"
+                  description="문제를 말로 정리하고 공유하는 활동"
+                />
+                {renderActivityList(writingActivities)}
               </section>
 
               <section className="space-y-4">
@@ -425,13 +468,41 @@ export default function ResumePage() {
                   ))}
                 </div>
               </section>
+
+              <section className="space-y-4">
+                <SectionTitle title="Background" />
+                {renderActivityList(backgroundActivities)}
+              </section>
             </aside>
 
-            <div className="space-y-12 lg:col-span-2">
+            <div className="order-first space-y-12 lg:order-last lg:col-span-2">
+              <section className="space-y-8">
+                <SectionTitle
+                  title="How I Work"
+                  description="반복을 구조로 옮길 때 지키는 기준"
+                />
+
+                <div className="grid gap-5 md:grid-cols-3">
+                  {workingPrinciples.map((principle) => (
+                    <article
+                      key={principle.title}
+                      className="space-y-2 border-t border-[var(--color-border)] pt-4"
+                    >
+                      <h3 className="text-base font-medium text-[var(--color-text-primary)]">
+                        {principle.title}
+                      </h3>
+                      <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
+                        {principle.description}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
               <section className="space-y-8">
                 <SectionTitle
                   title="Experience"
-                  description="회사, 역할, 기간, 담당 범위를 먼저 정리했습니다."
+                  description="실무에서 반복과 데이터 흐름을 다룬 경험"
                 />
 
                 <div className="space-y-8">
@@ -476,8 +547,8 @@ export default function ResumePage() {
 
               <section className="space-y-8">
                 <SectionTitle
-                  title="Projects"
-                  description="주요 프로젝트는 문제, 선택, 구현, 결과 중심으로 분리했습니다."
+                  title="Selected Work"
+                  description="문제를 어떻게 해석하고 구조로 옮겼는지"
                 />
 
                 <div className="space-y-10">
@@ -534,8 +605,8 @@ export default function ResumePage() {
 
               <section className="space-y-8">
                 <SectionTitle
-                  title="Personal Projects"
-                  description="개인 실험도 동일하게 문제, 설계, 검증 기준으로 정리했습니다."
+                  title="Technical Experiments"
+                  description="개인 프로젝트는 설계 가설과 운영 기준을 검증하는 방식으로 정리했습니다."
                 />
 
                 <div className="space-y-8">
