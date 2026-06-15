@@ -5,46 +5,83 @@ import type {
   Education,
   Activity,
   Certification,
+  ResumeHighlight,
+  WorkingPrinciple,
 } from '@/resume/model/types';
 
 export const personalInfo: PersonalInfo = {
   name: '박은우',
   birthDate: '1996.07.20',
-  position: 'Software Engineer',
-  // keywords: 'BE, DE, Platform',
+  position: 'Backend / Data Platform Engineer',
   email: 'une@kakao.com',
   phone: '+82 01029139706',
   github: 'https://github.com/dev-wooyeon',
   blog: 'https://ark-log.vercel.app',
   skillGroups: [
     {
-      category: '언어',
-      skills: ['Java'],
+      category: 'Backend',
+      skills: ['Java', 'Spring Boot', 'Spring Batch', 'JPA', 'QueryDSL'],
+      description:
+        '결제·정산·송금 도메인의 거래 상태, 정산 기준, 운영 백오피스 구현',
     },
     {
-      category: '프레임워크',
-      skills: ['Spring Boot', 'Spring Batch', 'JPA'],
+      category: 'Data Platform',
+      skills: ['MySQL', 'ClickHouse', 'Kafka', 'Flink', 'Athena'],
+      description:
+        'CDC 기반 분석 파이프라인, 대용량 정산 배치, 실시간 집계 실험',
     },
     {
-      category: '데이터베이스',
-      skills: ['MySQL', 'ClickHouse'],
-    },
-    {
-      category: '데이터 파이프라인',
-      skills: ['Kafka', 'Flink', 'Athena'],
-    },
-    {
-      category: '클라우드',
-      skills: ['AWS', 'AWS DMS', 'AWS Glue'],
-    },
-    {
-      category: '자동화',
-      skills: ['MCP/Codex'],
+      category: 'Cloud & Automation',
+      skills: ['AWS', 'AWS DMS', 'AWS Glue', 'Grafana', 'MCP/Codex'],
+      description:
+        '반복 장애 확인 절차와 운영 분석 흐름을 리포트와 자동화로 전환',
     },
   ],
   introduction:
-    '백엔드 엔지니어로 일하며 서비스의 완성도는 기능 수보다 데이터가 얼마나 정확하게 쌓이고, 일관된 기준으로 흐르며, 여러 팀이 믿고 사용할 수 있는 구조를 갖추는지에 달려 있다는 점을 체감했습니다. 결제·정산·IoT 도메인에서 데이터 기준을 명확히 하고 운영 가능한 구조로 바꾸는 일에 강한 몰입과 성과를 냈습니다.',
+    '서비스의 완성도는 기능 수만으로 결정되지 않는다고 봅니다. 데이터가 정확히 쌓이고, 일관된 기준으로 흐르며, 여러 팀이 믿고 사용할 수 있어야 합니다. 저는 결제·정산·IoT 도메인에서 그런 구조를 만드는 일에 몰입해 왔습니다.',
 };
+
+export const resumeHighlights: ResumeHighlight[] = [
+  {
+    label: '분석 리드타임',
+    value: '1~2시간 -> 즉시 조회',
+    description: '운영 DB 직접 조회와 수동 검증을 CDC 기반 분석 계층으로 전환',
+  },
+  {
+    label: '백오피스 응답',
+    value: '15,000ms -> 2,000ms',
+    description:
+      '병목 쿼리, N+1, 페이지네이션을 정리해 반복 조회 대기 시간 축소',
+  },
+  {
+    label: '정산 데이터',
+    value: '400만 건+',
+    description: '반기별 사업자 구간 변경과 과거 거래 소급 정산 흐름을 자동화',
+  },
+  {
+    label: '지급대행 구축',
+    value: '30개+ 테이블 / 19개 API',
+    description: '거래·정산·송금 책임을 분리하고 초기 고객사 연동 흐름을 검증',
+  },
+];
+
+export const workingPrinciples: WorkingPrinciple[] = [
+  {
+    title: '반복은 없애기 전에 분류합니다',
+    description:
+      '필요한 반복과 사람이 반복하면 위험한 절차를 구분한 뒤, 장애와 비용으로 이어지는 반복을 시스템 안으로 옮깁니다.',
+  },
+  {
+    title: '기능보다 먼저 데이터 흐름을 봅니다',
+    description:
+      'API나 화면 단위로 문제를 닫기보다 데이터가 어디서 생기고, 어떤 기준으로 이동하며, 누가 믿고 쓰는지부터 확인합니다.',
+  },
+  {
+    title: '운영자가 믿을 수 있는 기준으로 닫습니다',
+    description:
+      '구현이 끝났다는 말보다 운영자가 다시 확인하지 않아도 되는 상태, 장애 신호를 빠르게 구분할 수 있는 상태를 더 중요하게 봅니다.',
+  },
+];
 
 export const experiences: Experience[] = [
   {
@@ -89,7 +126,7 @@ export const experiences: Experience[] = [
             key: 'result',
             label: '성과',
             detail: [
-              '분석 리드타임을 1~2시간에서 즉시 조회 가능한 수준으로 단축하고, 월 평균 4회 이상 발생하던 수동 추출·검증 작업을 사실상 제거했습니다. 분석가가 개발자 개입 없이 필요한 데이터를 직접 확인할 수 있는 기반을 마련했습니다.',
+              '분석 리드타임을 1~2시간에서 즉시 조회 가능한 수준으로 단축했습니다. 반복 분석 요청을 Athena 조회 계층으로 옮겨, 개발자가 운영 DB에서 매번 추출하지 않아도 되는 구조로 바꿨습니다.',
             ],
           },
         ],
@@ -138,7 +175,7 @@ export const experiences: Experience[] = [
             key: 'result',
             label: '성과',
             detail: [
-              '변경 범위를 도메인 단위로 예측할 수 있게 만들고 신규 파크 대응을 설정 중심으로 확장할 수 있는 기반을 마련했습니다. 서비스 중단 없이 구조 개선을 이어갈 수 있는 방향을 만들었습니다.',
+              '변경 범위를 도메인 단위로 예측할 수 있게 정리했습니다. 신규 파크 대응은 설정 중심으로 확장할 수 있게 만들고, 기존 시스템은 중단 없이 점진적으로 전환하는 방향을 잡았습니다.',
             ],
           },
         ],
@@ -180,7 +217,7 @@ export const experiences: Experience[] = [
             key: 'result',
             label: '성과',
             detail: [
-              '우선 대응이 필요한 오류를 더 빠르게 식별할 수 있게 만들고, 로깅 레벨 관리와 잠재 오류 탐지의 기반을 함께 마련했습니다.',
+              '반복 확인하던 로그, TraceId, API 경로, 코드 링크를 하나의 리포트로 묶어 대응 우선순위 판단에 필요한 정보를 줄였습니다.',
             ],
           },
         ],
@@ -237,7 +274,7 @@ export const experiences: Experience[] = [
             key: 'result',
             label: '성과',
             detail: [
-              '기능 확장과 서비스 성장에 대응할 수 있는 도메인 단위 변경 통제 구조를 확보했습니다. 고객사 초기 연동 단계부터 장애 없이 안정적으로 서비스가 운영됐고, 팀의 일관된 개발 기준을 수립했습니다.',
+              '기능 확장과 서비스 성장에 대응할 수 있는 도메인 단위 변경 통제 구조를 확보했습니다. 초기 고객사 연동 구간에서 핵심 거래·정산 흐름이 중단 없이 운영되도록 검증 범위와 변경 통제를 관리했습니다.',
             ],
           },
         ],
@@ -444,8 +481,8 @@ export const personalProjects: PersonalProject[] = [
         key: 'result',
         label: '성과',
         detail: [
-          '계층을 많이 나누는 구조보다 현재 목표와 제약에 맞는 최소 구조가 더 좋은 설계일 수 있음을 검증했습니다.',
-          '단순 기능 구현을 넘어 스트리밍 정확성, 성능 엔지니어링, 운영 안정성, 관측성을 함께 다루는 데이터 엔지니어링 프로젝트로 발전시켰습니다.',
+          '초기 다중 싱크 구조의 오버헤드를 확인한 뒤 ClickHouse 원본 테이블과 Materialized View 중심으로 단순화했습니다.',
+          '기능 구현 이후 checkpoint/restart, 지연 이벤트, DLQ, ClickHouse 서빙 구조까지 검증 범위에 포함했습니다.',
         ],
       },
       {
