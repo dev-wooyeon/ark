@@ -4,17 +4,32 @@
   "description": "Sentinel 기반 고가용성과 Cluster 기반 샤딩 구조를 비교해 확장 전략을 정리합니다.",
   "date": "2026-02-13",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Redis",
     "Replication",
     "Sentinel",
     "Cluster"
   ],
+  "featured": false,
   "series": {
     "id": "redis-deep-dive",
     "title": "Redis 완전정복",
     "order": 6
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": ""
+  }
 }

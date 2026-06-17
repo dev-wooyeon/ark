@@ -4,6 +4,7 @@
   "description": "토스증권 1차 직무면접 탈락이라는 성적표를 마주하고 작성한 뼈아픈 성찰의 기록입니다. 치열했던 기술 토론의 즐거움과 '일하는 방식'에 대한 메타인지적 고찰을 솔직하게 나눕니다.",
   "date": "2026-05-29",
   "category": "Life",
+  "contentType": "retrospective",
   "tags": [
     "Retrospective",
     "회고",
@@ -13,5 +14,19 @@
     "Work"
   ],
   "featured": false,
-  "visibility": "public"
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": ""
+  }
 }

@@ -4,6 +4,7 @@
   "description": "CTR 집계를 운영 가능한 시스템으로 만들기 위해 워터마크, 윈도우, 지연 허용, 검증 전략을 어떻게 설계했는지 정리한다.",
   "date": "2025-01-20",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Flink",
     "Kafka",
@@ -18,7 +19,13 @@
     "design": 4.5,
     "implementation": 4,
     "brandFit": 4.5,
-    "notes": "파일럿 리라이트",
-    "reviewedAt": "2026-04-13"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-04-13",
+    "notes": "파일럿 리라이트"
   }
 }

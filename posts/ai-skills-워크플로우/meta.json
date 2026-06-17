@@ -4,6 +4,7 @@
   "description": "브랜치 생성, 커밋 분리, SSH 계정 확인, 푸시까지 반복하던 Git Flow를 Codex Skill로 만들고 팀에 공유한 과정을 정리한다.",
   "date": "2026-04-28",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "AI Workflow",
     "Developer Experience",
@@ -18,7 +19,13 @@
     "design": 3.5,
     "implementation": 3.5,
     "brandFit": 3.5,
-    "notes": "발행",
-    "reviewedAt": "2026-04-28"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-04-28",
+    "notes": "발행"
   }
 }

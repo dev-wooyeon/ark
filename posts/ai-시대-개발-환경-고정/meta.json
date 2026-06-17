@@ -4,6 +4,7 @@
   "description": "도구를 자주 바꾸는 비용을 줄이기 위해 개인 개발 환경을 어떻게 고정했는지 정리해요.",
   "date": "2026-02-12",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "AI Workflow",
     "Productivity",
@@ -12,14 +13,20 @@
     "ChatGPT",
     "Atlas"
   ],
-  "visibility": "private",
   "featured": false,
+  "visibility": "private",
   "qualityReview": {
     "philosophy": 3.5,
     "design": 3,
     "implementation": 2.5,
     "brandFit": 2.5,
-    "notes": "비공개",
-    "reviewedAt": "2026-04-13"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-04-13",
+    "notes": "비공개"
   }
 }

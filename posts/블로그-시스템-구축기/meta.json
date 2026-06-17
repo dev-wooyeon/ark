@@ -4,6 +4,7 @@
   "description": "MDX 기반 기술 블로그를 만들며 정리한 설계 원칙, 시스템 구조, 성능 최적화 기준을 소개한다.",
   "date": "2026-01-28",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Next.js",
     "React",
@@ -11,14 +12,20 @@
     "Three.js",
     "Design System"
   ],
-  "visibility": "public",
   "featured": false,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 3,
     "design": 4,
     "implementation": 4,
     "brandFit": 2.5,
-    "notes": "보강 후 유지",
-    "reviewedAt": "2026-04-22"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-04-22",
+    "notes": "보강 후 유지"
   }
 }

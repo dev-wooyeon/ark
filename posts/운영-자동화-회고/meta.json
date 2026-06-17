@@ -4,20 +4,27 @@
   "description": "반복 업무 자동화와 성능 개선으로 운영팀의 시간을 줄인 문제 정의와 구현 기준을 돌아본다.",
   "date": "2026-01-25",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Legacy",
     "Automation",
     "Performance",
     "Backoffice"
   ],
-  "visibility": "public",
   "featured": false,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 3.5,
     "design": 3.5,
     "implementation": 3,
     "brandFit": 4,
-    "notes": "보강 후 유지",
-    "reviewedAt": "2026-04-22"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-04-22",
+    "notes": "보강 후 유지"
   }
 }

@@ -21,15 +21,65 @@ describe('FeedFrontmatterSchema', () => {
       description: 'desc',
       date: '2026-04-13',
       category: 'Tech',
+      contentType: 'essay',
       qualityReview: {
         philosophy: null,
         design: null,
         implementation: null,
         brandFit: null,
+        clarity: null,
+        structure: null,
+        evidence: null,
+        usefulness: null,
+        originality: null,
+        polish: null,
       },
     });
 
     expect(parsed.qualityReview?.philosophy).toBeNull();
+    expect(parsed.qualityReview?.clarity).toBeNull();
+  });
+
+  it('accepts supported content types', () => {
+    const baseInput = {
+      title: 'Example',
+      slug: 'example',
+      description: 'desc',
+      date: '2026-04-13',
+      category: 'Life' as const,
+    };
+
+    expect(
+      FeedFrontmatterSchema.parse({
+        ...baseInput,
+        contentType: 'essay',
+      }).contentType
+    ).toBe('essay');
+    expect(
+      FeedFrontmatterSchema.parse({
+        ...baseInput,
+        contentType: 'retrospective',
+      }).contentType
+    ).toBe('retrospective');
+    expect(
+      FeedFrontmatterSchema.parse({
+        ...baseInput,
+        contentType: 'review',
+      }).contentType
+    ).toBe('review');
+  });
+
+  it('rejects unsupported content types', () => {
+    expect(() =>
+      FeedFrontmatterSchema.parse({
+        title: 'Example',
+        slug: 'example',
+        description: 'desc',
+        date: '2026-04-13',
+        category: 'Life',
+        contentType: 'journal',
+      })
+    ).toThrow();
   });
 
   it('rejects scores outside the allowed range or increment', () => {
@@ -58,5 +108,14 @@ describe('FeedFrontmatterSchema', () => {
         },
       })
     ).toThrow();
+
+    expect(() =>
+      FeedFrontmatterSchema.parse({
+        ...baseInput,
+        qualityReview: {
+          clarity: 2.25,
+        },
+      })
+    ).toThrow(/0\.5 increments/);
   });
 });

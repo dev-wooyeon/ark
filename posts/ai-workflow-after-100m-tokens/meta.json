@@ -4,7 +4,7 @@
   "description": "3개월간 월평균 1억 토큰 이상을 쓰며 AI를 검색창이 아니라 작업 시스템으로 바라보게 된 과정을 정리한다.",
   "date": "2026-05-12",
   "category": "Tech",
-  "image": "/images/posts/ai-workflow-after-100m-tokens/ai-workflow-illustration.png",
+  "contentType": "essay",
   "tags": [
     "AI",
     "AI Workflow",
@@ -12,6 +12,7 @@
     "Prompt Engineering",
     "Context Engineering"
   ],
+  "image": "/images/posts/ai-workflow-after-100m-tokens/ai-workflow-illustration.png",
   "featured": false,
   "visibility": "public",
   "qualityReview": {
@@ -19,7 +20,13 @@
     "design": 4,
     "implementation": 3.5,
     "brandFit": 4,
-    "notes": "발행",
-    "reviewedAt": "2026-05-12"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-05-12",
+    "notes": "발행"
   }
 }

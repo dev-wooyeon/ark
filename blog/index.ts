@@ -27,6 +27,7 @@ export type {
   FeedData,
   FeedFrontmatter,
   PostCategory,
+  PostContentType,
   PostVisibility,
   QualityReview,
   QualityScore,

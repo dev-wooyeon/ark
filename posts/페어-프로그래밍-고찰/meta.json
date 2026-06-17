@@ -4,6 +4,7 @@
   "description": "페어 프로그래밍을 같이 코딩하는 방식이 아니라 같이 판단하는 구조로 이해한 이유를 정리한다.",
   "date": "2026-01-08",
   "category": "Life",
+  "contentType": "essay",
   "tags": [
     "페어 프로그래밍",
     "Collaboration"
@@ -15,7 +16,13 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3.5,
-    "notes": "6W1H 기준 보강 완료",
-    "reviewedAt": "2026-05-06"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-05-06",
+    "notes": "6W1H 기준 보강 완료"
   }
 }

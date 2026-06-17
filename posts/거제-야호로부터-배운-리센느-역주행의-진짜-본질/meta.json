@@ -4,12 +4,13 @@
   "description": "최근 걸그룹 리센느의 역주행 사례를 통해 노력과 운의 관계, 그리고 한계를 깨부수기 위한 준비에 대해 고민해 봅니다.",
   "date": "2026-06-12",
   "category": "Life",
-  "image": "/images/posts/거제-야호로부터-배운-리센느-역주행의-진짜-본질/yaho.jpg",
+  "contentType": "essay",
   "tags": [
     "Career",
     "Life",
     "Thoughts"
   ],
+  "image": "/images/posts/거제-야호로부터-배운-리센느-역주행의-진짜-본질/yaho.jpg",
   "featured": false,
   "visibility": "public",
   "qualityReview": {
@@ -17,7 +18,13 @@
     "design": 4,
     "implementation": 4,
     "brandFit": 4,
-    "notes": "리센느 역주행과 Love Attack 가사 기반의 깨달음 작성",
-    "reviewedAt": "2026-06-12"
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "2026-06-12",
+    "notes": "리센느 역주행과 Love Attack 가사 기반의 깨달음 작성"
   }
 }

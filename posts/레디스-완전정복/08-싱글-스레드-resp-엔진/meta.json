@@ -4,17 +4,32 @@
   "description": "Redis가 싱글 스레드 구조에서도 높은 처리량을 유지하는 이유와 RESP 프로토콜의 핵심을 정리합니다.",
   "date": "2026-02-13",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Redis",
     "Event Loop",
     "RESP",
     "Engine"
   ],
+  "featured": false,
   "series": {
     "id": "redis-deep-dive",
     "title": "Redis 완전정복",
     "order": 8
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": ""
+  }
 }

@@ -4,17 +4,32 @@
   "description": "Bitmaps, HyperLogLog, Streams를 활용해 대규모 데이터를 낮은 비용으로 처리하는 전략을 정리합니다.",
   "date": "2026-02-13",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Redis",
     "Bitmaps",
     "HyperLogLog",
     "Streams"
   ],
+  "featured": false,
   "series": {
     "id": "redis-deep-dive",
     "title": "Redis 완전정복",
     "order": 3
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": ""
+  }
 }

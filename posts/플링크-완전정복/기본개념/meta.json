@@ -4,16 +4,31 @@
   "description": "Flink의 스트림 처리 철학, Runtime 구조, 시간 개념, Stateful 처리, Checkpoint, Exactly-once 보장 원리를 정리했습니다.",
   "date": "2025-11-28",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Flink",
     "Stream Processing",
     "Data Engineering"
   ],
+  "featured": false,
   "series": {
     "id": "flink-mastery",
     "title": "Flink 완전 정복",
     "order": 1
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": ""
+  }
 }

@@ -2,8 +2,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
-const postsDirectory = path.join(process.cwd(), 'posts');
+const configuredPostsDirectory = process.env.BLOG_AUDIT_POSTS_DIR ?? 'posts';
+const postsDirectory = path.isAbsolute(configuredPostsDirectory)
+  ? configuredPostsDirectory
+  : path.join(process.cwd(), configuredPostsDirectory);
+const CONTENT_TYPES = ['essay', 'retrospective', 'review'];
 const CORE_REVIEW_KEYS = ['philosophy', 'design', 'implementation'];
+const WRITING_REVIEW_KEYS = [
+  'clarity',
+  'structure',
+  'evidence',
+  'usefulness',
+  'originality',
+  'polish',
+];
 const SHORT_PARAGRAPH_LIMIT = 80;
 const LONG_PARAGRAPH_LIMIT = 700;
 
@@ -115,18 +127,55 @@ function countWords(content) {
   return tokens?.length ?? 0;
 }
 
-function readCoreAverage(review) {
+function readAverage(review, keys) {
   if (!review || typeof review !== 'object') {
     return null;
   }
 
-  const scores = CORE_REVIEW_KEYS.map((key) => review[key]);
+  const scores = keys.map((key) => review[key]);
 
   if (scores.some((score) => typeof score !== 'number')) {
     return null;
   }
 
   return scores.reduce((sum, score) => sum + score, 0) / scores.length;
+}
+
+function readCoreAverage(review) {
+  return readAverage(review, CORE_REVIEW_KEYS);
+}
+
+function readWritingAverage(review) {
+  return readAverage(review, WRITING_REVIEW_KEYS);
+}
+
+function readMissingScoreKeys(review, keys) {
+  if (!review || typeof review !== 'object') {
+    return keys;
+  }
+
+  return keys.filter((key) => typeof review[key] !== 'number');
+}
+
+function isSupportedContentType(value) {
+  return CONTENT_TYPES.includes(value);
+}
+
+function evaluateTaxonomy(meta) {
+  const warnings = [];
+
+  if (!meta.contentType) {
+    warnings.push('contentType 누락');
+  } else if (!isSupportedContentType(meta.contentType)) {
+    warnings.push(`contentType 미지원 (${meta.contentType})`);
+  }
+
+  return {
+    contentType: isSupportedContentType(meta.contentType)
+      ? meta.contentType
+      : null,
+    warnings,
+  };
 }
 
 function hasIntroHook(paragraphs) {
@@ -271,7 +320,7 @@ function evaluatePolicy(meta) {
   };
 }
 
-function determineStatus(meta, policy, quality) {
+function determineStatus(meta, policy, taxonomy, quality, writingScore) {
   const visibility = meta.visibility ?? 'public';
 
   if (visibility === 'private') {
@@ -279,6 +328,14 @@ function determineStatus(meta, policy, quality) {
   }
 
   if (policy.warnings.length > 0) {
+    return 'private-review';
+  }
+
+  if (writingScore !== null && writingScore <= 2.5) {
+    return 'private-review';
+  }
+
+  if (taxonomy.warnings.length > 0) {
     return 'revise';
   }
 
@@ -314,8 +371,14 @@ function auditPosts() {
       return [];
     }
 
+    const taxonomy = evaluateTaxonomy(meta);
     const policy = evaluatePolicy(meta);
     const quality = reviewPostQuality(meta, content);
+    const writingAverage = readWritingAverage(meta.qualityReview);
+    const missingWritingScores = readMissingScoreKeys(
+      meta.qualityReview,
+      WRITING_REVIEW_KEYS
+    );
 
     return [
       {
@@ -324,12 +387,22 @@ function auditPosts() {
         title: String(meta.title ?? '(untitled)'),
         visibility: meta.visibility ?? 'public',
         category: meta.category ?? '(unknown)',
+        contentType: taxonomy.contentType,
         series: meta.series?.title ?? null,
         qualityReview: meta.qualityReview ?? null,
         featured: Boolean(meta.featured),
+        taxonomy,
         policy,
+        writingAverage,
+        missingWritingScores,
         quality,
-        status: determineStatus(meta, policy, quality),
+        status: determineStatus(
+          meta,
+          policy,
+          taxonomy,
+          quality,
+          writingAverage
+        ),
       },
     ];
   });
@@ -350,25 +423,81 @@ function formatCoreAverage(value) {
   return value === null ? 'n/a' : value.toFixed(2);
 }
 
+function formatWritingAverage(value) {
+  return value === null ? 'n/a' : value.toFixed(2);
+}
+
+function countBy(items, getKey) {
+  const counts = new Map();
+
+  for (const item of items) {
+    const key = getKey(item);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+
+  return counts;
+}
+
+function formatCountList(counts) {
+  return CONTENT_TYPES.map((type) => `${type}: ${counts.get(type) ?? 0}`).join(
+    ', '
+  );
+}
+
+function average(values) {
+  if (values.length === 0) {
+    return null;
+  }
+
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function statusLabel(status) {
+  switch (status) {
+    case 'ready':
+      return '공개 유지';
+    case 'revise':
+      return '보강 필요';
+    case 'private-review':
+      return 'private 전환 검토';
+    case 'keep-private':
+      return 'private 유지';
+    default:
+      return status;
+  }
+}
+
 function printPostLine(post) {
+  const taxonomyText =
+    post.taxonomy.warnings.length === 0
+      ? `contentType: ${post.contentType}`
+      : `contentType: ${post.taxonomy.warnings.join(', ')}`;
   const policyText =
     post.policy.warnings.length === 0
       ? 'policy: ok'
       : `policy: ${post.policy.warnings.join(', ')}`;
+  const writingText =
+    post.missingWritingScores.length === 0
+      ? `writing=${formatWritingAverage(post.writingAverage)}`
+      : `writing=${formatWritingAverage(
+          post.writingAverage
+        )}, missing=${post.missingWritingScores.join(', ')}`;
   const advisoryText =
     post.quality.advisoryWarnings.length === 0
       ? 'advisory: ok'
       : `advisory: ${post.quality.advisoryWarnings.join(', ')}`;
 
   console.log(
-    `- [${post.status}] ${post.slug} (${post.visibility}, ${post.category})`
+    `- [${statusLabel(post.status)}] ${post.slug} (${post.visibility}, ${
+      post.category
+    })`
   );
   console.log(
-    `  core=${formatCoreAverage(post.policy.coreAverage)}, title=${
-      post.quality.titleLength
-    }자, chars=${post.quality.characterCount}, words=${
-      post.quality.wordCount
-    }, h2=${post.quality.sectionCount}, image=${
+    `  core=${formatCoreAverage(
+      post.policy.coreAverage
+    )}, ${writingText}, title=${post.quality.titleLength}자, chars=${
+      post.quality.characterCount
+    }, words=${post.quality.wordCount}, h2=${post.quality.sectionCount}, image=${
       post.quality.hasImage ? 'yes' : 'no'
     }`
   );
@@ -381,6 +510,7 @@ function printPostLine(post) {
       post.quality.shortParagraphCount
     }, long=${post.quality.longParagraphCount}`
   );
+  console.log(`  ${taxonomyText}`);
   console.log(`  ${policyText}`);
   console.log(`  ${advisoryText}`);
 }
@@ -394,6 +524,47 @@ function printReport(posts, errors) {
   const publicSeriesPosts = posts.filter(
     (post) => post.visibility === 'public' && post.series
   );
+  const contentTypeCounts = countBy(
+    posts.filter((post) => post.contentType),
+    (post) => post.contentType
+  );
+  const lifeContentTypeCounts = countBy(
+    posts.filter((post) => post.category === 'Life' && post.contentType),
+    (post) => post.contentType
+  );
+  const taxonomyWarnings = posts.filter(
+    (post) => post.taxonomy.warnings.length > 0
+  );
+  const missingWritingScorePosts = posts.filter(
+    (post) => post.missingWritingScores.length > 0
+  );
+  const scoredWritingPosts = posts.filter(
+    (post) => post.writingAverage !== null
+  );
+  const improvementPriorities = posts
+    .filter(
+      (post) =>
+        post.visibility === 'public' &&
+        (post.status === 'private-review' || post.status === 'revise')
+    )
+    .sort((a, b) => {
+      const statusWeight = {
+        'private-review': 0,
+        revise: 1,
+        ready: 2,
+        'keep-private': 3,
+      };
+      const statusGap = statusWeight[a.status] - statusWeight[b.status];
+
+      if (statusGap !== 0) {
+        return statusGap;
+      }
+
+      return (
+        b.quality.advisoryWarnings.length - a.quality.advisoryWarnings.length
+      );
+    })
+    .slice(0, 10);
 
   console.log('# Post Quality Audit');
   console.log('');
@@ -401,6 +572,22 @@ function printReport(posts, errors) {
   console.log(`Public posts: ${posts.length - privatePosts.length}`);
   console.log(`Private posts: ${privatePosts.length}`);
   console.log(`Structural errors: ${errors.length}`);
+  console.log('');
+
+  console.log('## Content Type Distribution');
+  console.log(`- all posts: ${formatCountList(contentTypeCounts)}`);
+  console.log(`- Life posts: ${formatCountList(lifeContentTypeCounts)}`);
+  console.log(
+    `- contentType warnings: ${
+      taxonomyWarnings.length === 0
+        ? 'none'
+        : taxonomyWarnings
+            .map(
+              (post) => `${post.slug} (${post.taxonomy.warnings.join(', ')})`
+            )
+            .join(', ')
+    }`
+  );
   console.log('');
 
   console.log('## Private Posts');
@@ -441,6 +628,38 @@ function printReport(posts, errors) {
         : publicSeriesPosts.map((post) => post.slug).join(', ')
     }`
   );
+  console.log('');
+
+  console.log('## Writing Score Checks');
+  console.log(
+    `- writing score coverage: ${
+      posts.length - missingWritingScorePosts.length
+    }/${posts.length}`
+  );
+  console.log(
+    `- writing score average: ${formatWritingAverage(
+      average(scoredWritingPosts.map((post) => post.writingAverage))
+    )}`
+  );
+  console.log(
+    `- missing writing scores: ${
+      missingWritingScorePosts.length === 0
+        ? 'none'
+        : missingWritingScorePosts
+            .map((post) => `${post.slug} (${post.missingWritingScores.length})`)
+            .join(', ')
+    }`
+  );
+  console.log('');
+
+  console.log('## Improvement Priorities');
+  if (improvementPriorities.length === 0) {
+    console.log('- none');
+  } else {
+    for (const post of improvementPriorities) {
+      console.log(`- ${statusLabel(post.status)}: ${post.slug}`);
+    }
+  }
   console.log('');
 
   console.log('## Per-Post Review');
