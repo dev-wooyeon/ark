@@ -1,11 +1,23 @@
 import { Metadata } from 'next';
 import { getSortedFeedData } from '@/blog/services/post-repository';
 import { Container } from '@/ui/layout';
+import { createSiteUrl } from '@/site/config/site';
 import BlogListClient from './BlogListClient';
+
+const blogUrl = createSiteUrl('/blog');
+const description = '개발과 일상에 대한 이야기를 나눕니다';
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: '개발과 일상에 대한 이야기를 나눕니다',
+  description,
+  alternates: {
+    canonical: blogUrl,
+  },
+  openGraph: {
+    title: 'Blog',
+    description,
+    url: blogUrl,
+  },
 };
 
 export default function BlogPage() {
