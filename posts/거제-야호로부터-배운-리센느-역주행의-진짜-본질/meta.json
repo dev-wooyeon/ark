@@ -18,13 +18,13 @@
     "design": 4,
     "implementation": 4,
     "brandFit": 4,
-    "clarity": null,
-    "structure": null,
-    "evidence": null,
-    "usefulness": null,
-    "originality": null,
-    "polish": null,
-    "reviewedAt": "2026-06-12",
+    "clarity": 3.5,
+    "structure": 3.5,
+    "evidence": 3.5,
+    "usefulness": 3,
+    "originality": 4,
+    "polish": 3.5,
+    "reviewedAt": "2026-06-17",
     "notes": "리센느 역주행과 Love Attack 가사 기반의 깨달음 작성"
   }
 }

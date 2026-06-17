@@ -20,13 +20,13 @@
     "design": null,
     "implementation": null,
     "brandFit": null,
-    "clarity": null,
-    "structure": null,
-    "evidence": null,
-    "usefulness": null,
-    "originality": null,
-    "polish": null,
-    "reviewedAt": "",
+    "clarity": 3.5,
+    "structure": 3.5,
+    "evidence": 3.5,
+    "usefulness": 3.5,
+    "originality": 4,
+    "polish": 3,
+    "reviewedAt": "2026-06-17",
     "notes": ""
   }
 }

@@ -16,13 +16,13 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3,
-    "clarity": null,
-    "structure": null,
-    "evidence": null,
-    "usefulness": null,
-    "originality": null,
-    "polish": null,
-    "reviewedAt": "2026-05-06",
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 4,
+    "polish": 4.5,
+    "reviewedAt": "2026-06-17",
     "notes": "6W1H 기준 보강 완료"
   }
 }

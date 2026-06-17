@@ -18,13 +18,13 @@
     "design": 2.5,
     "implementation": 2,
     "brandFit": 2,
-    "clarity": null,
-    "structure": null,
-    "evidence": null,
-    "usefulness": null,
-    "originality": null,
-    "polish": null,
-    "reviewedAt": "2026-04-13",
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 4,
+    "polish": 3.5,
+    "reviewedAt": "2026-06-17",
     "notes": "비공개"
   }
 }

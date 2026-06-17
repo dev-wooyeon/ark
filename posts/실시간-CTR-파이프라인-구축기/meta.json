@@ -19,13 +19,13 @@
     "design": 4.5,
     "implementation": 4,
     "brandFit": 4.5,
-    "clarity": null,
-    "structure": null,
-    "evidence": null,
-    "usefulness": null,
-    "originality": null,
-    "polish": null,
-    "reviewedAt": "2026-04-13",
+    "clarity": 4.5,
+    "structure": 4.5,
+    "evidence": 5,
+    "usefulness": 4.5,
+    "originality": 4.5,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
     "notes": "파일럿 리라이트"
   }
 }
