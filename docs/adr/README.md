@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-05-14
+Last updated: 2026-06-17
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -32,6 +32,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0012](0012-use-root-app-route-adapter.md) | Accepted | Next.js route adapter를 루트 `app/`에 둔다 |
 | [0013](0013-clarify-support-boundaries-and-docs.md) | Accepted | 지원 모듈, 유지 문서, 공개 route 경계를 명확히 한다 |
 | [0014](0014-use-ark-as-public-site-identity.md) | Accepted | 공개 사이트 정체성으로 아크를 사용한다 |
+| [0015](0015-skip-view-count-query-during-build.md) | Accepted | 빌드 중 조회수 집계 쿼리를 건너뛴다 |
 
 ## 작성 조건
 

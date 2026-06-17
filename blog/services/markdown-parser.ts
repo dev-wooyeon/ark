@@ -10,7 +10,6 @@ import path from 'path';
 export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
   try {
     if (!mdxContent || typeof mdxContent !== 'string') {
-      console.warn('Invalid MDX content for TOC parsing');
       return [];
     }
 
@@ -67,8 +66,7 @@ export function parseHeadingsFromMdx(mdxContent: string): TocItem[] {
     }
 
     return tocItems;
-  } catch (error) {
-    console.error('Error parsing MDX for TOC:', error);
+  } catch {
     return [];
   }
 }
@@ -80,8 +78,7 @@ export function getMdxSource(slug: string): string | null {
     const postsDirectory = path.join(process.cwd(), 'posts');
     const filePath = path.join(postsDirectory, folderSlug, 'index.mdx');
     return fs.readFileSync(filePath, 'utf8');
-  } catch (error) {
-    console.error(`Failed to read MDX source for ${slug}:`, error);
+  } catch {
     return null;
   }
 }
