@@ -24,6 +24,8 @@ import JsonLd from '@/infra/seo/JsonLd';
 import { getMDXComponents } from '@/blog/ui/mdx/components';
 import { SITE_AUTHOR, createSiteUrl } from '@/site/config/site';
 
+const shouldIncludePrivatePreview = process.env.NODE_ENV === 'development';
+
 function createPostUrl(slug: string): string {
   return createSiteUrl(`/blog/${slug}`);
 }
@@ -59,7 +61,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getFeedData(slug);
+  const post = await getFeedData(slug, {
+    includePrivate: shouldIncludePrivatePreview,
+  });
 
   if (!post) {
     return { title: '글을 찾을 수 없습니다' };
@@ -113,7 +117,9 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getFeedData(slug);
+  const post = await getFeedData(slug, {
+    includePrivate: shouldIncludePrivatePreview,
+  });
 
   if (!post) {
     notFound();
