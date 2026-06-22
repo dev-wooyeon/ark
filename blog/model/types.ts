@@ -27,7 +27,7 @@ export interface FeedFrontmatter {
   date: string;
   updated?: string;
   category: PostCategory;
-  contentType?: PostContentType;
+  contentType: PostContentType;
   visibility?: PostVisibility;
   tags?: string[];
   image?: string;

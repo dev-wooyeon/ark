@@ -331,11 +331,11 @@ function determineStatus(meta, policy, taxonomy, quality, writingScore) {
     return 'private-review';
   }
 
-  if (writingScore !== null && writingScore <= 2.5) {
-    return 'private-review';
+  if (taxonomy.warnings.length > 0) {
+    return 'revise';
   }
 
-  if (taxonomy.warnings.length > 0) {
+  if (writingScore !== null && writingScore <= 2.5) {
     return 'revise';
   }
 

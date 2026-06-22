@@ -9,9 +9,22 @@ describe('FeedFrontmatterSchema', () => {
       description: 'desc',
       date: '2026-04-13',
       category: 'Tech',
+      contentType: 'essay',
     });
 
     expect(parsed.visibility).toBe('public');
+  });
+
+  it('requires content type classification', () => {
+    expect(() =>
+      FeedFrontmatterSchema.parse({
+        title: 'Example',
+        slug: 'example',
+        description: 'desc',
+        date: '2026-04-13',
+        category: 'Tech',
+      })
+    ).toThrow();
   });
 
   it('accepts empty quality review scaffolds', () => {
@@ -89,6 +102,7 @@ describe('FeedFrontmatterSchema', () => {
       description: 'desc',
       date: '2026-04-13',
       category: 'Tech' as const,
+      contentType: 'essay' as const,
     };
 
     expect(() =>

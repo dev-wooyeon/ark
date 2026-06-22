@@ -5,7 +5,7 @@ import { FeedFrontmatterSchema } from '@/blog/model/frontmatter-schema';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 const isProduction = process.env.NODE_ENV === 'production';
-const shouldLogContentIssues = process.env.NODE_ENV === 'development';
+const shouldLogContentIssues = process.env.NODE_ENV !== 'test';
 
 // Cache for folder path lookups by slug
 const slugToFolderCache = new Map<string, string>();

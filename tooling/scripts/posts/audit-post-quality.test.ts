@@ -110,4 +110,36 @@ describe('post quality audit script', () => {
     expect(output).toContain('missing-content (6)');
     expect(output).toContain('## Improvement Priorities');
   });
+
+  it('does not mark public Life posts private for low writing scores', () => {
+    writePostFixture('low-scored-life', {
+      title: 'Life 기준을 다시 세운 기록',
+      slug: 'low-scored-life',
+      description: '설명',
+      date: '2026-06-17',
+      category: 'Life',
+      contentType: 'essay',
+      visibility: 'public',
+      tags: ['Life'],
+      qualityReview: {
+        philosophy: 4,
+        design: 4,
+        implementation: 4,
+        brandFit: 4,
+        clarity: 2.5,
+        structure: 2.5,
+        evidence: 2.5,
+        usefulness: 2.5,
+        originality: 2.5,
+        polish: 2.5,
+      },
+    });
+
+    const output = runAudit();
+
+    expect(output).toContain('[보강 필요] low-scored-life (public, Life)');
+    expect(output).not.toContain(
+      '[private 전환 검토] low-scored-life (public, Life)'
+    );
+  });
 });
