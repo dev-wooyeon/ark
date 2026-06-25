@@ -111,14 +111,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
       'h6',
       'mt-8 mb-4 text-base font-bold text-[var(--color-grey-900)]'
     ),
-    p: (props) => (
-      <p
-        {...props}
-        className="text-base leading-relaxed mb-6 text-[var(--color-grey-700)]"
-      >
-        {props.children}
-      </p>
-    ),
+    p: (props) => <p {...props}>{props.children}</p>,
     img: (props) => {
       // Improved null safety - return null if no src
       if (!props.src) return null;
