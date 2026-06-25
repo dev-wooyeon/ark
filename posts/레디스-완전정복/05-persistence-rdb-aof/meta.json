@@ -4,17 +4,32 @@
   "description": "Redis 영속성 전략인 RDB와 AOF의 동작 원리와 운영 트레이드오프를 정리합니다.",
   "date": "2026-02-13",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Redis",
     "Persistence",
     "RDB",
     "AOF"
   ],
+  "featured": false,
   "series": {
     "id": "redis-deep-dive",
     "title": "Redis 완전정복",
     "order": 5
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": 3.5,
+    "structure": 3.5,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 2.5,
+    "polish": 3.5,
+    "reviewedAt": "2026-06-17",
+    "notes": ""
+  }
 }

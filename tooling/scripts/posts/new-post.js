@@ -1,10 +1,51 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import prompts from 'prompts';
 import chalk from 'chalk';
 import slugify from 'slugify';
 
 const POSTS_DIR = path.join(process.cwd(), 'posts');
+export const CONTENT_TYPE_CHOICES = [
+  { title: 'Essay', value: 'essay' },
+  { title: 'Retrospective', value: 'retrospective' },
+  { title: 'Review', value: 'review' },
+];
+
+export function createPostMetadata({
+  title,
+  slug,
+  description,
+  date,
+  category,
+  contentType,
+  tags = [],
+}) {
+  return {
+    title,
+    slug,
+    description,
+    date,
+    category,
+    contentType,
+    visibility: 'public',
+    tags: tags.map((tag) => tag.trim()).filter(Boolean),
+    qualityReview: {
+      philosophy: null,
+      design: null,
+      implementation: null,
+      brandFit: null,
+      clarity: null,
+      structure: null,
+      evidence: null,
+      usefulness: null,
+      originality: null,
+      polish: null,
+      reviewedAt: '',
+      notes: '',
+    },
+  };
+}
 
 async function main() {
   console.log(chalk.bold.blue('📝 Create a New Blog Post'));
@@ -44,6 +85,13 @@ async function main() {
       initial: 0,
     },
     {
+      type: 'select',
+      name: 'contentType',
+      message: 'Select a content type:',
+      choices: CONTENT_TYPE_CHOICES,
+      initial: 0,
+    },
+    {
       type: 'list',
       name: 'tags',
       message: 'Enter tags (comma separated):',
@@ -56,7 +104,7 @@ async function main() {
     return;
   }
 
-  const { title, slug, description, category, tags } = response;
+  const { title, slug, description, category, contentType, tags } = response;
   const date = new Date().toISOString().split('T')[0];
   const targetDir = path.join(POSTS_DIR, slug);
 
@@ -75,23 +123,15 @@ async function main() {
     await fs.mkdir(targetDir, { recursive: true });
 
     // Create meta.json
-    const metaData = {
+    const metaData = createPostMetadata({
       title,
       slug,
       description,
       date,
       category,
-      visibility: 'public',
-      tags: tags.map((t) => t.trim()).filter(Boolean),
-      qualityReview: {
-        philosophy: null,
-        design: null,
-        implementation: null,
-        brandFit: null,
-        reviewedAt: '',
-        notes: '',
-      },
-    };
+      contentType,
+      tags,
+    });
 
     await fs.writeFile(
       path.join(targetDir, 'meta.json'),
@@ -116,4 +156,9 @@ Write your post content here...
   }
 }
 
-main();
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  main();
+}

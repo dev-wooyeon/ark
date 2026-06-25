@@ -5,10 +5,19 @@ import { FeedFrontmatterSchema } from '@/blog/model/frontmatter-schema';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 const isProduction = process.env.NODE_ENV === 'production';
+const shouldLogContentIssues = process.env.NODE_ENV !== 'test';
 
 // Cache for folder path lookups by slug
 const slugToFolderCache = new Map<string, string>();
 let cachedSortedFeedData: FeedData[] | null = null;
+
+function logContentIssue(message: string): void {
+  if (!shouldLogContentIssues) {
+    return;
+  }
+
+  console.warn(`[post-repository] ${message}`);
+}
 
 export interface FeedQueryOptions {
   includePrivate?: boolean;
@@ -26,8 +35,8 @@ export interface TocItem {
 function safeReadFile(filePath: string): string | null {
   try {
     return fs.readFileSync(filePath, 'utf8');
-  } catch (error) {
-    console.error(`Failed to read file: ${filePath}`, error);
+  } catch {
+    logContentIssue('Failed to read a content file.');
     return null;
   }
 }
@@ -35,8 +44,8 @@ function safeReadFile(filePath: string): string | null {
 function safeReaddir(dirPath: string): string[] | null {
   try {
     return fs.readdirSync(dirPath);
-  } catch (error) {
-    console.error(`Failed to read directory: ${dirPath}`, error);
+  } catch {
+    logContentIssue('Failed to read a content directory.');
     return null;
   }
 }
@@ -44,8 +53,8 @@ function safeReaddir(dirPath: string): string[] | null {
 function safeExists(p: string): boolean {
   try {
     return fs.existsSync(p);
-  } catch (error) {
-    console.error(`Failed to check existence: ${p}`, error);
+  } catch {
+    logContentIssue('Failed to check content path existence.');
     return false;
   }
 }
@@ -93,7 +102,7 @@ function validateFeedFrontmatter(
   const result = FeedFrontmatterSchema.safeParse(data);
 
   if (!result.success) {
-    console.error(`Invalid frontmatter for ${folderPath}:`, result.error.format());
+    logContentIssue(`Invalid frontmatter for ${folderPath}.`);
     return null;
   }
 
@@ -200,7 +209,7 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
   const metaContents = safeReadFile(metaPath);
 
   if (!metaContents) {
-    console.error(`Metadata file not found: ${folderPath}/meta.json`);
+    logContentIssue(`Metadata file missing for ${folderPath}.`);
     return null;
   }
 
@@ -233,8 +242,8 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
     slugToFolderCache.set(metadata.slug, folderPath);
 
     return metadata;
-  } catch (error) {
-    console.error(`Failed to parse metadata for ${folderPath}:`, error);
+  } catch {
+    logContentIssue(`Failed to parse metadata for ${folderPath}.`);
     return null;
   }
 }
@@ -296,7 +305,7 @@ export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
   }
 
   if (!safeExists(postsDirectory)) {
-    console.warn('Posts directory does not exist');
+    logContentIssue('Posts directory does not exist.');
     return [];
   }
 
@@ -307,7 +316,7 @@ export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
       const metadata = loadMetadata(folderPath);
 
       if (!metadata) {
-        console.error(`Failed to load metadata for ${folderPath}, skipping`);
+        logContentIssue(`Failed to load metadata for ${folderPath}.`);
         return null;
       }
 
@@ -339,14 +348,14 @@ export async function getFeedData(
   const folderPath = getFolderSlug(slug);
 
   if (!folderPath) {
-    console.error(`Could not find folder for slug: ${slug}`);
+    logContentIssue(`Could not find folder for slug ${slug}.`);
     return null;
   }
 
   const metadata = loadMetadata(folderPath);
 
   if (!metadata) {
-    console.error(`Failed to load metadata for ${folderPath}`);
+    logContentIssue(`Failed to load metadata for ${folderPath}.`);
     return null;
   }
 
@@ -362,8 +371,8 @@ export async function getFeedData(
       ...metadata,
       Content: mdxModule.default,
     } as Feed;
-  } catch (error) {
-    console.error(`Failed to load MDX content for ${folderPath}:`, error);
+  } catch {
+    logContentIssue(`Failed to load MDX content for ${folderPath}.`);
     return null;
   }
 }

@@ -2,14 +2,28 @@ import { Metadata } from 'next';
 import { getSortedFeedData } from '@/blog/services/post-repository';
 import { Container } from '@/ui/layout';
 import { PostList } from '@/blog/ui/components';
+import { createSiteUrl } from '@/site/config/site';
+
+const lifeUrl = createSiteUrl('/life');
+const description = '일상에서 배운 점과 오래 남은 생각을 차분하게 정리해요';
 
 export const metadata: Metadata = {
   title: 'Life',
-  description: '일상에서 배운 점과 오래 남은 생각을 차분하게 정리해요',
+  description,
+  alternates: {
+    canonical: lifeUrl,
+  },
+  openGraph: {
+    title: 'Life',
+    description,
+    url: lifeUrl,
+  },
 };
 
 export default function LifePage() {
-  const lifePosts = getSortedFeedData().filter((post) => post.category === 'Life');
+  const lifePosts = getSortedFeedData().filter(
+    (post) => post.category === 'Life'
+  );
 
   return (
     <main className="py-10">

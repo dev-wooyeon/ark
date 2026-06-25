@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cookies, headers } from 'next/headers';
 import { getSupabaseServerClient } from '@/infra/integrations/supabase';
 import {
@@ -78,15 +78,31 @@ function createSupabaseMock(options: {
 const mockedGetSupabase = vi.mocked(getSupabaseServerClient);
 const mockedCookies = vi.mocked(cookies);
 const mockedHeaders = vi.mocked(headers);
+const originalNextPhase = process.env.NEXT_PHASE;
+const originalNpmLifecycleEvent = process.env.npm_lifecycle_event;
 
-function createCookieStoreMock(visitorId: string | null = null): CookieStoreLike {
+function restoreBuildPhaseEnv() {
+  if (originalNextPhase === undefined) {
+    delete process.env.NEXT_PHASE;
+  } else {
+    process.env.NEXT_PHASE = originalNextPhase;
+  }
+
+  if (originalNpmLifecycleEvent === undefined) {
+    delete process.env.npm_lifecycle_event;
+  } else {
+    process.env.npm_lifecycle_event = originalNpmLifecycleEvent;
+  }
+}
+
+function createCookieStoreMock(
+  visitorId: string | null = null
+): CookieStoreLike {
   return {
     get: vi
       .fn()
       .mockReturnValue(
-        visitorId
-          ? { name: 'view_visitor_id', value: visitorId }
-          : null
+        visitorId ? { name: 'view_visitor_id', value: visitorId } : null
       ),
     set: vi.fn(),
   };
@@ -102,6 +118,7 @@ function createHeaderStoreMock(
 
 describe('view actions', () => {
   beforeEach(() => {
+    restoreBuildPhaseEnv();
     vi.clearAllMocks();
     mockedCookies.mockResolvedValue(createCookieStoreMock());
     mockedHeaders.mockResolvedValue(
@@ -111,6 +128,10 @@ describe('view actions', () => {
         'accept-language': 'ko-KR',
       })
     );
+  });
+
+  afterEach(() => {
+    restoreBuildPhaseEnv();
   });
 
   it('increments view when slug is valid and client exists', async () => {
@@ -254,6 +275,29 @@ describe('view actions', () => {
     );
   });
 
+  it('uses standard client hints platform header for fingerprinting', async () => {
+    const client = createSupabaseMock({
+      queryPayload: { data: { count: 1 }, error: null },
+      rpcPayload: { data: 5, error: null },
+    });
+    const headerStore = createHeaderStoreMock({
+      'x-forwarded-for': '203.0.113.10',
+      'user-agent': 'Vitest Browser',
+      'accept-language': 'ko-KR',
+      'sec-ch-ua': '"Chromium";v="126"',
+      'sec-ch-ua-platform': '"macOS"',
+    });
+    mockedGetSupabase.mockReturnValue(client);
+    mockedHeaders.mockResolvedValue(headerStore);
+
+    await trackView('my-post');
+
+    expect(headerStore.get).toHaveBeenCalledWith('sec-ch-ua-platform');
+    expect(headerStore.get).not.toHaveBeenCalledWith(
+      'sec-ch-ua-infrastructure'
+    );
+  });
+
   it('falls back to legacy increment signature when rpc argument mismatch occurs', async () => {
     const client = {
       from: vi.fn().mockReturnValue({
@@ -377,6 +421,24 @@ describe('view actions', () => {
     const result = await getPopularViewsInRecentDays(30, 5);
 
     expect(result).toEqual([]);
+  });
+
+  it('skips popular query during production build phase', async () => {
+    process.env.NEXT_PHASE = 'phase-production-build';
+    mockedGetSupabase.mockReturnValue(
+      createSupabaseMock({
+        queryPayload: {
+          data: [{ slug: 'a', count: 10, updated_at: '2026-03-05' }],
+          error: null,
+        },
+        rpcPayload: { data: 0, error: null },
+      })
+    );
+
+    const result = await getPopularViewsInRecentDays(30, 5);
+
+    expect(result).toEqual([]);
+    expect(mockedGetSupabase).not.toHaveBeenCalled();
   });
 
   it('normalizes invalid day/limit inputs for popular query', async () => {

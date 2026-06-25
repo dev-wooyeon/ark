@@ -7,10 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
-      'server-only': path.resolve(
-        __dirname,
-        './tests/support/server-only.ts'
-      ),
+      'server-only': path.resolve(__dirname, './tests/support/server-only.ts'),
     },
   },
   test: {
@@ -33,6 +30,7 @@ export default defineConfig({
       'app/**/*.test.ts',
       'app/**/*.test.tsx',
       'styles/**/*.test.ts',
+      'tooling/**/*.test.ts',
     ],
     coverage: {
       provider: 'v8',

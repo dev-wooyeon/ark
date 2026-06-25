@@ -4,6 +4,7 @@
   "description": "운영 DB 수작업 분석을 줄이기 위해 CDC 기반 분석 파이프라인 PoC를 설계한 과정을 돌아본다.",
   "date": "2025-09-07",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Project",
     "Engineering",
@@ -16,7 +17,13 @@
     "design": 3.5,
     "implementation": 3,
     "brandFit": 4,
-    "notes": "재작성 후 유지",
-    "reviewedAt": "2026-04-13"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4,
+    "usefulness": 4,
+    "originality": 3.5,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "재작성 후 유지"
   }
 }

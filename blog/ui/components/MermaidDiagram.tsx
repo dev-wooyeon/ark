@@ -80,8 +80,10 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     if (!dragState.dragging) return;
 
     const viewport = event.currentTarget;
-    viewport.scrollLeft = dragState.scrollLeft - (event.clientX - dragState.startX);
-    viewport.scrollTop = dragState.scrollTop - (event.clientY - dragState.startY);
+    viewport.scrollLeft =
+      dragState.scrollLeft - (event.clientX - dragState.startX);
+    viewport.scrollTop =
+      dragState.scrollTop - (event.clientY - dragState.startY);
   }
 
   function handleMouseUp() {
@@ -97,7 +99,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 
         mermaid.initialize({
           startOnLoad: false,
-          securityLevel: 'loose',
+          securityLevel: 'strict',
           theme: resolvedTheme === 'dark' ? 'dark' : 'default',
         });
 
@@ -146,14 +148,18 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
           <button
             type="button"
             className="mermaid-btn"
-            onClick={() => setInlineScale((prev) => clampScale(prev - SCALE_STEP))}
+            onClick={() =>
+              setInlineScale((prev) => clampScale(prev - SCALE_STEP))
+            }
           >
             -
           </button>
           <button
             type="button"
             className="mermaid-btn"
-            onClick={() => setInlineScale((prev) => clampScale(prev + SCALE_STEP))}
+            onClick={() =>
+              setInlineScale((prev) => clampScale(prev + SCALE_STEP))
+            }
           >
             +
           </button>
@@ -164,7 +170,9 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
           >
             Reset
           </button>
-          <span className="mermaid-zoom-label">{Math.round(inlineScale * 100)}%</span>
+          <span className="mermaid-zoom-label">
+            {Math.round(inlineScale * 100)}%
+          </span>
           <button
             type="button"
             className="mermaid-btn mermaid-btn-primary"

@@ -4,6 +4,7 @@
   "description": "짧은 다낭 여행에서 실제 만족도를 높인 선택과 개발자 시선에 남은 장면을 정리한다.",
   "date": "2026-02-05",
   "category": "Life",
+  "contentType": "review",
   "tags": [
     "Travel",
     "Vietnam",
@@ -12,14 +13,20 @@
     "Insight",
     "Engineering"
   ],
-  "visibility": "public",
   "featured": false,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 3.5,
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3,
-    "notes": "2차 보강 및 문장 리라이팅 완료",
-    "reviewedAt": "2026-05-06"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4.5,
+    "usefulness": 4.5,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "2차 보강 및 문장 리라이팅 완료"
   }
 }

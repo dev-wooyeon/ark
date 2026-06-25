@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-05-14
+Last updated: 2026-06-19
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -16,22 +16,25 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 
 ## 기록
 
-| ID | 상태 | 결정 |
-| --- | --- | --- |
-| [0001](0001-use-nextjs-app-router.md) | Accepted | 블로그 런타임으로 Next.js App Router를 사용한다 |
-| [0002](0002-keep-custom-mdx-webpack-pipeline.md) | Accepted | 커스텀 MDX webpack 파이프라인을 유지한다 |
-| [0003](0003-store-posts-as-folder-mdx-and-meta.md) | Accepted | 글을 중첩 가능한 `index.mdx`와 `meta.json` 폴더로 저장한다 |
-| [0004](0004-preserve-feature-first-source-structure.md) | Superseded | feature-first 소스 구조를 유지한다 |
-| [0005](0005-use-token-first-tailwind-styling.md) | Accepted | token-first Tailwind 스타일링을 사용한다 |
-| [0006](0006-isolate-visualization-heavy-components.md) | Accepted | 시각화 중심 컴포넌트를 격리한다 |
-| [0007](0007-use-umami-and-supabase-view-counts.md) | Accepted | Umami 분석과 Supabase 조회수를 함께 사용한다 |
-| [0008](0008-enforce-publication-policy-in-content-ingestion.md) | Accepted | 콘텐츠 수집 경로에서 공개 정책을 강제한다 |
-| [0009](0009-use-app-shell-for-primary-navigation.md) | Accepted | 주요 탐색과 레이아웃에 AppShell을 사용한다 |
-| [0010](0010-use-targeted-documentation-harness.md) | Accepted | 핵심 문서 검증에 targeted documentation harness를 사용한다 |
-| [0011](0011-adopt-frontend-modular-monolith.md) | Accepted | Domain-first Modular Monolith를 사용한다 |
-| [0012](0012-use-root-app-route-adapter.md) | Accepted | Next.js route adapter를 루트 `app/`에 둔다 |
-| [0013](0013-clarify-support-boundaries-and-docs.md) | Accepted | 지원 모듈, 유지 문서, 공개 route 경계를 명확히 한다 |
-| [0014](0014-use-ark-as-public-site-identity.md) | Accepted | 공개 사이트 정체성으로 아크를 사용한다 |
+| ID                                                              | 상태       | 결정                                                       |
+| --------------------------------------------------------------- | ---------- | ---------------------------------------------------------- |
+| [0001](0001-use-nextjs-app-router.md)                           | Accepted   | 블로그 런타임으로 Next.js App Router를 사용한다            |
+| [0002](0002-keep-custom-mdx-webpack-pipeline.md)                | Accepted   | 커스텀 MDX webpack 파이프라인을 유지한다                   |
+| [0003](0003-store-posts-as-folder-mdx-and-meta.md)              | Accepted   | 글을 중첩 가능한 `index.mdx`와 `meta.json` 폴더로 저장한다 |
+| [0004](0004-preserve-feature-first-source-structure.md)         | Superseded | feature-first 소스 구조를 유지한다                         |
+| [0005](0005-use-token-first-tailwind-styling.md)                | Accepted   | token-first Tailwind 스타일링을 사용한다                   |
+| [0006](0006-isolate-visualization-heavy-components.md)          | Accepted   | 시각화 중심 컴포넌트를 격리한다                            |
+| [0007](0007-use-umami-and-supabase-view-counts.md)              | Accepted   | Umami 분석과 Supabase 조회수를 함께 사용한다               |
+| [0008](0008-enforce-publication-policy-in-content-ingestion.md) | Accepted   | 콘텐츠 수집 경로에서 공개 정책을 강제한다                  |
+| [0009](0009-use-app-shell-for-primary-navigation.md)            | Accepted   | 주요 탐색과 레이아웃에 AppShell을 사용한다                 |
+| [0010](0010-use-targeted-documentation-harness.md)              | Accepted   | 핵심 문서 검증에 targeted documentation harness를 사용한다 |
+| [0011](0011-adopt-frontend-modular-monolith.md)                 | Accepted   | Domain-first Modular Monolith를 사용한다                   |
+| [0012](0012-use-root-app-route-adapter.md)                      | Accepted   | Next.js route adapter를 루트 `app/`에 둔다                 |
+| [0013](0013-clarify-support-boundaries-and-docs.md)             | Accepted   | 지원 모듈, 유지 문서, 공개 route 경계를 명확히 한다        |
+| [0014](0014-use-ark-as-public-site-identity.md)                 | Accepted   | 공개 사이트 정체성으로 아크를 사용한다                     |
+| [0015](0015-skip-view-count-query-during-build.md)              | Accepted   | 빌드 중 조회수 집계 쿼리를 건너뛴다                        |
+| [0016](0016-use-content-type-and-growth-review-scores.md)       | Accepted   | 글 형식과 성장 리뷰 점수를 분리한다                        |
+| [0017](0017-allow-private-post-preview-in-development.md)       | Accepted   | 개발 환경에서 private 글 상세 미리보기를 허용한다          |
 
 ## 작성 조건
 

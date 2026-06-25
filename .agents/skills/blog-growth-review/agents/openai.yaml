@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Growth Review"
+  short_description: "Score and review Ark blog posts"
+  default_prompt: "Review this blog post for content type, quality scores, publication readiness, and concrete improvements."

@@ -4,6 +4,7 @@
   "description": "슬로우 쿼리와 rows_examined, EXPLAIN으로 병목을 좁히며 인덱스 설계 문제를 확인한 과정을 정리한다.",
   "date": "2026-03-23",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Database",
     "MySQL",
@@ -18,7 +19,13 @@
     "design": 4.5,
     "implementation": 4.5,
     "brandFit": 4.5,
-    "notes": "핵심 유지",
-    "reviewedAt": "2026-04-22"
+    "clarity": 4.5,
+    "structure": 4.5,
+    "evidence": 4.5,
+    "usefulness": 4.5,
+    "originality": 4,
+    "polish": 4.5,
+    "reviewedAt": "2026-06-17",
+    "notes": "핵심 유지"
   }
 }

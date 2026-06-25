@@ -11,6 +11,56 @@ const VIEW_FINGERPRINT_SALT =
   `${SITE_BRAND.technicalName}-view-fingerprint-v1`;
 const VIEW_FALLBACK_VISITOR_COOKIE = 'view_visitor_id';
 const VIEW_FALLBACK_VISITOR_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+const NEXT_PHASE_PRODUCTION_BUILD = 'phase-production-build';
+const shouldLogViewIssues = process.env.NODE_ENV !== 'test';
+
+function readErrorField(error: unknown, field: 'code' | 'message'): string {
+  if (typeof error !== 'object' || error === null) {
+    return '';
+  }
+
+  const value = (error as Record<string, unknown>)[field];
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function summarizeOperationalError(error: unknown): string {
+  const code = readErrorField(error, 'code');
+  const message =
+    error instanceof Error
+      ? error.message.trim()
+      : readErrorField(error, 'message');
+
+  if (code && message) {
+    return `${code}: ${message}`;
+  }
+
+  return message || code || 'unknown error';
+}
+
+function logViewWarning(message: string): void {
+  if (!shouldLogViewIssues) {
+    return;
+  }
+
+  console.warn(`[view-count] ${message}`);
+}
+
+function logViewError(message: string, error: unknown): void {
+  if (!shouldLogViewIssues) {
+    return;
+  }
+
+  console.error(
+    `[view-count] ${message} (${summarizeOperationalError(error)})`
+  );
+}
+
+function isProductionBuildPhase(): boolean {
+  return (
+    process.env.NEXT_PHASE === NEXT_PHASE_PRODUCTION_BUILD ||
+    process.env.npm_lifecycle_event === 'build'
+  );
+}
 
 function normalizeSlug(slug: string): string | null {
   const value = slug.trim();
@@ -99,9 +149,7 @@ async function createViewerFingerprint(): Promise<string> {
   const userAgent = readHeaderValue(headerStore, ['user-agent']);
   const acceptLanguage = readHeaderValue(headerStore, ['accept-language']);
   const secChUa = readHeaderValue(headerStore, ['sec-ch-ua']);
-  const secChUaPlatform = readHeaderValue(headerStore, [
-    'sec-ch-ua-infrastructure',
-  ]);
+  const secChUaPlatform = readHeaderValue(headerStore, ['sec-ch-ua-platform']);
 
   const signatureParts = [
     ipAddress,
@@ -157,7 +205,7 @@ async function readViewCount(slug: string): Promise<number | null> {
     .maybeSingle<{ count: number }>();
 
   if (error) {
-    console.error('Error fetching view count:', error);
+    logViewError('Failed to fetch view count.', error);
     return null;
   }
 
@@ -172,9 +220,7 @@ export async function incrementView(slug: string) {
 
   const supabase = getSupabaseServerClient();
   if (!supabase) {
-    console.warn(
-      '[view-count] Supabase env is missing. Skipping increment operation.'
-    );
+    logViewWarning('Supabase env is missing. Skipping increment operation.');
     return;
   }
 
@@ -185,7 +231,7 @@ export async function incrementView(slug: string) {
     slug_input: normalizedSlug,
   });
   if (error) {
-    console.error('Error incrementing view count:', error);
+    logViewError('Failed to increment view count.', error);
   }
 }
 
@@ -206,9 +252,7 @@ export async function trackView(slug: string): Promise<number | null> {
 
   const supabase = getSupabaseServerClient();
   if (!supabase) {
-    console.warn(
-      '[view-count] Supabase env is missing. Returning null for view count.'
-    );
+    logViewWarning('Supabase env is missing. Returning null for view count.');
     return null;
   }
 
@@ -238,7 +282,7 @@ export async function trackView(slug: string): Promise<number | null> {
       });
 
       if (legacyResult.error) {
-        console.error('Error incrementing view count:', legacyResult.error);
+        logViewError('Failed to increment view count.', legacyResult.error);
         return readViewCount(normalizedSlug);
       }
 
@@ -250,7 +294,7 @@ export async function trackView(slug: string): Promise<number | null> {
       return readViewCount(normalizedSlug);
     }
 
-    console.error('Error incrementing view count:', error);
+    logViewError('Failed to increment view count.', error);
     return readViewCount(normalizedSlug);
   }
 
@@ -266,10 +310,14 @@ export async function getPopularViewsInRecentDays(
   days: number,
   limit: number
 ): Promise<PopularViewEntry[]> {
+  if (isProductionBuildPhase()) {
+    return [];
+  }
+
   const supabase = getSupabaseServerClient();
   if (!supabase) {
-    console.warn(
-      '[view-count] Supabase env is missing. Returning empty popular view list.'
+    logViewWarning(
+      'Supabase env is missing. Returning empty popular view list.'
     );
     return [];
   }
@@ -288,7 +336,7 @@ export async function getPopularViewsInRecentDays(
     .limit(normalizedLimit);
 
   if (error) {
-    console.error('Error fetching popular view entries:', error);
+    logViewError('Failed to fetch popular view entries.', error);
     return [];
   }
 

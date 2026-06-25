@@ -4,6 +4,7 @@
   "description": "제주파크 맞춤 IoT 시스템을 멀티파크 플랫폼으로 전환하기 위해 도메인 경계, Hexagonal Architecture, 점진 전환 전략을 어떻게 정했는지 정리한다.",
   "date": "2024-08-18",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Project",
     "Engineering",
@@ -16,7 +17,13 @@
     "design": 4,
     "implementation": 2.5,
     "brandFit": 4,
-    "notes": "재작성 후 유지",
-    "reviewedAt": "2026-04-13"
+    "clarity": 4.5,
+    "structure": 4.5,
+    "evidence": 4,
+    "usefulness": 4.5,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "재작성 후 유지"
   }
 }

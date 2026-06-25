@@ -7,6 +7,26 @@ interface ViewCounterProps {
   slug: string;
 }
 
+function getSessionKey(slug: string): string {
+  return `viewed:${slug}`;
+}
+
+function hasTrackedViewInSession(slug: string): boolean {
+  try {
+    return sessionStorage.getItem(getSessionKey(slug)) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function rememberTrackedView(slug: string): void {
+  try {
+    sessionStorage.setItem(getSessionKey(slug), '1');
+  } catch {
+    // Storage can be unavailable in private or restricted browser contexts.
+  }
+}
+
 export default function ViewCounter({ slug }: ViewCounterProps) {
   const [views, setViews] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,22 +36,23 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
 
     const init = async () => {
       try {
-        const sessionKey = `viewed:${slug}`;
-        const alreadyTracked = sessionStorage.getItem(sessionKey) === '1';
+        const alreadyTracked = hasTrackedViewInSession(slug);
 
         const count = alreadyTracked
           ? await getViewCount(slug)
           : await trackView(slug);
 
         if (!alreadyTracked) {
-          sessionStorage.setItem(sessionKey, '1');
+          rememberTrackedView(slug);
         }
 
         if (isMounted) {
           setViews(count);
         }
-      } catch (error) {
-        console.error('Failed to load view count:', error);
+      } catch {
+        if (isMounted) {
+          setViews(null);
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);

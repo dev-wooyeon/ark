@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import ViewCounter from './ViewCounter';
 
 const mockTrackView = vi.fn();
@@ -10,8 +10,19 @@ vi.mock('@/blog/api/view', () => ({
   trackView: (...args: unknown[]) => mockTrackView(...args),
 }));
 
+const sessionStorageDescriptor = Object.getOwnPropertyDescriptor(
+  window,
+  'sessionStorage'
+);
+
 describe('ViewCounter', () => {
   const slug = 'redis-deep-dive-02-core-data-types';
+
+  afterEach(() => {
+    if (sessionStorageDescriptor) {
+      Object.defineProperty(window, 'sessionStorage', sessionStorageDescriptor);
+    }
+  });
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,6 +59,25 @@ describe('ViewCounter', () => {
 
     render(<ViewCounter slug={slug} />);
 
-    expect(await screen.findByText('조회수를 준비하고 있어요')).toBeInTheDocument();
+    expect(
+      await screen.findByText('조회수를 준비하고 있어요')
+    ).toBeInTheDocument();
+  });
+
+  it('tracks view when sessionStorage is unavailable', async () => {
+    Object.defineProperty(window, 'sessionStorage', {
+      configurable: true,
+      get() {
+        throw new Error('Storage access blocked');
+      },
+    });
+    mockTrackView.mockResolvedValue(7);
+
+    render(<ViewCounter slug={slug} />);
+
+    await screen.findByText('조회수 7회');
+
+    expect(mockTrackView).toHaveBeenCalledWith(slug);
+    expect(mockGetViewCount).not.toHaveBeenCalled();
   });
 });
