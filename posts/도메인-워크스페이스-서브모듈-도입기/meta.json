@@ -4,6 +4,7 @@
   "description": "도메인 워크스페이스와 Git 서브모듈로 MSA 환경의 맥락 전환 비용을 줄인 도입 기준을 정리한다.",
   "date": "2026-02-26",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "MSA",
     "Git Submodule",
@@ -17,7 +18,13 @@
     "design": 4,
     "implementation": 3.5,
     "brandFit": 4,
-    "notes": "핵심 유지",
-    "reviewedAt": "2026-04-22"
+    "clarity": 4.5,
+    "structure": 4.5,
+    "evidence": 4,
+    "usefulness": 4.5,
+    "originality": 4,
+    "polish": 4.5,
+    "reviewedAt": "2026-06-17",
+    "notes": "핵심 유지"
   }
 }

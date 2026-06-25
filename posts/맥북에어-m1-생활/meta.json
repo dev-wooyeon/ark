@@ -4,6 +4,7 @@
   "description": "실시간 CTR 파이프라인에서 Redis와 API를 덜어내고 ClickHouse 중심으로 성능을 개선한 과정을 정리한다.",
   "date": "2025-01-20",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Flink",
     "Kafka",
@@ -18,7 +19,13 @@
     "design": 4,
     "implementation": 4,
     "brandFit": 4,
-    "notes": "핵심 유지",
-    "reviewedAt": "2026-04-13"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4.5,
+    "usefulness": 4,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "핵심 유지"
   }
 }

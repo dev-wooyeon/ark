@@ -4,10 +4,22 @@ import { Container } from '@/ui/layout';
 import { EmptyState } from '@/ui';
 import { getSeriesSummaries } from '@/blog/model/series-group';
 import { SeriesHubList } from '@/blog/ui/components';
+import { createSiteUrl } from '@/site/config/site';
+
+const seriesUrl = createSiteUrl('/series');
+const description = '연속된 학습과 구현 기록을 시리즈 단위로 모아봅니다';
 
 export const metadata: Metadata = {
   title: 'Series',
-  description: '연속된 학습과 구현 기록을 시리즈 단위로 모아봅니다',
+  description,
+  alternates: {
+    canonical: seriesUrl,
+  },
+  openGraph: {
+    title: 'Series',
+    description,
+    url: seriesUrl,
+  },
 };
 
 export default function SeriesPage() {

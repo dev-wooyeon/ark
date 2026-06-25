@@ -4,20 +4,27 @@
   "description": "정책 변경 이력을 시스템이 기억하게 만들어 신뢰할 수 있는 소급 정산을 구현한 기록이다.",
   "date": "2026-01-24",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Architecture",
     "Payment",
     "Settlement",
     "Batch"
   ],
-  "visibility": "public",
   "featured": true,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 4,
     "design": 4,
     "implementation": 3.5,
     "brandFit": 4.5,
-    "notes": "핵심 유지",
-    "reviewedAt": "2026-04-13"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4,
+    "usefulness": 4,
+    "originality": 3.5,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "핵심 유지"
   }
 }

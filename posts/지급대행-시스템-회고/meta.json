@@ -4,19 +4,26 @@
   "description": "거래, 정산, 송금 책임을 분리해 지급대행 시스템의 안정성을 높인 설계 회고예요.",
   "date": "2026-01-24",
   "category": "Tech",
+  "contentType": "retrospective",
   "tags": [
     "Architecture",
     "Payment",
     "Domain Driven Design"
   ],
-  "visibility": "public",
   "featured": true,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 4,
     "design": 4.5,
     "implementation": 3.5,
     "brandFit": 4.5,
-    "notes": "핵심 유지",
-    "reviewedAt": "2026-04-13"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4,
+    "usefulness": 4,
+    "originality": 3.5,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "핵심 유지"
   }
 }

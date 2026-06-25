@@ -34,4 +34,17 @@ describe('getMDXComponents', () => {
       '하위-섹션'
     );
   });
+
+  it('lets prose stylesheet control paragraph typography', () => {
+    const { p: Paragraph } = getMDXComponents({});
+
+    if (!Paragraph) {
+      throw new Error('Expected paragraph component to be defined');
+    }
+
+    render(<Paragraph>본문 문단</Paragraph>);
+
+    expect(screen.getByText('본문 문단')).not.toHaveClass('text-base');
+    expect(screen.getByText('본문 문단')).not.toHaveClass('leading-relaxed');
+  });
 });

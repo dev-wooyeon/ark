@@ -4,15 +4,27 @@
   "description": "외할아버지의 장례를 다녀오며, 가족에게 연락을 미루지 않겠다고 생각한 날의 기록.",
   "date": "2026-03-16",
   "category": "Life",
-  "tags": ["Family", "가족", "Reflection", "Memento Mori"],
-  "visibility": "public",
+  "contentType": "essay",
+  "tags": [
+    "Family",
+    "가족",
+    "Reflection",
+    "Memento Mori"
+  ],
   "featured": false,
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 4,
     "design": 3.5,
     "implementation": 3,
     "brandFit": 4,
-    "notes": "공개 글 문체 퇴고 완료",
-    "reviewedAt": "2026-05-14"
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4,
+    "usefulness": 3.5,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "공개 글 문체 퇴고 완료"
   }
 }

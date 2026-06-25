@@ -1,6 +1,7 @@
 import type { MDXProps } from 'mdx/types';
 
 export type PostCategory = 'Tech' | 'Life';
+export type PostContentType = 'essay' | 'retrospective' | 'review';
 export type PostVisibility = 'public' | 'private';
 export type QualityScore = number | null;
 
@@ -9,6 +10,12 @@ export interface QualityReview {
   design?: QualityScore;
   implementation?: QualityScore;
   brandFit?: QualityScore;
+  clarity?: QualityScore;
+  structure?: QualityScore;
+  evidence?: QualityScore;
+  usefulness?: QualityScore;
+  originality?: QualityScore;
+  polish?: QualityScore;
   reviewedAt?: string;
   notes?: string;
 }
@@ -20,6 +27,7 @@ export interface FeedFrontmatter {
   date: string;
   updated?: string;
   category: PostCategory;
+  contentType: PostContentType;
   visibility?: PostVisibility;
   tags?: string[];
   image?: string;

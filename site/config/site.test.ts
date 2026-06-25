@@ -4,6 +4,8 @@ import {
   SITE_DESCRIPTION,
   SITE_KOREAN_NAME,
   SITE_NAME,
+  SITE_URL,
+  createSiteUrl,
 } from '@/site/config/site';
 import packageJson from '@/package.json';
 
@@ -18,5 +20,13 @@ describe('site brand', () => {
     expect(SITE_KOREAN_NAME).toBe(SITE_BRAND.koreanName);
     expect(packageJson.name).toBe(SITE_BRAND.technicalName);
     expect(SITE_DESCRIPTION).toContain(SITE_BRAND.koreanName);
+  });
+});
+
+describe('createSiteUrl', () => {
+  it('returns canonical absolute URLs without a trailing slash for home', () => {
+    expect(createSiteUrl()).toBe(SITE_URL);
+    expect(createSiteUrl('/')).toBe(SITE_URL);
+    expect(createSiteUrl('/blog/example')).toBe(`${SITE_URL}/blog/example`);
   });
 });

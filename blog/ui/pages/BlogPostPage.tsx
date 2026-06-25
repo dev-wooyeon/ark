@@ -22,7 +22,34 @@ import DwellTimeTracker from '@/infra/analytics/components/DwellTimeTracker';
 import ScrollDepthTracker from '@/infra/analytics/components/ScrollDepthTracker';
 import JsonLd from '@/infra/seo/JsonLd';
 import { getMDXComponents } from '@/blog/ui/mdx/components';
-import { SITE_URL } from '@/site/config/site';
+import { SITE_AUTHOR, createSiteUrl } from '@/site/config/site';
+
+const shouldIncludePrivatePreview = process.env.NODE_ENV === 'development';
+
+function createPostUrl(slug: string): string {
+  return createSiteUrl(`/blog/${slug}`);
+}
+
+function createPostOgImageUrl({
+  title,
+  date,
+  tags,
+}: {
+  title: string;
+  date: string;
+  tags?: string[];
+}): string {
+  const params = new URLSearchParams({
+    title,
+    date,
+  });
+
+  if (tags && tags.length > 0) {
+    params.set('tags', tags.join(','));
+  }
+
+  return `${createSiteUrl('/api/og')}?${params.toString()}`;
+}
 
 export async function generateStaticParams() {
   return getAllFeedSlugs();
@@ -34,27 +61,49 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getFeedData(slug);
+  const post = await getFeedData(slug, {
+    includePrivate: shouldIncludePrivatePreview,
+  });
 
   if (!post) {
     return { title: '글을 찾을 수 없습니다' };
   }
 
+  const postUrl = createPostUrl(post.slug);
+  const ogImageUrl = createPostOgImageUrl(post);
+  const modifiedTime = post.updated ?? post.date;
+
   return {
     title: post.title,
     description: post.description,
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
+      url: postUrl,
       type: 'article',
       publishedTime: post.date,
-      authors: ['Eunu'],
+      modifiedTime,
+      authors: [SITE_AUTHOR.name],
       tags: post.tags,
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(post.title)}&date=${post.date}&tags=${post.tags?.join(',') || ''}`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: [
+        {
+          url: ogImageUrl,
           alt: post.title,
         },
       ],
@@ -68,7 +117,9 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getFeedData(slug);
+  const post = await getFeedData(slug, {
+    includePrivate: shouldIncludePrivatePreview,
+  });
 
   if (!post) {
     notFound();
@@ -88,6 +139,9 @@ export default async function BlogPostPage({
   });
   const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
   const mdxComponents = getMDXComponents({});
+  const postUrl = createPostUrl(post.slug);
+  const ogImageUrl = createPostOgImageUrl(post);
+  const modifiedTime = post.updated ?? post.date;
 
   return (
     <>
@@ -163,16 +217,25 @@ export default async function BlogPostPage({
         data={{
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': postUrl,
+          },
+          url: postUrl,
           headline: post.title,
           description: post.description,
           author: {
             '@type': 'Person',
-            name: 'Eunu',
+            name: SITE_AUTHOR.name,
+            url: SITE_AUTHOR.profileUrl,
+            sameAs: SITE_AUTHOR.sameAs,
           },
           datePublished: post.date,
-          image: [
-            `${SITE_URL}/api/og?title=${encodeURIComponent(post.title)}&date=${post.date}&tags=${post.tags?.join(',') || ''}`,
-          ],
+          dateModified: modifiedTime,
+          image: [ogImageUrl],
+          keywords: post.tags ?? [],
+          inLanguage: 'ko-KR',
+          isAccessibleForFree: true,
         }}
       />
 

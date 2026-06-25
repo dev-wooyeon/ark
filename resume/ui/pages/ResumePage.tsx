@@ -13,10 +13,22 @@ import {
 } from '@/resume/model/resume-data';
 import { orderExperienceStages } from '@/resume/model/order-experience-stages';
 import type { Activity } from '@/resume/model/types';
+import { createSiteUrl } from '@/site/config/site';
+
+const resumeUrl = createSiteUrl('/resume');
+const description = `${personalInfo.name}의 CV`;
 
 export const metadata: Metadata = {
   title: 'CV',
-  description: `${personalInfo.name}의 CV`,
+  description,
+  alternates: {
+    canonical: resumeUrl,
+  },
+  openGraph: {
+    title: 'CV',
+    description,
+    url: resumeUrl,
+  },
 };
 
 const heroStatement = '반복되는 운영을 데이터 구조와 자동화로 바꾸는 엔지니어';

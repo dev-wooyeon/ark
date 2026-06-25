@@ -41,4 +41,5 @@ next-env.d.ts
 .husky/
 .sisyphus/
 .claude/
+.playwright-cli/
 .idea

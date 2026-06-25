@@ -2,11 +2,23 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getSortedFeedData } from '@/blog/services/post-repository';
 import { Container } from '@/ui/layout';
+import { createSiteUrl } from '@/site/config/site';
 import EngineeringPageClient from './EngineeringPageClient';
+
+const engineeringUrl = createSiteUrl('/engineering');
+const description = '기술 글을 한 흐름에서 탐색할 수 있어요';
 
 export const metadata: Metadata = {
   title: 'Engineering',
-  description: '기술 글을 한 흐름에서 탐색할 수 있어요',
+  description,
+  alternates: {
+    canonical: engineeringUrl,
+  },
+  openGraph: {
+    title: 'Engineering',
+    description,
+    url: engineeringUrl,
+  },
 };
 
 export default function EngineeringPage() {

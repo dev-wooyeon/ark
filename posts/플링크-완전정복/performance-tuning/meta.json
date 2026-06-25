@@ -4,16 +4,31 @@
   "description": "Flink의 병렬도, Operator Chain, RocksDB, Checkpoint, Backpressure 튜닝 전략을 정리했습니다.",
   "date": "2025-11-28",
   "category": "Tech",
+  "contentType": "essay",
   "tags": [
     "Flink",
     "Performance",
     "Tuning"
   ],
+  "featured": false,
   "series": {
     "id": "flink-mastery",
     "title": "Flink 완전 정복",
     "order": 6
   },
   "visibility": "private",
-  "featured": false
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": 3.5,
+    "structure": 4,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 2.5,
+    "polish": 3,
+    "reviewedAt": "2026-06-17",
+    "notes": ""
+  }
 }

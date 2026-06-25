@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { MermaidDiagram } from './MermaidDiagram';
 
@@ -11,10 +17,11 @@ vi.mock('next-themes', () => ({
 const mockMermaidRender = vi.fn(async () => ({
   svg: '<svg width="500" height="250"><text>diagram</text></svg>',
 }));
+const mockMermaidInitialize = vi.fn();
 
 vi.mock('mermaid', () => ({
   default: {
-    initialize: vi.fn(),
+    initialize: mockMermaidInitialize,
     render: mockMermaidRender,
   },
 }));
@@ -27,6 +34,11 @@ describe('MermaidDiagram', () => {
       expect(screen.getByText('diagram')).toBeInTheDocument();
       expect(mockMermaidRender).toHaveBeenCalledTimes(1);
     });
+    expect(mockMermaidInitialize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        securityLevel: 'strict',
+      })
+    );
 
     const minus = screen.getByRole('button', { name: '-' });
     const plus = screen.getByRole('button', { name: '+' });
@@ -49,7 +61,6 @@ describe('MermaidDiagram', () => {
     const close = screen.getByRole('button', { name: '닫기' });
     fireEvent.click(close);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-
   });
 
   it('shows plain code fallback when render fails', async () => {

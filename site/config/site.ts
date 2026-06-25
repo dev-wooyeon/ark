@@ -29,3 +29,13 @@ export const SITE_AUTHOR = {
   profileUrl: `${SITE_URL}/resume`,
   sameAs: ['https://github.com/dev-wooyeon', 'mailto:une@kakao.com'],
 };
+
+export type SitePath = '' | `/${string}`;
+
+export function createSiteUrl(path: SitePath = ''): string {
+  if (path === '' || path === '/') {
+    return SITE_URL;
+  }
+
+  return `${SITE_URL}${path}`;
+}

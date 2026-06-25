@@ -1,0 +1,32 @@
+{
+  "title": "LLM Wiki 구축기: 답변을 검증된 지식으로 옮기기",
+  "slug": "llm-wiki-build-retrospective",
+  "description": "Karpathy의 LLM Wiki Gist와 컬리 LLM Wiki 구축기에서 얻은 힌트를 바탕으로 좋은 답변을 raw, drafts, wiki 신뢰 경계로 옮긴 과정을 정리한다.",
+  "date": "2026-06-19",
+  "category": "Tech",
+  "contentType": "retrospective",
+  "tags": [
+    "LLM Wiki",
+    "AI Workflow",
+    "Knowledge Management",
+    "RAG",
+    "Developer Experience"
+  ],
+  "image": "/images/posts/llm-wiki-build-retrospective/good-answer-wiki-hold.jpg",
+  "featured": false,
+  "visibility": "public",
+  "qualityReview": {
+    "philosophy": 4.5,
+    "design": 4,
+    "implementation": 4,
+    "brandFit": 4,
+    "clarity": 4.5,
+    "structure": 4.5,
+    "evidence": 4,
+    "usefulness": 4.5,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-06-19",
+    "notes": "공개용. drafts 완충 계층을 초반에 제시하고 실제 승격/보류 사례를 독립 흐름으로 정리함"
+  }
+}

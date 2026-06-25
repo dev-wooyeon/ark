@@ -4,6 +4,7 @@
   "description": "첫 직장에서 보낸 3년과 퇴사 과정이 일과 성장 기준을 어떻게 바꿨는지 돌아본다.",
   "date": "2023-06-07",
   "category": "Life",
+  "contentType": "retrospective",
   "tags": [
     "Career",
     "Resignation",
@@ -18,7 +19,13 @@
     "design": 3,
     "implementation": 2.5,
     "brandFit": 3.5,
-    "notes": "6W1H 기준 보강 완료",
-    "reviewedAt": "2026-05-06"
+    "clarity": 4,
+    "structure": 3.5,
+    "evidence": 3.5,
+    "usefulness": 3.5,
+    "originality": 3.5,
+    "polish": 4,
+    "reviewedAt": "2026-06-17",
+    "notes": "6W1H 기준 보강 완료"
   }
 }
