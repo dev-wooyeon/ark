@@ -8,7 +8,7 @@
   "tags": ["Life", "Career", "Essay", "Hobby"],
   "image": "/images/posts/AI를-배울수록-붓펜이-필요했다/minami-calligraphy-classroom.png",
   "featured": false,
-  "visibility": "private",
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 4,
     "design": 4.5,
@@ -21,6 +21,6 @@
     "originality": 4,
     "polish": 4,
     "reviewedAt": "2026-07-03",
-    "notes": "초안. 제목과 도입을 AI/자기채점 훅으로 조정했고, 미나미 영상은 직접 계기로 낮춰 표현했다. 사자성어와 가족 이름을 한자로 적어본 실제 연습 장면을 보강했다. 썸네일 권리 확인 전까지 비공개"
+    "notes": "공개용. 제목과 도입을 AI/자기채점 훅으로 조정했고, 미나미 영상은 직접 계기로 낮춰 표현했다. 사자성어와 가족 이름을 한자로 적어본 실제 연습 장면을 보강했다. 영상 캡처는 출처를 표기했고, 문제가 생기면 삭제 또는 교체한다."
   }
 }
