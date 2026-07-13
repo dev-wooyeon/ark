@@ -15,13 +15,7 @@ export {
   type SeriesGroup,
   type SeriesSummary,
 } from './model/series-group';
-export {
-  getPopularViewsInRecentDays,
-  getViewCount,
-  incrementView,
-  trackView,
-  type PopularViewEntry,
-} from './api/view';
+export { getViewCount, incrementView, trackView } from './api/view';
 export type {
   Feed,
   FeedData,

@@ -14,7 +14,7 @@
     "Work"
   ],
   "featured": false,
-  "visibility": "public",
+  "visibility": "private",
   "qualityReview": {
     "philosophy": null,
     "design": null,
@@ -26,7 +26,7 @@
     "usefulness": 3.5,
     "originality": 4,
     "polish": 3,
-    "reviewedAt": "2026-06-17",
-    "notes": ""
+    "reviewedAt": "2026-07-13",
+    "notes": "NDA 범위와 직접 질문 인용을 재검토하기 전까지 비공개"
   }
 }

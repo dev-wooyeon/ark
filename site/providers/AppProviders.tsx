@@ -2,17 +2,16 @@ import type { ReactNode } from 'react';
 import ThemeProvider from '@/site/providers/ThemeProvider';
 import KBarProvider from '@/search/ui/components/KBarProvider';
 import UmamiAnalytics from '@/infra/analytics/components/UmamiAnalytics';
-import { getSortedFeedData } from '@/blog/services/post-repository';
+import type { SearchablePost } from '@/search/model/get-search-actions';
 import JsonLd from '@/infra/seo/JsonLd';
 import { SITE_AUTHOR, SITE_NAME, SITE_URL } from '@/site/config/site';
 
 interface AppProvidersProps {
   children: ReactNode;
+  posts: SearchablePost[];
 }
 
-export default function AppProviders({ children }: AppProvidersProps) {
-  const posts = getSortedFeedData();
-
+export default function AppProviders({ children, posts }: AppProvidersProps) {
   return (
     <>
       <UmamiAnalytics />

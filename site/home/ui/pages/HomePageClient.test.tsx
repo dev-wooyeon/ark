@@ -31,7 +31,13 @@ vi.mock('@/blog/ui/components', () => ({
     </div>
   ),
   PostList: ({ posts }: { posts: FeedData[] }) => (
-    <div data-testid="post-list">{posts.length}</div>
+    <ol data-testid="post-list">
+      {posts.map((post) => (
+        <li key={post.slug} data-testid="post-list-item">
+          {post.slug}
+        </li>
+      ))}
+    </ol>
   ),
 }));
 
@@ -56,11 +62,32 @@ const samplePosts: FeedData[] = [
 
 describe('HomePageClient', () => {
   it('keeps only archive filters and removes the local search input', () => {
-    render(<HomePageClient posts={samplePosts} popularViews={[]} />);
+    render(<HomePageClient posts={samplePosts} />);
 
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: '최근 기록',
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', {
+        name: '시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다',
+      })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: '먼저 읽을 글' })
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '인기순' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: '최신순' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: '인기순' })
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
+      'tech-post'
+    );
   });
 });

@@ -1,12 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { cookies, headers } from 'next/headers';
 import { getSupabaseServerClient } from '@/infra/integrations/supabase';
-import {
-  getPopularViewsInRecentDays,
-  getViewCount,
-  incrementView,
-  trackView,
-} from './view';
+import { getViewCount, incrementView, trackView } from './view';
 
 vi.mock('@/infra/integrations/supabase', () => ({
   getSupabaseServerClient: vi.fn(),
@@ -28,9 +23,6 @@ type SupabaseLike = {
   __queryMock: {
     select: ReturnType<typeof vi.fn>;
     eq: ReturnType<typeof vi.fn>;
-    gte: ReturnType<typeof vi.fn>;
-    order: ReturnType<typeof vi.fn>;
-    limit: ReturnType<typeof vi.fn>;
     maybeSingle: ReturnType<typeof vi.fn>;
   };
 };
@@ -51,9 +43,6 @@ function createQueryMock(payload: {
   return {
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
-    gte: vi.fn().mockReturnThis(),
-    order: vi.fn().mockReturnThis(),
-    limit: vi.fn().mockResolvedValue(payload),
     maybeSingle: vi.fn().mockResolvedValue(payload),
   };
 }
@@ -78,23 +67,6 @@ function createSupabaseMock(options: {
 const mockedGetSupabase = vi.mocked(getSupabaseServerClient);
 const mockedCookies = vi.mocked(cookies);
 const mockedHeaders = vi.mocked(headers);
-const originalNextPhase = process.env.NEXT_PHASE;
-const originalNpmLifecycleEvent = process.env.npm_lifecycle_event;
-
-function restoreBuildPhaseEnv() {
-  if (originalNextPhase === undefined) {
-    delete process.env.NEXT_PHASE;
-  } else {
-    process.env.NEXT_PHASE = originalNextPhase;
-  }
-
-  if (originalNpmLifecycleEvent === undefined) {
-    delete process.env.npm_lifecycle_event;
-  } else {
-    process.env.npm_lifecycle_event = originalNpmLifecycleEvent;
-  }
-}
-
 function createCookieStoreMock(
   visitorId: string | null = null
 ): CookieStoreLike {
@@ -118,7 +90,6 @@ function createHeaderStoreMock(
 
 describe('view actions', () => {
   beforeEach(() => {
-    restoreBuildPhaseEnv();
     vi.clearAllMocks();
     mockedCookies.mockResolvedValue(createCookieStoreMock());
     mockedHeaders.mockResolvedValue(
@@ -128,10 +99,6 @@ describe('view actions', () => {
         'accept-language': 'ko-KR',
       })
     );
-  });
-
-  afterEach(() => {
-    restoreBuildPhaseEnv();
   });
 
   it('increments view when slug is valid and client exists', async () => {
@@ -357,102 +324,5 @@ describe('view actions', () => {
         viewer_fingerprint_input: expect.any(String),
       })
     );
-  });
-
-  it('fetches popular views with recent-day filter and descending count order', async () => {
-    const client = createSupabaseMock({
-      queryPayload: {
-        data: [
-          {
-            slug: 'a',
-            count: 10,
-            updated_at: '2026-03-05T00:00:00.000Z',
-          },
-          {
-            slug: 'b',
-            count: 10,
-            updated_at: '2026-03-04T00:00:00.000Z',
-          },
-        ],
-        error: null,
-      },
-      rpcPayload: { data: 0, error: null },
-    });
-    mockedGetSupabase.mockReturnValue(client);
-
-    const result = await getPopularViewsInRecentDays(30, 5);
-
-    expect(client.from).toHaveBeenCalledWith('views');
-    expect(client.__queryMock.select).toHaveBeenCalledWith(
-      'slug,count,updated_at'
-    );
-    expect(client.__queryMock.gte).toHaveBeenCalledWith(
-      'updated_at',
-      expect.any(String)
-    );
-    expect(client.__queryMock.order).toHaveBeenCalledWith('count', {
-      ascending: false,
-    });
-    expect(client.__queryMock.limit).toHaveBeenCalledWith(5);
-    expect(result).toEqual([
-      { slug: 'a', count: 10, updated_at: '2026-03-05T00:00:00.000Z' },
-      { slug: 'b', count: 10, updated_at: '2026-03-04T00:00:00.000Z' },
-    ]);
-  });
-
-  it('returns empty list when supabase is unavailable for popular query', async () => {
-    mockedGetSupabase.mockReturnValue(null);
-
-    const result = await getPopularViewsInRecentDays(30, 5);
-
-    expect(result).toEqual([]);
-  });
-
-  it('returns empty list when popular query fails', async () => {
-    const client = createSupabaseMock({
-      queryPayload: {
-        data: null,
-        error: { message: 'failed' },
-      },
-      rpcPayload: { data: 0, error: null },
-    });
-    mockedGetSupabase.mockReturnValue(client);
-
-    const result = await getPopularViewsInRecentDays(30, 5);
-
-    expect(result).toEqual([]);
-  });
-
-  it('skips popular query during production build phase', async () => {
-    process.env.NEXT_PHASE = 'phase-production-build';
-    mockedGetSupabase.mockReturnValue(
-      createSupabaseMock({
-        queryPayload: {
-          data: [{ slug: 'a', count: 10, updated_at: '2026-03-05' }],
-          error: null,
-        },
-        rpcPayload: { data: 0, error: null },
-      })
-    );
-
-    const result = await getPopularViewsInRecentDays(30, 5);
-
-    expect(result).toEqual([]);
-    expect(mockedGetSupabase).not.toHaveBeenCalled();
-  });
-
-  it('normalizes invalid day/limit inputs for popular query', async () => {
-    const client = createSupabaseMock({
-      queryPayload: {
-        data: [],
-        error: null,
-      },
-      rpcPayload: { data: 0, error: null },
-    });
-    mockedGetSupabase.mockReturnValue(client);
-
-    await getPopularViewsInRecentDays(0, 0);
-
-    expect(client.__queryMock.limit).toHaveBeenCalledWith(1);
   });
 });

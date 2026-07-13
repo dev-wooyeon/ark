@@ -15,7 +15,7 @@ export const FeedFrontmatterSchema = z.object({
   date: z.string(),
   category: z.enum(['Tech', 'Life']),
   contentType: z.enum(['essay', 'retrospective', 'review']),
-  visibility: z.enum(['public', 'private']).default('public'),
+  visibility: z.enum(['public', 'private']).default('private'),
   tags: z.array(z.string()).optional(),
   image: z.string().optional(),
   readingTime: z.number().optional(),

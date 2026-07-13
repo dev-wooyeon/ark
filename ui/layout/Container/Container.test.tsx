@@ -14,6 +14,8 @@ describe('Container', () => {
 
     expect(section).toBeInTheDocument();
     expect(section).toHaveClass('mx-auto');
+    expect(section).toHaveClass('px-4');
+    expect(section).toHaveClass('md:px-8');
     expect(section).toHaveClass('max-w-[1000px]');
     expect(section).toHaveClass('custom-class');
   });
@@ -30,4 +32,3 @@ describe('Container', () => {
     expect(container).toHaveClass('max-w-[640px]');
   });
 });
-

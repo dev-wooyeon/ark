@@ -80,16 +80,6 @@
     padding: 0;
   }
 
-  /* Smooth transition for theme-related properties */
-  *,
-  *::before,
-  *::after {
-    transition-property:
-      background-color, border-color, color, fill, stroke, box-shadow;
-    transition-duration: var(--duration-150);
-    transition-timing-function: var(--ease-default);
-  }
-
   /* Typography defaults */
   h1,
   h2,
@@ -296,7 +286,7 @@
   max-width: none;
   font-family: var(--font-sans-emoji);
   color: var(--color-text-primary);
-  font-size: var(--text-md);
+  font-size: var(--text-reading);
   line-height: var(--leading-prose);
 }
 
@@ -698,6 +688,7 @@
 
 .prose table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 1.75rem 0;
   font-size: var(--text-sm);
@@ -732,6 +723,12 @@
 }
 
 @media (max-width: 767px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
   .prose h1,
   .prose h2,
   .prose h3,

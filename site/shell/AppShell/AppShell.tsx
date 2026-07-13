@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useKBar } from 'kbar';
 import { clsx } from 'clsx';
-import type { FeedData } from '@/blog/model/types';
+import type { SearchablePost } from '@/search/model/get-search-actions';
 import { personalInfo } from '@/resume/model/resume-data';
 import { SITE_FEED_PATH } from '@/site/config/site';
 import MobileBottomNav from '@/site/navigation/MobileBottomNav';
@@ -18,7 +18,7 @@ type AppSection = 'home' | 'engineering' | 'life' | 'resume';
 
 interface AppShellProps {
   children: ReactNode;
-  posts: FeedData[];
+  posts: Array<Pick<SearchablePost, 'slug' | 'category'>>;
 }
 
 interface RailNavItem {
@@ -125,7 +125,10 @@ const EXTERNAL_LINKS: ExternalLinkItem[] = [
   },
 ];
 
-function resolveSection(pathname: string, posts: FeedData[]): AppSection {
+function resolveSection(
+  pathname: string,
+  posts: Array<Pick<SearchablePost, 'slug' | 'category'>>
+): AppSection {
   if (pathname.startsWith('/resume')) {
     return 'resume';
   }
@@ -330,13 +333,17 @@ export default function AppShell({ children, posts }: AppShellProps) {
           </div>
         </header>
 
-        <div className="min-h-[calc(100vh-56px)] pb-8 md:min-h-0 md:flex-1 md:overflow-y-auto md:pb-0">
+        <div
+          data-page-scroll-container
+          className="min-h-[calc(100vh-56px)] pb-8 md:min-h-0 md:flex-1 md:overflow-y-auto md:pb-0"
+        >
           {children}
         </div>
       </div>
 
       <MobileBottomNav
         pathname={pathname}
+        activeSection={activeSection}
         visible
         open={mobileNavOpen}
         onOpenChange={setMobileNavOpen}

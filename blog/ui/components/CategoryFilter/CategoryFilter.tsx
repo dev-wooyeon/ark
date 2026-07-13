@@ -30,11 +30,10 @@ export default function CategoryFilter({
           key={category}
           onClick={() => onCategoryChange(category)}
           className={clsx(
-            'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]',
-            'active:translate-y-px',
+            'inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-selection)] border px-4 py-2 text-sm transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]',
             activeCategory === category
-              ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white shadow-sm'
+              ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
               : 'border-[var(--color-border)] bg-[var(--color-bg-primary)] text-[var(--color-grey-600)] hover:border-[var(--color-border-hover)] hover:bg-[var(--color-grey-50)]'
           )}
           aria-pressed={activeCategory === category}
@@ -42,7 +41,7 @@ export default function CategoryFilter({
           <span className="font-medium">{CATEGORY_LABELS[category]}</span>
           <span
             className={clsx(
-              'rounded-full px-1.5 py-0.5 text-[10px] font-semibold',
+              'rounded-[var(--radius-selection)] px-1.5 py-0.5 text-[10px] font-semibold',
               activeCategory === category
                 ? 'bg-white/20 text-white'
                 : 'bg-[var(--color-grey-100)] text-[var(--color-text-tertiary)]'

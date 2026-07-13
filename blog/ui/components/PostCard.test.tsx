@@ -40,15 +40,6 @@ describe('PostCard', () => {
     );
   });
 
-  it('renders featured variant styles', () => {
-    const { container } = render(
-      <PostCard post={basePost} variant="featured" />
-    );
-    const link = container.querySelector('a');
-
-    expect(link).toHaveClass('bg-gradient-to-br');
-  });
-
   it('omits reading time text when not provided', () => {
     render(<PostCard post={basePost} />);
     expect(screen.queryByText(/약 \d+분/)).not.toBeInTheDocument();
@@ -72,6 +63,32 @@ describe('PostCard', () => {
 
     render(<PostCard post={withImage} variant="list" />);
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
+  });
+
+  it('uses a static content surface for the list variant', () => {
+    render(<PostCard post={basePost} variant="list" />);
+
+    const link = screen.getByRole('link', { name: /테스트 글/i });
+
+    expect(link).toHaveClass('rounded-[var(--radius-content)]');
+    expect(link).toHaveClass('px-4');
+    expect(link).toHaveClass('sm:px-6');
+    expect(link).not.toHaveClass('hover:shadow-[var(--shadow-sm)]');
+    expect(link).not.toHaveClass('hover:-translate-y-0.5');
+  });
+
+  it('uses the content-first type roles in the list variant', () => {
+    render(<PostCard post={basePost} variant="list" />);
+
+    expect(screen.getByRole('heading', { name: '테스트 글' })).toHaveClass(
+      'text-lg',
+      'font-bold',
+      'tracking-tight'
+    );
+    expect(screen.getByText('테스트 설명')).toHaveClass(
+      'text-reading',
+      'leading-relaxed'
+    );
   });
 
   it('shows category, series title, and tags in list variant', () => {

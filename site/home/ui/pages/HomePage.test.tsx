@@ -4,15 +4,9 @@ import type { FeedData } from '@/blog/model/types';
 import HomePage from './HomePage';
 
 const mockGetSortedFeedData = vi.fn<() => FeedData[]>(() => []);
-const mockGetPopularViewsInRecentDays = vi.fn(async () => []);
 
 vi.mock('@/blog/services/post-repository', () => ({
   getSortedFeedData: () => mockGetSortedFeedData(),
-}));
-
-vi.mock('@/blog/api/view', () => ({
-  getPopularViewsInRecentDays: (...args: unknown[]) =>
-    mockGetPopularViewsInRecentDays(...args),
 }));
 
 const mockHomePageClient = vi.fn(() => <div data-testid="home-page-client" />);
@@ -32,7 +26,7 @@ function createPost(index: number): FeedData {
 }
 
 describe('HomePage', () => {
-  it('passes posts and normalized popular views to the home client', async () => {
+  it('passes the latest-first posts to the home client', () => {
     mockGetSortedFeedData.mockReturnValue([
       createPost(1),
       createPost(2),
@@ -41,28 +35,15 @@ describe('HomePage', () => {
       createPost(5),
       createPost(6),
     ]);
-    mockGetPopularViewsInRecentDays.mockResolvedValue([
-      {
-        slug: 'post-2',
-        count: 17,
-        updated_at: '2026-03-20T00:00:00.000Z',
-      },
-    ]);
-
-    const element = await HomePage();
-    render(element);
+    render(<HomePage />);
 
     expect(screen.getByTestId('home-page-client')).toBeInTheDocument();
-    expect(mockGetPopularViewsInRecentDays).toHaveBeenCalledWith(30, 6);
 
     const firstCallArgs = mockHomePageClient.mock.calls[0]?.[0] as {
       posts: FeedData[];
-      popularViews: Array<{ slug: string; count: number }>;
     };
 
     expect(firstCallArgs.posts).toHaveLength(6);
-    expect(firstCallArgs.popularViews).toEqual([
-      { slug: 'post-2', count: 17 },
-    ]);
+    expect(firstCallArgs).not.toHaveProperty('popularViews');
   });
 });
