@@ -12,33 +12,25 @@ const schemaPath = path.join(
 );
 
 describe('view count database contract', () => {
-  it('updates the daily aggregate only for accepted views', async () => {
+  it('stores accepted views in the lifetime counter', async () => {
     const schema = await readFile(schemaPath, 'utf8');
     const acceptedViewBranch = schema.match(
       /if should_increment then([\s\S]+?)else/
     )?.[1];
 
-    expect(schema).toContain(
-      'create table if not exists public.view_daily_counts'
-    );
     expect(acceptedViewBranch).toContain(
-      'insert into public.view_daily_counts (slug, view_date, count)'
+      'insert into public.views (slug, count)'
     );
+    expect(schema).not.toContain('public.view_daily_counts');
   });
 
-  it('sums daily counts through a restricted recent-popularity rpc', async () => {
+  it('keeps fingerprint deduplication without a popularity rpc', async () => {
     const schema = await readFile(schemaPath, 'utf8');
 
-    expect(schema).toContain('create function public.get_popular_views(');
-    expect(schema).toContain('sum(daily.count)::bigint as count');
     expect(schema).toContain(
-      'current_date - (least(greatest(coalesce(days_input, 30), 1), 365) - 1)'
+      'create table if not exists public.view_unique_visitors'
     );
-    expect(schema).toContain(
-      'limit least(greatest(coalesce(limit_input, 5), 1), 100)'
-    );
-    expect(schema).toContain(
-      'revoke all on public.view_daily_counts from anon, authenticated'
-    );
+    expect(schema).toContain('create function public.increment_view(');
+    expect(schema).not.toContain('get_popular_views');
   });
 });

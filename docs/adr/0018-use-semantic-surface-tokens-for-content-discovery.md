@@ -1,7 +1,8 @@
 # 0018. 콘텐츠 탐색 표면에 의미 기반 반경과 무그림자 상태를 사용한다
 
 Date: 2026-07-13
-Status: Accepted
+Status: Accepted; sort-control clause amended by
+[0024](0024-use-latest-only-home-feed.md)
 
 ## 배경
 

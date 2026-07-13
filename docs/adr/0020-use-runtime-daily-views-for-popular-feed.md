@@ -1,7 +1,7 @@
 # 0020. 인기 피드를 런타임 일별 조회수로 계산한다
 
 Date: 2026-07-13
-Status: Accepted
+Status: Superseded by [0024](0024-use-latest-only-home-feed.md)
 Supersedes: 0015
 
 ## 배경
