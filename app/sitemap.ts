@@ -28,10 +28,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routePaths: SitePath[] = [
     '',
-    '/blog',
     '/engineering',
     '/life',
-    '/series',
     '/resume',
     SITE_FEED_PATH,
   ];
