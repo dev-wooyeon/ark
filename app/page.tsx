@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { SITE_DESCRIPTION, SITE_NAME, createSiteUrl } from '@/site/config/site';
 
+export const dynamic = 'force-dynamic';
+
 const homeUrl = createSiteUrl();
 
 export const metadata: Metadata = {

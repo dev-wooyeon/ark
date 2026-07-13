@@ -25,6 +25,30 @@ export type SupabaseDatabase = {
         };
         Relationships: [];
       };
+      view_daily_counts: {
+        Row: {
+          slug: string;
+          view_date: string;
+          count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          slug: string;
+          view_date?: string;
+          count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          slug?: string;
+          view_date?: string;
+          count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -37,6 +61,17 @@ export type SupabaseDatabase = {
           dedupe_window_seconds_input?: number;
         };
         Returns: number;
+      };
+      get_popular_views: {
+        Args: {
+          days_input?: number;
+          limit_input?: number;
+        };
+        Returns: Array<{
+          slug: string;
+          count: number;
+          updated_at: string;
+        }>;
       };
     };
     Enums: {

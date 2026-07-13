@@ -359,9 +359,10 @@ describe('view actions', () => {
     );
   });
 
-  it('fetches popular views with recent-day filter and descending count order', async () => {
+  it('fetches recent daily view totals through the popular views rpc', async () => {
     const client = createSupabaseMock({
-      queryPayload: {
+      queryPayload: { data: null, error: null },
+      rpcPayload: {
         data: [
           {
             slug: 'a',
@@ -376,24 +377,15 @@ describe('view actions', () => {
         ],
         error: null,
       },
-      rpcPayload: { data: 0, error: null },
     });
     mockedGetSupabase.mockReturnValue(client);
 
     const result = await getPopularViewsInRecentDays(30, 5);
 
-    expect(client.from).toHaveBeenCalledWith('views');
-    expect(client.__queryMock.select).toHaveBeenCalledWith(
-      'slug,count,updated_at'
-    );
-    expect(client.__queryMock.gte).toHaveBeenCalledWith(
-      'updated_at',
-      expect.any(String)
-    );
-    expect(client.__queryMock.order).toHaveBeenCalledWith('count', {
-      ascending: false,
+    expect(client.rpc).toHaveBeenCalledWith('get_popular_views', {
+      days_input: 30,
+      limit_input: 5,
     });
-    expect(client.__queryMock.limit).toHaveBeenCalledWith(5);
     expect(result).toEqual([
       { slug: 'a', count: 10, updated_at: '2026-03-05T00:00:00.000Z' },
       { slug: 'b', count: 10, updated_at: '2026-03-04T00:00:00.000Z' },
@@ -410,11 +402,11 @@ describe('view actions', () => {
 
   it('returns empty list when popular query fails', async () => {
     const client = createSupabaseMock({
-      queryPayload: {
+      queryPayload: { data: null, error: null },
+      rpcPayload: {
         data: null,
         error: { message: 'failed' },
       },
-      rpcPayload: { data: 0, error: null },
     });
     mockedGetSupabase.mockReturnValue(client);
 
@@ -443,16 +435,16 @@ describe('view actions', () => {
 
   it('normalizes invalid day/limit inputs for popular query', async () => {
     const client = createSupabaseMock({
-      queryPayload: {
-        data: [],
-        error: null,
-      },
-      rpcPayload: { data: 0, error: null },
+      queryPayload: { data: null, error: null },
+      rpcPayload: { data: [], error: null },
     });
     mockedGetSupabase.mockReturnValue(client);
 
     await getPopularViewsInRecentDays(0, 0);
 
-    expect(client.__queryMock.limit).toHaveBeenCalledWith(1);
+    expect(client.rpc).toHaveBeenCalledWith('get_popular_views', {
+      days_input: 1,
+      limit_input: 1,
+    });
   });
 });

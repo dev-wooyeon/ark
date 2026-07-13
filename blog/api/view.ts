@@ -324,16 +324,10 @@ export async function getPopularViewsInRecentDays(
 
   const normalizedDays = normalizePositiveInt(days, 30);
   const normalizedLimit = normalizePositiveInt(limit, 5);
-  const threshold = new Date(
-    Date.now() - normalizedDays * 24 * 60 * 60 * 1000
-  ).toISOString();
-
-  const { data, error } = await supabase
-    .from('views')
-    .select('slug,count,updated_at')
-    .gte('updated_at', threshold)
-    .order('count', { ascending: false })
-    .limit(normalizedLimit);
+  const { data, error } = await supabase.rpc('get_popular_views', {
+    days_input: normalizedDays,
+    limit_input: normalizedLimit,
+  });
 
   if (error) {
     logViewError('Failed to fetch popular view entries.', error);
