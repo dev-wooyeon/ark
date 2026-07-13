@@ -296,7 +296,7 @@
   max-width: none;
   font-family: var(--font-sans-emoji);
   color: var(--color-text-primary);
-  font-size: var(--text-md);
+  font-size: var(--text-reading);
   line-height: var(--leading-prose);
 }
 

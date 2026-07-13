@@ -86,6 +86,20 @@ describe('PostCard', () => {
     expect(link).not.toHaveClass('hover:-translate-y-0.5');
   });
 
+  it('uses the content-first type roles in the list variant', () => {
+    render(<PostCard post={basePost} variant="list" />);
+
+    expect(screen.getByRole('heading', { name: '테스트 글' })).toHaveClass(
+      'text-lg',
+      'font-bold',
+      'tracking-tight'
+    );
+    expect(screen.getByText('테스트 설명')).toHaveClass(
+      'text-reading',
+      'leading-relaxed'
+    );
+  });
+
   it('shows category, series title, and tags in list variant', () => {
     const detailedPost: FeedData = {
       ...basePost,

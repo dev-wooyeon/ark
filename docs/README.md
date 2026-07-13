@@ -17,6 +17,7 @@ Last updated: 2026-07-13
 
 - `docs/adr/README.md`
 - `docs/adr/*.md`
+- `docs/adr/0019-use-content-first-typography-scale.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`
