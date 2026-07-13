@@ -32,12 +32,13 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0012](0012-use-root-app-route-adapter.md)                        | Accepted   | Next.js route adapter를 루트 `app/`에 둔다                   |
 | [0013](0013-clarify-support-boundaries-and-docs.md)               | Accepted   | 지원 모듈, 유지 문서, 공개 route 경계를 명확히 한다          |
 | [0014](0014-use-ark-as-public-site-identity.md)                   | Accepted   | 공개 사이트 정체성으로 아크를 사용한다                       |
-| [0015](0015-skip-view-count-query-during-build.md)                | Accepted   | 빌드 중 조회수 집계 쿼리를 건너뛴다                          |
+| [0015](0015-skip-view-count-query-during-build.md)                | Superseded | 빌드 중 조회수 집계 쿼리를 건너뛴다                          |
 | [0016](0016-use-content-type-and-growth-review-scores.md)         | Accepted   | 글 형식과 성장 리뷰 점수를 분리한다                          |
 | [0017](0017-allow-private-post-preview-in-development.md)         | Accepted   | 개발 환경에서 private 글 상세 미리보기를 허용한다            |
 | [0018](0018-use-semantic-surface-tokens-for-content-discovery.md) | Accepted   | 콘텐츠 탐색 표면에 의미 기반 반경과 무그림자 상태를 사용한다 |
 | [0019](0019-use-content-first-typography-scale.md)                | Accepted   | 콘텐츠 읽기 흐름에 16px 기준과 17px 본문을 사용한다          |
-| [0022](0022-default-new-posts-to-private.md)                      | Accepted   | 새 글을 명시적으로 검토한 뒤 공개한다                         |
+| [0020](0020-use-runtime-daily-views-for-popular-feed.md)          | Accepted   | 인기 피드를 런타임 일별 조회수로 계산한다                    |
+| [0022](0022-default-new-posts-to-private.md)                      | Accepted   | 새 글을 명시적으로 검토한 뒤 공개한다                        |
 
 ## 작성 조건
 

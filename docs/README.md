@@ -18,6 +18,7 @@ Last updated: 2026-07-13
 - `docs/adr/README.md`
 - `docs/adr/*.md`
 - `docs/adr/0019-use-content-first-typography-scale.md`
+- `docs/adr/0020-use-runtime-daily-views-for-popular-feed.md`
 - `docs/adr/0022-default-new-posts-to-private.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
