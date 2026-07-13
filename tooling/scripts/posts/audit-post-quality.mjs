@@ -290,7 +290,7 @@ function reviewPostQuality(meta, content) {
 }
 
 function evaluatePolicy(meta) {
-  const visibility = meta.visibility ?? 'public';
+  const visibility = meta.visibility ?? 'private';
   const coreAverage = readCoreAverage(meta.qualityReview);
   const warnings = [];
 
@@ -321,7 +321,7 @@ function evaluatePolicy(meta) {
 }
 
 function determineStatus(meta, policy, taxonomy, quality, writingScore) {
-  const visibility = meta.visibility ?? 'public';
+  const visibility = meta.visibility ?? 'private';
 
   if (visibility === 'private') {
     return 'keep-private';
@@ -385,7 +385,7 @@ function auditPosts() {
         path: folder.relativePath,
         slug: String(meta.slug ?? folder.relativePath),
         title: String(meta.title ?? '(untitled)'),
-        visibility: meta.visibility ?? 'public',
+        visibility: meta.visibility ?? 'private',
         category: meta.category ?? '(unknown)',
         contentType: taxonomy.contentType,
         series: meta.series?.title ?? null,

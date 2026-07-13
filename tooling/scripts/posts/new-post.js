@@ -28,7 +28,7 @@ export function createPostMetadata({
     date,
     category,
     contentType,
-    visibility: 'public',
+    visibility: 'private',
     tags: tags.map((tag) => tag.trim()).filter(Boolean),
     qualityReview: {
       philosophy: null,
