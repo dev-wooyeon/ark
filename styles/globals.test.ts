@@ -24,6 +24,15 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('animation-duration: 0.01ms !important');
   });
 
+  it('limits theme transitions instead of animating every element', () => {
+    expect(globalsContent).toContain(
+      'background-color var(--duration-150) var(--ease-default)'
+    );
+    expect(globalsContent).not.toMatch(
+      /\*,\s*\*::before,\s*\*::after\s*\{[^}]*transition-property:/
+    );
+  });
+
   it('uses Tossface-aware font stack for article prose', () => {
     expect(tokensContent).toContain('--font-sans-emoji:');
     expect(tokensContent).toContain("'Pretendard', 'Tossface Safe'");

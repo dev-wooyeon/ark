@@ -80,16 +80,6 @@
     padding: 0;
   }
 
-  /* Smooth transition for theme-related properties */
-  *,
-  *::before,
-  *::after {
-    transition-property:
-      background-color, border-color, color, fill, stroke, box-shadow;
-    transition-duration: var(--duration-150);
-    transition-timing-function: var(--ease-default);
-  }
-
   /* Typography defaults */
   h1,
   h2,
