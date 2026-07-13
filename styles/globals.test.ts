@@ -39,6 +39,12 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('@media (max-width: 767px)');
   });
 
+  it('keeps wide article tables scrollable on mobile', () => {
+    expect(globalsContent).toMatch(
+      /@media \(max-width: 767px\)[\s\S]*\.prose table \{[\s\S]*display: block;[\s\S]*overflow-x: auto;/
+    );
+  });
+
   it('defines high contrast color overrides', () => {
     expect(tokensContent).toContain('@media (prefers-contrast: more)');
     expect(globalsContent).toContain('@media (prefers-contrast: more)');

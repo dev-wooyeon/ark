@@ -44,7 +44,7 @@ export function GiscusComments({ slug }: GiscusCommentsProps) {
       </h2>
       <div className="min-h-40">
         <Giscus
-          key={`${slug}-${giscusTheme}`}
+          key={slug}
           id="comments"
           repo="dev-wooyeon/ark"
           repoId="R_kgDOQ9dweg"
