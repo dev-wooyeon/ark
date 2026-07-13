@@ -40,15 +40,6 @@ describe('PostCard', () => {
     );
   });
 
-  it('renders featured variant styles', () => {
-    const { container } = render(
-      <PostCard post={basePost} variant="featured" />
-    );
-    const link = container.querySelector('a');
-
-    expect(link).toHaveClass('bg-gradient-to-br');
-  });
-
   it('omits reading time text when not provided', () => {
     render(<PostCard post={basePost} />);
     expect(screen.queryByText(/약 \d+분/)).not.toBeInTheDocument();

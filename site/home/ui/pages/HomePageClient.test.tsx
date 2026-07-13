@@ -67,14 +67,16 @@ describe('HomePageClient', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: '시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다',
+        name: '최근 기록',
       })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { level: 2, name: '최근 기록' })
-    ).toBeInTheDocument();
+      screen.queryByRole('heading', {
+        name: '시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다',
+      })
+    ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/플랫폼 엔지니어 박우연이/)
+      screen.queryByRole('heading', { name: '먼저 읽을 글' })
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
