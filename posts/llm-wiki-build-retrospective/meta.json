@@ -13,7 +13,7 @@
     "Developer Experience"
   ],
   "image": "/images/posts/llm-wiki-build-retrospective/good-answer-wiki-hold.jpg",
-  "featured": false,
+  "featured": true,
   "visibility": "public",
   "qualityReview": {
     "philosophy": 4.5,

@@ -3,6 +3,7 @@ import type { FeedData } from '@/blog/model/types';
 import {
   buildHomeCategoryCounts,
   filterHomePosts,
+  selectHomeFeaturedPosts,
   type HomePopularView,
 } from './home-feed';
 
@@ -35,6 +36,24 @@ describe('home-feed model', () => {
       Tech: 2,
       Life: 1,
     });
+  });
+
+  it('selects at most four featured posts in feed order', () => {
+    const posts = [
+      createPost('one', 'Tech', '2026-04-05', { featured: true }),
+      createPost('two', 'Tech', '2026-04-04', { featured: true }),
+      createPost('not-featured', 'Life', '2026-04-03'),
+      createPost('three', 'Tech', '2026-04-02', { featured: true }),
+      createPost('four', 'Tech', '2026-04-01', { featured: true }),
+      createPost('five', 'Tech', '2026-03-31', { featured: true }),
+    ];
+
+    expect(selectHomeFeaturedPosts(posts).map((post) => post.slug)).toEqual([
+      'one',
+      'two',
+      'three',
+      'four',
+    ]);
   });
 
   it('filters posts by query across title, description, tags, and series', () => {
