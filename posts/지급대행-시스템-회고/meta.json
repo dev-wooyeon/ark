@@ -10,7 +10,7 @@
     "Payment",
     "Domain Driven Design"
   ],
-  "featured": true,
+  "featured": false,
   "visibility": "public",
   "qualityReview": {
     "philosophy": 4,

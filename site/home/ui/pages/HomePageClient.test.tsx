@@ -64,6 +64,15 @@ describe('HomePageClient', () => {
   it('keeps only archive filters and removes the local search input', () => {
     render(<HomePageClient posts={samplePosts} popularViews={[]} />);
 
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: '시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다',
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: '최근 기록' })
+    ).toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();

@@ -8,6 +8,8 @@ export interface HomePopularView {
 
 export type HomeSortOrder = 'latest' | 'popular';
 
+const HOME_FEATURED_LIMIT = 4;
+
 interface HomeFeedOptions {
   query: string;
   category: Category;
@@ -22,6 +24,10 @@ export function buildHomeCategoryCounts(
     Tech: posts.filter((post) => post.category === 'Tech').length,
     Life: posts.filter((post) => post.category === 'Life').length,
   };
+}
+
+export function selectHomeFeaturedPosts(posts: FeedData[]): FeedData[] {
+  return posts.filter((post) => post.featured).slice(0, HOME_FEATURED_LIMIT);
 }
 
 function buildSearchText(post: FeedData): string {
