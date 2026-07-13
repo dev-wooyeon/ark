@@ -12,7 +12,7 @@
     "성장"
   ],
   "featured": false,
-  "visibility": "public",
+  "visibility": "private",
   "qualityReview": {
     "philosophy": 3,
     "design": 2.5,
@@ -24,7 +24,7 @@
     "usefulness": 4,
     "originality": 3,
     "polish": 3.5,
-    "reviewedAt": "2026-06-17",
-    "notes": "2차 보강 및 문장 리라이팅 완료"
+    "reviewedAt": "2026-07-13",
+    "notes": "인용 수치의 원문 페이지와 연구 출처를 보강하기 전까지 비공개"
   }
 }
