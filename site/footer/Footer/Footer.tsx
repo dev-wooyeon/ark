@@ -1,8 +1,8 @@
-import { SITE_NAME } from '@/site/config/site';
+import { SITE_AUTHOR_EMAIL, SITE_NAME } from '@/site/config/site';
 
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/dev-wooyeon' },
-  { name: 'Email', href: 'mailto:une@kakao.com' },
+  { name: 'Email', href: `mailto:${SITE_AUTHOR_EMAIL}` },
 ];
 
 export default function Footer() {

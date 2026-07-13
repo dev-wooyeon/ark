@@ -60,6 +60,22 @@ describe('MobileBottomNav', () => {
     expect(tech).toHaveAttribute('aria-current', 'page');
   });
 
+  it('uses the resolved article section from the app shell', async () => {
+    render(
+      <MobileBottomNav
+        pathname="/blog/life-post"
+        activeSection="life"
+        visible
+        open
+      />
+    );
+
+    expect(await screen.findByRole('link', { name: /Life/ })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
+  });
+
   it('renders drawer shell when open', () => {
     render(<MobileBottomNav pathname="/" visible open />);
 
@@ -103,12 +119,23 @@ describe('MobileBottomNav', () => {
     });
   });
 
-  it('hides pointer events when closed', () => {
+  it('removes the closed drawer from pointer and keyboard interaction', () => {
     render(<MobileBottomNav pathname="/" visible open={false} />);
 
-    const drawerRoot =
-      screen.getAllByRole('button', { name: '메뉴 닫기', hidden: true })[0]
-        .parentElement;
+    const drawerRoot = screen.getAllByRole('button', {
+      name: '메뉴 닫기',
+      hidden: true,
+    })[0].parentElement;
     expect(drawerRoot).toHaveClass('pointer-events-none');
+    expect(drawerRoot).toHaveAttribute('inert');
+  });
+
+  it('uses the canonical contact email', () => {
+    render(<MobileBottomNav pathname="/" visible open />);
+
+    expect(screen.getByRole('link', { name: /Email/ })).toHaveAttribute(
+      'href',
+      'mailto:une@kakao.com'
+    );
   });
 });

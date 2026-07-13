@@ -4,11 +4,12 @@ import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { clsx } from 'clsx';
 import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
-import { SITE_FEED_PATH } from '@/site/config/site';
+import { SITE_AUTHOR_EMAIL, SITE_FEED_PATH } from '@/site/config/site';
 import { AppSectionIcon } from '@/ui/icons/AppSectionIcon';
 
 interface MobileBottomNavProps {
   pathname: string;
+  activeSection?: MobileNavItem['id'];
   visible: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -22,6 +23,7 @@ interface MobileNavItem {
 
 export default function MobileBottomNav({
   pathname,
+  activeSection,
   visible,
   open = false,
   onOpenChange,
@@ -80,6 +82,7 @@ export default function MobileBottomNav({
         visible && open ? 'pointer-events-auto' : 'pointer-events-none'
       )}
       aria-hidden={!open}
+      inert={!open}
     >
       <button
         type="button"
@@ -135,7 +138,9 @@ export default function MobileBottomNav({
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
             {navItems.map((item) => {
-              const isActive = isActiveItem(item, pathname);
+              const isActive = activeSection
+                ? item.id === activeSection
+                : isActiveItem(item, pathname);
 
               return (
                 <Link
@@ -197,7 +202,7 @@ export default function MobileBottomNav({
               onNavigate={() => onOpenChange?.(false)}
             />
             <ExternalLink
-              href="mailto:parkwooyeon.dev@gmail.com"
+              href={`mailto:${SITE_AUTHOR_EMAIL}`}
               label="Email"
               onNavigate={() => onOpenChange?.(false)}
             />

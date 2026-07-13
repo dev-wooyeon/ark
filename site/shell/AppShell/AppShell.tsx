@@ -340,6 +340,7 @@ export default function AppShell({ children, posts }: AppShellProps) {
 
       <MobileBottomNav
         pathname={pathname}
+        activeSection={activeSection}
         visible
         open={mobileNavOpen}
         onOpenChange={setMobileNavOpen}
