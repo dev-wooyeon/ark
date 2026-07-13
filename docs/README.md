@@ -21,6 +21,7 @@ Last updated: 2026-07-13
 - `docs/adr/0020-use-runtime-daily-views-for-popular-feed.md`
 - `docs/adr/0021-load-heavy-mdx-visualizations-on-demand.md`
 - `docs/adr/0022-default-new-posts-to-private.md`
+- `docs/adr/0023-run-the-release-quality-gate-in-ci.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`

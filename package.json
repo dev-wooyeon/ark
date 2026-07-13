@@ -15,7 +15,7 @@
     "test:unit": "vitest run",
     "test:components": "vitest run blog resume search ui site infra styles",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "npm run lint && npm run lint:css:syntax && npm run verify:docs && npm run test:unit && npm run test:e2e",
+    "test:ci": "npm run lint && npm run lint:css:syntax && npm run verify:docs && npm run content:audit && npm run test:unit && npm run build && npm run test:e2e",
     "test:e2e": "npx playwright test",
     "test:smoke": "vitest run ui/**/*.test.ts ui/**/*.test.tsx blog/api/*.test.ts && npx playwright test --grep @smoke",
     "new-post": "node tooling/scripts/posts/new-post.js",
