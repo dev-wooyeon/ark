@@ -1,16 +1,17 @@
 import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import { SITE_NAME } from '@/site/config/site';
 
 export const runtime = 'nodejs';
 
-const fontUrl = new URL('./Pretendard-Bold.ttf', import.meta.url);
+const fontPath = join(process.cwd(), 'app', 'api', 'og', 'Pretendard-Bold.ttf');
 let fontDataPromise: Promise<ArrayBuffer> | null = null;
 
 function loadFontData(): Promise<ArrayBuffer> {
   if (!fontDataPromise) {
-    fontDataPromise = readFile(fontUrl).then(
+    fontDataPromise = readFile(fontPath).then(
       (font) =>
         font.buffer.slice(
           font.byteOffset,
