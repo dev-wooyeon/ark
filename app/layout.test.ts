@@ -13,6 +13,11 @@ describe('root layout font loading', () => {
     expect(layoutContent).not.toContain('href="/fonts/TossFaceFontWeb.otf"');
   });
 
+  it('passes a public client DTO instead of full editorial metadata', () => {
+    expect(layoutContent).toContain('selectClientPosts(getSortedFeedData())');
+    expect(layoutContent).toContain('<AppProviders posts={posts}>');
+  });
+
   it('keeps Tossface demand-driven for matching emoji glyphs', () => {
     expect(layoutContent).toContain("import '@/styles/tossface.css';");
     expect(tossfaceContent).toContain("font-family: 'Tossface Safe';");

@@ -2,7 +2,7 @@ import { Action } from 'kbar';
 import { FeedData } from '@/blog/model/types';
 import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 
-type SearchablePost = Pick<
+export type SearchablePost = Pick<
   FeedData,
   'slug' | 'title' | 'category' | 'tags' | 'description'
 >;

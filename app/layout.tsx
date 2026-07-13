@@ -5,6 +5,7 @@ import '@/styles/tossface.css';
 
 import AppProviders from '@/site/providers/AppProviders';
 import { getSortedFeedData } from '@/blog/services/post-repository';
+import { selectClientPosts } from '@/site/providers/client-posts';
 import { AppShell } from '@/site/shell/AppShell';
 import {
   SITE_AUTHOR,
@@ -60,7 +61,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const posts = getSortedFeedData();
+  const posts = selectClientPosts(getSortedFeedData());
 
   return (
     <html lang="ko" suppressHydrationWarning>
@@ -74,7 +75,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <AppProviders>
+        <AppProviders posts={posts}>
           <div id="app-root">
             <AppShell posts={posts}>{children}</AppShell>
           </div>
