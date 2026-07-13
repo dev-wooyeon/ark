@@ -7,8 +7,7 @@ import { getAllFeedSlugs, getSortedFeedData } from './post-repository';
 const FEATURED_SLUGS = [
   'ctr-pipeline',
   'db-outage-analysis-retrospective',
-  'payment-system-design',
-  'settlement-automation',
+  'llm-wiki-build-retrospective',
   'msa-domain-workspace-submodule',
 ];
 
