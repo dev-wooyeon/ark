@@ -5,7 +5,7 @@ import { CategoryIcon } from '@/ui/icons/AppSectionIcon';
 
 interface PostCardProps {
   post: FeedData;
-  variant?: 'default' | 'featured' | 'list';
+  variant?: 'default' | 'list';
 }
 
 export default function PostCard({ post, variant = 'default' }: PostCardProps) {
@@ -16,34 +16,6 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
   });
   const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
   const visibleTags = post.tags?.slice(0, 3) ?? [];
-
-  if (variant === 'featured') {
-    return (
-      <Link
-        href={`/blog/${post.slug}`}
-        className={clsx(
-          'group block p-8 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--color-toss-blue)] to-[var(--color-toss-blue-dark)]',
-          'text-white transition-all duration-[var(--duration-300)]',
-          'hover:shadow-[var(--shadow-xl)] hover:-translate-y-1'
-        )}
-      >
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium opacity-85">
-          <CategoryIcon category={post.category} />
-          {post.category}
-        </span>
-        <h2 className="mt-3 text-2xl md:text-3xl font-bold leading-tight">
-          {post.title}
-        </h2>
-        <p className="mt-4 text-base opacity-90 line-clamp-2">
-          {post.description}
-        </p>
-        <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
-          <time>{formattedDate}</time>
-          {readingTimeLabel && <span>{readingTimeLabel}</span>}
-        </div>
-      </Link>
-    );
-  }
 
   if (variant === 'list') {
     return (
