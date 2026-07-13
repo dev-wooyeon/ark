@@ -73,6 +73,9 @@ describe('HomePageClient', () => {
     expect(
       screen.getByRole('heading', { level: 2, name: '최근 기록' })
     ).toBeInTheDocument();
+    expect(
+      screen.queryByText(/플랫폼 엔지니어 박우연이/)
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();
