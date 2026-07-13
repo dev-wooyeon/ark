@@ -59,11 +59,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   const posts = getSortedFeedData();
 
   return (
@@ -74,13 +70,6 @@ export default function RootLayout({
           href="/fonts/PretendardVariable.woff2"
           as="font"
           type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/TossFaceFontWeb.otf"
-          as="font"
-          type="font/otf"
           crossOrigin="anonymous"
         />
       </head>
