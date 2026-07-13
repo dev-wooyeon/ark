@@ -11,7 +11,7 @@ import {
   useMatches,
 } from 'kbar';
 import styles from './CommandPalette.module.css';
-import type { FeedData } from '@/blog/model/types';
+import type { SearchablePost } from '@/search/model/get-search-actions';
 import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 import { getRecommendedSearchTerms } from '@/search/model/search-recommendations';
 
@@ -24,7 +24,7 @@ interface SearchScope {
 }
 
 interface CommandPaletteProps {
-  posts?: FeedData[];
+  posts?: SearchablePost[];
 }
 
 const SEARCH_SCOPES: SearchScope[] = [
