@@ -37,10 +37,11 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0017](0017-allow-private-post-preview-in-development.md)         | Accepted   | 개발 환경에서 private 글 상세 미리보기를 허용한다            |
 | [0018](0018-use-semantic-surface-tokens-for-content-discovery.md) | Accepted   | 콘텐츠 탐색 표면에 의미 기반 반경과 무그림자 상태를 사용한다 |
 | [0019](0019-use-content-first-typography-scale.md)                | Accepted   | 콘텐츠 읽기 흐름에 16px 기준과 17px 본문을 사용한다          |
-| [0020](0020-use-runtime-daily-views-for-popular-feed.md)          | Accepted   | 인기 피드를 런타임 일별 조회수로 계산한다                    |
+| [0020](0020-use-runtime-daily-views-for-popular-feed.md)          | Superseded | 인기 피드를 런타임 일별 조회수로 계산한다                    |
 | [0021](0021-load-heavy-mdx-visualizations-on-demand.md)           | Accepted   | 무거운 MDX 시각화를 글 단위로 로드한다                       |
 | [0022](0022-default-new-posts-to-private.md)                      | Accepted   | 새 글을 명시적으로 검토한 뒤 공개한다                        |
 | [0023](0023-run-the-release-quality-gate-in-ci.md)                | Accepted   | 배포 품질 gate를 CI에서 실행한다                             |
+| [0024](0024-use-latest-only-home-feed.md)                         | Accepted   | 홈 피드를 최신순 단일 경로로 유지한다                        |
 
 ## 작성 조건
 

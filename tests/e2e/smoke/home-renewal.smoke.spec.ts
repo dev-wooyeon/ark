@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Home feed', () => {
-  test('@smoke 데스크톱 홈에서 카테고리 필터와 정렬이 보여요', async ({
+  test('@smoke 데스크톱 홈에서 카테고리 필터와 최신 글이 보여요', async ({
     page,
   }) => {
     await page.goto('/');
@@ -9,8 +9,8 @@ test.describe('Home feed', () => {
     await expect(page.getByRole('button', { name: /All/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Tech/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Life/ })).toBeVisible();
-    await expect(page.getByRole('button', { name: '최신순' })).toBeVisible();
-    await expect(page.getByRole('button', { name: '인기순' })).toBeVisible();
+    await expect(page.getByRole('button', { name: '최신순' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '인기순' })).toHaveCount(0);
 
     const articleCards = page.locator('main a[href^="/blog/"]');
     await expect(articleCards.first()).toBeVisible();

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import type { FeedData } from '@/blog/model/types';
@@ -62,7 +62,7 @@ const samplePosts: FeedData[] = [
 
 describe('HomePageClient', () => {
   it('keeps only archive filters and removes the local search input', () => {
-    render(<HomePageClient posts={samplePosts} popularViews={[]} />);
+    render(<HomePageClient posts={samplePosts} />);
 
     expect(
       screen.getByRole('heading', {
@@ -80,34 +80,12 @@ describe('HomePageClient', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
     expect(screen.getByText('All')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '인기순' })).toBeInTheDocument();
-  });
-
-  it('reorders the feed when the popular sort is selected', () => {
-    render(
-      <HomePageClient
-        posts={samplePosts}
-        popularViews={[{ slug: 'life-post', count: 12 }]}
-      />
-    );
-
-    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
-      'tech-post'
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: '인기순' }));
-
-    expect(screen.getByRole('button', { name: '인기순' })).toHaveAttribute(
-      'aria-pressed',
-      'true'
-    );
-    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
-      'life-post'
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: '최신순' }));
-
+    expect(
+      screen.queryByRole('button', { name: '최신순' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: '인기순' })
+    ).not.toBeInTheDocument();
     expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
       'tech-post'
     );
