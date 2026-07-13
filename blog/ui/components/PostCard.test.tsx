@@ -74,6 +74,18 @@ describe('PostCard', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
+  it('uses a static content surface for the list variant', () => {
+    render(<PostCard post={basePost} variant="list" />);
+
+    const link = screen.getByRole('link', { name: /테스트 글/i });
+
+    expect(link).toHaveClass('rounded-[var(--radius-content)]');
+    expect(link).toHaveClass('px-4');
+    expect(link).toHaveClass('sm:px-6');
+    expect(link).not.toHaveClass('hover:shadow-[var(--shadow-sm)]');
+    expect(link).not.toHaveClass('hover:-translate-y-0.5');
+  });
+
   it('shows category, series title, and tags in list variant', () => {
     const detailedPost: FeedData = {
       ...basePost,
