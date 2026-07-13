@@ -33,7 +33,8 @@ describe('globals styles', () => {
 
   it('uses mobile-readable prose sizing and spacing tokens', () => {
     expect(tokensContent).toContain('--leading-prose: 1.72;');
-    expect(globalsContent).toContain('font-size: var(--text-md);');
+    expect(tokensContent).toContain('--text-reading: 1.0625rem;');
+    expect(globalsContent).toContain('font-size: var(--text-reading);');
     expect(globalsContent).toContain('line-height: var(--leading-prose);');
     expect(globalsContent).toContain('@media (max-width: 767px)');
   });

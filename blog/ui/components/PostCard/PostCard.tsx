@@ -58,7 +58,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
       >
         <div className="min-w-0">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-tertiary)]">
+            <div className="flex flex-wrap items-center gap-2 text-meta text-[var(--color-text-tertiary)]">
               <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-selection)] border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
                 <CategoryIcon category={post.category} />
                 {post.category}
@@ -77,10 +77,10 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
                 </>
               )}
             </div>
-            <h3 className="mt-3 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
+            <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
               {post.title}
             </h3>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--color-text-secondary)] line-clamp-2">
+            <p className="mt-2 max-w-3xl text-reading leading-relaxed text-[var(--color-text-secondary)] line-clamp-2">
               {post.description}
             </p>
             {visibleTags.length > 0 ? (

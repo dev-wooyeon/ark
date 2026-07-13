@@ -36,6 +36,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0016](0016-use-content-type-and-growth-review-scores.md)         | Accepted   | 글 형식과 성장 리뷰 점수를 분리한다                          |
 | [0017](0017-allow-private-post-preview-in-development.md)         | Accepted   | 개발 환경에서 private 글 상세 미리보기를 허용한다            |
 | [0018](0018-use-semantic-surface-tokens-for-content-discovery.md) | Accepted   | 콘텐츠 탐색 표면에 의미 기반 반경과 무그림자 상태를 사용한다 |
+| [0019](0019-use-content-first-typography-scale.md)                | Accepted   | 콘텐츠 읽기 흐름에 16px 기준과 17px 본문을 사용한다          |
 
 ## 작성 조건
 
