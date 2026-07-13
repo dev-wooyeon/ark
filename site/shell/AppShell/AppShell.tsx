@@ -330,7 +330,10 @@ export default function AppShell({ children, posts }: AppShellProps) {
           </div>
         </header>
 
-        <div className="min-h-[calc(100vh-56px)] pb-8 md:min-h-0 md:flex-1 md:overflow-y-auto md:pb-0">
+        <div
+          data-page-scroll-container
+          className="min-h-[calc(100vh-56px)] pb-8 md:min-h-0 md:flex-1 md:overflow-y-auto md:pb-0"
+        >
           {children}
         </div>
       </div>

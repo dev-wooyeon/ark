@@ -698,6 +698,7 @@
 
 .prose table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 1.75rem 0;
   font-size: var(--text-sm);
@@ -732,6 +733,12 @@
 }
 
 @media (max-width: 767px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
   .prose h1,
   .prose h2,
   .prose h3,
