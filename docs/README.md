@@ -23,6 +23,7 @@ Last updated: 2026-07-13
 - `docs/adr/0022-default-new-posts-to-private.md`
 - `docs/adr/0023-run-the-release-quality-gate-in-ci.md`
 - `docs/adr/0024-use-latest-only-home-feed.md`
+- `docs/adr/0025-use-node-runtime-for-og-image-route.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`

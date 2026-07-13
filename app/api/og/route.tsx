@@ -1,21 +1,22 @@
+import { readFile } from 'node:fs/promises';
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import { SITE_NAME } from '@/site/config/site';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 const fontUrl = new URL('./Pretendard-Bold.ttf', import.meta.url);
 let fontDataPromise: Promise<ArrayBuffer> | null = null;
 
 function loadFontData(): Promise<ArrayBuffer> {
   if (!fontDataPromise) {
-    fontDataPromise = fetch(fontUrl).then((response) => {
-      if (!response.ok) {
-        throw new Error(`Failed to load bundled OG font: ${response.status}`);
-      }
-
-      return response.arrayBuffer();
-    });
+    fontDataPromise = readFile(fontUrl).then(
+      (font) =>
+        font.buffer.slice(
+          font.byteOffset,
+          font.byteOffset + font.byteLength
+        ) as ArrayBuffer
+    );
   }
 
   return fontDataPromise;
