@@ -54,10 +54,6 @@ export default function HomePageClient({
           <h1 className="mt-3 text-2xl font-bold leading-tight tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
             시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다
           </h1>
-          <p className="mt-3 max-w-2xl text-reading leading-relaxed text-[var(--color-text-secondary)]">
-            플랫폼 엔지니어 박우연이 운영, 데이터, 아키텍처에서 얻은 기준을 실제
-            사례와 함께 정리합니다.
-          </p>
         </header>
 
         <HomeFeaturedPosts posts={featuredPosts} />
