@@ -38,6 +38,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0018](0018-use-semantic-surface-tokens-for-content-discovery.md) | Accepted   | 콘텐츠 탐색 표면에 의미 기반 반경과 무그림자 상태를 사용한다 |
 | [0019](0019-use-content-first-typography-scale.md)                | Accepted   | 콘텐츠 읽기 흐름에 16px 기준과 17px 본문을 사용한다          |
 | [0020](0020-use-runtime-daily-views-for-popular-feed.md)          | Accepted   | 인기 피드를 런타임 일별 조회수로 계산한다                    |
+| [0021](0021-load-heavy-mdx-visualizations-on-demand.md)           | Accepted   | 무거운 MDX 시각화를 글 단위로 로드한다                       |
 | [0022](0022-default-new-posts-to-private.md)                      | Accepted   | 새 글을 명시적으로 검토한 뒤 공개한다                        |
 
 ## 작성 조건
