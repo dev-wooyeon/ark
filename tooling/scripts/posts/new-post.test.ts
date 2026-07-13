@@ -21,7 +21,7 @@ describe('new-post metadata scaffold', () => {
     expect(metadata).toMatchObject({
       category: 'Life',
       contentType: 'essay',
-      visibility: 'public',
+      visibility: 'private',
       tags: ['Life', 'Essay'],
       qualityReview: {
         philosophy: null,

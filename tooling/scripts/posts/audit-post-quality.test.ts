@@ -142,4 +142,22 @@ describe('post quality audit script', () => {
       '[private 전환 검토] low-scored-life (public, Life)'
     );
   });
+
+  it('treats posts without visibility as private', () => {
+    writePostFixture('missing-visibility', {
+      title: '검토 전 초안',
+      slug: 'missing-visibility',
+      description: '설명',
+      date: '2026-07-13',
+      category: 'Life',
+      contentType: 'essay',
+      tags: ['Draft'],
+    });
+
+    const output = runAudit();
+
+    expect(output).toContain(
+      '[private 유지] missing-visibility (private, Life)'
+    );
+  });
 });

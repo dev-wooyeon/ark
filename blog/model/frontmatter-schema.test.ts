@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FeedFrontmatterSchema } from './frontmatter-schema';
 
 describe('FeedFrontmatterSchema', () => {
-  it('defaults visibility to public', () => {
+  it('defaults visibility to private', () => {
     const parsed = FeedFrontmatterSchema.parse({
       title: 'Example',
       slug: 'example',
@@ -12,7 +12,7 @@ describe('FeedFrontmatterSchema', () => {
       contentType: 'essay',
     });
 
-    expect(parsed.visibility).toBe('public');
+    expect(parsed.visibility).toBe('private');
   });
 
   it('requires content type classification', () => {

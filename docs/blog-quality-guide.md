@@ -100,7 +100,7 @@ Life 글은 아래 기준으로 본다.
 
 ## 공개 정책
 
-- `visibility` 기본값은 `public`이다.
+- `visibility` 기본값은 `private`다. 공개는 리뷰를 마친 뒤 명시적으로 승격한다.
 - `contentType`은 `essay`, `retrospective`, `review` 중 하나로 둔다.
 - 시리즈는 기본적으로 공개 자산이 아니라 학습 자산으로 보고, 공개 필요성이 생기기 전까지 `private`로 둔다.
 - 엔지니어링 글은 `philosophy`, `design`, `implementation` 평균이 `3.0` 이하이면 `private`로 둔다.
