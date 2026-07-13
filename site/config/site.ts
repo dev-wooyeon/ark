@@ -23,11 +23,12 @@ export const SITE_KOREAN_NAME = SITE_BRAND.koreanName;
 export const SITE_DESCRIPTION = `${SITE_KOREAN_NAME}는 오래 건너갈 생각들을 싣는 개인의 방주입니다`;
 export const SITE_FEED_PATH = '/rss.xml';
 export const SITE_FEED_URL = `${SITE_URL}${SITE_FEED_PATH}`;
+export const SITE_AUTHOR_EMAIL = 'une@kakao.com';
 
 export const SITE_AUTHOR = {
   name: 'dev-wooyeon',
   profileUrl: `${SITE_URL}/resume`,
-  sameAs: ['https://github.com/dev-wooyeon', 'mailto:une@kakao.com'],
+  sameAs: ['https://github.com/dev-wooyeon', `mailto:${SITE_AUTHOR_EMAIL}`],
 };
 
 export type SitePath = '' | `/${string}`;

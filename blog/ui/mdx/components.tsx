@@ -7,44 +7,11 @@ import {
   type ReactNode,
 } from 'react';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import {
   ImageGrid,
   MermaidDiagram,
   ScrollWorkflow,
 } from '@/blog/ui/components';
-
-// Dynamic imports for visualization components (code splitting)
-const BinarySearchVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.BinarySearchVisualization,
-  }))
-);
-const DPVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.DPVisualization,
-  }))
-);
-const GraphTraversalVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.GraphTraversalVisualization,
-  }))
-);
-const SlidingWindowVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.SlidingWindowVisualization,
-  }))
-);
-const SortingVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.SortingVisualization,
-  }))
-);
-const TwoPointerVisualization = dynamic(() =>
-  import('@/blog/ui/visualization').then((mod) => ({
-    default: mod.TwoPointerVisualization,
-  }))
-);
 
 function extractText(node: ReactNode): string {
   if (node == null || typeof node === 'boolean') return '';
@@ -140,12 +107,6 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
         </span>
       );
     },
-    BinarySearchVisualization,
-    DPVisualization,
-    GraphTraversalVisualization,
-    SlidingWindowVisualization,
-    SortingVisualization,
-    TwoPointerVisualization,
     ImageGrid,
     ScrollWorkflow,
     pre: (props) => {

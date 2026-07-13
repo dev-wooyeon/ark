@@ -13,7 +13,7 @@
     "Design System"
   ],
   "featured": false,
-  "visibility": "public",
+  "visibility": "private",
   "qualityReview": {
     "philosophy": 3,
     "design": 4,
@@ -25,7 +25,7 @@
     "usefulness": 3.5,
     "originality": 3.5,
     "polish": 2.5,
-    "reviewedAt": "2026-06-17",
-    "notes": "보강 후 유지"
+    "reviewedAt": "2026-07-13",
+    "notes": "현재 저장소 구조와 성능 지표에 맞게 갱신하기 전까지 비공개"
   }
 }

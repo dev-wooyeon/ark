@@ -5,26 +5,26 @@ Generated from:
 - `docs/database/supabase-view-count.sql`
 - `infra/integrations/supabase.ts`
 
-Last updated: 2026-05-08
+Last updated: 2026-07-13
 
 ## Table: `public.views`
 
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| `slug` | `text` | no | - | Primary key |
-| `count` | `bigint` | no | `0` | View count |
-| `created_at` | `timestamptz` | no | `now()` | Insert time |
-| `updated_at` | `timestamptz` | no | `now()` | Update time |
+| Column       | Type          | Null | Default | Notes       |
+| ------------ | ------------- | ---- | ------- | ----------- |
+| `slug`       | `text`        | no   | -       | Primary key |
+| `count`      | `bigint`      | no   | `0`     | View count  |
+| `created_at` | `timestamptz` | no   | `now()` | Insert time |
+| `updated_at` | `timestamptz` | no   | `now()` | Update time |
 
 ## Table: `public.view_unique_visitors`
 
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| `slug` | `text` | no | - | PK part, post identifier |
-| `viewer_fingerprint` | `text` | no | - | PK part, hashed viewer key |
-| `last_viewed_at` | `timestamptz` | no | `now()` | Last accepted view time |
-| `created_at` | `timestamptz` | no | `now()` | Insert time |
-| `updated_at` | `timestamptz` | no | `now()` | Update time |
+| Column               | Type          | Null | Default | Notes                      |
+| -------------------- | ------------- | ---- | ------- | -------------------------- |
+| `slug`               | `text`        | no   | -       | PK part, post identifier   |
+| `viewer_fingerprint` | `text`        | no   | -       | PK part, hashed viewer key |
+| `last_viewed_at`     | `timestamptz` | no   | `now()` | Last accepted view time    |
+| `created_at`         | `timestamptz` | no   | `now()` | Insert time                |
+| `updated_at`         | `timestamptz` | no   | `now()` | Update time                |
 
 ## RLS and Grants
 
@@ -42,7 +42,7 @@ Last updated: 2026-05-08
 - Behavior:
   1. Normalize slug and fingerprint input.
   2. If fingerprint exists, enforce dedupe window by `view_unique_visitors.last_viewed_at`.
-  3. Increment `views.count` only when outside dedupe window.
+  3. Increment `views.count` only when outside the dedupe window.
   4. Return latest count (`bigint`).
 
 ## Type Mapping (App)

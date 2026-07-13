@@ -5,6 +5,7 @@ import '@/styles/tossface.css';
 
 import AppProviders from '@/site/providers/AppProviders';
 import { getSortedFeedData } from '@/blog/services/post-repository';
+import { selectClientPosts } from '@/site/providers/client-posts';
 import { AppShell } from '@/site/shell/AppShell';
 import {
   SITE_AUTHOR,
@@ -59,12 +60,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const posts = getSortedFeedData();
+export default function RootLayout({ children }: { children: ReactNode }) {
+  const posts = selectClientPosts(getSortedFeedData());
 
   return (
     <html lang="ko" suppressHydrationWarning>
@@ -76,16 +73,9 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preload"
-          href="/fonts/TossFaceFontWeb.otf"
-          as="font"
-          type="font/otf"
-          crossOrigin="anonymous"
-        />
       </head>
       <body>
-        <AppProviders>
+        <AppProviders posts={posts}>
           <div id="app-root">
             <AppShell posts={posts}>{children}</AppShell>
           </div>

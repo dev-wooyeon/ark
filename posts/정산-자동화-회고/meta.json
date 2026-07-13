@@ -11,7 +11,7 @@
     "Settlement",
     "Batch"
   ],
-  "featured": true,
+  "featured": false,
   "visibility": "public",
   "qualityReview": {
     "philosophy": 4,

@@ -249,7 +249,7 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
 }
 
 function isPublicPost(post: FeedData): boolean {
-  return (post.visibility ?? 'public') === 'public';
+  return (post.visibility ?? 'private') === 'public';
 }
 
 function filterVisiblePosts(

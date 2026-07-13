@@ -11,7 +11,6 @@ const VIEW_FINGERPRINT_SALT =
   `${SITE_BRAND.technicalName}-view-fingerprint-v1`;
 const VIEW_FALLBACK_VISITOR_COOKIE = 'view_visitor_id';
 const VIEW_FALLBACK_VISITOR_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
-const NEXT_PHASE_PRODUCTION_BUILD = 'phase-production-build';
 const shouldLogViewIssues = process.env.NODE_ENV !== 'test';
 
 function readErrorField(error: unknown, field: 'code' | 'message'): string {
@@ -55,13 +54,6 @@ function logViewError(message: string, error: unknown): void {
   );
 }
 
-function isProductionBuildPhase(): boolean {
-  return (
-    process.env.NEXT_PHASE === NEXT_PHASE_PRODUCTION_BUILD ||
-    process.env.npm_lifecycle_event === 'build'
-  );
-}
-
 function normalizeSlug(slug: string): string | null {
   const value = slug.trim();
   return value.length > 0 ? value : null;
@@ -78,14 +70,6 @@ function toCount(value: unknown): number | null {
   }
 
   return null;
-}
-
-function normalizePositiveInt(value: number, fallback: number): number {
-  if (!Number.isFinite(value)) {
-    return fallback;
-  }
-
-  return Math.max(1, Math.floor(value));
 }
 
 function readHeaderValue(
@@ -184,12 +168,6 @@ function isLegacyIncrementViewSignatureError(error: {
       fullText.includes('signature') ||
       fullText.includes('matches'))
   );
-}
-
-export interface PopularViewEntry {
-  slug: string;
-  count: number;
-  updated_at: string;
 }
 
 async function readViewCount(slug: string): Promise<number | null> {
@@ -304,69 +282,4 @@ export async function trackView(slug: string): Promise<number | null> {
   }
 
   return readViewCount(normalizedSlug);
-}
-
-export async function getPopularViewsInRecentDays(
-  days: number,
-  limit: number
-): Promise<PopularViewEntry[]> {
-  if (isProductionBuildPhase()) {
-    return [];
-  }
-
-  const supabase = getSupabaseServerClient();
-  if (!supabase) {
-    logViewWarning(
-      'Supabase env is missing. Returning empty popular view list.'
-    );
-    return [];
-  }
-
-  const normalizedDays = normalizePositiveInt(days, 30);
-  const normalizedLimit = normalizePositiveInt(limit, 5);
-  const threshold = new Date(
-    Date.now() - normalizedDays * 24 * 60 * 60 * 1000
-  ).toISOString();
-
-  const { data, error } = await supabase
-    .from('views')
-    .select('slug,count,updated_at')
-    .gte('updated_at', threshold)
-    .order('count', { ascending: false })
-    .limit(normalizedLimit);
-
-  if (error) {
-    logViewError('Failed to fetch popular view entries.', error);
-    return [];
-  }
-
-  if (!Array.isArray(data)) {
-    return [];
-  }
-
-  return data
-    .map((entry) => {
-      const count = toCount(entry.count);
-      const slug = typeof entry.slug === 'string' ? entry.slug.trim() : '';
-      const updatedAt =
-        typeof entry.updated_at === 'string' ? entry.updated_at : '';
-
-      if (!slug || count === null || !updatedAt) {
-        return null;
-      }
-
-      return {
-        slug,
-        count,
-        updated_at: updatedAt,
-      } satisfies PopularViewEntry;
-    })
-    .filter((entry): entry is PopularViewEntry => entry !== null)
-    .sort((a, b) => {
-      if (a.count === b.count) {
-        return a.updated_at < b.updated_at ? 1 : -1;
-      }
-
-      return b.count - a.count;
-    });
 }

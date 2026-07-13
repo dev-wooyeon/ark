@@ -1,8 +1,27 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { SITE_NAME } from '@/site/config/site';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
+
+const fontPath = join(process.cwd(), 'app', 'api', 'og', 'Pretendard-Bold.ttf');
+let fontDataPromise: Promise<ArrayBuffer> | null = null;
+
+function loadFontData(): Promise<ArrayBuffer> {
+  if (!fontDataPromise) {
+    fontDataPromise = readFile(fontPath).then(
+      (font) =>
+        font.buffer.slice(
+          font.byteOffset,
+          font.byteOffset + font.byteLength
+        ) as ArrayBuffer
+    );
+  }
+
+  return fontDataPromise;
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -10,14 +29,7 @@ export async function GET(req: NextRequest) {
   const date = searchParams.get('date');
   const tags = searchParams.get('tags')?.split(',') || [];
 
-  // Load Noto Sans KR for consistent rendering across environments
-  // Using a Google Fonts raw file as a reliable source
-  const fontData = await fetch(
-    new URL(
-      'https://github.com/google/fonts/raw/main/ofl/notosanskr/NotoSansKR-Bold.otf',
-      import.meta.url
-    )
-  ).then((res) => res.arrayBuffer());
+  const fontData = await loadFontData();
 
   return new ImageResponse(
     <div
@@ -37,7 +49,7 @@ export async function GET(req: NextRequest) {
           display: 'flex',
           flexDirection: 'column',
           gap: '20px',
-          fontFamily: '"Noto Sans KR"',
+          fontFamily: 'Pretendard',
         }}
       >
         {date && (
@@ -73,6 +85,7 @@ export async function GET(req: NextRequest) {
               <div
                 key={tag}
                 style={{
+                  display: 'flex',
                   backgroundColor: 'rgba(49, 130, 246, 0.1)',
                   color: '#3182f6',
                   padding: '8px 24px',
@@ -102,7 +115,7 @@ export async function GET(req: NextRequest) {
             fontSize: '32px',
             fontWeight: 700,
             color: '#3182f6',
-            fontFamily: '"Noto Sans KR"',
+            fontFamily: 'Pretendard',
           }}
         >
           {SITE_NAME}
@@ -114,7 +127,7 @@ export async function GET(req: NextRequest) {
       height: 630,
       fonts: [
         {
-          name: 'Noto Sans KR',
+          name: 'Pretendard',
           data: fontData,
           style: 'normal',
           weight: 700,

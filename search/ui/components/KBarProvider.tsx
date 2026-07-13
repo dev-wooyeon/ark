@@ -4,11 +4,11 @@ import { KBarProvider as KBarProviderLib } from 'kbar';
 import { CommandPalette } from '@/search/ui/components/CommandPalette';
 import { getSearchActions } from '@/search/model/get-search-actions';
 import { useMemo, type ReactNode } from 'react';
-import type { FeedData } from '@/blog/model/types';
+import type { SearchablePost } from '@/search/model/get-search-actions';
 
 interface KBarProviderProps {
   children: ReactNode;
-  posts?: FeedData[];
+  posts?: SearchablePost[];
 }
 
 export default function KBarProvider({

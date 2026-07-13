@@ -29,14 +29,14 @@ describe('sitemap', () => {
     expect(urls).toEqual(
       expect.arrayContaining([
         SITE_URL,
-        `${SITE_URL}/blog`,
         `${SITE_URL}/engineering`,
         `${SITE_URL}/life`,
-        `${SITE_URL}/series`,
         `${SITE_URL}/resume`,
         `${SITE_URL}/rss.xml`,
       ])
     );
+    expect(urls).not.toContain(`${SITE_URL}/blog`);
+    expect(urls).not.toContain(`${SITE_URL}/series`);
   });
 
   it('uses updated date for post lastModified when available', () => {
