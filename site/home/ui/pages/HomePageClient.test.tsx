@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import type { FeedData } from '@/blog/model/types';
@@ -31,7 +31,13 @@ vi.mock('@/blog/ui/components', () => ({
     </div>
   ),
   PostList: ({ posts }: { posts: FeedData[] }) => (
-    <div data-testid="post-list">{posts.length}</div>
+    <ol data-testid="post-list">
+      {posts.map((post) => (
+        <li key={post.slug} data-testid="post-list-item">
+          {post.slug}
+        </li>
+      ))}
+    </ol>
   ),
 }));
 
@@ -62,5 +68,34 @@ describe('HomePageClient', () => {
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '인기순' })).toBeInTheDocument();
+  });
+
+  it('reorders the feed when the popular sort is selected', () => {
+    render(
+      <HomePageClient
+        posts={samplePosts}
+        popularViews={[{ slug: 'life-post', count: 12 }]}
+      />
+    );
+
+    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
+      'tech-post'
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '인기순' }));
+
+    expect(screen.getByRole('button', { name: '인기순' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
+    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
+      'life-post'
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '최신순' }));
+
+    expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
+      'tech-post'
+    );
   });
 });

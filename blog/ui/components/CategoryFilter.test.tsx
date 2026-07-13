@@ -99,5 +99,8 @@ describe('CategoryFilter', () => {
     }
 
     expect(lifeButton).toHaveClass('bg-[var(--color-toss-blue)]');
+    expect(lifeButton).toHaveClass('rounded-[var(--radius-selection)]');
+    expect(lifeButton).not.toHaveClass('shadow-sm');
+    expect(lifeButton).not.toHaveClass('active:translate-y-px');
   });
 });

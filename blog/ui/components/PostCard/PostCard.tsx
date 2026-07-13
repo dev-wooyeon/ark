@@ -50,21 +50,21 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
       <Link
         href={`/blog/${post.slug}`}
         className={clsx(
-          'group block overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-5 py-5 sm:px-6',
-          'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
-          'hover:-translate-y-0.5 hover:border-[var(--color-border-hover)] hover:bg-[var(--color-grey-50)] hover:shadow-[var(--shadow-sm)]',
+          'group block overflow-hidden rounded-[var(--radius-content)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-4 py-5 sm:px-6',
+          'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
+          'hover:border-[var(--color-border-hover)] hover:bg-[var(--color-grey-50)]',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
         )}
       >
         <div className="min-w-0">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-tertiary)] transition-transform duration-300 ease-[var(--ease-default)] group-hover:translate-x-0.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-tertiary)]">
+              <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-selection)] border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
                 <CategoryIcon category={post.category} />
                 {post.category}
               </span>
               {post.series ? (
-                <span className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
+                <span className="inline-flex items-center rounded-[var(--radius-selection)] border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
                   {post.series.title}
                 </span>
               ) : null}
@@ -77,18 +77,18 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
                 </>
               )}
             </div>
-            <h3 className="mt-3 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-[color,transform] duration-300 ease-[var(--ease-default)] group-hover:translate-x-1 group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
+            <h3 className="mt-3 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
               {post.title}
             </h3>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--color-text-secondary)] line-clamp-2 transition-transform duration-300 ease-[var(--ease-default)] group-hover:translate-x-1">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--color-text-secondary)] line-clamp-2">
               {post.description}
             </p>
             {visibleTags.length > 0 ? (
-              <div className="mt-3 flex flex-wrap gap-2 transition-transform duration-300 ease-[var(--ease-default)] group-hover:translate-x-1">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {visibleTags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-[var(--color-grey-50)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-tertiary)]"
+                    className="rounded-[var(--radius-selection)] bg-[var(--color-grey-50)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-tertiary)]"
                   >
                     #{tag}
                   </span>
