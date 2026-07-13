@@ -42,6 +42,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0022](0022-default-new-posts-to-private.md)                      | Accepted   | 새 글을 명시적으로 검토한 뒤 공개한다                        |
 | [0023](0023-run-the-release-quality-gate-in-ci.md)                | Accepted   | 배포 품질 gate를 CI에서 실행한다                             |
 | [0024](0024-use-latest-only-home-feed.md)                         | Accepted   | 홈 피드를 최신순 단일 경로로 유지한다                        |
+| [0025](0025-use-node-runtime-for-og-image-route.md)               | Accepted   | OG 이미지 route에 Node.js runtime을 사용한다                 |
 
 ## 작성 조건
 
