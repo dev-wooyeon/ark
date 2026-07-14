@@ -33,5 +33,11 @@ describe('TDS token definitions', () => {
     expect(lightMatch).not.toBeNull();
     expect(darkMatch).not.toBeNull();
   });
-});
 
+  it('defines the editorial home canvas in both themes', () => {
+    expect(tokensContent).toContain('--color-canvas: #eaebea;');
+    expect(tokensContent).toContain('--color-canvas: #1c1d1c;');
+    expect(tokensContent).toContain('--color-home-accent: #5b7ee8;');
+    expect(tokensContent).toContain('--color-home-accent: #91aaff;');
+  });
+});

@@ -34,6 +34,14 @@
   --color-surface: #ffffff;
   --color-blue-500: #3182f6;
 
+  /* Editorial home canvas */
+  --color-canvas: #eaebea;
+  --color-canvas-paper: #f7f7f4;
+  --color-canvas-border: #d0d1cd;
+  --color-ink: #171817;
+  --color-ink-muted: #5f615d;
+  --color-home-accent: #5b7ee8;
+
   --color-border: #e5e8eb;
   --color-border-hover: #d1d6db;
   --color-divider: #f2f4f6;
@@ -239,6 +247,14 @@
   --color-bg-tertiary: #1e293b;
   --color-surface: #111827;
   --color-blue-500: #6bb3ff;
+
+  /* Editorial home canvas - Dark */
+  --color-canvas: #1c1d1c;
+  --color-canvas-paper: #272927;
+  --color-canvas-border: #3c3e3b;
+  --color-ink: #f1f2ed;
+  --color-ink-muted: #bec0ba;
+  --color-home-accent: #91aaff;
 
   --color-border: #2c3644;
   --color-border-hover: #364252;

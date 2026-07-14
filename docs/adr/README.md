@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-06-19
+Last updated: 2026-07-15
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -35,6 +35,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0015](0015-skip-view-count-query-during-build.md)              | Accepted   | 빌드 중 조회수 집계 쿼리를 건너뛴다                        |
 | [0016](0016-use-content-type-and-growth-review-scores.md)       | Accepted   | 글 형식과 성장 리뷰 점수를 분리한다                        |
 | [0017](0017-allow-private-post-preview-in-development.md)       | Accepted   | 개발 환경에서 private 글 상세 미리보기를 허용한다          |
+| [0019](0019-use-editorial-home-hero-with-filterable-archive.md) | Accepted   | 홈에 소개 영역과 필터 가능한 아카이브를 함께 둔다          |
 
 ## 작성 조건
 
