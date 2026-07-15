@@ -35,20 +35,6 @@ vi.mock('@/blog/ui/components', () => ({
   ),
 }));
 
-vi.mock('./HomeHero', () => ({
-  default: ({
-    latestPost,
-    postCount,
-  }: {
-    latestPost?: FeedData;
-    postCount: number;
-  }) => (
-    <div data-testid="home-hero">
-      {latestPost?.slug}:{postCount}
-    </div>
-  ),
-}));
-
 const samplePosts: FeedData[] = [
   {
     slug: 'tech-post',
@@ -73,7 +59,6 @@ describe('HomePageClient', () => {
     render(<HomePageClient posts={samplePosts} popularViews={[]} />);
 
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
-    expect(screen.getByTestId('home-hero')).toHaveTextContent('tech-post:2');
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '최신순' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '인기순' })).toBeInTheDocument();

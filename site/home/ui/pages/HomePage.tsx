@@ -12,7 +12,7 @@ export default async function HomePage() {
   );
 
   return (
-    <main className="bg-canvas">
+    <main>
       <HomePageClient
         posts={sortedPosts}
         popularViews={popularViews.map(({ slug, count }) => ({
