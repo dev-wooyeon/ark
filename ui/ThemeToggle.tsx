@@ -2,11 +2,74 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import {
+  motion,
+  type TargetAndTransition,
+  type Transition,
+} from 'framer-motion';
 import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
-import { useEffectiveMotionMode } from '@/ui/motion/model/motion-mode';
+import {
+  type EffectiveMotionMode,
+  useEffectiveMotionMode,
+} from '@/ui/motion/model/motion-mode';
 
 export const THEME_TRANSITION_ORIGIN_EVENT = 'theme-transition-origin';
+
+const SELECTOR_TRAVEL_DISTANCE = 40;
+const THEME_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+interface ThemeSelectorMotion {
+  animate: TargetAndTransition;
+  transition: Transition;
+  transformOrigin: string;
+}
+
+function getThemeSelectorMotion(
+  isDark: boolean,
+  effectiveMotionMode: EffectiveMotionMode
+): ThemeSelectorMotion {
+  const targetX = isDark ? SELECTOR_TRAVEL_DISTANCE : 0;
+  const sourceX = isDark ? 0 : SELECTOR_TRAVEL_DISTANCE;
+  const stretchX = isDark ? 8 : SELECTOR_TRAVEL_DISTANCE - 8;
+  const direction = isDark ? 1 : -1;
+
+  if (effectiveMotionMode === 'full') {
+    return {
+      animate: {
+        x: [sourceX, stretchX, targetX, targetX],
+        y: '-50%',
+        scaleX: [1, 1.42, 0.94, 1],
+        scaleY: [1, 0.94, 1.03, 1],
+        rotate: [0, direction * -5, direction, 0],
+      },
+      transition: {
+        duration: 0.42,
+        times: [0, 0.2, 0.76, 1],
+        ease: THEME_EASE,
+      },
+      transformOrigin: isDark ? 'left center' : 'right center',
+    };
+  }
+
+  return {
+    animate: {
+      x: targetX,
+      y: '-50%',
+      scaleX: 1,
+      scaleY: 1,
+      rotate: 0,
+    },
+    transition: {
+      duration: effectiveMotionMode === 'off' ? 0 : 0.16,
+      ease: THEME_EASE,
+    },
+    transformOrigin: isDark ? 'left center' : 'right center',
+  };
+}
+
+function getThemeWashDelay(effectiveMotionMode: EffectiveMotionMode): number {
+  return effectiveMotionMode === 'full' ? 0.12 : 0;
+}
 
 export default function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme();
@@ -31,6 +94,10 @@ export default function ThemeToggle() {
   const isReducedMotion = effectiveMotionMode === 'reduced';
   const isMotionOff = effectiveMotionMode === 'off';
   const symbolDuration = isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.24;
+  const selectorMotion = getThemeSelectorMotion(
+    isDark,
+    effectiveMotionMode
+  );
 
   return (
     <motion.button
@@ -46,6 +113,7 @@ export default function ThemeToggle() {
               x: centerX,
               y: centerY,
               nextTheme,
+              delay: getThemeWashDelay(effectiveMotionMode),
             },
           })
         );
@@ -81,35 +149,14 @@ export default function ThemeToggle() {
 
       <motion.span
         aria-hidden="true"
+        data-testid="theme-selector"
         className="absolute top-1/2 h-7 w-7 rounded-full bg-[var(--color-bg-primary)] shadow-sm"
         initial={false}
-        animate={{
-          x: isDark ? 40 : 0,
-          y: '-50%',
-          scaleX: isFullMotion ? [1, 1.16, 1] : 1,
-          rotate: isFullMotion ? (isDark ? -10 : 10) : 0,
-        }}
-        transition={{
-          x: {
-            ...(isMotionOff
-              ? { duration: 0 }
-              : {
-                  type: 'spring' as const,
-                  stiffness: 360,
-                  damping: 24,
-                }),
-          },
-          scaleX: {
-            duration: isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.26,
-            ease: [0.22, 1, 0.36, 1],
-          },
-          rotate: {
-            duration: isMotionOff ? 0 : isReducedMotion ? 0.12 : 0.26,
-            ease: [0.22, 1, 0.36, 1],
-          },
-        }}
+        animate={selectorMotion.animate}
+        transition={selectorMotion.transition}
         style={{
-          transformOrigin: isDark ? 'right center' : 'left center',
+          transformOrigin: selectorMotion.transformOrigin,
+          willChange: 'transform',
         }}
       />
 

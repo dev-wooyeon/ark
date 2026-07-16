@@ -112,6 +112,33 @@ describe('ThemeTransitionWash', () => {
     );
   });
 
+  it('starts the wash after the selector has begun travelling', async () => {
+    mockResolvedTheme('light');
+    const { rerender } = render(<ThemeTransitionWash />);
+
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent(THEME_TRANSITION_ORIGIN_EVENT, {
+          detail: { x: 24, y: 32, nextTheme: 'dark', delay: 0.12 },
+        })
+      );
+    });
+
+    mockResolvedTheme('dark');
+    rerender(<ThemeTransitionWash />);
+
+    const wash = await screen.findByTestId('theme-transition-wash');
+
+    expect(wash).toHaveAttribute(
+      'data-transition',
+      JSON.stringify({
+        duration: 0.28,
+        ease: [0.22, 1, 0.36, 1],
+        delay: 0.12,
+      })
+    );
+  });
+
   it('skips the wash when motion is disabled', () => {
     vi.mocked(useEffectiveMotionMode).mockReturnValue('off');
     mockResolvedTheme('light');

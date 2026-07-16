@@ -42,12 +42,20 @@ vi.mock('framer-motion', () => ({
     }) => {
       const {
         initial: _initial,
-        animate: _animate,
+        animate,
         exit: _exit,
-        transition: _transition,
+        transition,
         ...domProps
       } = props;
-      return createElement('span', domProps, children);
+      return createElement(
+        'span',
+        {
+          ...domProps,
+          'data-animate': JSON.stringify(animate),
+          'data-transition': JSON.stringify(transition),
+        },
+        children
+      );
     },
   },
   AnimatePresence: ({ children }: { children: ReactNode }) => children,
@@ -117,5 +125,37 @@ describe('ThemeToggle', () => {
       from_theme: 'light',
       to_theme: 'dark',
     });
+  });
+
+  it('stretches the selector toward the next theme before it settles', async () => {
+    vi.mocked(useTheme).mockReturnValue({
+      theme: 'light',
+      resolvedTheme: 'light',
+      setTheme: mockSetTheme,
+    } as ReturnType<typeof useTheme>);
+
+    const { rerender } = render(<ThemeToggle />);
+
+    vi.mocked(useTheme).mockReturnValue({
+      theme: 'dark',
+      resolvedTheme: 'dark',
+      setTheme: mockSetTheme,
+    } as ReturnType<typeof useTheme>);
+    rerender(<ThemeToggle />);
+
+    const selector = await screen.findByTestId('theme-selector');
+
+    expect(selector).toHaveAttribute(
+      'data-animate',
+      JSON.stringify({
+        x: [0, 8, 40, 40],
+        y: '-50%',
+        scaleX: [1, 1.42, 0.94, 1],
+        scaleY: [1, 0.94, 1.03, 1],
+        rotate: [0, -5, 1, 0],
+      })
+    );
+    expect(selector.style.transformOrigin).toBe('left center');
+    expect(selector.style.willChange).toBe('transform');
   });
 });

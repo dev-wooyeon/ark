@@ -10,6 +10,7 @@ interface ThemeOriginDetail {
   x: number;
   y: number;
   nextTheme: 'light' | 'dark';
+  delay?: number;
 }
 
 interface WashState {
@@ -17,6 +18,7 @@ interface WashState {
   theme: 'light' | 'dark';
   originX: number;
   originY: number;
+  delay: number;
 }
 
 function getDefaultOrigin() {
@@ -53,23 +55,26 @@ export default function ThemeTransitionWash() {
     x: number;
     y: number;
     nextTheme: 'light' | 'dark';
+    delay: number;
   } | null>(null);
   const [washState, setWashState] = useState<WashState | null>(null);
 
   useEffect(() => {
     const handleOrigin = (event: Event) => {
       const customEvent = event as CustomEvent<ThemeOriginDetail>;
-      const { x, y, nextTheme } = customEvent.detail;
+      const { x, y, nextTheme, delay } = customEvent.detail;
 
       if (
         typeof x !== 'number' ||
         typeof y !== 'number' ||
-        (nextTheme !== 'light' && nextTheme !== 'dark')
+        (nextTheme !== 'light' && nextTheme !== 'dark') ||
+        (delay !== undefined &&
+          (!Number.isFinite(delay) || delay < 0))
       ) {
         return;
       }
 
-      originRef.current = { x, y, nextTheme };
+      originRef.current = { x, y, nextTheme, delay: delay ?? 0 };
     };
 
     window.addEventListener(
@@ -111,6 +116,7 @@ export default function ThemeTransitionWash() {
       theme: nextTheme,
       originX: shouldUseStoredOrigin ? storedOrigin.x : fallbackOrigin.x,
       originY: shouldUseStoredOrigin ? storedOrigin.y : fallbackOrigin.y,
+      delay: shouldUseStoredOrigin ? storedOrigin.delay : 0,
     });
 
     originRef.current = null;
@@ -134,7 +140,11 @@ export default function ThemeTransitionWash() {
       className="pointer-events-none fixed inset-0 z-[var(--z-overlay)]"
       initial={{ opacity: 0 }}
       animate={{ opacity: [0, peakOpacity, 0] }}
-      transition={{ duration, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        duration,
+        ease: [0.22, 1, 0.36, 1],
+        ...(washState.delay > 0 ? { delay: washState.delay } : {}),
+      }}
       style={{
         background: buildWashBackground(
           washState.theme,
