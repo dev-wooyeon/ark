@@ -1,6 +1,6 @@
 # 문서 인덱스
 
-Last updated: 2026-07-13
+Last updated: 2026-07-18
 
 이 인덱스는 현재 코드베이스와 함께 유지해야 하는 문서만 추적한다. 계속
 업데이트할 문서가 아니라면 삭제하거나, 오래 남겨야 하는 결정만 ADR로 옮긴다.
@@ -16,7 +16,7 @@ Last updated: 2026-07-13
 ## 유지 대상 문서
 
 - `docs/adr/README.md`
-- `docs/adr/*.md`
+- `docs/adr/*.md` (도메인별 UI 경계와 같이 오래 유지될 결정 포함)
 - `docs/adr/0019-use-content-first-typography-scale.md`
 - `docs/adr/0020-use-runtime-daily-views-for-popular-feed.md`
 - `docs/adr/0021-load-heavy-mdx-visualizations-on-demand.md`
@@ -24,6 +24,8 @@ Last updated: 2026-07-13
 - `docs/adr/0023-run-the-release-quality-gate-in-ci.md`
 - `docs/adr/0024-use-latest-only-home-feed.md`
 - `docs/adr/0025-use-node-runtime-for-og-image-route.md`
+- `docs/adr/0026-use-repo-local-title-review-skill.md`
+- `docs/adr/0027-use-resume-specific-editorial-grid.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`
