@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-07-13
+Last updated: 2026-07-18
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -43,6 +43,8 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0023](0023-run-the-release-quality-gate-in-ci.md)                | Accepted   | 배포 품질 gate를 CI에서 실행한다                             |
 | [0024](0024-use-latest-only-home-feed.md)                         | Accepted   | 홈 피드를 최신순 단일 경로로 유지한다                        |
 | [0025](0025-use-node-runtime-for-og-image-route.md)               | Accepted   | OG 이미지 route에 Node.js runtime을 사용한다                 |
+| [0026](0026-use-repo-local-title-review-skill.md)                 | Accepted   | 제목 선택은 repo-local skill로 보조한다                     |
+| [0027](0027-use-resume-specific-editorial-grid.md)                | Accepted   | 이력서에는 콘텐츠 밀도에 맞춘 에디토리얼 그리드를 사용한다  |
 
 ## 작성 조건
 

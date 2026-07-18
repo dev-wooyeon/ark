@@ -115,7 +115,7 @@ function renderTextWithCode(text: string): ReactNode[] {
         return (
           <pre
             key={`${segment}-${index}`}
-            className="mt-2 overflow-x-auto rounded-md border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-3 py-2"
+            className="mt-2 overflow-x-auto rounded-md border border-canvas-border bg-canvas-paper px-3 py-2"
           >
             <code className="text-sm">{code}</code>
           </pre>
@@ -126,7 +126,7 @@ function renderTextWithCode(text: string): ReactNode[] {
         return (
           <code
             key={`${segment}-${index}`}
-            className="rounded border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-1.5 py-0.5 text-sm"
+            className="rounded border border-canvas-border bg-canvas-paper px-1.5 py-0.5 text-sm"
           >
             {segment.slice(1, -1)}
           </code>
@@ -139,7 +139,7 @@ function renderTextWithCode(text: string): ReactNode[] {
 
 function renderDetailList(detailLines: string[]): ReactNode {
   return (
-    <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+    <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-ink-muted">
       {detailLines.map((line, index) => (
         <li key={`${line}-${index}`} className="m-0 pl-1">
           {renderTextWithCode(line)}
@@ -157,14 +157,14 @@ function renderProjectLinks(
   }
 
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--color-text-secondary)]">
+    <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-ink-muted">
       {links.map((link) => (
         <a
           key={`${link.label}-${link.href}`}
           href={link.href}
           target={link.external ? '_blank' : '_self'}
           rel={link.external ? 'noopener noreferrer' : undefined}
-          className="underline decoration-[var(--color-border)] underline-offset-4 transition-colors hover:text-[var(--color-text-primary)]"
+          className="underline decoration-canvas-border underline-offset-4 transition-colors hover:text-ink"
         >
           {link.label}
         </a>
@@ -179,21 +179,19 @@ function renderActivityList(activityItems: Activity[]): ReactNode {
       {activityItems.map((activity) => (
         <article
           key={`${activity.organization}-${activity.period}`}
-          className="space-y-3 border-b border-[var(--color-border)] pb-5 last:border-b-0 last:pb-0"
+          className="space-y-3"
         >
           <div className="space-y-1">
-            <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
-              {activity.title}
-            </p>
-            <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+            <p className="m-0 text-sm font-medium text-ink">{activity.title}</p>
+            <p className="m-0 text-sm text-ink-muted">
               {activity.organization}
             </p>
-            <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
+            <p className="m-0 font-mono text-xs text-ink-muted">
               {activity.period}
             </p>
           </div>
 
-          <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
+          <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-ink-muted">
             {activity.description.map((description, index) => (
               <li
                 key={`${activity.organization}-${index}`}
@@ -217,12 +215,10 @@ function SectionTitle({
   description?: string;
 }) {
   return (
-    <div className="flex flex-col gap-2 border-b border-[var(--color-border)] pb-4 sm:flex-row sm:items-end sm:justify-between">
-      <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">
-        {title}
-      </h2>
+    <div className="space-y-2 border-t border-canvas-border pt-4">
+      <h2 className="text-xl font-semibold tracking-tight text-ink">{title}</h2>
       {description ? (
-        <p className="text-sm text-[var(--color-text-tertiary)]">
+        <p className="max-w-2xl text-sm leading-6 text-ink-muted">
           {description}
         </p>
       ) : null}
@@ -302,360 +298,295 @@ export default function ResumePage() {
   ].filter(Boolean);
 
   return (
-    <main className="bg-[var(--color-bg-primary)] py-12 md:py-16">
+    <main className="bg-canvas py-8 text-ink md:py-10">
       <Container size="xl">
-        <div className="bg-[var(--color-bg-primary)]">
-          <header className="border-y border-[var(--color-border)] py-10 md:py-14">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
-              <div className="space-y-7">
-                <div className="space-y-5">
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-5">
-                    <h1 className="text-4xl font-semibold text-[var(--color-text-primary)] md:text-5xl">
-                      {personalInfo.name}
-                    </h1>
-                    <div className="space-y-2 sm:pt-1 md:pt-2">
-                      <p className="m-0 text-lg text-[var(--color-text-secondary)]">
-                        {personalInfo.position}
-                      </p>
-                      <p className="m-0 text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                        Backend · Data Pipelines · Operations Automation
-                      </p>
-                    </div>
-                  </div>
+        <header className="grid gap-y-8 md:grid-cols-6 md:gap-x-8 lg:gap-x-10">
+          <div className="space-y-2 md:col-span-1">
+            <h1 className="text-3xl font-semibold tracking-tight text-ink md:text-4xl">
+              {personalInfo.name}
+            </h1>
+            <p className="font-mono text-xs text-ink-muted">CV</p>
+          </div>
 
-                  <div className="max-w-4xl space-y-4">
-                    <h2 className="break-keep text-base font-medium leading-7 text-[var(--color-text-primary)]">
-                      {heroStatement}
-                    </h2>
-                    <div className="max-w-3xl space-y-3">
-                      {heroSummary.map((paragraph) => (
-                        <p
-                          key={paragraph}
-                          className="break-keep text-base leading-7 text-[var(--color-text-secondary)]"
-                        >
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                    <p className="max-w-3xl break-keep border-l-2 border-[var(--color-text-primary)] pl-4 text-base leading-7 text-[var(--color-text-primary)]">
-                      {motivationStatement}
-                    </p>
-                  </div>
-
-                  <dl className="grid gap-5 border-t border-[var(--color-border)] pt-6 sm:grid-cols-2">
-                    {resumeHighlights.map((highlight) => (
-                      <div key={highlight.label} className="space-y-1">
-                        <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                          {highlight.label}
-                        </dt>
-                        <dd className="m-0 space-y-1">
-                          <p className="text-base font-semibold text-[var(--color-text-primary)]">
-                            {highlight.value}
-                          </p>
-                          <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
-                            {highlight.description}
-                          </p>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-
-              <div className="space-y-5 lg:border-l lg:border-[var(--color-border)] lg:pl-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                  Contact
+          <div className="space-y-5 md:col-span-3">
+            <p className="text-lg leading-7 text-ink">
+              {personalInfo.position}
+            </p>
+            <div className="max-w-2xl space-y-3">
+              <p className="break-keep text-base font-medium leading-7 text-ink">
+                {heroStatement}
+              </p>
+              {heroSummary.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="break-keep text-base leading-7 text-ink-muted"
+                >
+                  {paragraph}
                 </p>
-                <dl className="grid content-start gap-y-5 text-sm text-[var(--color-text-secondary)] sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1">
-                  {profileLinks.map((item) => {
-                    if (!item) {
-                      return null;
-                    }
-
-                    return (
-                      <div key={item.label} className="space-y-1">
-                        <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                          {item.label}
-                        </dt>
-                        <dd className="m-0 whitespace-nowrap">{item.value}</dd>
-                      </div>
-                    );
-                  })}
-                </dl>
-              </div>
+              ))}
+              <p className="break-keep border-l-2 border-ink pl-4 text-base leading-7 text-ink">
+                {motivationStatement}
+              </p>
             </div>
-          </header>
+          </div>
 
-          <div className="grid gap-12 py-12 md:py-14 lg:grid-cols-3">
-            <aside className="order-last space-y-10 lg:order-first lg:col-span-1">
-              <section className="space-y-4">
-                <SectionTitle
-                  title="Profile"
-                  description={`실무 경력 ${careerYears}년+`}
-                />
-                <div className="space-y-4 text-sm leading-6 text-[var(--color-text-secondary)]">
-                  <p>{personalInfo.introduction}</p>
-                  <p>
-                    결제·정산·IoT 도메인에서 Java 기반 서버와 백오피스 시스템을
-                    설계하고 운영해온 {careerYears}년차 엔지니어입니다. 반복되는
-                    운영 요청과 수작업 리스크를 표준화와 자동화로 흡수하는
-                    방식으로 일합니다.
+          <div className="space-y-4 md:col-span-2">
+            <p className="font-mono text-xs text-ink-muted">Contact</p>
+            <dl className="grid gap-x-6 gap-y-4 text-sm text-ink-muted sm:grid-cols-2 md:grid-cols-1">
+              {profileLinks.map((item) => {
+                if (!item) {
+                  return null;
+                }
+
+                return (
+                  <div key={item.label} className="space-y-1">
+                    <dt className="font-mono text-xs text-ink-muted">
+                      {item.label}
+                    </dt>
+                    <dd className="m-0 break-all text-ink">{item.value}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </header>
+
+        <section
+          className="mt-10 border-y border-canvas-border py-6 md:mt-14"
+          aria-labelledby="resume-impact-title"
+        >
+          <h2 id="resume-impact-title" className="sr-only">
+            주요 성과
+          </h2>
+          <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+            {resumeHighlights.map((highlight) => (
+              <div key={highlight.label} className="space-y-1.5">
+                <dt className="font-mono text-xs text-ink-muted">
+                  {highlight.label}
+                </dt>
+                <dd className="m-0 space-y-1">
+                  <p className="text-base font-semibold text-ink">
+                    {highlight.value}
                   </p>
-                </div>
-              </section>
+                  <p className="text-sm leading-6 text-ink-muted">
+                    {highlight.description}
+                  </p>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
-              <section className="space-y-4">
-                <SectionTitle title="Skills" />
-                <div className="space-y-5">
-                  {personalInfo.skillGroups.map((group) => (
-                    <section key={group.category} className="space-y-2.5">
-                      <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                        {group.category}
-                      </h3>
-                      {group.description ? (
-                        <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
-                          {group.description}
+        <div className="grid gap-y-14 py-12 lg:grid-cols-6 lg:gap-x-10 lg:py-16">
+          <aside className="order-last space-y-10 lg:order-first lg:col-span-2">
+            <section className="space-y-5">
+              <SectionTitle
+                title="Profile"
+                description={`실무 경력 ${careerYears}년+`}
+              />
+              <div className="space-y-4 text-sm leading-6 text-ink-muted">
+                <p>{personalInfo.introduction}</p>
+                <p>
+                  결제·정산·IoT 도메인에서 Java 기반 서버와 백오피스 시스템을
+                  설계하고 운영해온 {careerYears}년차 엔지니어입니다. 반복되는
+                  운영 요청과 수작업 리스크를 표준화와 자동화로 흡수하는
+                  방식으로 일합니다.
+                </p>
+              </div>
+            </section>
+
+            <section className="space-y-5">
+              <SectionTitle title="Skills" />
+              <div className="space-y-6">
+                {personalInfo.skillGroups.map((group) => (
+                  <section key={group.category} className="space-y-2.5">
+                    <h3 className="font-mono text-xs text-ink-muted">
+                      {group.category}
+                    </h3>
+                    {group.description ? (
+                      <p className="text-sm leading-6 text-ink-muted">
+                        {group.description}
+                      </p>
+                    ) : null}
+                    <ul className="m-0 list-none space-y-1 p-0 text-sm leading-6 text-ink">
+                      {group.skills.map((skill) => (
+                        <li key={skill} className="m-0">
+                          {skill}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-5">
+              <SectionTitle
+                title="Writing & Mentoring"
+                description="문제를 말로 정리하고 공유하는 활동"
+              />
+              {renderActivityList(writingActivities)}
+            </section>
+
+            <section className="space-y-5">
+              <SectionTitle title="Education" />
+              <div className="space-y-5">
+                {education.map((item) => (
+                  <article
+                    key={`${item.school}-${item.period}`}
+                    className="space-y-1 text-sm"
+                  >
+                    <p className="m-0 font-medium text-ink">{item.school}</p>
+                    <p className="m-0 text-ink-muted">
+                      {item.degree} · {item.major}
+                    </p>
+                    <p className="m-0 font-mono text-xs text-ink-muted">
+                      {item.period} · {item.status}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-5">
+              <SectionTitle title="Certifications" />
+              <div className="space-y-4">
+                {certifications.map((certification) => (
+                  <article
+                    key={`${certification.name}-${certification.date}`}
+                    className="space-y-1 text-sm"
+                  >
+                    <p className="m-0 font-medium text-ink">
+                      {certification.name}
+                    </p>
+                    <p className="m-0 text-ink-muted">{certification.issuer}</p>
+                    <p className="m-0 font-mono text-xs text-ink-muted">
+                      {certification.date}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-5">
+              <SectionTitle title="Background" />
+              {renderActivityList(backgroundActivities)}
+            </section>
+          </aside>
+
+          <div className="order-first space-y-14 lg:order-last lg:col-span-4">
+            <section className="space-y-6">
+              <SectionTitle
+                title="How I Work"
+                description="반복을 구조로 옮길 때 지키는 기준"
+              />
+
+              <div className="space-y-5">
+                {workingPrinciples.map((principle) => (
+                  <article
+                    key={principle.title}
+                    className="grid gap-2 border-b border-canvas-border pb-5 last:border-b-0 last:pb-0 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6"
+                  >
+                    <h3 className="text-base font-medium text-ink">
+                      {principle.title}
+                    </h3>
+                    <p className="text-sm leading-6 text-ink-muted">
+                      {principle.description}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-7">
+              <SectionTitle
+                title="Experience"
+                description="실무에서 반복과 데이터 흐름을 다룬 경험"
+              />
+
+              <div className="space-y-9">
+                {experiences.map((experience) => (
+                  <article
+                    key={`${experience.company}-${experience.period}`}
+                    className="space-y-4 border-b border-canvas-border pb-9 last:border-b-0 last:pb-0"
+                  >
+                    <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-6">
+                      <div className="space-y-1">
+                        <h3 className="text-2xl font-semibold tracking-tight text-ink">
+                          {experience.company}
+                        </h3>
+                        <p className="text-sm text-ink-muted">
+                          {experience.role}
                         </p>
-                      ) : null}
-                      <ul className="m-0 list-none space-y-1 p-0 text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {group.skills.map((skill) => (
-                          <li key={skill} className="m-0">
-                            {skill}
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  ))}
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <SectionTitle
-                  title="Writing & Mentoring"
-                  description="문제를 말로 정리하고 공유하는 활동"
-                />
-                {renderActivityList(writingActivities)}
-              </section>
-
-              <section className="space-y-4">
-                <SectionTitle title="Education" />
-                <div className="space-y-5">
-                  {education.map((item) => (
-                    <article
-                      key={`${item.school}-${item.period}`}
-                      className="space-y-1 text-sm"
-                    >
-                      <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
-                        {item.school}
-                      </p>
-                      <p className="m-0 text-sm text-[var(--color-text-secondary)]">
-                        {item.degree} · {item.major}
-                      </p>
-                      <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
-                        {item.period} · {item.status}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <SectionTitle title="Certifications" />
-                <div className="space-y-4">
-                  {certifications.map((certification) => (
-                    <article
-                      key={`${certification.name}-${certification.date}`}
-                      className="space-y-1 text-sm"
-                    >
-                      <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
-                        {certification.name}
-                      </p>
-                      <p className="m-0 text-sm text-[var(--color-text-secondary)]">
-                        {certification.issuer}
-                      </p>
-                      <p className="m-0 text-sm text-[var(--color-text-tertiary)]">
-                        {certification.date}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <SectionTitle title="Background" />
-                {renderActivityList(backgroundActivities)}
-              </section>
-            </aside>
-
-            <div className="order-first space-y-12 lg:order-last lg:col-span-2">
-              <section className="space-y-8">
-                <SectionTitle
-                  title="How I Work"
-                  description="반복을 구조로 옮길 때 지키는 기준"
-                />
-
-                <div className="grid gap-5 md:grid-cols-3">
-                  {workingPrinciples.map((principle) => (
-                    <article
-                      key={principle.title}
-                      className="space-y-2 border-t border-[var(--color-border)] pt-4"
-                    >
-                      <h3 className="text-base font-medium text-[var(--color-text-primary)]">
-                        {principle.title}
-                      </h3>
-                      <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {principle.description}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="space-y-8">
-                <SectionTitle
-                  title="Experience"
-                  description="실무에서 반복과 데이터 흐름을 다룬 경험"
-                />
-
-                <div className="space-y-8">
-                  {experiences.map((experience) => (
-                    <article
-                      key={`${experience.company}-${experience.period}`}
-                      className="space-y-4 border-b border-[var(--color-border)] pb-8 last:border-b-0 last:pb-0"
-                    >
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                        <div className="space-y-1">
-                          <h3 className="text-2xl font-semibold text-[var(--color-text-primary)]">
-                            {experience.company}
-                          </h3>
-                          <p className="text-sm text-[var(--color-text-secondary)]">
-                            {experience.role}
-                          </p>
-                        </div>
-                        <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
-                          <p>{experience.period}</p>
-                          <p>{calculateDuration(experience.period)}</p>
-                        </div>
                       </div>
+                      <div className="space-y-1 font-mono text-xs text-ink-muted sm:text-right">
+                        <p>{experience.period}</p>
+                        <p>{calculateDuration(experience.period)}</p>
+                      </div>
+                    </div>
 
-                      <p className="break-keep text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {experience.summary}
-                      </p>
+                    <p className="break-keep text-sm leading-6 text-ink-muted">
+                      {experience.summary}
+                    </p>
 
-                      <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {experience.highlights.map((highlight) => (
-                          <li
-                            key={`${experience.company}-${highlight}`}
-                            className="m-0 pl-1"
-                          >
-                            {highlight}
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
-                </div>
-              </section>
+                    <ul className="m-0 list-disc space-y-1.5 pl-5 text-sm leading-6 text-ink-muted">
+                      {experience.highlights.map((highlight) => (
+                        <li
+                          key={`${experience.company}-${highlight}`}
+                          className="m-0 pl-1"
+                        >
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+            </section>
 
-              <section className="space-y-8">
-                <SectionTitle
-                  title="Selected Work"
-                  description="문제를 어떻게 해석하고 구조로 옮겼는지"
-                />
+            <section className="space-y-7">
+              <SectionTitle
+                title="Selected Work"
+                description="문제를 어떻게 해석하고 구조로 옮겼는지"
+              />
 
-                <div className="space-y-10">
-                  {professionalProjects.map(
-                    ({ company, role, period, project }) => (
-                      <article
-                        key={`${company}-${project.title}`}
-                        className="space-y-4 border-b border-[var(--color-border)] pb-10 last:border-b-0 last:pb-0"
-                      >
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="space-y-2">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                              {company}
+              <div className="space-y-10">
+                {professionalProjects.map(
+                  ({ company, role, period, project }) => (
+                    <article
+                      key={`${company}-${project.title}`}
+                      className="space-y-5 border-b border-canvas-border pb-10 last:border-b-0 last:pb-0"
+                    >
+                      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-6">
+                        <div className="space-y-2">
+                          <p className="font-mono text-xs text-ink-muted">
+                            {company}
+                          </p>
+                          <div className="space-y-1">
+                            <h3 className="text-xl font-medium text-ink">
+                              {project.title}
+                            </h3>
+                            <p className="text-sm leading-6 text-ink-muted">
+                              {project.description}
                             </p>
-                            <div className="space-y-1">
-                              <h3 className="text-xl font-medium text-[var(--color-text-primary)]">
-                                {project.title}
-                              </h3>
-                              <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
-                                {project.description}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
-                            <p>{role}</p>
-                            <p>{period}</p>
                           </div>
                         </div>
-
-                        <dl className="space-y-5">
-                          {orderExperienceStages(project.stages).map(
-                            (stage) => (
-                              <div
-                                key={`${project.title}-${stage.key}`}
-                                className="space-y-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:space-y-0"
-                              >
-                                <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
-                                  {stage.label}
-                                </dt>
-                                <dd className="m-0 sm:col-span-3">
-                                  {renderDetailList(stage.detail)}
-                                </dd>
-                              </div>
-                            )
-                          )}
-                        </dl>
-
-                        {renderProjectLinks(project.links)}
-                      </article>
-                    )
-                  )}
-                </div>
-              </section>
-
-              <section className="space-y-8">
-                <SectionTitle
-                  title="Technical Experiments"
-                  description="개인 프로젝트는 설계 가설과 운영 기준을 검증하는 방식으로 정리했습니다."
-                />
-
-                <div className="space-y-8">
-                  {personalProjects.map((project) => (
-                    <article
-                      key={`${project.title}-${project.period}`}
-                      className="space-y-4 border-b border-[var(--color-border)] pb-8 last:border-b-0 last:pb-0"
-                    >
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                        <div className="space-y-1">
-                          <h3 className="text-xl font-medium text-[var(--color-text-primary)]">
-                            {project.title}
-                          </h3>
-                          <p className="text-sm text-[var(--color-text-secondary)]">
-                            {project.role}
-                          </p>
-                        </div>
-                        <div className="space-y-1 text-sm text-[var(--color-text-tertiary)] sm:text-right">
-                          <p>{project.period}</p>
-                          <p>{calculateDuration(project.period)}</p>
+                        <div className="space-y-1 font-mono text-xs text-ink-muted sm:text-right">
+                          <p>{role}</p>
+                          <p>{period}</p>
                         </div>
                       </div>
-
-                      <p className="text-sm leading-6 text-[var(--color-text-secondary)]">
-                        {project.description}
-                      </p>
 
                       <dl className="space-y-5">
                         {orderExperienceStages(project.stages).map((stage) => (
                           <div
                             key={`${project.title}-${stage.key}`}
-                            className="space-y-2 sm:grid sm:grid-cols-4 sm:gap-4 sm:space-y-0"
+                            className="grid gap-2 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-5"
                           >
-                            <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-tertiary)]">
+                            <dt className="font-mono text-xs text-ink-muted">
                               {stage.label}
                             </dt>
-                            <dd className="m-0 sm:col-span-3">
+                            <dd className="m-0">
                               {renderDetailList(stage.detail)}
                             </dd>
                           </div>
@@ -664,10 +595,61 @@ export default function ResumePage() {
 
                       {renderProjectLinks(project.links)}
                     </article>
-                  ))}
-                </div>
-              </section>
-            </div>
+                  )
+                )}
+              </div>
+            </section>
+
+            <section className="space-y-7">
+              <SectionTitle
+                title="Technical Experiments"
+                description="개인 프로젝트는 설계 가설과 운영 기준을 검증하는 방식으로 정리했습니다."
+              />
+
+              <div className="space-y-9">
+                {personalProjects.map((project) => (
+                  <article
+                    key={`${project.title}-${project.period}`}
+                    className="space-y-5 border-b border-canvas-border pb-9 last:border-b-0 last:pb-0"
+                  >
+                    <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-6">
+                      <div className="space-y-1">
+                        <h3 className="text-xl font-medium text-ink">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-ink-muted">{project.role}</p>
+                      </div>
+                      <div className="space-y-1 font-mono text-xs text-ink-muted sm:text-right">
+                        <p>{project.period}</p>
+                        <p>{calculateDuration(project.period)}</p>
+                      </div>
+                    </div>
+
+                    <p className="text-sm leading-6 text-ink-muted">
+                      {project.description}
+                    </p>
+
+                    <dl className="space-y-5">
+                      {orderExperienceStages(project.stages).map((stage) => (
+                        <div
+                          key={`${project.title}-${stage.key}`}
+                          className="grid gap-2 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-5"
+                        >
+                          <dt className="font-mono text-xs text-ink-muted">
+                            {stage.label}
+                          </dt>
+                          <dd className="m-0">
+                            {renderDetailList(stage.detail)}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    {renderProjectLinks(project.links)}
+                  </article>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </Container>
