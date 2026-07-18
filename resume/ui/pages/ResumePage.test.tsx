@@ -19,5 +19,21 @@ describe('ResumePage', () => {
       screen.getByRole('heading', { name: 'Selected Work' })
     ).toBeVisible();
     expect(container.querySelector('header')).toHaveClass('md:grid-cols-6');
+    expect(container.querySelector('main')).toHaveClass(
+      'bg-bg-primary',
+      'text-text-primary'
+    );
+  });
+
+  it('renders career content before supplemental details in the DOM', () => {
+    render(<ResumePage />);
+
+    const experience = screen.getByRole('heading', { name: 'Experience' });
+    const profile = screen.getByRole('heading', { name: 'Profile' });
+
+    expect(
+      experience.compareDocumentPosition(profile) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 });
