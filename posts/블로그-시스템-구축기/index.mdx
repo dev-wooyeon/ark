@@ -8,7 +8,7 @@ Medium, Velog, Tistory 같은 플랫폼은 배포와 작성은 빠르지만,
 이번 구축 목표는 단순한 "개인 블로그"가 아니라
 **설계 원칙이 드러나는 기술 포트폴리오**를 만드는 일이었다.
 
-이 글에서는 Next.js 16, Three.js, MDX를 선택한 이유,
+이 글에서는 Next.js 16, Motion, MDX를 선택한 이유,
 아키텍처 원칙,
 최적화 기준,
 AI 활용 방식까지 한 흐름으로 정리한다.
@@ -151,37 +151,21 @@ module.exports = {
 - 다크 모드 확장 용이
 - Fluid Typography로 반응형 자동 대응
 
-### 2.4 Interactive: Three.js + @react-three/fiber
+### 2.4 Interactive: Framer Motion
 
 **선택 이유:**
 
-- 기술 블로그에 차별화 요소 필요
-- 알고리즘 시각화, 3D 데모 표현 가능
+- 테마 전환과 목록 진입처럼 상태 변화를 자연스럽게 전달
+- `prefers-reduced-motion`을 반영한 접근성 있는 모션 제어
 - React 생태계와 자연스러운 통합
 
-**구현 예시:**
-
-```tsx
-'use client';
-import { Canvas } from '@react-three/fiber';
-
-export function HeroScene() {
-  return (
-    <Canvas>
-      <mesh>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="#0066CC" />
-      </mesh>
-    </Canvas>
-  );
-}
-```
+**구현 기준:**
 
 **주의 사항:**
 
-- Three.js는 브라우저 전용 → `'use client'` 필수
-- SSG 시 hydration 에러 방지 위해 `dynamic` import 고려
-- 번들 사이즈 증가 → 코드 스플리팅 필수
+- 브라우저 API를 쓰는 leaf component에만 `'use client'`를 둔다
+- transform과 opacity 중심으로 움직여 레이아웃 비용을 피한다
+- reduced motion에서는 즉시 또는 짧은 전환으로 낮춘다
 
 ---
 
@@ -766,8 +750,8 @@ PageLayout 컴포넌트를 초반에 만들지 않고,
 
 <strong>"번들 사이즈는 항상 모니터링."</strong>
 
-Three.js 같은 무거운 라이브러리는 코드 스플리팅 필수.
-`next/dynamic`과 `'use client'`를 조합하여 초기 로딩에 영향 없도록 관리.
+무거운 클라이언트 라이브러리는 실제 공개 기능에 필요할 때만 추가한다.
+동적 import와 `'use client'` 경계로 초기 로딩 경로를 작게 유지한다.
 
 ### 8.3 최적화
 
@@ -839,4 +823,4 @@ Phase 1~5로 나눠 단계별로 개선했다.
 - [Next.js 16 Documentation](https://nextjs.org/docs)
 - [MDX Documentation](https://mdxjs.com/)
 - [Tailwind CSS v4](https://tailwindcss.com/)
-- [Three.js + React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
+- [Motion Documentation](https://motion.dev/docs/react)
