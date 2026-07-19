@@ -1,7 +1,7 @@
 {
-  "title": "AI 시대, 탑다운 방식으로 익히는 야생형 학습",
+  "title": "AI 시대의 학습 루프: 먼저 만들고 다시 검증하기",
   "slug": "ai-wild-learning-style",
-  "description": "공식 문서 번역과 결과물 해체를 오가며 실무 감각과 이론을 연결한 학습 방식을 정리해요.",
+  "description": "AI 답변을 그대로 소비하지 않고 결과물, 공식 문서, 재구현을 오가며 이해를 검증하는 학습 루프를 정리합니다.",
   "date": "2026-03-11",
   "category": "Tech",
   "contentType": "essay",
@@ -12,19 +12,19 @@
   ],
   "image": "/images/posts/ai-시대-학습법/thumbnail.png",
   "featured": false,
-  "visibility": "private",
+  "visibility": "public",
   "qualityReview": {
-    "philosophy": 3.5,
-    "design": 2.5,
-    "implementation": 2,
-    "brandFit": 2,
-    "clarity": 4,
+    "philosophy": 4,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 3.5,
+    "clarity": 4.5,
     "structure": 4,
-    "evidence": 3.5,
+    "evidence": 4,
     "usefulness": 4,
     "originality": 4,
-    "polish": 3.5,
+    "polish": 4,
     "reviewedAt": "2026-06-17",
-    "notes": "비공개"
+    "notes": "AI 시대 학습법을 결과물-문서-재검증 루프 중심으로 재작성하고 공개 전환"
   }
 }

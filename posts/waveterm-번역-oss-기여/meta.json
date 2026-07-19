@@ -1,7 +1,7 @@
 {
-  "title": "단순 사용자에서 OSS 기여자가 되기까지: README 번역으로 읽기 리드타임 줄이기",
+  "title": "README 번역으로 첫 OSS 기여를 만든 기준",
   "slug": "oss-readme-translation-lead-time",
-  "description": "README 번역 기여로 반복 번역 비용을 줄이기까지 문제를 정의하고 실행한 과정을 정리해요.",
+  "description": "Wave Terminal README 번역 PR을 통해 반복되는 읽기 리드타임을 문서 구조 문제로 줄인 과정을 정리합니다.",
   "date": "2026-02-27",
   "category": "Tech",
   "contentType": "retrospective",
@@ -12,19 +12,19 @@
     "Developer Experience"
   ],
   "featured": false,
-  "visibility": "private",
+  "visibility": "public",
   "qualityReview": {
-    "philosophy": 2.5,
-    "design": 2.5,
-    "implementation": 2,
-    "brandFit": 2,
-    "clarity": 3.5,
-    "structure": 3.5,
-    "evidence": 3.5,
-    "usefulness": 3.5,
+    "philosophy": 3.5,
+    "design": 3.5,
+    "implementation": 3.5,
+    "brandFit": 3.5,
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 4,
+    "usefulness": 4,
     "originality": 3.5,
-    "polish": 3,
+    "polish": 4,
     "reviewedAt": "2026-06-17",
-    "notes": "비공개"
+    "notes": "README 번역 PR을 읽기 리드타임 절감 관점으로 재구성하고 공개 전환"
   }
 }
