@@ -25,34 +25,17 @@ export default function HomePageClient({ posts }: HomePageClientProps) {
   );
 
   return (
-    <Container size="md" className="py-8 md:py-10">
-      <section aria-labelledby="home-feed-title" className="space-y-5">
-        <div>
-          <p className="text-meta font-semibold text-[var(--color-text-tertiary)]">
-            전체 아카이브
-          </p>
-          <h1
-            id="home-feed-title"
-            className="mt-1 text-xl font-bold tracking-tight text-[var(--color-text-primary)]"
-          >
-            최근 기록
-          </h1>
-        </div>
+    <Container size="md" className="py-8 md:pt-4 md:pb-10">
+      <section aria-label="글 아카이브" className="space-y-5">
+        <CategoryFilter
+          categories={FEED_CATEGORIES}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+          categoryCounts={categoryCounts}
+          variant="links"
+        />
 
-        <section className="rounded-[var(--radius-content)] border border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] p-4 sm:p-5">
-          <div className="-mx-1 overflow-x-auto px-1 pb-1 md:mx-0 md:overflow-visible md:px-0 md:pb-0">
-            <div className="min-w-max md:min-w-0">
-              <CategoryFilter
-                categories={FEED_CATEGORIES}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-                categoryCounts={categoryCounts}
-              />
-            </div>
-          </div>
-        </section>
-
-        <PostList posts={filteredPosts} layout="list" />
+        <PostList posts={filteredPosts} layout="archive" />
       </section>
     </Container>
   );
