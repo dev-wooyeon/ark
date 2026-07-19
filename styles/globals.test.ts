@@ -24,7 +24,7 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('animation-duration: 0.01ms !important');
   });
 
-  it('limits theme transitions instead of animating every element', () => {
+  it('keeps body color transitions scoped instead of animating every element', () => {
     expect(globalsContent).toContain(
       'background-color var(--duration-150) var(--ease-default)'
     );
