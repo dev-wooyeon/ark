@@ -166,7 +166,7 @@ export default function MobileBottomNav({
                     className={clsx(
                       'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border',
                       isActive
-                        ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
+                        ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-[var(--color-accent-foreground)]'
                         : 'border-[var(--color-border)] bg-[var(--color-grey-50)] text-[var(--mobile-nav-text)]'
                     )}
                     aria-hidden="true"

@@ -11,6 +11,30 @@ async function openDrawer(page: Page) {
 }
 
 test.describe('Navigation IA', () => {
+  test('@smoke 데스크톱 레일은 ark 홈 링크와 보조 링크만 보여요', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.use.isMobile, '데스크톱 레일 전용 테스트예요.');
+
+    await page.goto('/engineering');
+
+    const rail = page.getByRole('complementary', {
+      name: 'Ark 내비게이션',
+    });
+    await expect(
+      rail.getByRole('link', { name: 'ark 홈으로 이동' })
+    ).toHaveAttribute('href', '/');
+    await expect(rail.getByRole('link', { name: 'Resume' })).toHaveAttribute(
+      'href',
+      '/resume'
+    );
+    await expect(rail.getByRole('link', { name: 'GitHub' })).toBeVisible();
+    await expect(rail.getByRole('link', { name: 'Email' })).toBeVisible();
+    await expect(rail.getByRole('link', { name: 'RSS' })).toBeVisible();
+    await expect(rail.getByRole('link', { name: 'Tech' })).toHaveCount(0);
+    await expect(rail.getByRole('link', { name: 'Life' })).toHaveCount(0);
+  });
+
   test('@smoke 모바일 드로어에서 Tech로 이동해요', async ({
     page,
   }, testInfo) => {

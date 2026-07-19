@@ -6,27 +6,11 @@ import { EmptyState } from '.';
 describe('EmptyState', () => {
   it('renders title and description with polite status', () => {
     render(
-      <EmptyState
-        title="데이터 없음"
-        description="표시할 데이터가 없습니다."
-      />
+      <EmptyState title="데이터 없음" description="표시할 데이터가 없습니다." />
     );
 
     expect(screen.getByRole('status')).toHaveTextContent('데이터 없음');
     expect(screen.getByText('표시할 데이터가 없습니다.')).toBeInTheDocument();
-  });
-
-  it('renders search variant tone markers', () => {
-    render(
-      <EmptyState
-        variant="search"
-        title="검색 결과 없음"
-        description="다른 키워드로 시도해 보세요."
-      />
-    );
-
-    const title = screen.getByText('검색 결과 없음');
-    expect(title).toHaveClass('text-[var(--color-grey-900)]');
   });
 
   it('renders error variant title style', () => {

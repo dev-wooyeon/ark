@@ -24,7 +24,6 @@ vi.mock('@/infra/analytics/lib/analytics', () => {
   return {
     AnalyticsEvents: {
       click: 'click',
-      theme: 'theme',
       view: 'view',
     },
     trackEvent: (...args: unknown[]) => mockTrackEvent(...args),

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Theme regression', () => {
-  test('테마 토글 후 모바일 드로어 라벨과 링크가 유지되는지', async ({
+test.describe('Mobile navigation', () => {
+  test('고정 paper 테마에서도 모바일 드로어 라벨과 링크가 유지되는지', async ({
     page,
   }, testInfo) => {
     test.skip(
@@ -10,26 +10,12 @@ test.describe('Theme regression', () => {
     );
 
     await page.goto('/');
-    const themeButton = page.getByRole('button', { name: /모드로 전환/ });
-    await expect(themeButton).toBeVisible();
-
-    const classBefore = await page.evaluate(() => {
-      return document.documentElement.className;
-    });
-    const themeLabelBefore = await themeButton.getAttribute('aria-label');
-
-    await themeButton.click();
-    await page.waitForTimeout(400);
-
-    const classAfter = await page.evaluate(() => {
-      return document.documentElement.className;
-    });
-    const themeLabelAfter = await themeButton.getAttribute('aria-label');
-
-    expect(classAfter.length).toBeGreaterThanOrEqual(0);
-    expect(
-      classAfter !== classBefore || themeLabelBefore !== themeLabelAfter
-    ).toBeTruthy();
+    await expect(page.getByRole('button', { name: /모드로 전환/ })).toHaveCount(
+      0
+    );
+    await expect(page.getByRole('button', { name: '검색 열기' })).toHaveCount(
+      0
+    );
 
     await page.getByRole('button', { name: '메뉴 열기' }).click();
 

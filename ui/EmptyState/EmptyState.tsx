@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { Button } from '../Button';
 import { ButtonVariant } from '../Button/Button.types';
 
-type EmptyStateVariant = 'default' | 'search' | 'error';
+type EmptyStateVariant = 'default' | 'error';
 type EmptyStateSize = 'sm' | 'md';
 
 interface EmptyStateProps {
@@ -27,11 +27,6 @@ const variantStyles: Record<
 > = {
   default: {
     icon: 'text-[var(--color-grey-300)]',
-    title: 'text-[var(--color-grey-900)]',
-    description: 'text-[var(--color-grey-600)]',
-  },
-  search: {
-    icon: 'text-[var(--color-toss-blue)]',
     title: 'text-[var(--color-grey-900)]',
     description: 'text-[var(--color-grey-600)]',
   },

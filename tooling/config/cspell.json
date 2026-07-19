@@ -24,7 +24,6 @@
     "tailwindcss",
     "autoprefixer",
     "postcss",
-    "kbar",
     "drei",
     "threejs",
     "vitest",
