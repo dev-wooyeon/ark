@@ -53,6 +53,16 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0033](0033-use-a-white-canvas-without-content-cards.md)                             | Accepted   | 콘텐츠 카드 없이 흰 캔버스를 사용한다                        |
 | [0034](0034-adopt-the-graphite-ink-palette.md)                                       | Accepted   | Graphite Ink 팔레트를 채택한다                               |
 | [0035](0035-prioritize-mobile-archive-reading-order.md)                              | Accepted   | 모바일 아카이브의 읽기 순서를 우선한다                       |
+| [0036](0036-separate-philosophy-home-from-content-archive.md)                        | Accepted   | 철학 우선 홈과 콘텐츠 Archive를 분리한다                     |
+| [0037](0037-adopt-zero-log-grid-site-shell.md)                                       | Accepted   | zero.log 형태의 2-6-4 사이트 shell을 사용한다                |
+| [0038](0038-use-jetbrains-mono-for-home-statement.md)                                | Accepted   | 홈 소개 문장에 JetBrains Mono를 사용한다                     |
+| [0039](0039-use-summary-grid-for-public-resume.md)                                   | Accepted   | 공개 Resume은 요약 4열 그리드로 제공한다                     |
+| [0040](0040-keep-external-links-in-sticky-identity-rail.md)                          | Accepted   | 외부 링크는 sticky 정체성 레일에 둔다                        |
+| [0041](0041-use-two-level-project-summaries-in-resume.md)                            | Accepted   | Resume 프로젝트는 짧은 소개와 상세 설명을 나눠 제공한다      |
+| [0042](0042-use-textual-route-error-state.md)                                        | Accepted   | 경로 오류 상태를 콘텐츠 열의 텍스트 상태로 표현한다          |
+| [0043](0043-include-one-evidence-backed-personal-project-in-resume.md)               | Accepted   | Resume에는 증거가 있는 개인 프로젝트 하나만 제공한다         |
+| [0044](0044-link-direct-project-retrospectives-from-resume.md)                        | Accepted   | Resume 프로젝트에는 직접 대응하는 회고글만 연결한다          |
+| [0045](0045-use-team-context-in-resume-company-column.md)                             | Accepted   | Resume 회사 열에는 팀 맥락만 표시한다                        |
 
 ## 작성 조건
 

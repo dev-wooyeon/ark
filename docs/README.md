@@ -34,6 +34,16 @@ Last updated: 2026-07-20
 - `docs/adr/0033-use-a-white-canvas-without-content-cards.md`
 - `docs/adr/0034-adopt-the-graphite-ink-palette.md`
 - `docs/adr/0035-prioritize-mobile-archive-reading-order.md`
+- `docs/adr/0036-separate-philosophy-home-from-content-archive.md`
+- `docs/adr/0037-adopt-zero-log-grid-site-shell.md`
+- `docs/adr/0038-use-jetbrains-mono-for-home-statement.md`
+- `docs/adr/0039-use-summary-grid-for-public-resume.md`
+- `docs/adr/0040-keep-external-links-in-sticky-identity-rail.md`
+- `docs/adr/0041-use-two-level-project-summaries-in-resume.md`
+- `docs/adr/0042-use-textual-route-error-state.md`
+- `docs/adr/0043-include-one-evidence-backed-personal-project-in-resume.md`
+- `docs/adr/0044-link-direct-project-retrospectives-from-resume.md`
+- `docs/adr/0045-use-team-context-in-resume-company-column.md`
 - `docs/blog-quality-guide.md`
 - `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`
