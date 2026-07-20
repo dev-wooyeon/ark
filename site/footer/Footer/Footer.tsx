@@ -7,7 +7,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--color-grey-100)] bg-white">
+    <footer className="border-t border-[var(--color-grey-100)] bg-[var(--color-bg-primary)]">
       <div className="max-w-[1200px] mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-[var(--color-grey-500)]">

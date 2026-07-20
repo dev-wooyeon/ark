@@ -18,10 +18,15 @@ function resolveScrollTarget(isDesktop: boolean): PageScrollTarget {
     return window;
   }
 
-  return (
-    document.querySelector<HTMLElement>(PAGE_SCROLL_CONTAINER_SELECTOR) ??
-    window
+  const container = document.querySelector<HTMLElement>(
+    PAGE_SCROLL_CONTAINER_SELECTOR
   );
+
+  if (!container) {
+    return window;
+  }
+
+  return container.dataset.pageScrollMode === 'document' ? window : container;
 }
 
 function readScrollSnapshot(target: PageScrollTarget): PageScrollSnapshot {

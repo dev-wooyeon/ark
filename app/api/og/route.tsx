@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(to bottom right, #E0F2FF, #fff)',
+        backgroundImage: 'linear-gradient(to bottom right, #EAEBEA, #E0E1E3)',
         padding: '80px',
       }}
     >
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
           <div
             style={{
               fontSize: '30px',
-              color: '#6b7684',
+              color: '#52525B',
             }}
           >
             {date}
@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
           style={{
             fontSize: '60px',
             fontWeight: 700,
-            color: '#191f28',
+            color: '#252525',
             lineHeight: 1.2,
             wordBreak: 'keep-all',
           }}
@@ -86,8 +86,8 @@ export async function GET(req: NextRequest) {
                 key={tag}
                 style={{
                   display: 'flex',
-                  backgroundColor: 'rgba(49, 130, 246, 0.1)',
-                  color: '#3182f6',
+                  backgroundColor: '#E0E1E3',
+                  color: '#3F3F46',
                   padding: '8px 24px',
                   borderRadius: '50px',
                   fontSize: '24px',
@@ -114,7 +114,7 @@ export async function GET(req: NextRequest) {
           style={{
             fontSize: '32px',
             fontWeight: 700,
-            color: '#3182f6',
+            color: '#3F3F46',
             fontFamily: 'Pretendard',
           }}
         >

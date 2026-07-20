@@ -65,6 +65,46 @@ describe('PostCard', () => {
     expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
+  it('renders date and title only in archive variant', () => {
+    const detailedPost: FeedData = {
+      ...basePost,
+      readingTime: 12,
+      series: {
+        id: 'redis',
+        title: 'Redis 완전정복',
+        order: 1,
+      },
+      tags: ['redis', 'cache'],
+    };
+
+    render(<PostCard post={detailedPost} variant="archive" />);
+
+    const link = screen.getByRole('link', {
+      name: /2026\.02\.10 테스트 글/,
+    });
+
+    expect(link).toHaveAttribute('href', '/blog/test-post');
+    expect(link).toHaveClass(
+      'min-h-7',
+      'items-baseline',
+      'gap-6'
+    );
+    expect(link).not.toHaveClass('border');
+    expect(screen.getByText('2026.02.10')).toHaveAttribute(
+      'dateTime',
+      '2026-02-10T00:00:00.000Z'
+    );
+    expect(screen.queryByText('Tech')).not.toBeInTheDocument();
+    expect(screen.queryByText('테스트 설명')).not.toBeInTheDocument();
+    expect(screen.queryByText('#redis')).not.toBeInTheDocument();
+    expect(screen.queryByText('약 12분')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '테스트 글' })).toHaveClass(
+      'text-base',
+      'font-normal',
+      'leading-7'
+    );
+  });
+
   it('uses a static content surface for the list variant', () => {
     render(<PostCard post={basePost} variant="list" />);
 

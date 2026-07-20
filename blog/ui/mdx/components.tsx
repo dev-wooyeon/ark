@@ -10,7 +10,6 @@ import Image from 'next/image';
 import {
   ImageGrid,
   MermaidDiagram,
-  ScrollWorkflow,
 } from '@/blog/ui/components';
 
 function extractText(node: ReactNode): string {
@@ -108,7 +107,6 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     ImageGrid,
-    ScrollWorkflow,
     pre: (props) => {
       const preProps = props as ComponentPropsWithoutRef<'pre'> & {
         'data-language'?: string;

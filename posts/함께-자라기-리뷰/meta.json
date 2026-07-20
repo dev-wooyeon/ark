@@ -5,14 +5,9 @@
   "date": "2025-12-29",
   "category": "Life",
   "contentType": "review",
-  "tags": [
-    "Career",
-    "Work",
-    "Book",
-    "성장"
-  ],
+  "tags": ["Career", "Work", "Book", "성장"],
   "featured": false,
-  "visibility": "private",
+  "visibility": "public",
   "qualityReview": {
     "philosophy": 3,
     "design": 2.5,
@@ -24,7 +19,7 @@
     "usefulness": 4,
     "originality": 3,
     "polish": 3.5,
-    "reviewedAt": "2026-07-13",
-    "notes": "인용 수치의 원문 페이지와 연구 출처를 보강하기 전까지 비공개"
+    "reviewedAt": "2026-07-20",
+    "notes": "작성자 승인으로 공개 전환. 인용 수치의 원문 페이지와 연구 출처는 후속 점검"
   }
 }

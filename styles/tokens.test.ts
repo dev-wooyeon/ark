@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 const tokensPath = path.resolve(process.cwd(), 'styles/tokens.css');
 const tokensContent = fs.readFileSync(tokensPath, 'utf8');
 
-describe('TDS token definitions', () => {
+describe('Ark paper token definitions', () => {
   it('defines a content-first reading scale', () => {
     expect(tokensContent).toContain('--text-base: 1rem;');
     expect(tokensContent).toContain('--text-md: 1.0625rem;');
@@ -29,22 +29,17 @@ describe('TDS token definitions', () => {
     expect(tokensContent).toContain('--mobile-nav-focus-offset');
   });
 
-  it('defines dark-mode mobile nav overrides', () => {
-    expect(tokensContent).toContain('.dark {');
-    expect(tokensContent).toContain('--mobile-nav-hover-bg:');
-    expect(tokensContent).toContain('--mobile-nav-focus-ring:');
+  it('uses the Graphite Ink palette instead of dark-mode overrides', () => {
+    expect(tokensContent).toContain('--color-bg-primary: #eaebea;');
+    expect(tokensContent).toContain('--color-text-primary: #252525;');
+    expect(tokensContent).toContain('--color-accent: #3f3f46;');
+    expect(tokensContent).toContain('--color-surface: #eaebea;');
+    expect(tokensContent).not.toContain('.dark {');
   });
 
-  it('reuses tokenized focus ring in both themes', () => {
-    expect(tokensContent).toMatch(/--mobile-nav-focus-ring:[^}]*;/);
-    const lightMatch = tokensContent.match(
-      /--mobile-nav-focus-ring:\s*var\(--color-toss-blue\);/g
+  it('reuses the accent token for mobile navigation focus', () => {
+    expect(tokensContent).toContain(
+      '--mobile-nav-focus-ring: var(--color-toss-blue);'
     );
-    const darkMatch = tokensContent.match(
-      /--mobile-nav-focus-ring:\s*#6bb3ff;/g
-    );
-
-    expect(lightMatch).not.toBeNull();
-    expect(darkMatch).not.toBeNull();
   });
 });

@@ -36,7 +36,7 @@ test.describe('Article shell regression', () => {
     expect(layout.scrollWidth).toBeGreaterThan(layout.clientWidth);
   });
 
-  test('reading progress follows the desktop AppShell scroller', async ({
+  test('reading progress follows the document scroller in the grid shell', async ({
     page,
   }, testInfo) => {
     test.skip(
@@ -48,12 +48,10 @@ test.describe('Article shell regression', () => {
 
     const progress = page.locator('[data-reading-progress]');
     const progressBar = page.locator('[data-reading-progress-bar]');
-    const scrollContainer = page.locator('[data-page-scroll-container]');
-
     await expect(progress).toHaveCSS('opacity', '0');
-    await scrollContainer.evaluate((element) => {
-      element.scrollTop = 600;
-      element.dispatchEvent(new Event('scroll'));
+    await page.evaluate(() => {
+      window.scrollTo(0, 600);
+      window.dispatchEvent(new Event('scroll'));
     });
 
     await expect(progress).toHaveCSS('opacity', '1');

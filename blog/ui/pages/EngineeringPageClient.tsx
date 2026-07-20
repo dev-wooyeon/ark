@@ -117,7 +117,7 @@ export default function EngineeringPageClient({
                 className={clsx(
                   'rounded border px-3 py-1.5 transition-colors',
                   page === currentPage
-                    ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
+                    ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-[var(--color-accent-foreground)]'
                     : 'border-[var(--color-grey-200)] bg-[var(--color-bg-primary)] text-[var(--color-grey-700)] hover:bg-[var(--color-grey-50)]'
                 )}
               >

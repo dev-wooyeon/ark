@@ -1,15 +1,10 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useTheme } from 'next-themes';
 import { GiscusComments } from './GiscusComments';
 
 const mockGiscus = vi.fn((_props: Record<string, unknown>) => (
   <div data-testid="giscus-embed" />
 ));
-
-vi.mock('next-themes', () => ({
-  useTheme: vi.fn(),
-}));
 
 vi.mock('@giscus/react', () => ({
   default: (props: unknown) => mockGiscus(props),
@@ -20,29 +15,8 @@ describe('GiscusComments', () => {
     mockGiscus.mockClear();
   });
 
-  it('renders section and applies dark theme to iframe when present', async () => {
-    const postMessage = vi.fn();
-
-    const iframe = document.createElement('iframe');
-    iframe.className = 'giscus-frame';
-    Object.defineProperty(iframe, 'contentWindow', {
-      value: {
-        postMessage,
-      },
-      configurable: true,
-    });
-    document.body.appendChild(iframe);
-
-    vi.mocked(useTheme).mockReturnValue({
-      theme: 'light',
-      resolvedTheme: 'dark',
-    } as ReturnType<typeof useTheme>);
-
+  it('renders the comment embed with the fixed paper theme', () => {
     render(<GiscusComments slug="redis" />);
-
-    await act(async () => {
-      await Promise.resolve();
-    });
 
     expect(
       screen.getByRole('heading', { level: 2, name: '댓글' })
@@ -52,38 +26,8 @@ describe('GiscusComments', () => {
       expect.objectContaining({
         mapping: 'specific',
         term: 'redis',
-        theme: 'dark',
+        theme: 'light',
       })
     );
-    expect(postMessage).toHaveBeenCalledWith(
-      {
-        giscus: {
-          setConfig: {
-            theme: 'dark',
-          },
-        },
-      },
-      'https://giscus.app'
-    );
-
-    document.body.removeChild(iframe);
-  });
-
-  it('keeps the comment embed mounted when the theme changes', () => {
-    vi.mocked(useTheme).mockReturnValue({
-      theme: 'light',
-      resolvedTheme: 'light',
-    } as ReturnType<typeof useTheme>);
-
-    const { rerender } = render(<GiscusComments slug="redis" />);
-    const initialEmbed = screen.getByTestId('giscus-embed');
-
-    vi.mocked(useTheme).mockReturnValue({
-      theme: 'dark',
-      resolvedTheme: 'dark',
-    } as ReturnType<typeof useTheme>);
-    rerender(<GiscusComments slug="redis" />);
-
-    expect(screen.getByTestId('giscus-embed')).toBe(initialEmbed);
   });
 });

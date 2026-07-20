@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Title Review"
+  short_description: "블로그 제목 후보를 점수화해 더 쉽게 선택합니다"
+  default_prompt: "Use $blog-title-review to evaluate title candidates for a draft blog post."

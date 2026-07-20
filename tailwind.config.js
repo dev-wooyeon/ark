@@ -7,7 +7,6 @@ const config = {
     './blog/**/*.{js,ts,jsx,tsx,mdx}',
     './infra/**/*.{js,ts,jsx,tsx,mdx}',
     './resume/**/*.{js,ts,jsx,tsx,mdx}',
-    './search/**/*.{js,ts,jsx,tsx,mdx}',
     './ui/**/*.{js,ts,jsx,tsx,mdx}',
     './site/**/*.{js,ts,jsx,tsx,mdx}',
     './styles/**/*.{css,js,ts}',

@@ -1,7 +1,6 @@
 'use client';
 
 import { clsx } from 'clsx';
-import { EmptyState } from '@/ui/EmptyState';
 
 interface RouteErrorProps {
   title?: string;
@@ -11,30 +10,37 @@ interface RouteErrorProps {
 }
 
 export default function RouteError({
-  title = '문제가 발생했습니다',
+  title = '이 페이지를 표시할 수 없습니다',
   description = '잠시 후 다시 시도해 주세요.',
   onRetry,
   className,
 }: RouteErrorProps) {
   return (
-    <div
-      className={clsx('flex min-h-96 items-center justify-center', className)}
-    >
-      <EmptyState
-        icon={<span className="tossface">⚠️</span>}
-        title={title}
-        description={description}
-        variant="error"
-        action={
-          onRetry
-            ? {
-                label: '다시 시도',
-                onClick: onRetry,
-              }
-            : undefined
-        }
-      />
-    </div>
+    <main className={clsx('ark-route-error', className)}>
+      <section
+        aria-live="polite"
+        aria-labelledby="route-error-title"
+        className="ark-route-error-content"
+        role="status"
+      >
+        <p className="ark-route-error-label">UNAVAILABLE</p>
+        <h1 id="route-error-title" className="ark-route-error-title">
+          {title}
+        </h1>
+        {description ? (
+          <p className="ark-route-error-description">{description}</p>
+        ) : null}
+        {onRetry ? (
+          <button
+            className="ark-route-error-retry"
+            onClick={onRetry}
+            type="button"
+          >
+            다시 시도
+          </button>
+        ) : null}
+      </section>
+    </main>
   );
 }
 

@@ -12,7 +12,7 @@ import {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-toss-blue)] text-white hover:opacity-80 active:scale-[0.98]',
+    'bg-[var(--color-toss-blue)] text-[var(--color-accent-foreground)] hover:opacity-80 active:scale-[0.98]',
   secondary:
     'bg-[var(--color-grey-100)] text-[var(--color-grey-900)] hover:bg-[var(--color-grey-200)] active:scale-[0.98]',
   tertiary:
