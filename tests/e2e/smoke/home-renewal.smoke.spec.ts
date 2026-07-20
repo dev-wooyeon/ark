@@ -59,6 +59,7 @@ test.describe('Home and archive', () => {
   test('@smoke Archive는 날짜와 제목만의 글 목록을 제공해요', async ({
     page,
   }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/archive');
 
     const postLinks = page.locator('main a[href^="/blog/"]');
