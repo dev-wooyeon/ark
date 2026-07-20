@@ -24,9 +24,6 @@
 - `blog/services/post-repository.test.ts`
   - 정렬/시리즈 조회/SKU 슬러그 수집
 
-- `search/model/get-search-actions.test.ts`
-  - 키워드 생성/nullable tags 처리
-
 - `blog/services/markdown-parser.test.ts`
   - TOC ID 생성 및 중복 처리
 
@@ -40,7 +37,7 @@
 ### components
 
 - `site/navigation/MobileBottomNav.test.tsx`
-  - 아이템 수, active 상태, 토큰 기반 class, search action, analytics tracking
+  - 아이템 수, active 상태, 토큰 기반 class, analytics tracking
 - `blog/ui/components/*.test.tsx`
   - PostCard/PostList/CategoryFilter 상태별 렌더/이벤트
 - `ui/**/*.test.tsx`

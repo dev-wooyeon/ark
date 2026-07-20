@@ -42,7 +42,6 @@
 
 **애니메이션:**
 
-- **3D:** Three.js + @react-three/fiber + @react-three/drei
 - **모션:** Framer Motion
 
 **콘텐츠 처리:**
@@ -73,7 +72,6 @@ ark/
 ├── 📁 app/                     # Next.js route adapter
 ├── 📁 blog/                    # 글 도메인
 ├── 📁 resume/                  # 이력서 도메인
-├── 📁 search/                  # 검색 도메인
 ├── 📁 site/                    # 홈, AppShell, provider, site config
 ├── 📁 infra/                   # Supabase, Umami, SEO integration
 ├── 📁 ui/                      # 도메인 지식 없는 UI/레이아웃/모션

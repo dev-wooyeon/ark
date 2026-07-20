@@ -17,7 +17,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-8 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-action)] bg-[var(--color-toss-blue)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-toss-blue-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+          className="mt-8 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-action)] bg-[var(--color-toss-blue)] px-5 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[var(--color-toss-blue-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
         >
           홈으로 돌아가기
         </Link>

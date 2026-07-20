@@ -1,8 +1,8 @@
 /* ============================================
-   TDS-based Global Styles
+   Ark Paper Global Styles
    ============================================ */
 
-/* TDS Design Tokens */
+/* Ark Paper Design Tokens */
 @import './tokens.css';
 
 /* Tailwind CSS */
@@ -246,7 +246,7 @@
 
 /* ===== Selection ===== */
 ::selection {
-  background-color: rgba(49, 130, 246, 0.2);
+  background-color: var(--color-selection-bg);
   color: var(--color-grey-900);
 }
 
@@ -480,7 +480,7 @@
   font-family: var(--font-mono);
   border-top-left-radius: var(--radius-md);
   border-top-right-radius: var(--radius-md);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-code-divider);
   margin-bottom: -1.5rem;
   position: relative;
   z-index: 1;
@@ -555,7 +555,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(16, 24, 40, 0.72);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -677,12 +677,8 @@
   color: var(--color-grey-700);
 }
 
-/* Shiki dual-theme mapping */
+/* Shiki fixed ink-surface mapping */
 .prose pre code span {
-  color: var(--shiki-light);
-}
-
-.dark .prose pre code span {
   color: var(--shiki-dark);
 }
 

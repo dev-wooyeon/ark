@@ -24,7 +24,6 @@ vi.mock('@/infra/analytics/lib/analytics', () => {
   return {
     AnalyticsEvents: {
       click: 'click',
-      theme: 'theme',
       view: 'view',
     },
     trackEvent: (...args: unknown[]) => mockTrackEvent(...args),
@@ -76,11 +75,13 @@ describe('MobileBottomNav', () => {
     );
   });
 
-  it('renders drawer shell when open', () => {
+  it('renders a text-first drawer shell when open', () => {
     render(<MobileBottomNav pathname="/" visible open />);
 
     expect(screen.getByLabelText('모바일 네비게이션')).toBeInTheDocument();
-    expect(screen.getByText('블로그 섹션과 외부 링크')).toBeInTheDocument();
+    expect(screen.getByText('메뉴')).toBeInTheDocument();
+    expect(screen.queryByText('전체 피드와 최근 글')).not.toBeInTheDocument();
+    expect(screen.queryByText('기술 글과 시리즈')).not.toBeInTheDocument();
   });
 
   it('calls close handler when backdrop is clicked', () => {

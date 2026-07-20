@@ -34,7 +34,9 @@ describe('PostList', () => {
   it('shows empty state when no posts exist', () => {
     render(<PostList posts={[]} />);
 
-    expect(screen.getByRole('status')).toHaveTextContent('아직 작성된 글이 없어요');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      '아직 작성된 글이 없어요'
+    );
   });
 
   it('renders a list of posts', () => {
@@ -58,5 +60,16 @@ describe('PostList', () => {
     expect(links).toHaveLength(2);
     expect(links[0]).toHaveAttribute('href', '/blog/one');
     expect(screen.getByText('첫 번째 글')).toBeInTheDocument();
+  });
+
+  it('renders archive layout when requested', () => {
+    render(<PostList posts={samplePosts} layout="archive" />);
+
+    expect(screen.getByRole('list')).toBeInTheDocument();
+    expect(screen.getByRole('list')).toHaveClass('space-y-2', 'sm:space-y-1');
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(
+      screen.getByRole('link', { name: /2026\.02\.01 첫 번째 글/ })
+    ).toHaveAttribute('href', '/blog/one');
   });
 });

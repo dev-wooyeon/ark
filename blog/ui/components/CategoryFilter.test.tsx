@@ -79,18 +79,19 @@ describe('CategoryFilter', () => {
     expect(onCategoryChange).toHaveBeenCalledWith('Life');
   });
 
-  it('renders active style classes', () => {
+  it('renders the active category as an underlined text control', () => {
     render(
       <CategoryFilter
         {...baseProps}
         activeCategory="Life"
         onCategoryChange={vi.fn()}
+        variant="links"
       />
     );
 
     const lifeButton = screen
       .getAllByRole('button')
-      .find((button) => button.textContent === 'Life2');
+      .find((button) => button.textContent === 'Life(2)');
 
     expect(lifeButton).toBeDefined();
 
@@ -98,9 +99,10 @@ describe('CategoryFilter', () => {
       throw new Error('Life category button not found');
     }
 
-    expect(lifeButton).toHaveClass('bg-[var(--color-toss-blue)]');
-    expect(lifeButton).toHaveClass('rounded-[var(--radius-selection)]');
-    expect(lifeButton).not.toHaveClass('shadow-sm');
-    expect(lifeButton).not.toHaveClass('active:translate-y-px');
+    expect(lifeButton).toHaveClass('border-b-2');
+    expect(lifeButton).toHaveClass('border-[var(--color-toss-blue)]');
+    expect(lifeButton).toHaveClass('text-[var(--color-toss-blue)]');
+    expect(lifeButton).not.toHaveClass('rounded-[var(--radius-selection)]');
+    expect(lifeButton).not.toHaveClass('bg-[var(--color-toss-blue)]');
   });
 });

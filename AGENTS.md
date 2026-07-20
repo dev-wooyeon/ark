@@ -45,7 +45,6 @@ ADR 작성 기준:
 - `blog/`: 글 도메인. post schema, repository, publication policy, series,
   blog UI, RSS feed serialization, view-count use case
 - `resume/`: 이력서 도메인. resume data, ordering, resume UI
-- `search/`: 검색 도메인. command palette, search action, recommendation
 - `site/`: 도메인 조합 layer. home, AppShell, navigation, provider, site config
 - `infra/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper,
   integration adapter

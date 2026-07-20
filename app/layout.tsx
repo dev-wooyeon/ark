@@ -5,7 +5,6 @@ import '@/styles/tossface.css';
 
 import AppProviders from '@/site/providers/AppProviders';
 import { getSortedFeedData } from '@/blog/services/post-repository';
-import { selectClientPosts } from '@/site/providers/client-posts';
 import { AppShell } from '@/site/shell/AppShell';
 import {
   SITE_AUTHOR,
@@ -55,16 +54,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#EAEBEA',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const posts = selectClientPosts(getSortedFeedData());
+  const posts = getSortedFeedData().map(({ slug, category }) => ({
+    slug,
+    category,
+  }));
 
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko">
       <head>
         <link
           rel="preload"
@@ -75,11 +77,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <AppProviders posts={posts}>
+        <AppProviders>
           <div id="app-root">
             <AppShell posts={posts}>{children}</AppShell>
           </div>
-          <div id="overlay-root" />
         </AppProviders>
       </body>
     </html>

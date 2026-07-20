@@ -47,15 +47,4 @@ describe('getMDXComponents', () => {
     expect(screen.getByText('본문 문단')).not.toHaveClass('text-base');
     expect(screen.getByText('본문 문단')).not.toHaveClass('leading-relaxed');
   });
-
-  it('does not register Three.js visualizations for every MDX post', () => {
-    const components = getMDXComponents({});
-
-    expect(components).not.toHaveProperty('BinarySearchVisualization');
-    expect(components).not.toHaveProperty('DPVisualization');
-    expect(components).not.toHaveProperty('GraphTraversalVisualization');
-    expect(components).not.toHaveProperty('SlidingWindowVisualization');
-    expect(components).not.toHaveProperty('SortingVisualization');
-    expect(components).not.toHaveProperty('TwoPointerVisualization');
-  });
 });

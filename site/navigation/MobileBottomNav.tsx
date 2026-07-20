@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { clsx } from 'clsx';
 import { AnalyticsEvents, trackEvent } from '@/infra/analytics/lib/analytics';
 import { SITE_AUTHOR_EMAIL, SITE_FEED_PATH } from '@/site/config/site';
-import { AppSectionIcon } from '@/ui/icons/AppSectionIcon';
 
 interface MobileBottomNavProps {
   pathname: string;
@@ -21,6 +20,29 @@ interface MobileNavItem {
   href: string;
 }
 
+const NAV_ITEMS: MobileNavItem[] = [
+  {
+    id: 'home',
+    label: 'Home',
+    href: '/',
+  },
+  {
+    id: 'engineering',
+    label: 'Tech',
+    href: '/engineering',
+  },
+  {
+    id: 'life',
+    label: 'Life',
+    href: '/life',
+  },
+  {
+    id: 'resume',
+    label: 'Resume',
+    href: '/resume',
+  },
+];
+
 export default function MobileBottomNav({
   pathname,
   activeSection,
@@ -28,32 +50,6 @@ export default function MobileBottomNav({
   open = false,
   onOpenChange,
 }: MobileBottomNavProps) {
-  const navItems = useMemo<MobileNavItem[]>(
-    () => [
-      {
-        id: 'home',
-        label: 'Home',
-        href: '/',
-      },
-      {
-        id: 'engineering',
-        label: 'Tech',
-        href: '/engineering',
-      },
-      {
-        id: 'life',
-        label: 'Life',
-        href: '/life',
-      },
-      {
-        id: 'resume',
-        label: 'Resume',
-        href: '/resume',
-      },
-    ],
-    []
-  );
-
   useEffect(() => {
     if (!open) {
       return;
@@ -88,7 +84,7 @@ export default function MobileBottomNav({
         type="button"
         aria-label="메뉴 닫기"
         className={clsx(
-          'absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity',
+          'absolute inset-0 bg-black/20 transition-opacity',
           open ? 'opacity-100' : 'opacity-0'
         )}
         onClick={() => onOpenChange?.(false)}
@@ -97,47 +93,28 @@ export default function MobileBottomNav({
       <aside
         id="mobile-nav-drawer"
         className={clsx(
-          'absolute inset-y-0 left-0 flex w-72 max-w-full flex-col border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-xl transition-transform',
-          open ? 'translate-x-0' : '-translate-x-full'
+          'absolute inset-0 flex flex-col bg-[var(--mobile-nav-bg)] transition-opacity',
+          open ? 'opacity-100' : 'opacity-0'
         )}
         aria-label="모바일 네비게이션"
       >
-        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-grey-400)]">
-              탐색
-            </p>
-            <p className="mt-1 text-sm text-[var(--color-grey-500)]">
-              블로그 섹션과 외부 링크
-            </p>
-          </div>
+        <div className="flex h-14 items-center justify-between border-b border-[var(--mobile-nav-border)] px-4">
+          <p className="text-base font-semibold tracking-tight text-[var(--color-text-primary)]">
+            메뉴
+          </p>
           <button
             type="button"
             aria-label="메뉴 닫기"
             onClick={() => onOpenChange?.(false)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-grey-200)] bg-[var(--color-grey-50)] text-[var(--color-grey-500)] transition-colors hover:border-[var(--color-grey-300)] hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
+            className="flex h-11 items-center rounded-[var(--radius-action)] px-2 text-sm font-medium text-[var(--mobile-nav-text)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.9"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="4" y1="7" x2="20" y2="7" />
-              <line x1="4" y1="12" x2="20" y2="12" />
-              <line x1="4" y1="17" x2="20" y2="17" />
-            </svg>
+            닫기
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
+        <nav className="flex-1 overflow-y-auto px-6 py-10">
           <div className="space-y-2">
-            {navItems.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = activeSection
                 ? item.id === activeSection
                 : isActiveItem(item, pathname);
@@ -154,48 +131,23 @@ export default function MobileBottomNav({
                     });
                   }}
                   className={clsx(
-                    'flex items-center gap-3 rounded-2xl border px-3 py-3 transition-colors',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]',
+                    'flex min-h-14 items-center border-l-2 px-4 text-xl font-semibold tracking-tight transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]',
                     isActive
-                      ? 'border-[var(--mobile-nav-active-border)] bg-[var(--mobile-nav-active-bg)]'
-                      : 'border-transparent hover:bg-[var(--mobile-nav-hover-bg)]'
+                      ? 'border-[var(--color-toss-blue)] text-[var(--mobile-nav-active-text)]'
+                      : 'border-transparent text-[var(--mobile-nav-text)] hover:bg-[var(--mobile-nav-hover-bg)] hover:text-[var(--color-text-primary)]'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <span
-                    className={clsx(
-                      'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border',
-                      isActive
-                        ? 'border-[var(--color-toss-blue)] bg-[var(--color-toss-blue)] text-white'
-                        : 'border-[var(--color-border)] bg-[var(--color-grey-50)] text-[var(--mobile-nav-text)]'
-                    )}
-                    aria-hidden="true"
-                  >
-                    <NavIcon id={item.id} />
-                  </span>
-                  <span className="min-w-0">
-                    <span
-                      className={clsx(
-                        'block text-sm font-semibold',
-                        isActive
-                          ? 'text-[var(--mobile-nav-active-text)]'
-                          : 'text-[var(--color-text-primary)]'
-                      )}
-                    >
-                      {item.label}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-[var(--color-grey-500)]">
-                      {getDescription(item.id)}
-                    </span>
-                  </span>
+                  {item.label}
                 </Link>
               );
             })}
           </div>
         </nav>
 
-        <div className="border-t border-[var(--color-border)] px-3 py-3">
-          <div className="space-y-1.5">
+        <div className="border-t border-[var(--mobile-nav-border)] px-6 py-6">
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
             <ExternalLink
               href="https://github.com/dev-wooyeon"
               label="GitHub"
@@ -218,21 +170,6 @@ export default function MobileBottomNav({
   );
 }
 
-function getDescription(id: MobileNavItem['id']) {
-  switch (id) {
-    case 'home':
-      return '전체 피드와 최근 글';
-    case 'engineering':
-      return '기술 글과 시리즈';
-    case 'life':
-      return '에세이와 회고';
-    case 'resume':
-      return '경력과 프로젝트';
-    default:
-      return '';
-  }
-}
-
 function ExternalLink({
   href,
   label,
@@ -246,10 +183,9 @@ function ExternalLink({
     <a
       href={href}
       onClick={onNavigate}
-      className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-grey-50)] hover:text-[var(--color-text-primary)]"
+      className="inline-flex min-h-11 items-center rounded-[var(--radius-action)] px-2 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--mobile-nav-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--mobile-nav-focus-offset)]"
     >
-      <span>{label}</span>
-      <span className="text-xs text-[var(--color-grey-400)]">열기</span>
+      {label}
     </a>
   );
 }
@@ -260,19 +196,4 @@ function isActiveItem(item: MobileNavItem, pathname: string): boolean {
   }
 
   return pathname.startsWith(item.href);
-}
-
-function NavIcon({ id }: { id: MobileNavItem['id'] }) {
-  switch (id) {
-    case 'engineering':
-      return <AppSectionIcon section="engineering" width={16} height={16} />;
-    case 'home':
-      return <AppSectionIcon section="home" width={16} height={16} />;
-    case 'life':
-      return <AppSectionIcon section="life" width={16} height={16} />;
-    case 'resume':
-      return <AppSectionIcon section="resume" width={16} height={16} />;
-    default:
-      return null;
-  }
 }

@@ -5,7 +5,17 @@ import { CategoryIcon } from '@/ui/icons/AppSectionIcon';
 
 interface PostCardProps {
   post: FeedData;
-  variant?: 'default' | 'list';
+  variant?: 'archive' | 'default' | 'list';
+}
+
+function formatArchiveDate(date: string): string {
+  const matchedDate = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);
+
+  if (!matchedDate) {
+    return date;
+  }
+
+  return `${matchedDate[1]}.${matchedDate[2]}.${matchedDate[3]}`;
 }
 
 export default function PostCard({ post, variant = 'default' }: PostCardProps) {
@@ -16,6 +26,29 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
   });
   const readingTimeLabel = post.readingTime ? `약 ${post.readingTime}분` : null;
   const visibleTags = post.tags?.slice(0, 3) ?? [];
+
+  if (variant === 'archive') {
+    return (
+      <Link
+        href={`/blog/${post.slug}`}
+        className={clsx(
+          'group flex min-h-11 flex-col items-start gap-1.5 rounded-[var(--radius-action)] py-3 sm:flex-row sm:items-baseline sm:gap-3 sm:py-2',
+          'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
+        )}
+      >
+        <time
+          dateTime={post.date}
+          className="shrink-0 text-meta font-medium tabular-nums text-[var(--color-text-tertiary)]"
+        >
+          {formatArchiveDate(post.date)}
+        </time>
+        <h3 className="min-w-0 text-lg font-semibold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)] sm:text-base">
+          {post.title}
+        </h3>
+      </Link>
+    );
+  }
 
   if (variant === 'list') {
     return (

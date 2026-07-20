@@ -12,7 +12,7 @@ import {
 
 interface PostListProps {
   posts: FeedData[];
-  layout?: 'grid' | 'list';
+  layout?: 'archive' | 'grid' | 'list';
 }
 
 function getContainerVariants(
@@ -49,6 +49,7 @@ function getItemVariants(effectiveMotionMode: EffectiveMotionMode): Variants {
 }
 
 const layoutClassNames = {
+  archive: 'space-y-2 sm:space-y-1',
   grid: 'grid gap-6 md:grid-cols-2',
   list: 'space-y-4',
 } satisfies Record<NonNullable<PostListProps['layout']>, string>;
@@ -68,12 +69,25 @@ export default function PostList({ posts, layout = 'grid' }: PostListProps) {
 
   if (effectiveMotionMode === 'off') {
     return (
-      <div className={layoutClassNames[layout]}>
+      <div
+        className={layoutClassNames[layout]}
+        role={layout === 'archive' ? 'list' : undefined}
+      >
         {posts.map((post) => (
-          <div key={post.slug} className={layout === 'grid' ? 'h-full' : ''}>
+          <div
+            key={post.slug}
+            className={layout === 'grid' ? 'h-full' : ''}
+            role={layout === 'archive' ? 'listitem' : undefined}
+          >
             <PostCard
               post={post}
-              variant={layout === 'list' ? 'list' : 'default'}
+              variant={
+                layout === 'archive'
+                  ? 'archive'
+                  : layout === 'list'
+                    ? 'list'
+                    : 'default'
+              }
             />
           </div>
         ))}
@@ -84,17 +98,25 @@ export default function PostList({ posts, layout = 'grid' }: PostListProps) {
   const containerVariants = getContainerVariants(effectiveMotionMode);
   const itemVariants = getItemVariants(effectiveMotionMode);
 
-  if (layout === 'list') {
+  if (layout === 'list' || layout === 'archive') {
     return (
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className={layoutClassNames.list}
+        className={layoutClassNames[layout]}
+        role={layout === 'archive' ? 'list' : undefined}
       >
         {posts.map((post) => (
-          <motion.div key={post.slug} variants={itemVariants}>
-            <PostCard post={post} variant="list" />
+          <motion.div
+            key={post.slug}
+            variants={itemVariants}
+            role={layout === 'archive' ? 'listitem' : undefined}
+          >
+            <PostCard
+              post={post}
+              variant={layout === 'archive' ? 'archive' : 'list'}
+            />
           </motion.div>
         ))}
       </motion.div>

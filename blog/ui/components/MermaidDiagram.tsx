@@ -1,7 +1,6 @@
 'use client';
 
 import { useId, useEffect, useRef, useState, type MouseEvent } from 'react';
-import { useTheme } from 'next-themes';
 
 interface MermaidDiagramProps {
   chart: string;
@@ -13,7 +12,6 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const [inlineScale, setInlineScale] = useState(1);
   const [fullscreenScale, setFullscreenScale] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { resolvedTheme } = useTheme();
   const uniqueId = useId().replace(/:/g, '');
   const inlineHostRef = useRef<HTMLDivElement>(null);
   const fullscreenHostRef = useRef<HTMLDivElement>(null);
@@ -100,7 +98,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: 'strict',
-          theme: resolvedTheme === 'dark' ? 'dark' : 'default',
+          theme: 'neutral',
         });
 
         const { svg: renderedSvg } = await mermaid.render(
@@ -123,7 +121,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     return () => {
       isActive = false;
     };
-  }, [chart, resolvedTheme, uniqueId]);
+  }, [chart, uniqueId]);
 
   useEffect(() => {
     applyScale(inlineHostRef.current, inlineScale);

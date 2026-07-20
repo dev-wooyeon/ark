@@ -1,81 +1,86 @@
 /* ============================================
-   TDS (Toss Design System) Design Tokens
+   Ark Paper Design Tokens
    ============================================ */
 
 @theme {
   /* === Colors === */
 
-  /* Primary */
-  --color-toss-blue: #3182f6;
-  --color-toss-blue-light: #4a9eff;
-  --color-toss-blue-dark: #1b64da;
+  /* Accent */
+  --color-accent: #3f3f46;
+  --color-accent-hover: #252525;
+  --color-accent-foreground: #eaebea;
+  --color-toss-blue: var(--color-accent);
+  --color-toss-blue-light: #52525b;
+  --color-toss-blue-dark: var(--color-accent-hover);
 
   /* Grey Scale */
-  --color-grey-900: #191f28;
-  --color-grey-800: #333d4b;
-  --color-grey-700: #4e5968;
-  --color-grey-600: #6b7684;
-  --color-grey-500: #8b95a1;
-  --color-grey-400: #b0b8c1;
-  --color-grey-300: #d1d6db;
-  --color-grey-200: #e5e8eb;
-  --color-grey-100: #f2f4f6;
-  --color-grey-50: #f9fafb;
+  --color-grey-900: #252525;
+  --color-grey-800: #3f3f46;
+  --color-grey-700: #52525b;
+  --color-grey-600: #62626a;
+  --color-grey-500: #77777e;
+  --color-grey-400: #94949a;
+  --color-grey-300: #c8c8cc;
+  --color-grey-200: #d8d8dc;
+  --color-grey-100: #e2e2e5;
+  --color-grey-50: #f2f2f3;
 
   /* Semantic Colors */
-  --color-text-primary: #191f28;
-  --color-text-secondary: #4e5968;
-  --color-text-tertiary: #6b7684;
-  --color-text-disabled: #b0b8c1;
+  --color-text-primary: #252525;
+  --color-text-secondary: #52525b;
+  --color-text-tertiary: #62626a;
+  --color-text-disabled: #94949a;
 
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f9fafb;
-  --color-bg-tertiary: #f2f4f6;
-  --color-surface: #ffffff;
-  --color-blue-500: #3182f6;
+  --color-bg-primary: #eaebea;
+  --color-bg-secondary: #e2e2e5;
+  --color-bg-tertiary: #d8d8dc;
+  --color-surface: #eaebea;
+  --color-blue-500: var(--color-accent);
 
-  --color-border: #e5e8eb;
-  --color-border-hover: #d1d6db;
-  --color-divider: #f2f4f6;
+  --color-border: #c8c8cc;
+  --color-border-hover: #94949a;
+  --color-divider: #d8d8dc;
+  --color-selection-bg: #d8d8dc;
+  --color-overlay: rgba(37, 37, 37, 0.72);
 
-  /* Mobile Glass Navigation */
-  --mobile-top-header-bg: rgba(255, 255, 255, 0.78);
-  --mobile-nav-bg: rgba(255, 255, 255, 0.72);
-  --mobile-nav-border: rgba(209, 214, 219, 0.56);
-  --mobile-nav-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
-  --mobile-nav-text: #6b7684;
-  --mobile-nav-active-text: #191f28;
-  --mobile-nav-active-bg: #f2f4f6;
-  --mobile-nav-active-border: #e5e8eb;
-  --mobile-nav-hover-bg: rgba(49, 130, 246, 0.08);
+  /* Mobile Navigation */
+  --mobile-top-header-bg: var(--color-bg-primary);
+  --mobile-nav-bg: var(--color-bg-primary);
+  --mobile-nav-border: var(--color-border);
+  --mobile-nav-shadow: 0 8px 24px rgba(37, 37, 37, 0.12);
+  --mobile-nav-text: var(--color-text-secondary);
+  --mobile-nav-active-text: var(--color-text-primary);
+  --mobile-nav-active-bg: #e0e1e3;
+  --mobile-nav-active-border: var(--color-border);
+  --mobile-nav-hover-bg: var(--color-bg-secondary);
   --mobile-nav-focus-ring: var(--color-toss-blue);
   --mobile-nav-focus-offset: var(--mobile-nav-bg);
 
   /* Code Block Colors */
-  --color-code-bg: #f8fafc;
-  --color-code-fg: #1e293b;
-  --color-code-title-bg: #e2e8f0;
-  --color-code-title-fg: #334155;
-  --color-code-highlight: rgba(15, 23, 42, 0.06);
-  --shiki-light: #334155;
-  --shiki-dark: #e2e8f0;
+  --color-code-bg: #252525;
+  --color-code-fg: #eaebea;
+  --color-code-title-bg: #3f3f46;
+  --color-code-title-fg: #eaebea;
+  --color-code-highlight: rgba(234, 235, 234, 0.12);
+  --color-code-divider: rgba(234, 235, 234, 0.16);
+  --shiki-dark: #eaebea;
 
   /* Feedback Colors */
-  --color-success: #00c471;
-  --color-warning: #f59e0b;
-  --color-error: #f04452;
-  --color-info: #3182f6;
+  --color-success: #3f3f46;
+  --color-warning: #52525b;
+  --color-error: #252525;
+  --color-info: var(--color-accent);
 
-  /* Category Badge Colors - Light */
-  --color-category-tech-bg: #e8f2ff;
-  --color-category-tech-border: #bfd8ff;
-  --color-category-tech-text: #1b64da;
-  --color-category-series-bg: #e6f8ff;
-  --color-category-series-border: #b7e9ff;
-  --color-category-series-text: #0077b6;
-  --color-category-life-bg: #eef0ff;
-  --color-category-life-border: #ccd4ff;
-  --color-category-life-text: #4b5fd6;
+  /* Category Badge Colors */
+  --color-category-tech-bg: #e0e1e3;
+  --color-category-tech-border: #c8c8cc;
+  --color-category-tech-text: #3f3f46;
+  --color-category-series-bg: #e2e2e5;
+  --color-category-series-border: #c8c8cc;
+  --color-category-series-text: #3f3f46;
+  --color-category-life-bg: #e6e6e8;
+  --color-category-life-border: #c8c8cc;
+  --color-category-life-text: #52525b;
 
   /* === Typography === */
 
@@ -226,95 +231,14 @@
   /* sm: 640px, md: 768px, lg: 1024px, xl: 1280px */
 }
 
-/* ============================================
-   Dark Mode Theme
-   ============================================ */
-.dark {
-  /* Inverted Grey Scale */
-  --color-grey-50: #191f28;
-  --color-grey-100: #2a3441;
-  --color-grey-200: #3b4654;
-  --color-grey-300: #6b7684;
-  --color-grey-400: #8b95a1;
-  --color-grey-500: #b0b8c1;
-  --color-grey-600: #d1d6db;
-  --color-grey-700: #e5e8eb;
-  --color-grey-800: #f2f4f6;
-  --color-grey-900: #f9fafb;
-
-  /* Semantic Colors - Dark Mode */
-  --color-text-primary: #f9fafb;
-  --color-text-secondary: #e5e8eb;
-  --color-text-tertiary: #d1d6db;
-  --color-text-disabled: #8b95a1;
-
-  --color-bg-primary: #191f28;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #1e293b;
-  --color-surface: #111827;
-  --color-blue-500: #6bb3ff;
-
-  --color-border: #2c3644;
-  --color-border-hover: #364252;
-  --color-divider: #2f3947;
-
-  /* Mobile Glass Navigation - Dark */
-  --mobile-top-header-bg: rgba(25, 31, 40, 0.72);
-  --mobile-nav-bg: rgba(25, 31, 40, 0.66);
-  --mobile-nav-border: rgba(78, 89, 104, 0.68);
-  --mobile-nav-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --mobile-nav-text: #b0b8c1;
-  --mobile-nav-active-text: #f2f4f6;
-  --mobile-nav-active-bg: rgba(78, 89, 104, 0.48);
-  --mobile-nav-active-border: rgba(110, 129, 150, 0.72);
-  --mobile-nav-hover-bg: rgba(74, 158, 255, 0.16);
-  --mobile-nav-focus-ring: #6bb3ff;
-  --mobile-nav-focus-offset: var(--mobile-nav-bg);
-
-  /* Code Block Colors - keep dark surface in dark mode */
-  --color-code-bg: #0f172a;
-  --color-code-fg: #e5e8eb;
-  --color-code-title-bg: #1e293b;
-  --color-code-title-fg: #e5e8eb;
-  --color-code-highlight: rgba(255, 255, 255, 0.12);
-  --shiki-light: #94a3b8;
-  --shiki-dark: #f8fafc;
-
-  /* Primary Blue - Lighter in dark mode */
-  --color-toss-blue: #4a9eff;
-  --color-toss-blue-light: #6bb3ff;
-  --color-toss-blue-dark: #3182f6;
-
-  /* Category Badge Colors - Dark */
-  --color-category-tech-bg: rgba(74, 158, 255, 0.2);
-  --color-category-tech-border: rgba(110, 175, 255, 0.45);
-  --color-category-tech-text: #b7d9ff;
-  --color-category-series-bg: rgba(72, 188, 255, 0.2);
-  --color-category-series-border: rgba(120, 223, 255, 0.45);
-  --color-category-series-text: #beefff;
-  --color-category-life-bg: rgba(120, 138, 255, 0.22);
-  --color-category-life-border: rgba(163, 176, 255, 0.48);
-  --color-category-life-text: #d0d8ff;
-}
-
 @media (prefers-contrast: more) {
   :root {
-    --color-text-secondary: #333d4b;
-    --color-text-tertiary: #4e5968;
-    --color-border: #b0b8c1;
-    --color-border-hover: #8b95a1;
-    --color-divider: #d1d6db;
-    --color-toss-blue: #1b64da;
-    --color-toss-blue-dark: #0f4fb8;
-  }
-
-  .dark {
-    --color-text-secondary: #f2f4f6;
-    --color-text-tertiary: #e5e8eb;
-    --color-border: #6b7684;
-    --color-border-hover: #b0b8c1;
-    --color-divider: #6b7684;
-    --color-toss-blue: #8cc7ff;
-    --color-toss-blue-dark: #b7d9ff;
+    --color-text-secondary: #3f3f46;
+    --color-text-tertiary: #52525b;
+    --color-border: #62626a;
+    --color-border-hover: #3f3f46;
+    --color-divider: #94949a;
+    --color-accent: #252525;
+    --color-accent-hover: #252525;
   }
 }

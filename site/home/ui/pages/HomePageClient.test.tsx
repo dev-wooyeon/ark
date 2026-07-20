@@ -11,7 +11,11 @@ vi.mock('@/ui/layout', () => ({
   }: {
     children: ReactNode;
     className?: string;
-  }) => <div className={className}>{children}</div>,
+  }) => (
+    <div data-testid="home-container" className={className}>
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock('@/blog/ui/components', () => ({
@@ -30,8 +34,8 @@ vi.mock('@/blog/ui/components', () => ({
       ))}
     </div>
   ),
-  PostList: ({ posts }: { posts: FeedData[] }) => (
-    <ol data-testid="post-list">
+  PostList: ({ posts, layout }: { posts: FeedData[]; layout?: string }) => (
+    <ol data-layout={layout} data-testid="post-list">
       {posts.map((post) => (
         <li key={post.slug} data-testid="post-list-item">
           {post.slug}
@@ -61,15 +65,11 @@ const samplePosts: FeedData[] = [
 ];
 
 describe('HomePageClient', () => {
-  it('keeps only archive filters and removes the local search input', () => {
+  it('starts with archive filters without a feed heading or local search', () => {
     render(<HomePageClient posts={samplePosts} />);
 
-    expect(
-      screen.getByRole('heading', {
-        level: 1,
-        name: '최근 기록',
-      })
-    ).toBeInTheDocument();
+    expect(screen.queryByText('전체 아카이브')).not.toBeInTheDocument();
+    expect(screen.queryByText('최근 기록')).not.toBeInTheDocument();
     expect(
       screen.queryByRole('heading', {
         name: '시스템을 운영하며 내린 기술적 판단과 실패를 기록합니다',
@@ -79,6 +79,7 @@ describe('HomePageClient', () => {
       screen.queryByRole('heading', { name: '먼저 읽을 글' })
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+    expect(screen.getByTestId('home-container')).toHaveClass('md:pt-4');
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: '최신순' })
@@ -88,6 +89,10 @@ describe('HomePageClient', () => {
     ).not.toBeInTheDocument();
     expect(screen.getAllByTestId('post-list-item')[0]).toHaveTextContent(
       'tech-post'
+    );
+    expect(screen.getByTestId('post-list')).toHaveAttribute(
+      'data-layout',
+      'archive'
     );
   });
 });
