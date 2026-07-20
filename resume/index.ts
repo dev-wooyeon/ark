@@ -5,6 +5,8 @@ export {
   experiences,
   personalInfo,
   personalProjects,
+  resumeCapabilities,
+  resumeSummaryExperiences,
 } from './model/resume-data';
 export { orderExperienceStages } from './model/order-experience-stages';
 export type {
@@ -18,5 +20,8 @@ export type {
   PersonalInfo,
   PersonalProject,
   ProjectLink,
+  ResumeCapability,
+  ResumeSummaryExperience,
+  ResumeSummaryProject,
   SkillGroup,
 } from './model/types';
