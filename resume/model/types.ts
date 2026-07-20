@@ -67,6 +67,25 @@ export interface ResumeHighlight {
   description: string;
 }
 
+export interface ResumeSummaryProject {
+  title: string;
+  summary: string;
+  description: string;
+  links?: ProjectLink[];
+}
+
+export interface ResumeSummaryExperience {
+  company: string;
+  roleLines: string[];
+  period?: string;
+  projects: ResumeSummaryProject[];
+}
+
+export interface ResumeCapability {
+  label: string;
+  values: string[];
+}
+
 export interface WorkingPrinciple {
   title: string;
   description: string;

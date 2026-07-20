@@ -1,9 +1,7 @@
 export const AnalyticsEvents = {
   view: 'view',
   click: 'click',
-  search: 'search',
   error: 'error',
-  theme: 'theme',
   motion: 'motion_mode_changed',
   visualizationStarted: 'visualization_started',
   visualizationPaused: 'visualization_paused',

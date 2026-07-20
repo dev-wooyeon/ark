@@ -13,9 +13,10 @@ describe('root layout font loading', () => {
     expect(layoutContent).not.toContain('href="/fonts/TossFaceFontWeb.otf"');
   });
 
-  it('passes a public client DTO instead of full editorial metadata', () => {
-    expect(layoutContent).toContain('selectClientPosts(getSortedFeedData())');
-    expect(layoutContent).toContain('<AppProviders posts={posts}>');
+  it('keeps the app shell independent from the archive feed', () => {
+    expect(layoutContent).not.toContain('getSortedFeedData');
+    expect(layoutContent).toContain('<AppProviders>');
+    expect(layoutContent).toContain('<AppShell>{children}</AppShell>');
   });
 
   it('keeps Tossface demand-driven for matching emoji glyphs', () => {

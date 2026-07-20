@@ -38,13 +38,5 @@ export default defineConfig({
         colorScheme: 'light',
       },
     },
-    {
-      name: 'mobile-chrome-dark',
-      use: {
-        browserName: 'chromium',
-        ...devices['iPhone 14'],
-        colorScheme: 'dark',
-      },
-    },
   ],
 });

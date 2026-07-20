@@ -3,14 +3,18 @@ import { render, screen } from '@testing-library/react';
 import RouteError from './RouteState/RouteError';
 
 describe('RouteError', () => {
-  it('renders default error copy', () => {
+  it('renders a route-aligned textual status without an illustration', () => {
     render(<RouteError />);
 
-    expect(screen.getByText('문제가 발생했습니다')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('UNAVAILABLE');
+    expect(
+      screen.getByRole('heading', { name: '이 페이지를 표시할 수 없습니다' })
+    ).toHaveClass('ark-route-error-title');
     expect(screen.getByText('잠시 후 다시 시도해 주세요.')).toBeInTheDocument();
+    expect(screen.queryByText('⚠️')).not.toBeInTheDocument();
   });
 
-  it('calls retry callback when action is clicked', async () => {
+  it('calls retry callback from the text action', async () => {
     const onRetry = vi.fn();
     const { getByRole } = render(
       <RouteError
@@ -22,6 +26,8 @@ describe('RouteError', () => {
 
     await getByRole('button', { name: '다시 시도' }).click();
     expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(getByRole('button', { name: '다시 시도' })).toHaveClass(
+      'ark-route-error-retry'
+    );
   });
 });
-

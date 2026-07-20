@@ -6,6 +6,8 @@ import type {
   Activity,
   Certification,
   ResumeHighlight,
+  ResumeCapability,
+  ResumeSummaryExperience,
   WorkingPrinciple,
 } from '@/resume/model/types';
 
@@ -62,6 +64,126 @@ export const resumeHighlights: ResumeHighlight[] = [
     label: '지급대행 구축',
     value: '30개+ 테이블 / 19개 API',
     description: '거래·정산·송금 책임을 분리하고 초기 고객사 연동 흐름을 검증',
+  },
+];
+
+export const resumeSummaryExperiences: ResumeSummaryExperience[] = [
+  {
+    company: '모노리스',
+    roleLines: ['IoT Team'],
+    period: '2023 - 현재',
+    projects: [
+      {
+        title: '데이터 분석 자동화',
+        summary: '운영 분석을 셀프서비스로 전환',
+        description:
+          '운영 DB를 직접 조회하던 흐름을 CDC 기반 분석 파이프라인으로 바꿔, 1-2시간 걸리던 분석 요청을 즉시 조회할 수 있게 했습니다.',
+        links: [
+          {
+            label: '회고',
+            href: '/blog/data-analysis-pipeline-poc',
+          },
+        ],
+      },
+      {
+        title: 'IoT 플랫폼 재설계',
+        summary: '확장을 고려한 시스템 경계 정리',
+        description:
+          '새로운 파크와 서비스가 추가돼도 변경 범위를 예측할 수 있도록 도메인 경계를 나누고, 기존 시스템은 점진적으로 전환하는 구조를 설계했습니다.',
+        links: [
+          {
+            label: '회고',
+            href: '/blog/platform-system-review',
+          },
+        ],
+      },
+      {
+        title: '에러 분석 자동화',
+        summary: '반복 장애 분석을 리포트로 전환',
+        description:
+          '로그, TraceId, API 경로, 코드 맥락을 하나의 리포트로 묶어 운영자가 우선순위를 빠르게 판단할 수 있게 했습니다.',
+      },
+    ],
+  },
+  {
+    company: '엑심베이',
+    roleLines: ['PG Platform Team'],
+    period: '2019 - 2023',
+    projects: [
+      {
+        title: '지급대행 플랫폼 구축',
+        summary: '거래, 정산, 송금 책임 분리',
+        description:
+          '3인 팀의 PL로 참여해 30개 이상 테이블과 19개 API를 설계하고, 초기 고객사 연동까지 이어지는 지급대행 흐름을 구축했습니다.',
+        links: [
+          {
+            label: '회고',
+            href: '/blog/payment-system-design',
+          },
+        ],
+      },
+      {
+        title: '차액 정산 자동화',
+        summary: '대량 정산 기준을 시스템화',
+        description:
+          '반기마다 400만 건 이상을 수작업으로 비교하던 정산을 자동화해, 과거 거래 소급 정산까지 하루 안에 처리할 수 있게 했습니다.',
+        links: [
+          {
+            label: '회고',
+            href: '/blog/settlement-automation',
+          },
+        ],
+      },
+      {
+        title: '백오피스 성능 개선',
+        summary: '반복 조회의 대기 시간 축소',
+        description:
+          '병목 쿼리와 N+1을 정리하고 페이지네이션을 개선해, 주요 조회 응답 시간을 15초에서 2초로 줄였습니다.',
+        links: [
+          {
+            label: '회고',
+            href: '/blog/operation-automation',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    company: '개인 프로젝트',
+    roleLines: ['데이터 엔지니어링'],
+    projects: [
+      {
+        title: '실시간 CTR 집계 파이프라인',
+        summary: '이벤트를 실시간 지표로 전환',
+        description:
+          'Kafka, Flink, ClickHouse로 impression과 click 이벤트를 집계하고, ClickHouse Materialized View 중심으로 조회 구조를 단순화했습니다.',
+        links: [
+          {
+            label: '구축기',
+            href: '/blog/ctr-pipeline',
+          },
+          {
+            label: '성능개선기',
+            href: '/blog/macbook-air-m1-life',
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const resumeCapabilities: ResumeCapability[] = [
+  {
+    label: '서버 시스템',
+    values: ['Java', 'Spring Boot', 'JPA'],
+  },
+  {
+    label: '데이터 플랫폼',
+    values: ['MySQL', 'Kafka', 'Flink', 'ClickHouse'],
+  },
+  {
+    label: '운영 자동화',
+    values: ['AWS', 'Grafana', 'AI tooling'],
   },
 ];
 

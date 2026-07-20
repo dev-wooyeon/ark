@@ -8,12 +8,6 @@ import {
 import { describe, expect, it, vi } from 'vitest';
 import { MermaidDiagram } from './MermaidDiagram';
 
-vi.mock('next-themes', () => ({
-  useTheme: () => ({
-    resolvedTheme: 'light',
-  }),
-}));
-
 const mockMermaidRender = vi.fn(async () => ({
   svg: '<svg width="500" height="250"><text>diagram</text></svg>',
 }));
@@ -37,6 +31,7 @@ describe('MermaidDiagram', () => {
     expect(mockMermaidInitialize).toHaveBeenCalledWith(
       expect.objectContaining({
         securityLevel: 'strict',
+        theme: 'neutral',
       })
     );
 

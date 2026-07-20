@@ -60,14 +60,13 @@ ${'x'.repeat(5000)}
     expect(hasExtractedImage).toBe(true);
   });
 
-  it('returns series posts sorted by order', () => {
-    const redisPosts = getSeriesPosts('redis-deep-dive', {
-      includePrivate: true,
-    });
-
-    expect(redisPosts.length).toBeGreaterThan(0);
-    const orders = redisPosts.map((post) => post.series?.order ?? 0);
-    expect(orders).toEqual([...orders].sort((a, b) => a - b));
+  it('does not retain learning series migrated to llm-wiki', () => {
+    expect(getSeriesPosts('redis-deep-dive', { includePrivate: true })).toEqual(
+      []
+    );
+    expect(getSeriesPosts('flink-mastery', { includePrivate: true })).toEqual(
+      []
+    );
   });
 
   it('returns empty array for unknown series id', () => {
@@ -110,13 +109,6 @@ ${'x'.repeat(5000)}
 
     expect(getFolderSlug(privateSlug)).not.toBeNull();
     expect(await getFeedData(privateSlug)).toBeNull();
-  });
-
-  it('filters private series posts from helper lookups', () => {
-    expect(getSeriesPosts('redis-deep-dive')).toEqual([]);
-    expect(
-      getSeriesPosts('redis-deep-dive', { includePrivate: true }).length
-    ).toBeGreaterThan(0);
   });
 
   it('returns null for non-existent posts folder slug', () => {

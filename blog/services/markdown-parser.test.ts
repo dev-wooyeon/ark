@@ -68,7 +68,7 @@ describe('parseHeadingsFromMdx', () => {
 
 describe('getMdxSource', () => {
   it('returns markdown source for an existing slug', () => {
-    const source = getMdxSource('redis-deep-dive-02-core-data-types');
+    const source = getMdxSource('llm-wiki-build-retrospective');
 
     expect(typeof source).toBe('string');
     expect(source).toContain('#');
