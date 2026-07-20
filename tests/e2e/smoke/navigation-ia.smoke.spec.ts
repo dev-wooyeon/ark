@@ -7,7 +7,7 @@ async function warmRoute(page: Page, path: string) {
 
 async function openDrawer(page: Page) {
   await page.getByRole('button', { name: '메뉴 열기' }).click();
-  await expect(page.locator('#mobile-nav-drawer')).toHaveClass(/translate-x-0/);
+  await expect(page.locator('#mobile-nav-drawer')).toHaveClass(/opacity-100/);
 }
 
 test.describe('Navigation IA', () => {

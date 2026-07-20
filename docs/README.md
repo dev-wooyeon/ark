@@ -1,6 +1,6 @@
 # 문서 인덱스
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 이 인덱스는 현재 코드베이스와 함께 유지해야 하는 문서만 추적한다. 계속
 업데이트할 문서가 아니라면 삭제하거나, 오래 남겨야 하는 결정만 ADR로 옮긴다.
@@ -33,6 +33,7 @@ Last updated: 2026-07-19
 - `docs/adr/0032-reduce-desktop-rail-to-home-wordmark-and-utilities.md`
 - `docs/adr/0033-use-a-white-canvas-without-content-cards.md`
 - `docs/adr/0034-adopt-the-graphite-ink-palette.md`
+- `docs/adr/0035-prioritize-mobile-archive-reading-order.md`
 - `docs/blog-quality-guide.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`

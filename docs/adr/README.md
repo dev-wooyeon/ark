@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -52,6 +52,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0032](0032-reduce-desktop-rail-to-home-wordmark-and-utilities.md)                   | Accepted   | 데스크톱 레일을 홈 워드마크와 보조 링크로 축소한다           |
 | [0033](0033-use-a-white-canvas-without-content-cards.md)                             | Accepted   | 콘텐츠 카드 없이 흰 캔버스를 사용한다                        |
 | [0034](0034-adopt-the-graphite-ink-palette.md)                                       | Accepted   | Graphite Ink 팔레트를 채택한다                               |
+| [0035](0035-prioritize-mobile-archive-reading-order.md)                              | Accepted   | 모바일 아카이브의 읽기 순서를 우선한다                       |
 
 ## 작성 조건
 

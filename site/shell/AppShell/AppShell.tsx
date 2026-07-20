@@ -174,16 +174,24 @@ export default function AppShell({ children, posts }: AppShellProps) {
       </aside>
 
       <div className="min-w-0 flex-1 bg-[var(--color-bg-primary)] md:flex md:h-dvh md:flex-col md:overflow-hidden">
-        <header className="sticky top-0 z-[var(--z-sticky)] bg-[var(--color-bg-primary)] md:hidden">
-          <div className="flex h-14 items-center px-4">
+        <header className="sticky top-0 z-[var(--z-sticky)] border-b border-[var(--color-border)] bg-[var(--color-bg-primary)] md:hidden">
+          <div className="flex h-14 items-center justify-between px-4">
+            <Link
+              href="/"
+              aria-label="ark 홈으로 이동"
+              className="flex h-11 items-center text-base font-semibold tracking-tight text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+            >
+              ark
+            </Link>
             <button
               type="button"
               aria-label={mobileNavOpen ? '메뉴 닫기' : '메뉴 열기'}
               aria-expanded={mobileNavOpen}
               aria-controls="mobile-nav-drawer"
               onClick={() => setMobileNavOpen((current) => !current)}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-action)] text-[var(--color-grey-600)] transition-colors hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+              className="flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-action)] px-2 text-sm font-medium text-[var(--color-grey-600)] transition-colors hover:text-[var(--color-grey-900)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
             >
+              <span>{mobileNavOpen ? '닫기' : '메뉴'}</span>
               <svg
                 width="18"
                 height="18"

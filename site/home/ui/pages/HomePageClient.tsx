@@ -25,8 +25,8 @@ export default function HomePageClient({ posts }: HomePageClientProps) {
   );
 
   return (
-    <Container size="md" className="py-8 md:pt-4 md:pb-10">
-      <section aria-label="글 아카이브" className="space-y-5">
+    <Container size="md" className="py-6 sm:py-8 md:pt-4 md:pb-10">
+      <section aria-label="글 아카이브" className="space-y-6 sm:space-y-5">
         <CategoryFilter
           categories={FEED_CATEGORIES}
           activeCategory={activeCategory}

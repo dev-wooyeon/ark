@@ -84,7 +84,13 @@ describe('PostCard', () => {
     });
 
     expect(link).toHaveAttribute('href', '/blog/test-post');
-    expect(link).toHaveClass('min-h-11');
+    expect(link).toHaveClass(
+      'min-h-11',
+      'flex-col',
+      'sm:flex-row',
+      'items-start',
+      'sm:items-baseline'
+    );
     expect(link).not.toHaveClass('border');
     expect(screen.getByText('2026.02.10')).toHaveAttribute(
       'dateTime',
@@ -94,6 +100,10 @@ describe('PostCard', () => {
     expect(screen.queryByText('테스트 설명')).not.toBeInTheDocument();
     expect(screen.queryByText('#redis')).not.toBeInTheDocument();
     expect(screen.queryByText('약 12분')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '테스트 글' })).toHaveClass(
+      'text-lg',
+      'sm:text-base'
+    );
   });
 
   it('uses a static content surface for the list variant', () => {

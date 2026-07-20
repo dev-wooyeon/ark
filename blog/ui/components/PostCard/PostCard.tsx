@@ -32,7 +32,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
       <Link
         href={`/blog/${post.slug}`}
         className={clsx(
-          'group flex min-h-11 items-baseline gap-3 rounded-[var(--radius-action)] py-2',
+          'group flex min-h-11 flex-col items-start gap-1.5 rounded-[var(--radius-action)] py-3 sm:flex-row sm:items-baseline sm:gap-3 sm:py-2',
           'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
         )}
@@ -43,7 +43,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
         >
           {formatArchiveDate(post.date)}
         </time>
-        <h3 className="min-w-0 text-base font-semibold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
+        <h3 className="min-w-0 text-lg font-semibold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)] sm:text-base">
           {post.title}
         </h3>
       </Link>

@@ -49,7 +49,7 @@ function getItemVariants(effectiveMotionMode: EffectiveMotionMode): Variants {
 }
 
 const layoutClassNames = {
-  archive: 'space-y-1',
+  archive: 'space-y-2 sm:space-y-1',
   grid: 'grid gap-6 md:grid-cols-2',
   list: 'space-y-4',
 } satisfies Record<NonNullable<PostListProps['layout']>, string>;
