@@ -1,32 +1,31 @@
 {
   "title": "AI 시대, 나는 개발 환경을 고정하기로 했다",
   "slug": "fixed-ai-dev-environment",
-  "description": "도구를 자주 바꾸는 비용을 줄이기 위해 개인 개발 환경을 어떻게 고정했는지 정리해요.",
+  "description": "AI 도구를 고정하는 대신, 도입·실험·교체를 판단하는 개발 환경의 기준을 정리한다.",
   "date": "2026-02-12",
+  "updated": "2026-07-20",
   "category": "Tech",
   "contentType": "essay",
   "tags": [
     "AI Workflow",
-    "Productivity",
     "Developer Experience",
-    "Codex",
-    "ChatGPT",
-    "Atlas"
+    "Engineering Practice",
+    "Decision Making"
   ],
   "featured": false,
   "visibility": "private",
   "qualityReview": {
-    "philosophy": 3.5,
-    "design": 3,
-    "implementation": 2.5,
-    "brandFit": 2.5,
-    "clarity": 3.5,
-    "structure": 3.5,
+    "philosophy": 4,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 3.5,
+    "clarity": 4,
+    "structure": 4,
     "evidence": 3,
-    "usefulness": 3.5,
+    "usefulness": 4,
     "originality": 3.5,
-    "polish": 3,
-    "reviewedAt": "2026-06-17",
-    "notes": "비공개"
+    "polish": 4,
+    "reviewedAt": "2026-07-20",
+    "notes": "도구 카탈로그를 제거하고 문제 정의, 실험 경계, 교체 조건, 검증 산출물 중심의 에세이로 재작성함"
   }
 }

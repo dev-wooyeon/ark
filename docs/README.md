@@ -35,6 +35,7 @@ Last updated: 2026-07-20
 - `docs/adr/0034-adopt-the-graphite-ink-palette.md`
 - `docs/adr/0035-prioritize-mobile-archive-reading-order.md`
 - `docs/blog-quality-guide.md`
+- `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`
 - `docs/database/supabase-view-count.sql`
 - `docs/guides/testing-guide.md`
