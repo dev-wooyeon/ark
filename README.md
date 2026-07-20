@@ -7,12 +7,9 @@
 
 아크는 오래 건너갈 생각들을 싣는 개인의 방주입니다.
 
-[라이브 데모](https://ark-log.vercel.app)
+[https://ark-log.vercel.app](https://ark-log.vercel.app)
 
 </div>
-
-운영 URL은 `NEXT_PUBLIC_SITE_URL`로 주입할 수 있습니다. 기본 운영 도메인은
-`https://ark-log.vercel.app`입니다.
 
 ## 🛠 기술 스택
 
@@ -29,10 +26,6 @@
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
 <br>TypeScript
-</td>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=threejs" width="48" height="48" alt="Three.js" />
-<br>Three.js
 </td>
 <td align="center" width="96">
 <img src="https://skillicons.dev/icons?i=tailwind" width="48" height="48" alt="CSS" />
