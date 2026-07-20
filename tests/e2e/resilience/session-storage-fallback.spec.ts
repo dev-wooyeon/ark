@@ -19,8 +19,14 @@ test.describe('Storage fallback', () => {
     });
 
     await page.goto('/');
-    await expect(page.getByRole('button', { name: /All/ })).toBeVisible();
-    await expect(page.locator('main a[href^="/blog/"]').first()).toBeVisible();
+    await expect(
+      page.locator('main p').filter({
+        hasText: 'Building backend systems with less complexity and more trust.',
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByLabel('Ark 주요 탐색').getByRole('link', { name: 'Archive' })
+    ).toBeVisible();
     expect(errors.join('\n')).not.toContain('Failed to set the value');
   });
 });

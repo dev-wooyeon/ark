@@ -20,7 +20,7 @@ const nextConfig = {
     return [
       {
         source: '/blog',
-        destination: '/engineering',
+        destination: '/archive',
         permanent: true,
       },
       {

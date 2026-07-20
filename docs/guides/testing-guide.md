@@ -36,8 +36,8 @@
 
 ### components
 
-- `site/navigation/MobileBottomNav.test.tsx`
-  - 아이템 수, active 상태, 토큰 기반 class, analytics tracking
+- `site/shell/AppShell/AppShell.test.tsx`
+  - Archive, Resume의 전역 주요 탐색과 Archive 활성 상태
 - `blog/ui/components/*.test.tsx`
   - PostCard/PostList/CategoryFilter 상태별 렌더/이벤트
 - `ui/**/*.test.tsx`
@@ -67,24 +67,24 @@
 
 ## Playwright 체크리스트
 
-### 1) 모바일 내비 회귀
+### 1) 모바일 주요 탐색 회귀
 
 - 경로: `/`
 - 기대:
-  - 진입 즉시 하단 nav 가시
-  - 스크롤 0/20/31/100 구간에서 y 값 기반 노출 변화
-  - 라우트 이동 후 홈 복귀 시 다시 노출
+  - 진입 즉시 상단 Archive, Resume 링크 가시
+  - 메뉴 드로어와 scroll lock 없음
+  - Archive, Resume route 이동 가능
 
 ### 2) 테마 토글
 
 - 경로: `/`
 - 기대:
   - 다크/라이트 토글 후 `html` 클래스 변경
-  - nav 포커스 토큰 class 유지
+  - 주요 링크의 focus-visible class 유지
 
 ### 3) safe-area / 여백
 
-- `--mobile-bottom-nav-offset` 값 변경 시 body 패딩 값 변화
+- 홈과 Archive 본문에 과한 하단 inset이 남지 않음
 
 ### 4) storage fallback
 

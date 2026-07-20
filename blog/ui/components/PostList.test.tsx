@@ -66,7 +66,7 @@ describe('PostList', () => {
     render(<PostList posts={samplePosts} layout="archive" />);
 
     expect(screen.getByRole('list')).toBeInTheDocument();
-    expect(screen.getByRole('list')).toHaveClass('space-y-2', 'sm:space-y-1');
+    expect(screen.getByRole('list')).toHaveClass('space-y-2');
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
     expect(
       screen.getByRole('link', { name: /2026\.02\.01 첫 번째 글/ })

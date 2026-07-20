@@ -4,7 +4,6 @@ import '@/styles/globals.css';
 import '@/styles/tossface.css';
 
 import AppProviders from '@/site/providers/AppProviders';
-import { getSortedFeedData } from '@/blog/services/post-repository';
 import { AppShell } from '@/site/shell/AppShell';
 import {
   SITE_AUTHOR,
@@ -60,11 +59,6 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const posts = getSortedFeedData().map(({ slug, category }) => ({
-    slug,
-    category,
-  }));
-
   return (
     <html lang="ko">
       <head>
@@ -79,7 +73,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppProviders>
           <div id="app-root">
-            <AppShell posts={posts}>{children}</AppShell>
+            <AppShell>{children}</AppShell>
           </div>
         </AppProviders>
       </body>

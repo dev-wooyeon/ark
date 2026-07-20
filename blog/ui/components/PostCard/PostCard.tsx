@@ -32,18 +32,18 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
       <Link
         href={`/blog/${post.slug}`}
         className={clsx(
-          'group flex min-h-11 flex-col items-start gap-1.5 rounded-[var(--radius-action)] py-3 sm:flex-row sm:items-baseline sm:gap-3 sm:py-2',
+          'group flex min-h-7 items-baseline gap-6 py-0',
           'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
         )}
       >
         <time
           dateTime={post.date}
-          className="shrink-0 text-meta font-medium tabular-nums text-[var(--color-text-tertiary)]"
+          className="shrink-0 text-xs font-normal leading-4 tabular-nums text-[var(--color-text-secondary)]"
         >
           {formatArchiveDate(post.date)}
         </time>
-        <h3 className="min-w-0 text-lg font-semibold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)] sm:text-base">
+        <h3 className="m-0 min-w-0 text-base font-normal leading-7 tracking-normal text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-text-secondary)] group-focus-visible:text-[var(--color-text-secondary)]">
           {post.title}
         </h3>
       </Link>

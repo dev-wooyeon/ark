@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routePaths: SitePath[] = [
     '',
+    '/archive',
     '/engineering',
     '/life',
     '/resume',

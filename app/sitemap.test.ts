@@ -29,6 +29,7 @@ describe('sitemap', () => {
     expect(urls).toEqual(
       expect.arrayContaining([
         SITE_URL,
+        `${SITE_URL}/archive`,
         `${SITE_URL}/engineering`,
         `${SITE_URL}/life`,
         `${SITE_URL}/resume`,
