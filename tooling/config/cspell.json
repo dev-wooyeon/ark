@@ -22,7 +22,6 @@
     "clsx",
     "lucide",
     "tailwindcss",
-    "autoprefixer",
     "postcss",
     "drei",
     "threejs",

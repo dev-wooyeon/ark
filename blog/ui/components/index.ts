@@ -17,13 +17,4 @@ export { GiscusComments } from './GiscusComments';
 export { MermaidDiagram } from './MermaidDiagram';
 
 export { SeriesNavigation } from './SeriesNavigation';
-export { default as SeriesHubCard } from './SeriesHubCard';
-export type { SeriesHubCardProps } from './SeriesHubCard';
-export { default as SeriesHubList } from './SeriesHubList';
-export type { SeriesHubListProps } from './SeriesHubList';
-export { default as SeriesTrackedLink } from './SeriesTrackedLink';
-export type {
-  SeriesTrackedLinkProps,
-  SeriesTrackedTarget,
-} from './SeriesTrackedLink';
 export { default as ViewCounter } from './ViewCounter';
