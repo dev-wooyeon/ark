@@ -47,12 +47,6 @@ describe('publication policy', () => {
     }
   });
 
-  it('keeps all series posts private', () => {
-    const publicSeriesPosts = getSortedFeedData().filter((post) => post.series);
-
-    expect(publicSeriesPosts).toEqual([]);
-  });
-
   it('requires public tech posts to stay above the minimum review threshold', () => {
     const offenses = getSortedFeedData()
       .filter((post) => post.category === 'Tech')
@@ -86,12 +80,6 @@ describe('publication policy', () => {
       if (post.category !== 'Tech') {
         currentOffenses.push(
           `${describePost(post)}: featured posts must be Tech`
-        );
-      }
-
-      if (post.series) {
-        currentOffenses.push(
-          `${describePost(post)}: featured posts must not be series`
         );
       }
 

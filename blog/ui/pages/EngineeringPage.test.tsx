@@ -38,19 +38,11 @@ describe('EngineeringPage', () => {
         date: '2026-02-28',
         category: 'Life',
       },
-      {
-        slug: 'series-a',
-        title: 'Series A',
-        description: 'C',
-        date: '2026-02-27',
-        category: 'Tech',
-        series: { id: 'redis', title: 'Redis', order: 1 },
-      },
     ]);
 
     render(<EngineeringPage />);
 
     expect(screen.getByText('Engineering')).toBeInTheDocument();
-    expect(screen.getByTestId('engineering-client')).toHaveTextContent('posts:2');
+    expect(screen.getByTestId('engineering-client')).toHaveTextContent('posts:1');
   });
 });

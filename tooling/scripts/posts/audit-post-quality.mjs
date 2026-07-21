@@ -208,7 +208,6 @@ function hasTitleKeyword(meta) {
   const keywords = [
     ...(Array.isArray(meta.tags) ? meta.tags : []),
     String(meta.category ?? ''),
-    meta.series?.title,
   ].filter((keyword) => typeof keyword === 'string' && keyword.length >= 2);
 
   return keywords.some((keyword) => title.includes(keyword));
@@ -293,10 +292,6 @@ function evaluatePolicy(meta) {
   const visibility = meta.visibility ?? 'private';
   const coreAverage = readCoreAverage(meta.qualityReview);
   const warnings = [];
-
-  if (visibility === 'public' && meta.series) {
-    warnings.push('public series 글');
-  }
 
   if (visibility === 'public' && meta.category === 'Tech') {
     if (coreAverage === null) {
@@ -388,7 +383,6 @@ function auditPosts() {
         visibility: meta.visibility ?? 'private',
         category: meta.category ?? '(unknown)',
         contentType: taxonomy.contentType,
-        series: meta.series?.title ?? null,
         qualityReview: meta.qualityReview ?? null,
         featured: Boolean(meta.featured),
         taxonomy,
@@ -521,9 +515,6 @@ function printReport(posts, errors) {
     (post) => post.visibility === 'public' && post.category === 'Tech'
   );
   const featuredPosts = posts.filter((post) => post.featured);
-  const publicSeriesPosts = posts.filter(
-    (post) => post.visibility === 'public' && post.series
-  );
   const contentTypeCounts = countBy(
     posts.filter((post) => post.contentType),
     (post) => post.contentType
@@ -619,13 +610,6 @@ function printReport(posts, errors) {
       })
         ? 'ok'
         : 'review'
-    }`
-  );
-  console.log(
-    `- public series posts: ${
-      publicSeriesPosts.length === 0
-        ? 'none'
-        : publicSeriesPosts.map((post) => post.slug).join(', ')
     }`
   );
   console.log('');

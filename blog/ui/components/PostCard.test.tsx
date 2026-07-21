@@ -69,11 +69,6 @@ describe('PostCard', () => {
     const detailedPost: FeedData = {
       ...basePost,
       readingTime: 12,
-      series: {
-        id: 'redis',
-        title: 'Redis 완전정복',
-        order: 1,
-      },
       tags: ['redis', 'cache'],
     };
 
@@ -131,21 +126,15 @@ describe('PostCard', () => {
     );
   });
 
-  it('shows category, series title, and tags in list variant', () => {
+  it('shows category and tags in list variant', () => {
     const detailedPost: FeedData = {
       ...basePost,
       tags: ['redis', 'cache'],
-      series: {
-        id: 'redis',
-        title: 'Redis 완전정복',
-        order: 1,
-      },
     };
 
     render(<PostCard post={detailedPost} variant="list" />);
 
     expect(screen.getByText('Tech')).toBeInTheDocument();
-    expect(screen.getByText('Redis 완전정복')).toBeInTheDocument();
     expect(screen.getByText('#redis')).toBeInTheDocument();
     expect(screen.getByText('#cache')).toBeInTheDocument();
   });

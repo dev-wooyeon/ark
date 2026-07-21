@@ -102,11 +102,9 @@ Life 글은 아래 기준으로 본다.
 
 - `visibility` 기본값은 `private`다. 공개는 리뷰를 마친 뒤 명시적으로 승격한다.
 - `contentType`은 `essay`, `retrospective`, `review` 중 하나로 둔다.
-- 시리즈는 기본적으로 공개 자산이 아니라 학습 자산으로 보고, 공개 필요성이 생기기 전까지 `private`로 둔다.
 - 엔지니어링 글은 `philosophy`, `design`, `implementation` 평균이 `3.0` 이하이면 `private`로 둔다.
 - `featured`는 아래 조건을 모두 만족할 때만 허용한다.
   - 엔지니어링 글
-  - 시리즈 아님
   - `brandFit >= 4.0`
 - `featured`는 점수만으로 자동 결정하지 않는다. 현재 단계에서는 수동 큐레이션 목록으로 관리한다.
 - 현재 홈은 `featured` 글을 별도 노출하지 않고 전체 공개 글을 단일 피드로 보여준다.

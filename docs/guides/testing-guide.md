@@ -22,7 +22,7 @@
   - trackEvent, trackPageView 실 발송 가드
 
 - `blog/services/post-repository.test.ts`
-  - 정렬/시리즈 조회/SKU 슬러그 수집
+  - 정렬/중첩 폴더 탐색/슬러그 수집
 
 - `blog/services/markdown-parser.test.ts`
   - TOC ID 생성 및 중복 처리

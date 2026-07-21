@@ -16,5 +16,4 @@ export { ImageGrid } from './ImageGrid';
 export { GiscusComments } from './GiscusComments';
 export { MermaidDiagram } from './MermaidDiagram';
 
-export { SeriesNavigation } from './SeriesNavigation';
 export { default as ViewCounter } from './ViewCounter';

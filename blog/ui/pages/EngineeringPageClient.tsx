@@ -20,7 +20,7 @@ export default function EngineeringPageClient({
   const searchParamString = searchParams.toString();
 
   const articlePosts = useMemo(
-    () => posts.filter((post) => post.category === 'Tech' && !post.series),
+    () => posts.filter((post) => post.category === 'Tech'),
     [posts]
   );
   const totalArticlePages = Math.max(
@@ -42,11 +42,6 @@ export default function EngineeringPageClient({
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParamString);
     let changed = false;
-
-    if (nextParams.has('type')) {
-      nextParams.delete('type');
-      changed = true;
-    }
 
     if (nextParams.has('tag')) {
       nextParams.delete('tag');

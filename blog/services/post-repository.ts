@@ -86,7 +86,7 @@ function findAllPostFolders(dir: string, relativePath: string = ''): string[] {
       folders.push(currentRelPath);
     }
 
-    // Recursively search subdirectories (for series folders)
+    // Recursively search nested post folders.
     const subFolders = findAllPostFolders(fullPath, currentRelPath);
     folders.push(...subFolders);
   }
@@ -375,16 +375,4 @@ export async function getFeedData(
     logContentIssue(`Failed to load MDX content for ${folderPath}.`);
     return null;
   }
-}
-
-// Get all posts in a series, sorted by order
-export function getSeriesPosts(
-  seriesId: string,
-  options: FeedQueryOptions = {}
-): FeedData[] {
-  const allPosts = getSortedFeedData(options);
-
-  return allPosts
-    .filter((post) => post.series?.id === seriesId)
-    .sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0));
 }

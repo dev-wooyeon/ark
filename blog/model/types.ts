@@ -35,11 +35,6 @@ export interface FeedFrontmatter {
   featured?: boolean;
   transliteratedTitle?: string;
   qualityReview?: QualityReview;
-  series?: {
-    id: string;
-    title: string;
-    order: number;
-  };
 }
 
 export interface FeedData extends FeedFrontmatter {

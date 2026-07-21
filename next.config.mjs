@@ -23,11 +23,6 @@ const nextConfig = {
         destination: '/archive',
         permanent: true,
       },
-      {
-        source: '/series',
-        destination: '/engineering?type=series',
-        permanent: true,
-      },
     ];
   },
   async headers() {

@@ -63,6 +63,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0043](0043-include-one-evidence-backed-personal-project-in-resume.md)               | Accepted   | Resume에는 증거가 있는 개인 프로젝트 하나만 제공한다         |
 | [0044](0044-link-direct-project-retrospectives-from-resume.md)                        | Accepted   | Resume 프로젝트에는 직접 대응하는 회고글만 연결한다          |
 | [0045](0045-use-team-context-in-resume-company-column.md)                             | Accepted   | Resume 회사 열에는 팀 맥락만 표시한다                        |
+| [0046](0046-retire-series-feature.md)                                                  | Accepted   | 사용하지 않는 시리즈 라우트와 메타데이터를 폐기한다          |
 
 ## 작성 조건
 

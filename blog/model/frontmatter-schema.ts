@@ -38,11 +38,4 @@ export const FeedFrontmatterSchema = z.object({
       notes: z.string().optional(),
     })
     .optional(),
-  series: z
-    .object({
-      id: z.string(),
-      title: z.string(),
-      order: z.number(),
-    })
-    .optional(),
 });

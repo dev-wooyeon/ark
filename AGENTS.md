@@ -18,7 +18,7 @@
 - `src/` 디렉터리를 재도입하지 않는다. 새 코드 경계는 `app/`, 도메인 모듈,
   `site/`, `infra/`, `ui/`, `styles/` 중 하나에 둔다.
 - 블로그 콘텐츠 구조는 `posts/**/index.mdx`와 주변 `meta.json`으로 유지한다.
-  중첩된 series 디렉터리도 보존한다.
+  중첩된 콘텐츠 디렉터리도 보존한다.
 - 변경이 아래 ADR 작성 조건에 걸리면 반드시 ADR을 작성하거나 갱신한다.
 
 ## ADR 작성 조건
@@ -42,8 +42,8 @@ ADR 작성 기준:
 ## 프로젝트 구조
 
 - `app/`: Next.js App Router route adapter, route handler, metadata entry
-- `blog/`: 글 도메인. post schema, repository, publication policy, series,
-  blog UI, RSS feed serialization, view-count use case
+- `blog/`: 글 도메인. post schema, repository, publication policy, blog UI,
+  RSS feed serialization, view-count use case
 - `resume/`: 이력서 도메인. resume data, ordering, resume UI
 - `site/`: 도메인 조합 layer. home, AppShell, navigation, provider, site config
 - `infra/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper,

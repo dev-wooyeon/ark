@@ -38,19 +38,6 @@ const samplePosts: FeedData[] = [
   createArticle(4),
   createArticle(5),
   createArticle(6),
-  {
-    slug: 'series-ep1',
-    title: 'Series Episode',
-    description: 'series',
-    date: '2026-03-02',
-    category: 'Tech',
-    tags: ['Flink'],
-    series: {
-      id: 'flink-mastery',
-      title: 'Flink Mastery',
-      order: 1,
-    },
-  },
 ];
 
 describe('EngineeringPageClient', () => {
@@ -65,9 +52,7 @@ describe('EngineeringPageClient', () => {
     expect(
       screen.getByRole('heading', { level: 2, name: '아티클' })
     ).toBeInTheDocument();
-    expect(screen.queryByText('시리즈')).not.toBeInTheDocument();
     expect(screen.getByTestId('post-list')).toHaveTextContent('tech-article-1');
-    expect(screen.getByTestId('post-list')).not.toHaveTextContent('series-ep1');
     expect(screen.getByTestId('post-list')).not.toHaveTextContent(
       'tech-article-6'
     );
@@ -104,8 +89,8 @@ describe('EngineeringPageClient', () => {
     });
   });
 
-  it('removes legacy type and tag query parameters', () => {
-    mockQueryString = 'type=series&tag=Redis';
+  it('removes the legacy tag query parameter', () => {
+    mockQueryString = 'tag=Redis';
 
     render(<EngineeringPageClient posts={samplePosts} />);
 
