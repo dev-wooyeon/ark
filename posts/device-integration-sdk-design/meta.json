@@ -1,0 +1,31 @@
+{
+  "title": "현장 장비 연동 SDK 설계: 표준화의 경계 정하기",
+  "slug": "device-integration-sdk-design",
+  "description": "언어와 장비가 늘어나는 현장 시스템에서 SDK가 맡을 책임과 애플리케이션에 남길 책임을 다섯 가지 설계 판단으로 정리한다.",
+  "date": "2026-07-21",
+  "category": "Tech",
+  "contentType": "essay",
+  "tags": [
+    "IoT",
+    "SDK",
+    "Message Contract",
+    "Developer Experience",
+    "Architecture"
+  ],
+  "featured": false,
+  "visibility": "private",
+  "qualityReview": {
+    "philosophy": null,
+    "design": null,
+    "implementation": null,
+    "brandFit": null,
+    "clarity": null,
+    "structure": null,
+    "evidence": null,
+    "usefulness": null,
+    "originality": null,
+    "polish": null,
+    "reviewedAt": "",
+    "notes": "공개 전 보안 및 대외 공개 승인 확인 필요"
+  }
+}
