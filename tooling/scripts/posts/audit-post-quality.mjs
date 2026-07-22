@@ -1,13 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import publicationPolicy from '../../../blog/services/policy.json' with { type: 'json' };
 
 const configuredPostsDirectory = process.env.BLOG_AUDIT_POSTS_DIR ?? 'posts';
 const postsDirectory = path.isAbsolute(configuredPostsDirectory)
   ? configuredPostsDirectory
   : path.join(process.cwd(), configuredPostsDirectory);
 const CONTENT_TYPES = ['essay', 'retrospective', 'review'];
-const CORE_REVIEW_KEYS = ['philosophy', 'design', 'implementation'];
+const CORE_REVIEW_KEYS = publicationPolicy.publicTech.coreReviewFields;
 const WRITING_REVIEW_KEYS = [
   'clarity',
   'structure',
@@ -292,6 +293,8 @@ function reviewPostQuality(meta, content) {
 function evaluatePolicy(meta) {
   const visibility = meta.visibility ?? 'private';
   const coreAverage = readCoreAverage(meta.qualityReview);
+  const publicTechPolicy = publicationPolicy.publicTech;
+  const featuredPolicy = publicationPolicy.featured;
   const warnings = [];
 
   if (visibility === 'public' && meta.series) {
@@ -301,16 +304,33 @@ function evaluatePolicy(meta) {
   if (visibility === 'public' && meta.category === 'Tech') {
     if (coreAverage === null) {
       warnings.push('public Tech core 점수 누락');
-    } else if (coreAverage <= 3) {
-      warnings.push(`public Tech core 평균 ${coreAverage.toFixed(2)} <= 3.0`);
+    } else if (
+      coreAverage <= publicTechPolicy.minimumCoreReviewAverageExclusive
+    ) {
+      warnings.push(
+        `public Tech core 평균 ${coreAverage.toFixed(2)} <= ${publicTechPolicy.minimumCoreReviewAverageExclusive.toFixed(1)}`
+      );
     }
   }
 
   if (meta.featured) {
     const brandFit = meta.qualityReview?.brandFit;
 
-    if (typeof brandFit !== 'number' || brandFit < 4) {
-      warnings.push('featured brandFit < 4.0');
+    if (meta.category !== featuredPolicy.category) {
+      warnings.push(`featured category must be ${featuredPolicy.category}`);
+    }
+
+    if (featuredPolicy.requiresNoSeries && meta.series) {
+      warnings.push('featured series 글');
+    }
+
+    if (
+      typeof brandFit !== 'number' ||
+      brandFit < featuredPolicy.minimumBrandFit
+    ) {
+      warnings.push(
+        `featured brandFit < ${featuredPolicy.minimumBrandFit.toFixed(1)}`
+      );
     }
   }
 
@@ -602,20 +622,27 @@ function printReport(posts, errors) {
 
   console.log('## Policy Checks');
   console.log(
-    `- public Tech core average > 3.0: ${
+    `- public Tech core average > ${publicationPolicy.publicTech.minimumCoreReviewAverageExclusive.toFixed(1)}: ${
       publicTechPosts.every(
         (post) =>
-          post.policy.coreAverage !== null && post.policy.coreAverage > 3
+          post.policy.coreAverage !== null &&
+          post.policy.coreAverage >
+            publicationPolicy.publicTech.minimumCoreReviewAverageExclusive
       )
         ? 'ok'
         : 'review'
     }`
   );
   console.log(
-    `- featured brandFit >= 4.0: ${
+    `- featured eligibility: ${
       featuredPosts.every((post) => {
         const brandFit = post.qualityReview?.brandFit;
-        return typeof brandFit === 'number' && brandFit >= 4;
+        return (
+          post.category === publicationPolicy.featured.category &&
+          (!publicationPolicy.featured.requiresNoSeries || !post.series) &&
+          typeof brandFit === 'number' &&
+          brandFit >= publicationPolicy.featured.minimumBrandFit
+        );
       })
         ? 'ok'
         : 'review'

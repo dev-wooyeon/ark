@@ -1,5 +1,5 @@
 {
-  "title": "Next.js와 MDX로 다시 설계한 기술 블로그",
+  "title": "글이 늘어도 유지되는 블로그 구조를 고정한 기록",
   "slug": "blog-system-building",
   "description": "글과 UI를 함께 운영하기 위한 Ark의 현재 구조, MDX 계약, 공개 정책, 검증 기준을 기록한다.",
   "date": "2026-01-28",
@@ -19,7 +19,7 @@
     "usefulness": 3.5,
     "originality": 4,
     "polish": 4,
-    "reviewedAt": "2026-07-20",
-    "notes": "현재 Ark 구조와 ADR에 근거해 전면 재작성했다. 공개 승격은 별도 콘텐츠 리뷰에서 결정한다."
+    "reviewedAt": "2026-07-22",
+    "notes": "현재 Ark 구조와 ADR에 근거해 전면 재작성했다. 제목을 Tech 회고 톤(기록/고정)에 맞춰 조정. 공개 승격은 별도 결정."
   }
 }

@@ -158,21 +158,21 @@ export default async function BlogPostPage({
         <Container size="md">
           {/* Header */}
           <header className="mb-10">
-            <span className="inline-block px-3 py-1 text-sm font-medium text-[var(--color-toss-blue)] bg-[var(--color-toss-blue)]/10 rounded-full mb-4">
+            <span className="mb-4 inline-block rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-3 py-1 text-sm font-medium text-[var(--color-text-secondary)]">
               {post.category}
             </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-grey-900)] leading-tight">
+            <h1 className="text-3xl font-bold leading-tight text-[var(--color-text-primary)] md:text-4xl">
               {post.title}
             </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-grey-500)]">
+            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-tertiary)]">
               <time>{formattedDate}</time>
               {readingTimeLabel && (
                 <>
-                  <span className="w-1 h-1 bg-[var(--color-grey-300)] rounded-full" />
+                  <span className="h-1 w-1 rounded-full bg-[var(--color-divider)]" />
                   <span>{readingTimeLabel}</span>
                 </>
               )}
-              <span className="w-1 h-1 bg-[var(--color-grey-300)] rounded-full" />
+              <span className="h-1 w-1 rounded-full bg-[var(--color-divider)]" />
               <ViewCounter slug={post.slug} />
             </div>
             {post.tags && (
@@ -180,7 +180,7 @@ export default async function BlogPostPage({
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-[var(--color-grey-100)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-grey-500)]"
+                    className="rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-text-tertiary)]"
                   >
                     #{tag}
                   </span>

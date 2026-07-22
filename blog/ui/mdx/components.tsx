@@ -7,10 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import Image from 'next/image';
-import {
-  ImageGrid,
-  MermaidDiagram,
-} from '@/blog/ui/components';
+import { ImageGrid, MermaidDiagram } from '@/blog/ui/components';
 
 function extractText(node: ReactNode): string {
   if (node == null || typeof node === 'boolean') return '';
@@ -55,27 +52,27 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: createHeading(
       'h1',
-      'text-3xl font-bold mt-16 mb-8 text-[var(--color-grey-900)]'
+      'mt-16 mb-8 text-3xl font-bold text-[var(--color-text-primary)]'
     ),
     h2: createHeading(
       'h2',
-      'mt-12 mb-6 text-2xl font-bold text-[var(--color-grey-900)]'
+      'mt-12 mb-6 text-2xl font-bold text-[var(--color-text-primary)]'
     ),
     h3: createHeading(
       'h3',
-      'mt-8 mb-4 text-xl font-bold text-[var(--color-grey-900)]'
+      'mt-8 mb-4 text-xl font-bold text-[var(--color-text-primary)]'
     ),
     h4: createHeading(
       'h4',
-      'mt-8 mb-4 text-lg font-bold text-[var(--color-grey-900)]'
+      'mt-8 mb-4 text-lg font-bold text-[var(--color-text-primary)]'
     ),
     h5: createHeading(
       'h5',
-      'mt-8 mb-4 text-base font-bold text-[var(--color-grey-900)]'
+      'mt-8 mb-4 text-base font-bold text-[var(--color-text-primary)]'
     ),
     h6: createHeading(
       'h6',
-      'mt-8 mb-4 text-base font-bold text-[var(--color-grey-900)]'
+      'mt-8 mb-4 text-base font-bold text-[var(--color-text-primary)]'
     ),
     p: (props) => <p {...props}>{props.children}</p>,
     img: (props) => {
@@ -83,7 +80,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
       if (!props.src) return null;
 
       return (
-        <span className="block my-12 overflow-hidden rounded-[16px]">
+        <span className="my-12 block overflow-hidden rounded-[var(--radius-content)]">
           <Image
             src={props.src}
             alt={props.alt || ''}
@@ -96,10 +93,10 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
               objectFit: 'cover',
             }}
             priority={props.src?.includes('thumbnail')}
-            className="rounded-[16px]"
+            className="block w-full"
           />
           {props.alt && (
-            <span className="block text-center text-sm text-[var(--color-grey-600)] mt-4 mb-2 px-4">
+            <span className="mt-4 mb-2 block px-4 text-center text-sm text-[var(--color-text-tertiary)]">
               {props.alt}
             </span>
           )}

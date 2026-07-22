@@ -47,4 +47,18 @@ describe('getMDXComponents', () => {
     expect(screen.getByText('본문 문단')).not.toHaveClass('text-base');
     expect(screen.getByText('본문 문단')).not.toHaveClass('leading-relaxed');
   });
+
+  it('uses semantic tokens for MDX headings', () => {
+    const { h2: Heading } = getMDXComponents({});
+
+    if (!Heading) {
+      throw new Error('Expected heading component to be defined');
+    }
+
+    render(<Heading>제목</Heading>);
+
+    expect(screen.getByRole('heading', { name: '제목' })).toHaveClass(
+      'text-[var(--color-text-primary)]'
+    );
+  });
 });
