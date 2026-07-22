@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-07-20
+Last updated: 2026-07-22
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -63,6 +63,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0043](0043-include-one-evidence-backed-personal-project-in-resume.md)               | Accepted   | Resume에는 증거가 있는 개인 프로젝트 하나만 제공한다         |
 | [0044](0044-link-direct-project-retrospectives-from-resume.md)                        | Accepted   | Resume 프로젝트에는 직접 대응하는 회고글만 연결한다          |
 | [0045](0045-use-team-context-in-resume-company-column.md)                             | Accepted   | Resume 회사 열에는 팀 맥락만 표시한다                        |
+| [0046](0046-use-main-as-the-primary-branch.md)                                        | Accepted   | 저장소의 주 브랜치를 main으로 통일한다                      |
 
 ## 작성 조건
 
