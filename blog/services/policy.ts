@@ -1,20 +1,10 @@
 import type { FeedData, QualityReview } from '@/blog/model/types';
+import policyData from './policy.json';
 
-export const PUBLICATION_POLICY = {
-  publicTech: {
-    minimumCoreReviewAverageExclusive: 3,
-  },
-  featured: {
-    category: 'Tech',
-    minimumBrandFit: 4,
-  },
-} as const;
+export const PUBLICATION_POLICY = policyData;
 
-const CORE_TECH_REVIEW_FIELDS = [
-  'philosophy',
-  'design',
-  'implementation',
-] as const;
+const CORE_TECH_REVIEW_FIELDS = PUBLICATION_POLICY.publicTech
+  .coreReviewFields as ReadonlyArray<keyof QualityReview>;
 
 export interface PublicationQueryOptions {
   includePrivate?: boolean;
@@ -69,7 +59,7 @@ export function isEligibleForFeaturedPost(
 
   return (
     post.category === PUBLICATION_POLICY.featured.category &&
-    !post.series &&
+    (!PUBLICATION_POLICY.featured.requiresNoSeries || !post.series) &&
     typeof brandFit === 'number' &&
     brandFit >= PUBLICATION_POLICY.featured.minimumBrandFit
   );
