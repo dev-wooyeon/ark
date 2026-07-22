@@ -46,6 +46,7 @@ Last updated: 2026-07-22
 - `docs/adr/0045-use-team-context-in-resume-company-column.md`
 - `docs/adr/0046-use-main-as-the-primary-branch.md`
 - `docs/adr/0047-isolate-publication-policy.md`
+- `docs/adr/0048-centralize-blog-publication-rules.md`
 - `docs/blog-quality-guide.md`
 - `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`

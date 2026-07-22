@@ -1,9 +1,16 @@
 // @vitest-environment node
 
 import { describe, expect, it } from 'vitest';
-import type { FeedData, QualityReview } from '@/blog/model/types';
+import type { FeedData } from '@/blog/model/types';
 import { getAllFeedSlugs, getSortedFeedData } from './post-repository';
-import { filterVisiblePosts, isPostVisible } from './publication-policy';
+import {
+  filterVisiblePosts,
+  getCoreTechReviewAverage,
+  isEligibleForFeaturedPost,
+  isPostVisible,
+  meetsPublicTechReviewThreshold,
+  PUBLICATION_POLICY,
+} from './policy';
 
 const FEATURED_SLUGS = [
   'ctr-pipeline',
@@ -11,17 +18,6 @@ const FEATURED_SLUGS = [
   'llm-wiki-build-retrospective',
   'msa-domain-workspace-submodule',
 ];
-
-function readCoreAverage(review: QualityReview | undefined): number | null {
-  const scores = [review?.philosophy, review?.design, review?.implementation];
-
-  if (scores.some((score) => typeof score !== 'number')) {
-    return null;
-  }
-
-  const [philosophy, design, implementation] = scores as number[];
-  return (philosophy + design + implementation) / 3;
-}
 
 function describePost(post: FeedData): string {
   return `${post.slug} (${post.title})`;
@@ -38,6 +34,34 @@ describe('publication policy', () => {
     expect(isPostVisible(publicPost)).toBe(true);
     expect(isPostVisible(privatePost, { includePrivate: true })).toBe(true);
     expect(filterVisiblePosts([privatePost, publicPost])).toEqual([publicPost]);
+  });
+
+  it('keeps editorial thresholds in the policy module', () => {
+    expect(
+      meetsPublicTechReviewThreshold({
+        philosophy: 3.5,
+        design: 3.5,
+        implementation: 3.5,
+      })
+    ).toBe(true);
+    expect(meetsPublicTechReviewThreshold({})).toBe(false);
+
+    expect(
+      isEligibleForFeaturedPost({
+        category: 'Tech',
+        qualityReview: {
+          brandFit: PUBLICATION_POLICY.featured.minimumBrandFit,
+        },
+      })
+    ).toBe(true);
+    expect(
+      isEligibleForFeaturedPost({
+        category: 'Life',
+        qualityReview: {
+          brandFit: PUBLICATION_POLICY.featured.minimumBrandFit,
+        },
+      })
+    ).toBe(false);
   });
 
   it('keeps every private post out of public listings and static paths', () => {
@@ -70,17 +94,17 @@ describe('publication policy', () => {
     const offenses = getSortedFeedData()
       .filter((post) => post.category === 'Tech')
       .flatMap((post) => {
-        const average = readCoreAverage(post.qualityReview);
+        const average = getCoreTechReviewAverage(post.qualityReview);
 
-        if (average === null) {
-          return [
-            `${describePost(post)}: qualityReview core scores are incomplete`,
-          ];
-        }
+        if (!meetsPublicTechReviewThreshold(post.qualityReview)) {
+          if (average === null) {
+            return [
+              `${describePost(post)}: qualityReview core scores are incomplete`,
+            ];
+          }
 
-        if (average <= 3) {
           return [
-            `${describePost(post)}: core average ${average.toFixed(2)} <= 3.0`,
+            `${describePost(post)}: core average ${average.toFixed(2)} <= ${PUBLICATION_POLICY.publicTech.minimumCoreReviewAverageExclusive.toFixed(1)}`,
           ];
         }
 
@@ -93,26 +117,9 @@ describe('publication policy', () => {
   it('requires featured posts to meet branding thresholds', () => {
     const featuredPosts = getSortedFeedData().filter((post) => post.featured);
     const offenses = featuredPosts.flatMap((post) => {
-      const brandFit = post.qualityReview?.brandFit;
-      const currentOffenses: string[] = [];
-
-      if (post.category !== 'Tech') {
-        currentOffenses.push(
-          `${describePost(post)}: featured posts must be Tech`
-        );
-      }
-
-      if (post.series) {
-        currentOffenses.push(
-          `${describePost(post)}: featured posts must not be series`
-        );
-      }
-
-      if (typeof brandFit !== 'number' || brandFit < 4) {
-        currentOffenses.push(`${describePost(post)}: brandFit must be >= 4.0`);
-      }
-
-      return currentOffenses;
+      return isEligibleForFeaturedPost(post)
+        ? []
+        : [`${describePost(post)}: does not meet featured criteria`];
     });
 
     expect(featuredPosts.map((post) => post.slug).sort()).toEqual(
