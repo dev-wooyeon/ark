@@ -1,6 +1,6 @@
 # 문서 인덱스
 
-Last updated: 2026-07-20
+Last updated: 2026-07-22
 
 이 인덱스는 현재 코드베이스와 함께 유지해야 하는 문서만 추적한다. 계속
 업데이트할 문서가 아니라면 삭제하거나, 오래 남겨야 하는 결정만 ADR로 옮긴다.
@@ -44,6 +44,7 @@ Last updated: 2026-07-20
 - `docs/adr/0043-include-one-evidence-backed-personal-project-in-resume.md`
 - `docs/adr/0044-link-direct-project-retrospectives-from-resume.md`
 - `docs/adr/0045-use-team-context-in-resume-company-column.md`
+- `docs/adr/0046-use-main-as-the-primary-branch.md`
 - `docs/blog-quality-guide.md`
 - `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`
