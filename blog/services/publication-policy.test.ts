@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import type { FeedData, QualityReview } from '@/blog/model/types';
 import { getAllFeedSlugs, getSortedFeedData } from './post-repository';
+import { filterVisiblePosts, isPostVisible } from './publication-policy';
 
 const FEATURED_SLUGS = [
   'ctr-pipeline',
@@ -27,6 +28,18 @@ function describePost(post: FeedData): string {
 }
 
 describe('publication policy', () => {
+  it('keeps private posts hidden unless a caller explicitly requests a preview', () => {
+    const unspecifiedPost = {};
+    const privatePost = { visibility: 'private' };
+    const publicPost = { visibility: 'public' };
+
+    expect(isPostVisible(unspecifiedPost)).toBe(false);
+    expect(isPostVisible(privatePost)).toBe(false);
+    expect(isPostVisible(publicPost)).toBe(true);
+    expect(isPostVisible(privatePost, { includePrivate: true })).toBe(true);
+    expect(filterVisiblePosts([privatePost, publicPost])).toEqual([publicPost]);
+  });
+
   it('keeps every private post out of public listings and static paths', () => {
     const allPosts = getSortedFeedData({ includePrivate: true });
     const privatePosts = allPosts.filter(

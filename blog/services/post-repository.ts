@@ -2,6 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import type { FeedData, Feed, FeedFrontmatter } from '@/blog/model/types';
 import { FeedFrontmatterSchema } from '@/blog/model/frontmatter-schema';
+import {
+  filterVisiblePosts,
+  isPostVisible,
+  type PublicationQueryOptions,
+} from './publication-policy';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 const isProduction = process.env.NODE_ENV === 'production';
@@ -19,9 +24,7 @@ function logContentIssue(message: string): void {
   console.warn(`[post-repository] ${message}`);
 }
 
-export interface FeedQueryOptions {
-  includePrivate?: boolean;
-}
+export type FeedQueryOptions = PublicationQueryOptions;
 
 // TOC item type
 export interface TocItem {
@@ -248,21 +251,6 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
   }
 }
 
-function isPublicPost(post: FeedData): boolean {
-  return (post.visibility ?? 'private') === 'public';
-}
-
-function filterVisiblePosts(
-  posts: FeedData[],
-  options: FeedQueryOptions = {}
-): FeedData[] {
-  if (options.includePrivate) {
-    return posts;
-  }
-
-  return posts.filter(isPublicPost);
-}
-
 // Get folder path from slug (using cache or scanning)
 export function getFolderSlug(slug: string): string | null {
   // Check cache first
@@ -359,7 +347,7 @@ export async function getFeedData(
     return null;
   }
 
-  if (!options.includePrivate && metadata.visibility === 'private') {
+  if (!isPostVisible(metadata, options)) {
     return null;
   }
 

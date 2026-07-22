@@ -61,9 +61,10 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0041](0041-use-two-level-project-summaries-in-resume.md)                            | Accepted   | Resume 프로젝트는 짧은 소개와 상세 설명을 나눠 제공한다      |
 | [0042](0042-use-textual-route-error-state.md)                                        | Accepted   | 경로 오류 상태를 콘텐츠 열의 텍스트 상태로 표현한다          |
 | [0043](0043-include-one-evidence-backed-personal-project-in-resume.md)               | Accepted   | Resume에는 증거가 있는 개인 프로젝트 하나만 제공한다         |
-| [0044](0044-link-direct-project-retrospectives-from-resume.md)                        | Accepted   | Resume 프로젝트에는 직접 대응하는 회고글만 연결한다          |
-| [0045](0045-use-team-context-in-resume-company-column.md)                             | Accepted   | Resume 회사 열에는 팀 맥락만 표시한다                        |
-| [0046](0046-use-main-as-the-primary-branch.md)                                        | Accepted   | 저장소의 주 브랜치를 main으로 통일한다                      |
+| [0044](0044-link-direct-project-retrospectives-from-resume.md)                       | Accepted   | Resume 프로젝트에는 직접 대응하는 회고글만 연결한다          |
+| [0045](0045-use-team-context-in-resume-company-column.md)                            | Accepted   | Resume 회사 열에는 팀 맥락만 표시한다                        |
+| [0046](0046-use-main-as-the-primary-branch.md)                                       | Accepted   | 저장소의 주 브랜치를 main으로 통일한다                       |
+| [0047](0047-isolate-publication-policy.md)                                           | Accepted   | 공개 정책을 blog 도메인 모듈로 분리한다                      |
 
 ## 작성 조건
 
