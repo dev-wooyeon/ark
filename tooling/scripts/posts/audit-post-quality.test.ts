@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { PUBLICATION_POLICY } from '@/blog/services/policy';
 
 let tempRoot: string;
 let postsDir: string;
@@ -159,5 +160,42 @@ describe('post quality audit script', () => {
     expect(output).toContain(
       '[private 유지] missing-visibility (private, Life)'
     );
+  });
+
+  it('uses the shared publication thresholds for warnings and summaries', () => {
+    const coreThreshold =
+      PUBLICATION_POLICY.publicTech.minimumCoreReviewAverageExclusive;
+    const featuredThreshold = PUBLICATION_POLICY.featured.minimumBrandFit;
+
+    writePostFixture('thresholds', {
+      title: '공용 공개 기준을 검증하는 글',
+      slug: 'thresholds',
+      description: '설명',
+      date: '2026-07-22',
+      category: PUBLICATION_POLICY.featured.category,
+      contentType: 'retrospective',
+      visibility: 'public',
+      featured: true,
+      tags: ['Policy'],
+      qualityReview: {
+        philosophy: coreThreshold,
+        design: coreThreshold,
+        implementation: coreThreshold,
+        brandFit: featuredThreshold - 0.5,
+      },
+    });
+
+    const output = runAudit();
+
+    expect(output).toContain(
+      `public Tech core 평균 ${coreThreshold.toFixed(2)} <= ${coreThreshold.toFixed(1)}`
+    );
+    expect(output).toContain(
+      `featured brandFit < ${featuredThreshold.toFixed(1)}`
+    );
+    expect(output).toContain(
+      `public Tech core average > ${coreThreshold.toFixed(1)}: review`
+    );
+    expect(output).toContain('- featured eligibility: review');
   });
 });

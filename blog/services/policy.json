@@ -1,0 +1,11 @@
+{
+  "publicTech": {
+    "coreReviewFields": ["philosophy", "design", "implementation"],
+    "minimumCoreReviewAverageExclusive": 3
+  },
+  "featured": {
+    "category": "Tech",
+    "minimumBrandFit": 4,
+    "requiresNoSeries": true
+  }
+}

@@ -48,6 +48,14 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('@media (max-width: 767px)');
   });
 
+  it('uses semantic surface tokens for article content', () => {
+    expect(globalsContent).toContain('color: var(--color-text-secondary);');
+    expect(globalsContent).toContain(
+      'background-color: var(--color-bg-secondary);'
+    );
+    expect(globalsContent).toContain('border-radius: var(--radius-content);');
+  });
+
   it('keeps wide article tables scrollable on mobile', () => {
     expect(globalsContent).toMatch(
       /@media \(max-width: 767px\)[\s\S]*\.prose table \{[\s\S]*display: block;[\s\S]*overflow-x: auto;/
