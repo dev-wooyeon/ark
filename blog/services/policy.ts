@@ -17,11 +17,46 @@ export function isPostVisible(
   return options.includePrivate || post.visibility === 'public';
 }
 
+export function isListedPost(
+  post: FeedData,
+  options: PublicationQueryOptions = {}
+): boolean {
+  const visibility = post.visibility ?? 'private';
+
+  if (visibility !== 'public') {
+    return options.includePrivate === true;
+  }
+
+  if (options.includePrivate) {
+    return true;
+  }
+
+  if (
+    post.category === 'Tech' &&
+    !meetsPublicTechReviewThreshold(post.qualityReview)
+  ) {
+    return false;
+  }
+
+  if (post.featured && !isEligibleForFeaturedPost(post)) {
+    return false;
+  }
+
+  return true;
+}
+
 export function filterVisiblePosts<T extends Pick<FeedData, 'visibility'>>(
   posts: T[],
   options: PublicationQueryOptions = {}
 ): T[] {
   return posts.filter((post) => isPostVisible(post, options));
+}
+
+export function filterListedPosts<T extends FeedData>(
+  posts: T[],
+  options: PublicationQueryOptions = {}
+): T[] {
+  return posts.filter((post) => isListedPost(post, options));
 }
 
 export function getCoreTechReviewAverage(

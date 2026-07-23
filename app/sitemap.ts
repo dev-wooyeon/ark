@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { getSeriesSummaries } from '@/blog/model/series-group';
 import { getSortedFeedData } from '@/blog/services/post-repository';
 import {
   SITE_FEED_PATH,
@@ -15,15 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: feed.updated ?? feed.date,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
-  }));
-
-  const seriesEntries = getSeriesSummaries(
-    feeds.filter((feed) => feed.category === 'Tech')
-  ).map((series) => ({
-    url: createSiteUrl(`/engineering/series/${encodeURIComponent(series.id)}`),
-    lastModified: series.latestDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
   }));
 
   const routePaths: SitePath[] = [
@@ -43,5 +33,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1,
   }));
 
-  return [...routes, ...seriesEntries, ...feedEntries];
+  return [...routes, ...feedEntries];
 }

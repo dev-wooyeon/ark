@@ -43,7 +43,6 @@ const PRIMARY_LINKS = [
       pathname.startsWith('/archive') ||
       pathname.startsWith('/engineering') ||
       pathname.startsWith('/life') ||
-      pathname.startsWith('/series') ||
       pathname.startsWith('/blog/'),
   },
 ];
