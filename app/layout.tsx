@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import '@/styles/globals.css';
+import '@/styles/viewport/content.css';
+import '@/styles/viewport/mobile.css';
+import '@/styles/viewport/tablet.css';
 import '@/styles/tossface.css';
 
 import AppProviders from '@/site/providers/AppProviders';

@@ -36,24 +36,79 @@ test.describe('Home and archive', () => {
 
     await expect(
       page.locator('main p').filter({
-        hasText: 'Building backend systems with less complexity and more trust.',
+        hasText:
+          'Building backend systems with less complexity and more trust.',
       })
     ).toBeVisible();
     const serviceLink = page.getByRole('link', { name: '@9.81park' });
     await expect(serviceLink).toBeVisible();
-    await expect(serviceLink).toHaveAttribute('href', 'https://www.981park.com');
+    await expect(serviceLink).toHaveAttribute(
+      'href',
+      'https://www.981park.com'
+    );
     await expect(serviceLink).toHaveAttribute('target', '_blank');
 
     const statementFont = await page.locator('main p').evaluate((element) => {
       return getComputedStyle(element).fontFamily;
     });
-    expect(statementFont).toContain('JetBrains Mono');
+    expect(statementFont).toContain('Pretendard');
 
     const navigation = page.getByLabel('Ark 주요 탐색');
-    await expect(navigation.getByRole('link', { name: 'Archive' })).toBeVisible();
-    await expect(navigation.getByRole('link', { name: 'Resume' })).toBeVisible();
+    await expect(
+      navigation.getByRole('link', { name: 'Archive' })
+    ).toBeVisible();
+    await expect(
+      navigation.getByRole('link', { name: 'Resume' })
+    ).toBeVisible();
     await expect(page.getByRole('button', { name: /All/ })).toHaveCount(0);
     await expect(page.locator('main a[href^="/blog/"]')).toHaveCount(0);
+  });
+
+  test('좁은 데스크톱에서도 hero와 주요 탐색을 분리해요', async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.use.isMobile, '데스크톱 전용 테스트예요.');
+
+    await page.setViewportSize({ width: 855, height: 900 });
+    await page.goto('/');
+
+    const grid = page.locator('.ark-site-grid');
+    const statement = await page.locator('main p').boundingBox();
+    const resume = await page
+      .getByLabel('Ark 주요 탐색')
+      .getByRole('link', { name: 'Resume' })
+      .boundingBox();
+    const archive = await page
+      .getByLabel('Ark 주요 탐색')
+      .getByRole('link', { name: 'Archive' })
+      .boundingBox();
+
+    if (!statement || !resume || !archive) {
+      throw new Error('좁은 데스크톱 레이아웃 위치를 측정할 수 없습니다.');
+    }
+
+    const columns = await grid.evaluate((element) => {
+      return getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/);
+    });
+
+    expect(columns).toHaveLength(3);
+    expect(resume.x).toBeGreaterThan(statement.x + (statement.width ?? 0));
+    expect(archive.x).toBe(resume.x);
+    expect(archive.y).toBeGreaterThan(resume.y);
+    expect(statement.x).toBeGreaterThan(200);
+
+    const typography = await page.evaluate(() => {
+      const statement = document.querySelector('main p');
+      const resume = document.querySelector('[aria-label="Ark 주요 탐색"] a');
+
+      return {
+        statement: statement ? getComputedStyle(statement).fontSize : '',
+        resume: resume ? getComputedStyle(resume).fontSize : '',
+      };
+    });
+
+    expect(typography.statement).toBe('16px');
+    expect(typography.resume).toBe('16px');
   });
 
   test('@smoke Archive는 날짜와 제목만의 글 목록을 제공해요', async ({
@@ -81,7 +136,9 @@ test.describe('Home and archive', () => {
         .boundingBox();
 
       if (!github) {
-        throw new Error('좌측 레일의 GitHub 위치를 측정할 수 없습니다.');
+        throw new Error(
+          '데스크톱 identity rail의 GitHub 위치를 측정할 수 없습니다.'
+        );
       }
 
       expect(github.x).toBe(32);
@@ -100,16 +157,26 @@ test.describe('Home and archive', () => {
     await page.goto('/');
 
     const navigation = page.getByLabel('Ark 주요 탐색');
-    await expect(navigation.getByRole('link', { name: 'Archive' })).toBeVisible();
-    await expect(navigation.getByRole('link', { name: 'Resume' })).toBeVisible();
-    await expect(page.getByRole('button', { name: '메뉴 열기' })).toHaveCount(0);
+    await expect(
+      navigation.getByRole('link', { name: 'Archive' })
+    ).toBeVisible();
+    await expect(
+      navigation.getByRole('link', { name: 'Resume' })
+    ).toBeVisible();
+    await expect(page.getByRole('button', { name: '메뉴 열기' })).toHaveCount(
+      0
+    );
 
-    const resume = await navigation.getByRole('link', { name: 'Resume' }).boundingBox();
-    const archive = await navigation.getByRole('link', { name: 'Archive' }).boundingBox();
+    const resume = await navigation
+      .getByRole('link', { name: 'Resume' })
+      .boundingBox();
+    const archive = await navigation
+      .getByRole('link', { name: 'Archive' })
+      .boundingBox();
 
     expect(resume).not.toBeNull();
     expect(archive).not.toBeNull();
-    expect(resume?.y).toBe(128);
-    expect(archive?.y).toBe(148);
+    expect(resume?.y).toBeLessThan(160);
+    expect(archive?.y).toBe(resume?.y);
   });
 });

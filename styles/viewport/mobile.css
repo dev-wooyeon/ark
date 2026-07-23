@@ -1,0 +1,141 @@
+@media (max-width: 639px) {
+  .ark-site-shell {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .ark-site-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'identity'
+      'navigation'
+      'content';
+    row-gap: var(--space-4);
+    min-height: auto;
+  }
+
+  .ark-site-identity {
+    grid-area: identity;
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ark-site-external-links {
+    flex-direction: row;
+    gap: var(--space-3);
+    margin-top: 0;
+  }
+
+  .ark-site-external-link {
+    font-size: var(--text-sm);
+    line-height: 1.25rem;
+  }
+
+  .ark-site-content {
+    grid-area: content;
+  }
+
+  .ark-site-navigation {
+    grid-area: navigation;
+    flex-direction: row;
+    gap: var(--space-6);
+    align-self: start;
+    padding-top: 0;
+  }
+
+  .ark-site-grid[data-page-layout='home'] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 6fr);
+    grid-template-areas:
+      'identity content'
+      'navigation content'
+      'external content';
+    grid-template-rows: auto auto minmax(0, 1fr);
+    column-gap: 2rem;
+    row-gap: 0;
+    min-height: calc(100dvh - 3rem);
+  }
+
+  .ark-site-grid[data-page-layout='home'] .ark-site-identity {
+    display: contents;
+  }
+
+  .ark-site-grid[data-page-layout='home'] .ark-site-identity > header {
+    grid-area: identity;
+  }
+
+  .ark-site-grid[data-page-layout='home'] .ark-site-navigation {
+    grid-area: navigation;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    justify-self: start;
+    gap: 0;
+    padding-top: var(--space-6);
+  }
+
+  .ark-site-grid[data-page-layout='home'] .ark-site-external-links {
+    grid-area: external;
+    display: flex;
+    flex-direction: column;
+    align-self: end;
+    justify-self: start;
+    gap: 0;
+    margin-top: 0;
+    margin-bottom: var(--space-8);
+  }
+
+  .ark-site-grid[data-page-layout='home'] .ark-site-content {
+    grid-area: content;
+    align-self: start;
+    padding-top: 0.25rem;
+  }
+
+  .ark-site-primary-link {
+    font-size: var(--text-sm);
+    line-height: 1.25rem;
+  }
+
+  .ark-article {
+    padding-top: var(--space-6);
+  }
+
+  .ark-article-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .ark-article-meta {
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    margin-top: 2.5rem;
+  }
+
+  .prose h1 {
+    font-size: var(--text-prose-h1);
+  }
+
+  .prose h2 {
+    font-size: var(--text-prose-h2);
+  }
+
+  .prose pre,
+  .prose table {
+    font-size: var(--text-code);
+  }
+}

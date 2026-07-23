@@ -52,27 +52,27 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: createHeading(
       'h1',
-      'mt-16 mb-8 text-3xl font-bold text-[var(--color-text-primary)]'
+      'mt-16 mb-8 font-semibold text-[var(--color-text-primary)]'
     ),
     h2: createHeading(
       'h2',
-      'mt-12 mb-6 text-2xl font-bold text-[var(--color-text-primary)]'
+      'mt-12 mb-6 font-semibold text-[var(--color-text-primary)]'
     ),
     h3: createHeading(
       'h3',
-      'mt-8 mb-4 text-xl font-bold text-[var(--color-text-primary)]'
+      'mt-8 mb-4 font-semibold text-[var(--color-text-primary)]'
     ),
     h4: createHeading(
       'h4',
-      'mt-8 mb-4 text-lg font-bold text-[var(--color-text-primary)]'
+      'mt-8 mb-4 font-semibold text-[var(--color-text-primary)]'
     ),
     h5: createHeading(
       'h5',
-      'mt-8 mb-4 text-base font-bold text-[var(--color-text-primary)]'
+      'mt-8 mb-4 font-semibold text-[var(--color-text-primary)]'
     ),
     h6: createHeading(
       'h6',
-      'mt-8 mb-4 text-base font-bold text-[var(--color-text-primary)]'
+      'mt-8 mb-4 font-semibold text-[var(--color-text-primary)]'
     ),
     p: (props) => <p {...props}>{props.children}</p>,
     img: (props) => {
