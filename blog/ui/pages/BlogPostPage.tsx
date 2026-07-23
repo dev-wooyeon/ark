@@ -15,7 +15,6 @@ import {
   TableOfContents,
   GiscusComments,
   SeriesNavigation,
-  ViewCounter,
 } from '@/blog/ui/components';
 import PostViewTracker from '@/infra/analytics/components/PostViewTracker';
 import DwellTimeTracker from '@/infra/analytics/components/DwellTimeTracker';
@@ -154,17 +153,15 @@ export default async function BlogPostPage({
       <DwellTimeTracker slug={post.slug} />
       <ScrollDepthTracker slug={post.slug} />
 
-      <article className="py-10">
+      <article className="ark-article">
         <Container size="md">
           {/* Header */}
-          <header className="mb-10">
-            <span className="mb-4 inline-block rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-3 py-1 text-sm font-medium text-[var(--color-text-secondary)]">
+          <header className="ark-article-header">
+            <span className="mb-4 inline-block rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-3 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
               {post.category}
             </span>
-            <h1 className="text-3xl font-bold leading-tight text-[var(--color-text-primary)] md:text-4xl">
-              {post.title}
-            </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-tertiary)]">
+            <h1 className="ark-article-title">{post.title}</h1>
+            <div className="ark-article-meta">
               <time>{formattedDate}</time>
               {readingTimeLabel && (
                 <>
@@ -172,21 +169,7 @@ export default async function BlogPostPage({
                   <span>{readingTimeLabel}</span>
                 </>
               )}
-              <span className="h-1 w-1 rounded-full bg-[var(--color-divider)]" />
-              <ViewCounter slug={post.slug} />
             </div>
-            {post.tags && (
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-text-tertiary)]"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
           </header>
 
           {/* Series Navigation */}

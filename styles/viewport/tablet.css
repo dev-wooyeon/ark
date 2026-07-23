@@ -1,0 +1,16 @@
+@media (min-width: 640px) and (max-width: 1199px) {
+  .ark-home-statement {
+    font-weight: var(--font-medium-plus);
+  }
+
+  .ark-site-primary-link {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+}
+
+@media (min-width: 640px) {
+  .ark-article-title {
+    font-size: var(--text-article-title-lg);
+  }
+}

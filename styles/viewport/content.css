@@ -1,0 +1,21 @@
+/* Article pages keep the navigation rail under the identity on every non-mobile viewport. */
+@media (min-width: 640px) {
+  .ark-site-grid[data-page-layout='content'] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 8fr);
+  }
+
+  .ark-site-grid[data-page-layout='content'] .ark-site-navigation {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 4.5rem;
+  }
+
+  .ark-site-grid[data-page-layout='content'] .ark-site-content {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .ark-site-grid[data-page-layout='content'] .ark-article {
+    padding-top: 0;
+  }
+}

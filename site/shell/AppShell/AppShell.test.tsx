@@ -17,14 +17,12 @@ describe('AppShell', () => {
 
     const primaryNavigation = within(screen.getByLabelText('Ark 주요 탐색'));
 
-    expect(primaryNavigation.getByRole('link', { name: 'Archive' })).toHaveAttribute(
-      'href',
-      '/archive'
-    );
-    expect(primaryNavigation.getByRole('link', { name: 'Resume' })).toHaveAttribute(
-      'href',
-      '/resume'
-    );
+    expect(
+      primaryNavigation.getByRole('link', { name: 'Archive' })
+    ).toHaveAttribute('href', '/archive');
+    expect(
+      primaryNavigation.getByRole('link', { name: 'Resume' })
+    ).toHaveAttribute('href', '/resume');
     expect(
       primaryNavigation.queryByRole('link', { name: 'Tech' })
     ).not.toBeInTheDocument();
@@ -33,6 +31,9 @@ describe('AppShell', () => {
       screen.getByLabelText('Ark 외부 링크')
     );
     expect(container.querySelector('footer')).toBeNull();
+    expect(
+      container.querySelector('[data-page-layout="home"]')
+    ).toBeInTheDocument();
   });
 
   it('treats existing post routes as part of Archive', () => {
@@ -43,8 +44,9 @@ describe('AppShell', () => {
       </AppShell>
     );
 
-    expect(
-      screen.getByRole('link', { name: 'Archive' })
-    ).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Archive' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
   });
 });

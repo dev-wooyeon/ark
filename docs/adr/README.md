@@ -67,6 +67,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0047](0047-isolate-publication-policy.md)                                           | Accepted   | 공개 정책을 blog 도메인 모듈로 분리한다                      |
 | [0048](0048-centralize-blog-publication-rules.md)                                    | Accepted   | 블로그 발행 규칙을 단일 policy 모듈로 확장한다               |
 | [0049](0049-share-publication-policy-data-with-audit.md)                             | Accepted   | 발행 정책 데이터를 content audit과 공유한다                  |
+| [0050](0050-use-compact-mobile-navigation-and-article-entry-scale.md)                | Accepted   | 모바일 컴팩트 탐색과 글 상세 진입 스케일을 사용한다          |
 
 ## 작성 조건
 

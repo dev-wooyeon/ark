@@ -72,6 +72,7 @@ export default function AppShell({ children }: AppShellProps) {
       <div
         data-page-scroll-container
         data-page-scroll-mode="document"
+        data-page-layout={pathname === '/' ? 'home' : 'content'}
         className="ark-site-grid"
       >
         <aside className="ark-site-identity">
@@ -106,7 +107,6 @@ export default function AppShell({ children }: AppShellProps) {
           })}
         </nav>
       </div>
-
     </div>
   );
 }
