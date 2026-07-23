@@ -3,8 +3,8 @@ import path from 'path';
 import type { FeedData, Feed, FeedFrontmatter } from '@/blog/model/types';
 import { FeedFrontmatterSchema } from '@/blog/model/frontmatter-schema';
 import {
-  filterVisiblePosts,
-  isPostVisible,
+  filterListedPosts,
+  isListedPost,
   type PublicationQueryOptions,
 } from './policy';
 
@@ -289,7 +289,7 @@ export function getAllFeedSlugs(options: FeedQueryOptions = {}) {
 // Get sorted feed data for listing pages
 export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
   if (isProduction && cachedSortedFeedData) {
-    return filterVisiblePosts(cachedSortedFeedData, options);
+    return filterListedPosts(cachedSortedFeedData, options);
   }
 
   if (!safeExists(postsDirectory)) {
@@ -325,7 +325,7 @@ export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
     cachedSortedFeedData = sortedFeedData;
   }
 
-  return filterVisiblePosts(sortedFeedData, options);
+  return filterListedPosts(sortedFeedData, options);
 }
 
 // Get single feed data with MDX component
@@ -347,7 +347,7 @@ export async function getFeedData(
     return null;
   }
 
-  if (!isPostVisible(metadata, options)) {
+  if (!isListedPost(metadata, options)) {
     return null;
   }
 
