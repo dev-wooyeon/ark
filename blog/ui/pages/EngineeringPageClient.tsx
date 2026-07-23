@@ -19,10 +19,7 @@ export default function EngineeringPageClient({
   const searchParams = useSearchParams();
   const searchParamString = searchParams.toString();
 
-  const articlePosts = useMemo(
-    () => posts.filter((post) => post.category === 'Tech' && !post.series),
-    [posts]
-  );
+  const articlePosts = useMemo(() => posts, [posts]);
   const totalArticlePages = Math.max(
     1,
     Math.ceil(articlePosts.length / ARTICLE_PAGE_SIZE)

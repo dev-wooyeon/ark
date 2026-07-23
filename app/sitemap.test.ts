@@ -38,6 +38,9 @@ describe('sitemap', () => {
     );
     expect(urls).not.toContain(`${SITE_URL}/blog`);
     expect(urls).not.toContain(`${SITE_URL}/series`);
+    expect(
+      urls.some((url) => url.includes('/engineering/series/'))
+    ).toBe(false);
   });
 
   it('uses updated date for post lastModified when available', () => {

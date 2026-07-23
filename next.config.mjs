@@ -25,7 +25,7 @@ const nextConfig = {
       },
       {
         source: '/series',
-        destination: '/engineering?type=series',
+        destination: '/engineering',
         permanent: true,
       },
     ];
