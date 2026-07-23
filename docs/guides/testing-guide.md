@@ -39,7 +39,7 @@
 - `site/shell/AppShell/AppShell.test.tsx`
   - Archive, Resume의 전역 주요 탐색과 Archive 활성 상태
 - `blog/ui/components/*.test.tsx`
-  - PostCard/PostList/CategoryFilter 상태별 렌더/이벤트
+  - PostCard/PostList 상태별 렌더/이벤트
 - `ui/**/*.test.tsx`
   - Button/EmptyState/Route state 상태 검증
 

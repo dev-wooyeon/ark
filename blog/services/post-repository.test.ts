@@ -7,7 +7,6 @@ import {
   calculateReadingTime,
   getFeedData,
   getFolderSlug,
-  getSeriesPosts,
   getSortedFeedData,
   getAllFeedSlugs,
 } from './post-repository';
@@ -58,19 +57,6 @@ ${'x'.repeat(5000)}
     );
 
     expect(hasExtractedImage).toBe(true);
-  });
-
-  it('does not retain learning series migrated to llm-wiki', () => {
-    expect(getSeriesPosts('redis-deep-dive', { includePrivate: true })).toEqual(
-      []
-    );
-    expect(getSeriesPosts('flink-mastery', { includePrivate: true })).toEqual(
-      []
-    );
-  });
-
-  it('returns empty array for unknown series id', () => {
-    expect(getSeriesPosts('non-existent-series-id')).toEqual([]);
   });
 
   it('returns slug list with all feed entries', () => {

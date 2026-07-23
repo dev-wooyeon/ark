@@ -48,6 +48,7 @@ Last updated: 2026-07-22
 - `docs/adr/0047-isolate-publication-policy.md`
 - `docs/adr/0048-centralize-blog-publication-rules.md`
 - `docs/adr/0049-share-publication-policy-data-with-audit.md`
+- `docs/adr/0050-retire-series-navigation-and-enforce-listed-post-policy.md`
 - `docs/blog-quality-guide.md`
 - `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`

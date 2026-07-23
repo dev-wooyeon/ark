@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import {
   getFeedData,
   getAllFeedSlugs,
-  getSeriesPosts,
 } from '@/blog/services/post-repository';
 import {
   getMdxSource,
@@ -14,7 +13,6 @@ import {
   ReadingProgress,
   TableOfContents,
   GiscusComments,
-  SeriesNavigation,
 } from '@/blog/ui/components';
 import PostViewTracker from '@/infra/analytics/components/PostViewTracker';
 import DwellTimeTracker from '@/infra/analytics/components/DwellTimeTracker';
@@ -127,9 +125,6 @@ export default async function BlogPostPage({
   const mdxSource = getMdxSource(slug);
   const tocItems = mdxSource ? parseHeadingsFromMdx(mdxSource) : [];
 
-  // Get series posts if this post belongs to a series
-  const seriesPosts = post.series ? getSeriesPosts(post.series.id) : [];
-
   const { Content } = post;
   const formattedDate = new Date(post.date).toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -171,16 +166,6 @@ export default async function BlogPostPage({
               )}
             </div>
           </header>
-
-          {/* Series Navigation */}
-          {post.series && seriesPosts.length > 0 && (
-            <SeriesNavigation
-              currentSlug={post.slug}
-              seriesTitle={post.series.title}
-              seriesPosts={seriesPosts}
-              currentOrder={post.series.order}
-            />
-          )}
 
           {/* Content */}
           <div className="prose">
