@@ -3,8 +3,8 @@ import path from 'path';
 import type { FeedData, Feed, FeedFrontmatter } from '@/blog/model/types';
 import { FeedFrontmatterSchema } from '@/blog/model/frontmatter-schema';
 import {
-  filterVisiblePosts,
-  isPostVisible,
+  filterListedPosts,
+  isListedPost,
   type PublicationQueryOptions,
 } from './policy';
 
@@ -23,7 +23,6 @@ function logContentIssue(message: string): void {
 
   console.warn(`[post-repository] ${message}`);
 }
-
 export type FeedQueryOptions = PublicationQueryOptions;
 
 // TOC item type
@@ -289,7 +288,7 @@ export function getAllFeedSlugs(options: FeedQueryOptions = {}) {
 // Get sorted feed data for listing pages
 export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
   if (isProduction && cachedSortedFeedData) {
-    return filterVisiblePosts(cachedSortedFeedData, options);
+    return filterListedPosts(cachedSortedFeedData, options);
   }
 
   if (!safeExists(postsDirectory)) {
@@ -325,7 +324,7 @@ export function getSortedFeedData(options: FeedQueryOptions = {}): FeedData[] {
     cachedSortedFeedData = sortedFeedData;
   }
 
-  return filterVisiblePosts(sortedFeedData, options);
+  return filterListedPosts(sortedFeedData, options);
 }
 
 // Get single feed data with MDX component
@@ -347,7 +346,7 @@ export async function getFeedData(
     return null;
   }
 
-  if (!isPostVisible(metadata, options)) {
+  if (!isListedPost(metadata, options)) {
     return null;
   }
 
@@ -363,16 +362,4 @@ export async function getFeedData(
     logContentIssue(`Failed to load MDX content for ${folderPath}.`);
     return null;
   }
-}
-
-// Get all posts in a series, sorted by order
-export function getSeriesPosts(
-  seriesId: string,
-  options: FeedQueryOptions = {}
-): FeedData[] {
-  const allPosts = getSortedFeedData(options);
-
-  return allPosts
-    .filter((post) => post.series?.id === seriesId)
-    .sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0));
 }

@@ -68,11 +68,6 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
                 <CategoryIcon category={post.category} />
                 {post.category}
               </span>
-              {post.series ? (
-                <span className="inline-flex items-center rounded-[var(--radius-selection)] border border-[var(--color-border)] bg-[var(--color-grey-50)] px-2 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
-                  {post.series.title}
-                </span>
-              ) : null}
               <span className="h-1 w-1 rounded-full bg-[var(--color-grey-300)]" />
               <time>{formattedDate}</time>
               {readingTimeLabel && (

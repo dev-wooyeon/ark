@@ -42,8 +42,8 @@ ADR 작성 기준:
 ## 프로젝트 구조
 
 - `app/`: Next.js App Router route adapter, route handler, metadata entry
-- `blog/`: 글 도메인. post schema, repository, publication policy, series,
-  blog UI, RSS feed serialization, view-count use case
+- `blog/`: 글 도메인. post schema, repository, publication policy, blog UI,
+  RSS feed serialization, view-count use case
 - `resume/`: 이력서 도메인. resume data, ordering, resume UI
 - `site/`: 도메인 조합 layer. home, AppShell, navigation, provider, site config
 - `infra/`: 외부/런타임 인프라. Supabase, Umami analytics, SEO helper,

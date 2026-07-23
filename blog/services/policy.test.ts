@@ -4,9 +4,11 @@ import { describe, expect, it } from 'vitest';
 import type { FeedData } from '@/blog/model/types';
 import { getAllFeedSlugs, getSortedFeedData } from './post-repository';
 import {
+  filterListedPosts,
   filterVisiblePosts,
   getCoreTechReviewAverage,
   isEligibleForFeaturedPost,
+  isListedPost,
   isPostVisible,
   meetsPublicTechReviewThreshold,
   PUBLICATION_POLICY,
@@ -62,6 +64,29 @@ describe('publication policy', () => {
         },
       })
     ).toBe(false);
+  });
+
+  it('excludes public tech posts that fail review thresholds from public listings', () => {
+    const belowThresholdPost: FeedData = {
+      title: 'Below threshold',
+      slug: 'below-threshold',
+      description: 'desc',
+      date: '2026-01-01',
+      category: 'Tech',
+      contentType: 'essay',
+      visibility: 'public',
+      qualityReview: {
+        philosophy: 2,
+        design: 2,
+        implementation: 2,
+      },
+    };
+
+    expect(isListedPost(belowThresholdPost)).toBe(false);
+    expect(isListedPost(belowThresholdPost, { includePrivate: true })).toBe(
+      true
+    );
+    expect(filterListedPosts([belowThresholdPost])).toEqual([]);
   });
 
   it('keeps every private post out of public listings and static paths', () => {

@@ -73,6 +73,15 @@ describe('EngineeringPageClient', () => {
     );
   });
 
+  it('includes posts with series metadata in article pagination', () => {
+    mockQueryString = 'page=2';
+
+    render(<EngineeringPageClient posts={samplePosts} />);
+
+    expect(screen.getByTestId('post-list')).toHaveTextContent('series-ep1');
+    expect(screen.getByTestId('post-list')).toHaveTextContent('tech-article-6');
+  });
+
   it('updates page query when pagination button is clicked', () => {
     render(<EngineeringPageClient posts={samplePosts} />);
 

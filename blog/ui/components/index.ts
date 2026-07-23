@@ -5,9 +5,6 @@ export type { PostCardProps } from './PostCard';
 export { PostList } from './PostList';
 export type { PostListProps } from './PostList';
 
-export { CategoryFilter } from './CategoryFilter';
-export type { CategoryFilterProps, Category } from './CategoryFilter';
-
 export { TableOfContents } from './TableOfContents';
 export type { TableOfContentsProps, TocItem } from './TableOfContents';
 
@@ -16,5 +13,4 @@ export { ImageGrid } from './ImageGrid';
 export { GiscusComments } from './GiscusComments';
 export { MermaidDiagram } from './MermaidDiagram';
 
-export { SeriesNavigation } from './SeriesNavigation';
 export { default as ViewCounter } from './ViewCounter';
