@@ -23,7 +23,6 @@ function logContentIssue(message: string): void {
 
   console.warn(`[post-repository] ${message}`);
 }
-
 export type FeedQueryOptions = PublicationQueryOptions;
 
 // TOC item type
@@ -363,16 +362,4 @@ export async function getFeedData(
     logContentIssue(`Failed to load MDX content for ${folderPath}.`);
     return null;
   }
-}
-
-// Get all posts in a series, sorted by order
-export function getSeriesPosts(
-  seriesId: string,
-  options: FeedQueryOptions = {}
-): FeedData[] {
-  const allPosts = getSortedFeedData(options);
-
-  return allPosts
-    .filter((post) => post.series?.id === seriesId)
-    .sort((a, b) => (a.series?.order ?? 0) - (b.series?.order ?? 0));
 }
