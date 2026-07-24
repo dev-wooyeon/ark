@@ -33,7 +33,7 @@ Choose one primary type:
 If the post is mainly a review of an external object, route to the existing
 blog review workflow instead of forcing it into these two types. If it is a
 technical document with reader instructions as its main goal, route to the
-technical-writing skill.
+`technical-writing-pipeline` skill.
 
 ### 2. Run the release review
 
@@ -71,10 +71,13 @@ Use the strictest applicable result:
 Do not use a score average to hide a blocking issue. Mark uncertain factual or
 safety claims as `verify`, not as passed.
 
-If the target is an Ark Tech post and `qualityReview` is present, report the
-existing core score fields (`philosophy`, `design`, `implementation`) without
-inventing scores. The public policy threshold is a repository rule, not a
-substitute for editorial judgment.
+If the target is an Ark Tech post, inspect the `qualityReview` core fields
+(`philosophy`, `design`, `implementation`) even when `qualityReview` is absent.
+Report existing scores without inventing them. If a required core score is
+missing, mark the result `verify` and do not return `publish`; use `block` for
+a public-release decision and `revise` while the post remains private. The
+public policy threshold is a repository rule, not a substitute for editorial
+judgment.
 
 ### 4. Run repository checks when applicable
 
