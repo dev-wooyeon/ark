@@ -1,0 +1,30 @@
+{
+  "title": "말을 잘하고 싶다.",
+  "slug": "말하는-구조를-잃어버린-것-같았다",
+  "description": "평생 반복할 말하기와 듣기와 쓰기를 더 잘하기 위해, 모의 면접을 계기로 생각을 이해하기 쉬운 순서로 전달하는 연습을 시작한 기록.",
+  "date": "2026-07-24",
+  "category": "Life",
+  "contentType": "essay",
+  "image": "/images/posts/말하는-구조를-잃어버린-것-같았다/capstone-gameplay.png",
+  "visibility": "private",
+  "tags": [
+    "면접",
+    "말하기",
+    "커뮤니케이션",
+    "글쓰기"
+  ],
+  "qualityReview": {
+    "philosophy": 4.5,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 4,
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-07-24",
+    "notes": "말하기·듣기·쓰기의 장기 학습 동기를 중심에 둔 에세이. QADI 원문 직접 인용 없이 취지를 요약하고, 면접 답변 구조는 개인 적용 규칙으로 구분함. 문단 흐름을 정리하고 캡스톤 이미지는 비율 차이를 고려해 플레이 화면 한 장만 사용함."
+  }
+}
