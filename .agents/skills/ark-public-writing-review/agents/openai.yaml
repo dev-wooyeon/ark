@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ark Public Writing Review"
+  short_description: "에세이와 회고글의 공개 발행 가능성을 검토합니다"
+  default_prompt: "Use $ark-public-writing-review to review this essay or retrospective for public publication readiness."
