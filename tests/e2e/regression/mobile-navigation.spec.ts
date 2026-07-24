@@ -40,7 +40,7 @@ test.describe('Mobile navigation', () => {
     const focusedClass = await archive.getAttribute('class');
 
     expect(focusedClass).toContain(
-      'focus-visible:ring-[var(--color-toss-blue)]'
+      'focus-visible:ring-[var(--color-accent)]'
     );
     expect(focusedClass).toContain(
       'focus-visible:ring-offset-[var(--color-bg-primary)]'

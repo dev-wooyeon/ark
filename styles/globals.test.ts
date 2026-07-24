@@ -109,6 +109,13 @@ describe('globals styles', () => {
     );
   });
 
+  it('gives the active primary link a non-color state', () => {
+    expect(globalsContent).toContain(
+      ".ark-site-primary-link[aria-current='page']"
+    );
+    expect(globalsContent).toContain('font-weight: var(--font-semibold);');
+  });
+
   it('uses the content-page rail layout across non-mobile viewports', () => {
     const contentViewportPath = path.resolve(
       process.cwd(),
@@ -138,6 +145,9 @@ describe('globals styles', () => {
     );
     expect(tabletViewportContent).toContain(
       '  .ark-site-primary-link {\n    font-size: var(--text-sm);'
+    );
+    expect(tabletViewportContent).toContain(
+      ".ark-site-primary-link[aria-current='page'] {\n    font-weight: var(--font-semibold);"
     );
   });
 

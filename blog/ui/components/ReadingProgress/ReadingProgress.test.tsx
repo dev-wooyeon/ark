@@ -26,7 +26,7 @@ vi.mock('framer-motion', () => ({
     }) => {
       const className = props.className as string;
       const testId =
-        className.includes('bg-[var(--color-toss-blue)]') &&
+        className.includes('bg-[var(--color-accent)]') &&
         className.includes('h-full')
           ? 'reading-progress-bar'
           : 'reading-progress-root';

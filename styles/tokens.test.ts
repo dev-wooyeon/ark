@@ -40,7 +40,7 @@ describe('Ark paper token definitions', () => {
 
   it('reuses the accent token for mobile navigation focus', () => {
     expect(tokensContent).toContain(
-      '--mobile-nav-focus-ring: var(--color-toss-blue);'
+      '--mobile-nav-focus-ring: var(--color-accent);'
     );
   });
 });

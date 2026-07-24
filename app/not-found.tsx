@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <main>
       <Container size="sm" className="py-24 text-center md:py-32">
-        <p className="text-meta font-semibold text-[var(--color-toss-blue)]">
+        <p className="text-meta font-semibold text-[var(--color-accent)]">
           404
         </p>
         <h1 className="mt-3 text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
@@ -17,7 +17,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="mt-8 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-action)] bg-[var(--color-toss-blue)] px-5 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[var(--color-toss-blue-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+          className="mt-8 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-action)] bg-[var(--color-accent)] px-5 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
         >
           홈으로 돌아가기
         </Link>

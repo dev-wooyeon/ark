@@ -70,7 +70,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
                   'transition-colors duration-[var(--duration-150)]',
                   item.level > 2 && 'pl-6',
                   activeId === item.id
-                    ? 'bg-[var(--color-toss-blue)]/10 text-[var(--color-toss-blue)] font-medium'
+                    ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-medium'
                     : 'text-[var(--color-grey-600)] hover:text-[var(--color-grey-900)] hover:bg-[var(--color-grey-100)]'
                 )}
                 style={{ fontFamily: 'var(--font-sans-emoji)' }}

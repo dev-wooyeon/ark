@@ -12,11 +12,11 @@ import {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-toss-blue)] text-[var(--color-accent-foreground)] hover:opacity-80 active:scale-[0.98]',
+    'bg-[var(--color-accent)] text-[var(--color-accent-foreground)] hover:opacity-80 active:scale-[0.98]',
   secondary:
     'bg-[var(--color-grey-100)] text-[var(--color-grey-900)] hover:bg-[var(--color-grey-200)] active:scale-[0.98]',
   tertiary:
-    'bg-transparent text-[var(--color-toss-blue)] hover:bg-[var(--color-grey-50)] active:scale-[0.98]',
+    'bg-transparent text-[var(--color-accent)] hover:bg-[var(--color-grey-50)] active:scale-[0.98]',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -44,7 +44,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       'inline-flex items-center justify-center gap-2',
       'font-medium transition-all',
       'duration-[var(--duration-150)] ease-[var(--ease-default)]',
-      'focus-visible:outline-2 focus-visible:outline-[var(--color-toss-blue)] focus-visible:outline-offset-2',
+      'focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] focus-visible:outline-offset-2',
       'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none',
       variantStyles[variant],
       sizeStyles[size],
