@@ -146,6 +146,9 @@ describe('globals styles', () => {
     expect(tabletViewportContent).toContain(
       '  .ark-site-primary-link {\n    font-size: var(--text-sm);'
     );
+    expect(tabletViewportContent).toContain(
+      ".ark-site-primary-link[aria-current='page'] {\n    font-weight: var(--font-semibold);"
+    );
   });
 
   it('uses semantic surface tokens for article content', () => {
