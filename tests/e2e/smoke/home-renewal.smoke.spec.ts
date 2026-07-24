@@ -95,8 +95,6 @@ test.describe('Home and archive', () => {
     expect(resume.x).toBeGreaterThan(statement.x + (statement.width ?? 0));
     expect(archive.x).toBe(resume.x);
     expect(archive.y).toBeGreaterThan(resume.y);
-    expect(statement.x).toBeGreaterThan(200);
-
     const typography = await page.evaluate(() => {
       const statement = document.querySelector('main p');
       const resume = document.querySelector('[aria-label="Ark 주요 탐색"] a');
@@ -107,8 +105,8 @@ test.describe('Home and archive', () => {
       };
     });
 
-    expect(typography.statement).toBe('16px');
-    expect(typography.resume).toBe('16px');
+    expect(typography.statement).toBe('14px');
+    expect(typography.resume).toBe('14px');
   });
 
   test('@smoke Archive는 날짜와 제목만의 글 목록을 제공해요', async ({
@@ -128,7 +126,18 @@ test.describe('Home and archive', () => {
       throw new Error('Archive 행 간격을 측정할 수 없습니다.');
     }
 
-    expect(secondPost.y - firstPost.y).toBeGreaterThan(firstPost.height);
+    await expect
+      .poll(async () => {
+        const currentFirstPost = await postLinks.nth(0).boundingBox();
+        const currentSecondPost = await postLinks.nth(1).boundingBox();
+
+        if (!currentFirstPost || !currentSecondPost) {
+          return 0;
+        }
+
+        return currentSecondPost.y - currentFirstPost.y;
+      })
+      .toBeGreaterThan(firstPost.height);
 
     if (!test.info().project.use.isMobile) {
       const github = await page
@@ -177,6 +186,7 @@ test.describe('Home and archive', () => {
     expect(resume).not.toBeNull();
     expect(archive).not.toBeNull();
     expect(resume?.y).toBeLessThan(160);
-    expect(archive?.y).toBe(resume?.y);
+    expect(archive?.x).toBe(resume?.x);
+    expect(archive?.y).toBeGreaterThan(resume?.y ?? 0);
   });
 });

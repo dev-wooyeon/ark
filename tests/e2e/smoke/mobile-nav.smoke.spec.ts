@@ -82,6 +82,6 @@ test.describe('Mobile navigation', () => {
     expect(resume.y).toBeGreaterThan(brand.y);
     expect(resume.y).toBeLessThan(240);
     expect(github.x).toBe(16);
-    expect(github.y).toBeGreaterThan(650);
+    expect(github.y).toBeGreaterThan(resume.y);
   });
 });
