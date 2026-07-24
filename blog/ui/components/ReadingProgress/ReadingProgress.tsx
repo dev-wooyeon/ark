@@ -39,7 +39,7 @@ export default function ReadingProgress() {
     >
       <motion.div
         data-reading-progress-bar
-        className="h-full bg-[var(--color-toss-blue)] origin-left"
+        className="h-full bg-[var(--color-accent)] origin-left"
         style={{ scaleX }}
       />
     </motion.div>

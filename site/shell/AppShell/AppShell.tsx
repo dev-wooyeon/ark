@@ -54,7 +54,7 @@ function ExternalLinks() {
         <a
           key={item.label}
           href={item.href}
-          className="ark-site-external-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+          className="ark-site-external-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
         >
           {item.label}
         </a>
@@ -79,7 +79,7 @@ export default function AppShell({ children }: AppShellProps) {
             <Link
               href="/"
               aria-label="ark 홈으로 이동"
-              className="ark-site-brand-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+              className="ark-site-brand-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
             >
               ark
             </Link>
@@ -98,7 +98,7 @@ export default function AppShell({ children }: AppShellProps) {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
-                className="ark-site-primary-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
+                className="ark-site-primary-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
               >
                 {item.label}
               </Link>

@@ -58,7 +58,7 @@ describe('Button', () => {
   it('supports tertiary variant style markers', () => {
     render(<Button variant="tertiary">아웃라인</Button>);
     const button = screen.getByRole('button', { name: '아웃라인' });
-    expect(button).toHaveClass('text-[var(--color-toss-blue)]');
+    expect(button).toHaveClass('text-[var(--color-accent)]');
   });
 
   it('expands width when fullWidth is true', () => {

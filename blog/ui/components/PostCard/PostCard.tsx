@@ -34,7 +34,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
         className={clsx(
           'group flex min-h-7 items-baseline gap-6 py-0',
           'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
         )}
       >
         <time
@@ -58,7 +58,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
           'group block overflow-hidden rounded-[var(--radius-content)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-4 py-5 sm:px-6',
           'transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)]',
           'hover:border-[var(--color-border-hover)] hover:bg-[var(--color-grey-50)]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]'
         )}
       >
         <div className="min-w-0">
@@ -77,7 +77,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
                 </>
               )}
             </div>
-            <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
+            <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--color-text-primary)] transition-colors duration-[var(--duration-200)] ease-[var(--ease-default)] group-hover:text-[var(--color-accent)] group-focus-visible:text-[var(--color-accent)]">
               {post.title}
             </h3>
             <p className="mt-2 max-w-3xl text-reading leading-relaxed text-[var(--color-text-secondary)] line-clamp-2">
@@ -108,7 +108,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
         'group flex h-full cursor-pointer flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] p-6',
         'transition-all duration-[var(--duration-200)] ease-[var(--ease-default)]',
         'hover:-translate-y-0.5 hover:border-[var(--color-border-hover)] hover:shadow-[var(--shadow-md)]',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-toss-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]',
         'active:translate-y-0 active:shadow-sm'
       )}
     >
@@ -126,7 +126,7 @@ export default function PostCard({ post, variant = 'default' }: PostCardProps) {
           </>
         )}
       </div>
-      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-[color,transform] duration-300 ease-[var(--ease-default)] group-hover:translate-x-1 group-hover:text-[var(--color-toss-blue)] group-focus-visible:text-[var(--color-toss-blue)]">
+      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-[color,transform] duration-300 ease-[var(--ease-default)] group-hover:translate-x-1 group-hover:text-[var(--color-accent)] group-focus-visible:text-[var(--color-accent)]">
         {post.title}
       </h3>
       <p className="mt-3 flex-grow line-clamp-2 text-sm text-[var(--color-text-secondary)] transition-transform duration-300 ease-[var(--ease-default)] group-hover:translate-x-1">

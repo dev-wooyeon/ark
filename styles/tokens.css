@@ -9,9 +9,6 @@
   --color-accent: #3f3f46;
   --color-accent-hover: #252525;
   --color-accent-foreground: #eaebea;
-  --color-toss-blue: var(--color-accent);
-  --color-toss-blue-light: #52525b;
-  --color-toss-blue-dark: var(--color-accent-hover);
 
   /* Grey Scale */
   --color-grey-900: #252525;
@@ -35,7 +32,6 @@
   --color-bg-secondary: #e2e2e5;
   --color-bg-tertiary: #d8d8dc;
   --color-surface: #eaebea;
-  --color-blue-500: var(--color-accent);
 
   --color-border: #c8c8cc;
   --color-border-hover: #94949a;
@@ -53,7 +49,7 @@
   --mobile-nav-active-bg: #e0e1e3;
   --mobile-nav-active-border: var(--color-border);
   --mobile-nav-hover-bg: var(--color-bg-secondary);
-  --mobile-nav-focus-ring: var(--color-toss-blue);
+  --mobile-nav-focus-ring: var(--color-accent);
   --mobile-nav-focus-offset: var(--mobile-nav-bg);
 
   /* Code Block Colors */
