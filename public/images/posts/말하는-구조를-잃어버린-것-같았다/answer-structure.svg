@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">면접 답변 구조</title>
+  <desc id="desc">질문 이해, 결론, 상황, 선택과 근거, 결과와 배운 점의 순서</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7f4ee" />
+      <stop offset="1" stop-color="#e8eef0" />
+    </linearGradient>
+    <marker id="arrow" markerHeight="8" markerWidth="8" orient="auto" refX="6" refY="3">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#51636b" />
+    </marker>
+  </defs>
+  <rect width="1200" height="300" rx="24" fill="url(#background)" />
+  <text x="60" y="62" fill="#263238" font-family="sans-serif" font-size="26" font-weight="700">면접 답변은 생각을 전달 순서로 다시 배열하는 일</text>
+  <g font-family="sans-serif" text-anchor="middle">
+    <rect x="55" y="120" width="170" height="82" rx="16" fill="#d9e9e7" />
+    <text x="140" y="154" fill="#263238" font-size="19" font-weight="700">질문 이해</text>
+    <text x="140" y="181" fill="#51636b" font-size="15">무엇을 묻는가</text>
+
+    <rect x="270" y="120" width="170" height="82" rx="16" fill="#f4d8b8" />
+    <text x="355" y="154" fill="#263238" font-size="19" font-weight="700">결론</text>
+    <text x="355" y="181" fill="#51636b" font-size="15">내 답은 무엇인가</text>
+
+    <rect x="485" y="120" width="170" height="82" rx="16" fill="#d9e9e7" />
+    <text x="570" y="154" fill="#263238" font-size="19" font-weight="700">상황</text>
+    <text x="570" y="181" fill="#51636b" font-size="15">어떤 맥락인가</text>
+
+    <rect x="700" y="120" width="190" height="82" rx="16" fill="#f4d8b8" />
+    <text x="795" y="154" fill="#263238" font-size="19" font-weight="700">선택과 근거</text>
+    <text x="795" y="181" fill="#51636b" font-size="15">왜 그렇게 했는가</text>
+
+    <rect x="935" y="120" width="210" height="82" rx="16" fill="#d9e9e7" />
+    <text x="1040" y="154" fill="#263238" font-size="19" font-weight="700">결과와 배운 점</text>
+    <text x="1040" y="181" fill="#51636b" font-size="15">무엇이 달라졌는가</text>
+  </g>
+  <g stroke="#51636b" stroke-width="3" fill="none" marker-end="url(#arrow)">
+    <path d="M230 161 H258" />
+    <path d="M445 161 H473" />
+    <path d="M660 161 H688" />
+    <path d="M895 161 H923" />
+  </g>
+  <text x="600" y="252" fill="#51636b" font-family="sans-serif" font-size="16" text-anchor="middle">결론을 먼저 말하고, 필요한 만큼 근거를 붙인다</text>
+</svg>
