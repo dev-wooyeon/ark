@@ -56,7 +56,9 @@ describe('globals styles', () => {
     expect(tokensContent).toContain('--text-article-title: 1.625rem;');
     expect(tokensContent).toContain('--text-article-title-lg: 1.875rem;');
     expect(tokensContent).toContain('--leading-prose: 1.8;');
-    expect(tokensContent).toContain('--text-reading: 0.875rem;');
+    expect(tokensContent).toContain(
+      '--text-reading: clamp(0.9375rem, 0.8rem + 0.5vw, 1.0625rem);'
+    );
     expect(globalsContent).toContain('font-size: var(--text-reading);');
     expect(globalsContent).toContain('line-height: var(--leading-prose);');
     expect(mobileViewportContent).toContain('@media (max-width: 639px)');

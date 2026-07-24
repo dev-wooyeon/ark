@@ -121,8 +121,8 @@
   /* 26px - article title on small screens */
   --text-article-title-lg: 1.875rem;
   /* 30px - article title on large screens */
-  --text-reading: 0.875rem;
-  /* 14px - summaries and article prose */
+  --text-reading: clamp(0.9375rem, 0.8rem + 0.5vw, 1.0625rem);
+  /* 15px-17px - viewport-responsive summaries and article prose */
   --text-prose-h1: 1.375rem;
   /* 22px - article section headline */
   --text-prose-h2: 1.25rem;
