@@ -84,10 +84,13 @@ export default function AppShell({ children }: AppShellProps) {
               ark
             </Link>
           </header>
-          <ExternalLinks />
         </aside>
 
         <div className="ark-site-content">{children}</div>
+
+        <footer className="ark-site-footer">
+          <ExternalLinks />
+        </footer>
 
         <nav aria-label="Ark 주요 탐색" className="ark-site-navigation">
           {PRIMARY_LINKS.map((item) => {

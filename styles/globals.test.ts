@@ -64,7 +64,7 @@ describe('globals styles', () => {
 
   it('uses a compact single-column mobile shell and article entry scale', () => {
     expect(mobileViewportContent).toContain(
-      "grid-template-areas:\n      'identity'\n      'navigation'\n      'content';"
+      "grid-template-areas:\n      'identity'\n      'navigation'\n      'content'\n      'footer';"
     );
     expect(globalsContent).toContain('.ark-article-title {');
     expect(globalsContent).toContain('font-size: var(--text-article-title);');

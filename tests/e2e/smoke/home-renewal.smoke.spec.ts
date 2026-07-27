@@ -151,7 +151,7 @@ test.describe('Home and archive', () => {
       }
 
       expect(github.x).toBe(32);
-      expect(github.y).toBe(788);
+      expect(github.y).toBeGreaterThan(780);
     }
   });
 

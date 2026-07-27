@@ -97,6 +97,12 @@ ${'x'.repeat(5000)}
     expect(await getFeedData(privateSlug)).toBeNull();
   });
 
+  it('resolves percent-encoded slugs', () => {
+    const slug = '말하는-구조를-잃어버린-것-같았다';
+
+    expect(getFolderSlug(encodeURIComponent(slug))).toBe(slug);
+  });
+
   it('returns null for non-existent posts folder slug', () => {
     expect(getFolderSlug('missing-folder-slug')).toBeNull();
   });
