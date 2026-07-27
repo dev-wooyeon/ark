@@ -4,9 +4,12 @@ import { TableOfContents } from './TableOfContents';
 
 describe('TableOfContents', () => {
   it('renders native hash links and observes headings', () => {
-    const item = { id: 'section-1', text: '첫번째 섹션', level: 2 };
+    const items = [
+      { id: 'section-1', text: '첫번째 섹션', level: 2 },
+      { id: 'section-2', text: '두번째 섹션', level: 2 },
+    ];
     const header = document.createElement('h2');
-    header.id = item.id;
+    header.id = items[0].id;
     document.body.appendChild(header);
 
     const observeSpy = vi.fn();
@@ -24,22 +27,17 @@ describe('TableOfContents', () => {
     window.IntersectionObserver =
       MockIntersectionObserver as unknown as typeof window.IntersectionObserver;
 
-    const { container, getByRole } = render(<TableOfContents items={[item]} />);
+    const { container, getByRole } = render(<TableOfContents items={items} />);
 
     const link = getByRole('link', { name: '첫번째 섹션' });
     fireEvent.click(link);
 
-    expect(container.querySelector('nav')).toBeNull();
-    expect(document.body.querySelector('nav')).toHaveClass('bottom-8');
-    expect(document.body.querySelector('nav > div')).toHaveClass(
-      'h-full',
-      'overflow-y-auto'
+    expect(container.querySelector('nav')).toHaveClass('ark-article-toc');
+    expect(container.querySelector('nav > ol')).toHaveClass(
+      'ark-article-toc-list'
     );
-    expect(document.body.querySelector('ul')).toHaveClass('m-0', 'p-0');
-    expect(link).toHaveAttribute('href', `#${item.id}`);
-    expect(link).toHaveStyle({
-      fontFamily: 'var(--font-sans-emoji)',
-    });
+    expect(link).toHaveAttribute('href', `#${items[0].id}`);
+    expect(link).toHaveClass('ark-article-toc-link');
     expect(observeSpy).toHaveBeenCalledWith(header);
   });
 });

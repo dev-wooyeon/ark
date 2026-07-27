@@ -84,6 +84,20 @@ describe('globals styles', () => {
     expect(globalsContent).toContain('max-width: 34rem;');
   });
 
+  it('keeps external links visually secondary to primary navigation', () => {
+    expect(globalsContent).toContain('.ark-site-external-link {');
+    expect(globalsContent).toContain('font-size: var(--text-sm);');
+  });
+
+  it('keeps inline code lighter than fenced code blocks', () => {
+    expect(tokensContent).toContain('--color-code-inline-bg: #d8d8dc;');
+    expect(tokensContent).toContain('--color-code-inline-fg: #52525b;');
+    expect(tokensContent).toContain('--color-code-bg: #3f3f46;');
+    expect(globalsContent).toContain(
+      '.prose :not(pre) > code {\n  background-color: var(--color-code-inline-bg);'
+    );
+  });
+
   it('gives the mobile home page a split first-entry layout', () => {
     expect(mobileViewportContent).toContain(
       ".ark-site-grid[data-page-layout='home']"
@@ -134,6 +148,12 @@ describe('globals styles', () => {
     expect(contentViewport).toContain(
       ".ark-site-grid[data-page-layout='content'] .ark-article {\n    padding-top: 0;"
     );
+    expect(contentViewport).toContain('position: sticky;');
+    expect(contentViewport).toContain('top: 2.5rem;');
+    expect(contentViewport).toContain(
+      ".ark-site-grid[data-page-layout='content'] .ark-article-container {"
+    );
+    expect(contentViewport).toContain('margin-left: 0;');
   });
 
   it('matches hero and primary navigation sizes at intermediate widths', () => {

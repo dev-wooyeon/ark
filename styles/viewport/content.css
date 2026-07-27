@@ -7,6 +7,9 @@
   .ark-site-grid[data-page-layout='content'] .ark-site-navigation {
     grid-column: 1;
     grid-row: 1;
+    position: sticky;
+    top: 2.5rem;
+    align-self: start;
     padding-top: 4.5rem;
   }
 
@@ -17,5 +20,10 @@
 
   .ark-site-grid[data-page-layout='content'] .ark-article {
     padding-top: 0;
+  }
+
+  .ark-site-grid[data-page-layout='content'] .ark-article-container {
+    margin-right: 0;
+    margin-left: 0;
   }
 }
