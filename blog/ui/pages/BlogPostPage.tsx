@@ -1,9 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-  getFeedData,
-  getAllFeedSlugs,
-} from '@/blog/services/post-repository';
+import { getFeedData, getAllFeedSlugs } from '@/blog/services/post-repository';
 import {
   getMdxSource,
   parseHeadingsFromMdx,
@@ -149,7 +146,7 @@ export default async function BlogPostPage({
       <ScrollDepthTracker slug={post.slug} />
 
       <article className="ark-article">
-        <Container size="md">
+        <Container size="md" className="ark-article-container">
           {/* Header */}
           <header className="ark-article-header">
             <span className="mb-4 inline-block rounded-[var(--radius-selection)] bg-[var(--color-bg-secondary)] px-3 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
@@ -167,6 +164,8 @@ export default async function BlogPostPage({
             </div>
           </header>
 
+          <TableOfContents items={tocItems} />
+
           {/* Content */}
           <div className="prose">
             <Content components={mdxComponents} />
@@ -176,7 +175,7 @@ export default async function BlogPostPage({
 
       {/* Comments */}
       <section className="py-12">
-        <Container size="md">
+        <Container size="md" className="ark-article-container">
           <GiscusComments slug={slug} />
         </Container>
       </section>
@@ -206,8 +205,6 @@ export default async function BlogPostPage({
           isAccessibleForFree: true,
         }}
       />
-
-      <TableOfContents items={tocItems} />
     </>
   );
 }

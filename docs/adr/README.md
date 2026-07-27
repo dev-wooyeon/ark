@@ -70,6 +70,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0050](0050-retire-series-navigation-and-enforce-listed-post-policy.md)            | Accepted   | 시리즈 탐색을 제거하고 발행 정책을 repository에서 강제한다   |
 | [0051](0051-use-viewport-specific-reading-layout-and-type-scale.md)                 | Accepted   | viewport별 읽기 레이아웃과 타이포그래피 스케일을 사용한다     |
 | [0052](0052-use-repo-local-public-writing-review-workflow.md)                       | Accepted   | 공개 글 검토에 repo-local writing review workflow를 사용한다   |
+| [0053](0053-use-inline-table-of-contents-for-article-reading.md)                   | Accepted   | 글 읽기 흐름에 인라인 목차를 사용한다                         |
 
 ## 작성 조건
 

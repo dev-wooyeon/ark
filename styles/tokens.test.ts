@@ -13,6 +13,7 @@ describe('Ark paper token definitions', () => {
     expect(tokensContent).toContain('--text-meta: 0.75rem;');
     expect(tokensContent).toContain('--text-reading: 0.875rem;');
     expect(tokensContent).toContain('--text-prose-h1: 1.375rem;');
+    expect(tokensContent).toContain('--color-code-inline-bg: #d8d8dc;');
   });
 
   it('defines semantic radius roles for actions, content, and selections', () => {

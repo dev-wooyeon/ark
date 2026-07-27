@@ -53,9 +53,11 @@
   --mobile-nav-focus-offset: var(--mobile-nav-bg);
 
   /* Code Block Colors */
-  --color-code-bg: #252525;
-  --color-code-fg: #eaebea;
-  --color-code-title-bg: #3f3f46;
+  --color-code-bg: #3f3f46;
+  --color-code-fg: #e2e2e5;
+  --color-code-inline-bg: #d8d8dc;
+  --color-code-inline-fg: #52525b;
+  --color-code-title-bg: #52525b;
   --color-code-title-fg: #eaebea;
   --color-code-highlight: rgba(234, 235, 234, 0.12);
   --color-code-divider: rgba(234, 235, 234, 0.16);
