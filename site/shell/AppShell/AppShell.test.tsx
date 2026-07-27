@@ -8,7 +8,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 describe('AppShell', () => {
-  it('keeps Archive and Resume visible with external links in the identity rail', () => {
+  it('keeps primary navigation and external links available', () => {
     const { container } = render(
       <AppShell>
         <main>content</main>
@@ -27,10 +27,9 @@ describe('AppShell', () => {
       primaryNavigation.queryByRole('link', { name: 'Tech' })
     ).not.toBeInTheDocument();
     expect(screen.getAllByLabelText('Ark 외부 링크')).toHaveLength(1);
-    expect(container.querySelector('.ark-site-identity')).toContainElement(
+    expect(container.querySelector('footer')).toContainElement(
       screen.getByLabelText('Ark 외부 링크')
     );
-    expect(container.querySelector('footer')).toBeNull();
     expect(
       container.querySelector('[data-page-layout="home"]')
     ).toBeInTheDocument();

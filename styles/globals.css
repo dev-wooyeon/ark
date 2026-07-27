@@ -60,6 +60,12 @@
   min-width: 0;
 }
 
+.ark-site-footer {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+}
+
 .ark-home-statement {
   max-width: 34rem;
   margin: 0;
@@ -164,7 +170,7 @@
 .ark-site-external-links {
   display: flex;
   flex-direction: column;
-  margin-top: auto;
+  margin-top: 0;
   pointer-events: auto;
 }
 

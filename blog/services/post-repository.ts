@@ -16,6 +16,14 @@ const shouldLogContentIssues = process.env.NODE_ENV !== 'test';
 const slugToFolderCache = new Map<string, string>();
 let cachedSortedFeedData: FeedData[] | null = null;
 
+function normalizeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    return slug;
+  }
+}
+
 function logContentIssue(message: string): void {
   if (!shouldLogContentIssues) {
     return;
@@ -252,15 +260,17 @@ function loadMetadata(folderPath: string): FeedFrontmatter | null {
 
 // Get folder path from slug (using cache or scanning)
 export function getFolderSlug(slug: string): string | null {
+  const normalizedSlug = normalizeSlug(slug);
+
   // Check cache first
-  if (slugToFolderCache.has(slug)) {
-    return slugToFolderCache.get(slug)!;
+  if (slugToFolderCache.has(normalizedSlug)) {
+    return slugToFolderCache.get(normalizedSlug)!;
   }
 
   // Populate slug cache by loading full feed index first
   getSortedFeedData({ includePrivate: true });
-  if (slugToFolderCache.has(slug)) {
-    return slugToFolderCache.get(slug)!;
+  if (slugToFolderCache.has(normalizedSlug)) {
+    return slugToFolderCache.get(normalizedSlug)!;
   }
 
   if (isProduction) {
@@ -272,7 +282,7 @@ export function getFolderSlug(slug: string): string | null {
 
   for (const folderPath of allFolders) {
     const metadata = loadMetadata(folderPath);
-    if (metadata?.slug === slug) {
+    if (metadata?.slug === normalizedSlug) {
       return folderPath;
     }
   }
