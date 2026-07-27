@@ -63,7 +63,15 @@
 .ark-site-footer {
   grid-column: 1;
   grid-row: 1;
+  position: sticky;
+  top: 2.5rem;
+  height: calc(100dvh - 5rem);
   align-self: end;
+}
+
+.ark-site-footer .ark-site-external-links {
+  height: 100%;
+  justify-content: flex-end;
 }
 
 .ark-home-statement {

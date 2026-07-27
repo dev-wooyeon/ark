@@ -41,6 +41,8 @@
 
   .ark-site-footer {
     grid-area: footer;
+    position: static;
+    height: auto;
   }
 
   .ark-site-navigation {
@@ -88,7 +90,6 @@
     justify-self: start;
     gap: 0;
     margin-top: 0;
-    margin-bottom: var(--space-8);
   }
 
   .ark-site-grid[data-page-layout='home'] .ark-site-footer {
@@ -125,6 +126,10 @@
     border-top: 1px solid var(--color-divider);
     padding-top: var(--space-6);
     padding-bottom: var(--space-2);
+  }
+
+  .ark-site-grid[data-page-layout='content'] .ark-site-footer .ark-site-external-links {
+    height: auto;
   }
 
   .ark-site-grid[data-page-layout='content'] .ark-site-external-links {
