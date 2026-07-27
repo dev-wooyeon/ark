@@ -31,7 +31,7 @@ test.describe('Mobile navigation', () => {
     await expect(page).toHaveURL(/\/archive/);
   });
 
-  test('모바일 상단 컴팩트 영역에 보조 외부 링크를 둬요', async ({ page }) => {
+  test('모바일 본문 하단에 보조 외부 링크를 둬요', async ({ page }) => {
     await page.goto('/archive');
 
     const github = page.getByRole('link', { name: 'GitHub' });
@@ -44,14 +44,14 @@ test.describe('Mobile navigation', () => {
 
     const githubBox = await github.boundingBox();
     const emailBox = await email.boundingBox();
-    if (!githubBox || !emailBox) {
+    const footerBox = await page.locator('.ark-site-footer').boundingBox();
+    if (!githubBox || !emailBox || !footerBox) {
       throw new Error(
-        '상단 컴팩트 영역의 외부 링크 위치를 측정할 수 없습니다.'
+        '본문 하단 footer의 외부 링크 위치를 측정할 수 없습니다.'
       );
     }
 
-    expect(githubBox.x).toBeGreaterThan(160);
-    expect(githubBox.y).toBeLessThan(120);
+    expect(githubBox.y).toBeGreaterThanOrEqual(footerBox.y);
     expect(emailBox.y).toBe(githubBox.y);
   });
 
