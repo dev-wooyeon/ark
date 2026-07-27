@@ -175,7 +175,7 @@ export default async function BlogPostPage({
 
       {/* Comments */}
       <section className="py-12">
-        <Container size="md">
+        <Container size="md" className="ark-article-container">
           <GiscusComments slug={slug} />
         </Container>
       </section>
