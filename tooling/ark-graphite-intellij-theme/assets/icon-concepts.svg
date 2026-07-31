@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Graphite Theme icon concepts</title>
+  <desc id="desc">Eight original icon directions using paper, graphite, and plum colors.</desc>
+  <rect width="1200" height="760" fill="#EAEBEA"/>
+  <style>
+    .card { fill:#F7F7F5; stroke:#D4D4D1; stroke-width:2; }
+    .n { fill:#8A3D62; font:700 16px system-ui, sans-serif; }
+    .t { fill:#252525; font:600 18px system-ui, sans-serif; }
+    .s { fill:#68686C; font:14px system-ui, sans-serif; }
+    .ink { fill:#252525; } .plum { fill:#8A3D62; } .paper { fill:#EAEBEA; }
+    .line { fill:none; stroke:#252525; stroke-width:9; stroke-linecap:round; stroke-linejoin:round; }
+  </style>
+  <text x="56" y="62" class="t" font-size="30">Graphite Theme — icon concept board</text>
+  <text x="56" y="91" class="s">paper · graphite · plum / original reinterpretations of a five-petal rotation</text>
+
+  <!-- 01 -->
+  <g transform="translate(56 132)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">01</text><text x="24" y="60" class="t">Ink-line plum</text>
+    <g transform="translate(126 137)">
+      <g class="paper" stroke="#252525" stroke-width="8"><path d="M0 0 C-10-57 31-78 55-51 C76-26 45 8 0 0Z"/><path d="M0 0 C49-32 82 2 67 35 C52 66 10 47 0 0Z"/><path d="M0 0 C42 39 11 82-25 71 C-56 61-50 18 0 0Z"/><path d="M0 0 C-25 51-71 42-75 8 C-78-27-35-42 0 0Z"/><path d="M0 0 C-55-8-58-55-28-70 C3-85 28-50 0 0Z"/></g><circle r="18" class="plum"/>
+    </g><text x="24" y="230" class="s">quiet, most legible</text></g>
+
+  <!-- 02 -->
+  <g transform="translate(336 132)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">02</text><text x="24" y="60" class="t">Dry-brush plum</text>
+    <g transform="translate(126 137)" class="line"><path d="M0 0 C-4-54 37-74 56-48"/><path d="M0 0 C51-23 73 14 57 43"/><path d="M0 0 C35 44-3 75-37 61"/><path d="M0 0 C-38 38-74 9-61-26"/><path d="M0 0 C-55-19-37-62-2-62"/></g><circle cx="462" cy="269" r="15" class="plum"/><text x="24" y="230" class="s">brush gesture, airy</text></g>
+
+  <!-- 03 -->
+  <g transform="translate(616 132)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">03</text><text x="24" y="60" class="t">Seal blossom</text>
+    <rect x="73" y="84" width="106" height="106" rx="8" class="ink"/>
+    <g transform="translate(126 137)" class="paper"><ellipse rx="16" ry="34" transform="rotate(0) translate(0 -24)"/><ellipse rx="16" ry="34" transform="rotate(72) translate(0 -24)"/><ellipse rx="16" ry="34" transform="rotate(144) translate(0 -24)"/><ellipse rx="16" ry="34" transform="rotate(216) translate(0 -24)"/><ellipse rx="16" ry="34" transform="rotate(288) translate(0 -24)"/><circle r="12" class="plum"/></g>
+    <text x="24" y="230" class="s">stamp-like, strongest badge</text></g>
+
+  <!-- 04 -->
+  <g transform="translate(896 132)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">04</text><text x="24" y="60" class="t">Graphite fracture</text>
+    <path d="M78 105 L112 79 L164 94 L184 137 L151 188 L95 179 L66 139Z" class="ink"/>
+    <g fill="none" stroke="#EAEBEA" stroke-width="7" stroke-linecap="round"><path d="M126 137 L104 103"/><path d="M126 137 L164 113"/><path d="M126 137 L151 167"/><path d="M126 137 L93 154"/><path d="M126 137 L124 177"/></g><circle cx="126" cy="137" r="12" class="plum"/>
+    <text x="24" y="230" class="s">name-driven, distinctive</text></g>
+
+  <!-- 05 -->
+  <g transform="translate(56 432)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">05</text><text x="24" y="60" class="t">Code blossom</text>
+    <path d="M106 96 L77 137 L106 178" class="line"/><path d="M146 96 L175 137 L146 178" class="line"/>
+    <g transform="translate(126 137)"><circle r="30" class="paper" stroke="#252525" stroke-width="7"/><circle r="12" class="plum"/></g>
+    <text x="24" y="230" class="s">developer signal, minimal</text></g>
+
+  <!-- 06 -->
+  <g transform="translate(336 432)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">06</text><text x="24" y="60" class="t">Brush orbit</text>
+    <path d="M172 102 C191 141 152 178 111 170 C66 162 66 100 107 92 C141 84 166 113 148 139 C134 159 100 150 100 129" class="line"/>
+    <path d="M99 129 C100 113 120 108 131 119" fill="none" stroke="#8A3D62" stroke-width="11" stroke-linecap="round"/>
+    <text x="24" y="230" class="s">one stroke, restrained motion</text></g>
+
+  <!-- 07 -->
+  <g transform="translate(616 432)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">07</text><text x="24" y="60" class="t">Moon branch</text>
+    <circle cx="129" cy="137" r="54" class="paper" stroke="#252525" stroke-width="8"/>
+    <path d="M86 174 C110 150 137 126 174 103" class="line"/>
+    <g class="plum"><circle cx="116" cy="145" r="13"/><circle cx="151" cy="119" r="13"/></g>
+    <text x="24" y="230" class="s">calmest, editorial feel</text></g>
+
+  <!-- 08 -->
+  <g transform="translate(896 432)"><rect class="card" width="252" height="256" rx="18"/>
+    <text x="24" y="34" class="n">08</text><text x="24" y="60" class="t">Window lattice</text>
+    <rect x="72" y="83" width="108" height="108" rx="9" class="ink"/>
+    <g stroke="#EAEBEA" stroke-width="9" fill="none"><path d="M99 92 V182 M126 92 V182 M153 92 V182"/><path d="M81 110 H171 M81 137 H171 M81 164 H171"/></g>
+    <circle cx="153" cy="110" r="10" class="plum"/>
+    <text x="24" y="230" class="s">architectural, most abstract</text></g>
+</svg>

@@ -92,7 +92,7 @@ describe('globals styles', () => {
   it('keeps inline code lighter than fenced code blocks', () => {
     expect(tokensContent).toContain('--color-code-inline-bg: #d8d8dc;');
     expect(tokensContent).toContain('--color-code-inline-fg: #52525b;');
-    expect(tokensContent).toContain('--color-code-bg: #3f3f46;');
+    expect(tokensContent).toContain('--color-code-bg: #252525;');
     expect(globalsContent).toContain(
       '.prose :not(pre) > code {\n  background-color: var(--color-code-inline-bg);'
     );

@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(to bottom right, #EAEBEA, #E0E1E3)',
+        backgroundImage: 'linear-gradient(to bottom right, #ECEEEF, #E1E4E7)',
         padding: '80px',
       }}
     >
@@ -86,8 +86,8 @@ export async function GET(req: NextRequest) {
                 key={tag}
                 style={{
                   display: 'flex',
-                  backgroundColor: '#E0E1E3',
-                  color: '#3F3F46',
+                  backgroundColor: '#E1E4E7',
+                  color: '#A6294D',
                   padding: '8px 24px',
                   borderRadius: '50px',
                   fontSize: '24px',
@@ -114,7 +114,7 @@ export async function GET(req: NextRequest) {
           style={{
             fontSize: '32px',
             fontWeight: 700,
-            color: '#3F3F46',
+            color: '#A6294D',
             fontFamily: 'Pretendard',
           }}
         >

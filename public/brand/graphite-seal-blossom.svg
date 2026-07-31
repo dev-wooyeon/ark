@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Graphite seal blossom</title>
+  <desc id="desc">An original five-petal plum blossom impressed into a graphite seal.</desc>
+  <path d="M120 48H392C428 48 464 84 464 120V392C464 428 428 464 392 464H120C84 464 48 428 48 392V120C48 84 84 48 120 48Z" fill="#252525"/>
+  <path d="M124 68H388C425 68 444 94 444 124V388C444 425 418 444 388 444H124C87 444 68 418 68 388V124C68 87 94 68 124 68Z" fill="none" stroke="#3F3F46" stroke-width="8"/>
+  <g fill="#ECEEEF">
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(72 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(144 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(216 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(288 256 256)"/>
+  </g>
+  <g fill="#D02D60">
+    <circle cx="256" cy="236" r="14"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(72 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(144 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(216 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(288 256 256)"/>
+    <circle cx="256" cy="256" r="12"/>
+  </g>
+  <circle cx="256" cy="256" r="5" fill="#ECEEEF"/>
+</svg>

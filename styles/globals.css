@@ -45,6 +45,7 @@
 .ark-site-brand-link {
   display: flex;
   align-items: center;
+  gap: var(--space-2);
   min-height: 3rem;
   color: var(--color-text-primary);
   font-size: var(--text-base);
@@ -52,6 +53,12 @@
   line-height: var(--leading-normal);
   letter-spacing: var(--tracking-tight);
   pointer-events: auto;
+}
+
+.ark-site-brand-mark {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
 }
 
 .ark-site-content {
@@ -893,7 +900,7 @@
 
 .prose .workflow-scroll-fill {
   height: 100%;
-  background: var(--color-accent);
+  background: var(--color-accent-fill);
   transition: width 180ms ease;
 }
 

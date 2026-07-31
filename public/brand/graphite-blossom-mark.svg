@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="108 108 296 296" role="img" aria-labelledby="title desc">
+  <title id="title">Graphite blossom mark</title>
+  <desc id="desc">A transparent five-petal graphite plum blossom with a plum center.</desc>
+  <g fill="#FFFFFF">
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(72 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(144 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(216 256 256)"/>
+    <path d="M256 255C230 238 211 207 211 171C211 134 234 112 262 113C292 114 315 140 309 174C304 207 281 237 256 255Z" transform="rotate(288 256 256)"/>
+  </g>
+  <g fill="#D02D60">
+    <circle cx="256" cy="236" r="14"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(72 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(144 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(216 256 256)"/>
+    <circle cx="256" cy="236" r="14" transform="rotate(288 256 256)"/>
+    <circle cx="256" cy="256" r="12"/>
+  </g>
+  <circle cx="256" cy="256" r="5" fill="#ECEEEF"/>
+</svg>

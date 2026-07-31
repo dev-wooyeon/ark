@@ -1,6 +1,6 @@
 # 문서 인덱스
 
-Last updated: 2026-07-28
+Last updated: 2026-07-31
 
 이 인덱스는 현재 코드베이스와 함께 유지해야 하는 문서만 추적한다. 계속
 업데이트할 문서가 아니라면 삭제하거나, 오래 남겨야 하는 결정만 ADR로 옮긴다.
@@ -51,6 +51,7 @@ Last updated: 2026-07-28
 - `docs/adr/0050-retire-series-navigation-and-enforce-listed-post-policy.md`
 - `docs/adr/0052-use-repo-local-public-writing-review-workflow.md`
 - `docs/adr/0053-use-inline-table-of-contents-for-article-reading.md`
+- `docs/adr/0054-adopt-cool-paper-and-plum-accent-palette.md`
 - `docs/blog-quality-guide.md`
 - `docs/content-publication-candidates.md`
 - `docs/database/db-schema.md`

@@ -27,6 +27,10 @@ describe('AppShell', () => {
       primaryNavigation.queryByRole('link', { name: 'Tech' })
     ).not.toBeInTheDocument();
     expect(screen.getAllByLabelText('Ark 외부 링크')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'ark 홈으로 이동' })).toHaveTextContent(
+      'ark'
+    );
+    expect(screen.queryByAltText('')).not.toBeInTheDocument();
     expect(container.querySelector('footer')).toContainElement(
       screen.getByLabelText('Ark 외부 링크')
     );
@@ -46,6 +50,10 @@ describe('AppShell', () => {
     expect(screen.getByRole('link', { name: 'Archive' })).toHaveAttribute(
       'aria-current',
       'page'
+    );
+    expect(screen.getByAltText('')).toHaveAttribute(
+      'src',
+      '/brand/graphite-blossom-mark.svg'
     );
   });
 });
