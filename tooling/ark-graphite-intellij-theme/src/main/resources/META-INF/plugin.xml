@@ -1,0 +1,33 @@
+<idea-plugin>
+  <id>io.github.devwooyeon.graphite</id>
+  <name>Graphite Theme</name>
+  <version>1.0.5</version>
+  <vendor email="dev.haon@gmail.com" url="https://github.com/dev-wooyeon">Eunwoo Park (박은우)</vendor>
+
+  <description><![CDATA[
+    <p>Graphite Theme is a quiet paper-and-ink theme for IntelliJ Platform IDEs.</p>
+    <p>Built from the design system of my personal blog, it pairs a soft paper
+    background with graphite ink. When the code gets loud, the screen stays
+    calm—one small aid for becoming the developer who does not get angry at the
+    compiler. :)</p>
+    <hr>
+    <p><b>한국어</b></p>
+    <p>개인 블로그를 운영하며 사용하던 디자인 시스템을 IntelliJ Platform 테마로
+    만들었습니다.</p>
+    <p>종이 배경에 먹색을 조합한 차분한 테마입니다. 코드가 시끄러워질수록 화면은
+    조용하게. 컴파일러에게 화내지 않는 개발자가 되기 위한 작은 장치입니다. :)</p>
+  ]]></description>
+
+  <change-notes><![CDATA[
+    Initial Graphite Theme light release.
+  ]]></change-notes>
+
+  <idea-version since-build="233"/>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <themeProvider
+      id="io.github.devwooyeon.graphite.theme"
+      path="/ArkGraphite.theme.json"/>
+  </extensions>
+</idea-plugin>

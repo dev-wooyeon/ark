@@ -81,7 +81,15 @@ export default function AppShell({ children }: AppShellProps) {
               aria-label="ark 홈으로 이동"
               className="ark-site-brand-link transition-colors hover:text-[var(--color-text-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-primary)]"
             >
-              ark
+              {pathname !== '/' ? (
+                <img
+                  src="/brand/graphite-blossom-mark.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="ark-site-brand-mark"
+                />
+              ) : null}
+              <span>ark</span>
             </Link>
           </header>
         </aside>

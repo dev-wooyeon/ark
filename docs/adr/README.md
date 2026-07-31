@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Last updated: 2026-07-24
+Last updated: 2026-07-31
 
 이 디렉터리는 커밋 히스토리에서 복원한 아키텍처 의사결정을 기록한다.
 ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 초안을
@@ -71,6 +71,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0051](0051-use-viewport-specific-reading-layout-and-type-scale.md)                 | Accepted   | viewport별 읽기 레이아웃과 타이포그래피 스케일을 사용한다     |
 | [0052](0052-use-repo-local-public-writing-review-workflow.md)                       | Accepted   | 공개 글 검토에 repo-local writing review workflow를 사용한다   |
 | [0053](0053-use-inline-table-of-contents-for-article-reading.md)                   | Accepted   | 글 읽기 흐름에 인라인 목차를 사용한다                         |
+| [0054](0054-adopt-cool-paper-and-plum-accent-palette.md)                            | Accepted   | 차가운 종이와 매화색 포인트 팔레트를 채택한다                 |
 
 ## 작성 조건
 

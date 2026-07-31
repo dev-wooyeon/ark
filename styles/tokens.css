@@ -6,9 +6,10 @@
   /* === Colors === */
 
   /* Accent */
-  --color-accent: #3f3f46;
-  --color-accent-hover: #252525;
-  --color-accent-foreground: #eaebea;
+  --color-accent: #a6294d;
+  --color-accent-fill: #d02d60;
+  --color-accent-hover: #8f2044;
+  --color-accent-foreground: #ffffff;
 
   /* Grey Scale */
   --color-grey-900: #252525;
@@ -28,10 +29,10 @@
   --color-text-tertiary: #62626a;
   --color-text-disabled: #94949a;
 
-  --color-bg-primary: #eaebea;
-  --color-bg-secondary: #e2e2e5;
-  --color-bg-tertiary: #d8d8dc;
-  --color-surface: #eaebea;
+  --color-bg-primary: #eceeef;
+  --color-bg-secondary: #e2e4e7;
+  --color-bg-tertiary: #d8dade;
+  --color-surface: #eceeef;
 
   --color-border: #c8c8cc;
   --color-border-hover: #94949a;
@@ -46,22 +47,22 @@
   --mobile-nav-shadow: 0 8px 24px rgba(37, 37, 37, 0.12);
   --mobile-nav-text: var(--color-text-secondary);
   --mobile-nav-active-text: var(--color-text-primary);
-  --mobile-nav-active-bg: #e0e1e3;
+  --mobile-nav-active-bg: #e1e4e7;
   --mobile-nav-active-border: var(--color-border);
   --mobile-nav-hover-bg: var(--color-bg-secondary);
-  --mobile-nav-focus-ring: var(--color-accent);
+  --mobile-nav-focus-ring: var(--color-accent-fill);
   --mobile-nav-focus-offset: var(--mobile-nav-bg);
 
   /* Code Block Colors */
-  --color-code-bg: #3f3f46;
-  --color-code-fg: #e2e2e5;
+  --color-code-bg: #252525;
+  --color-code-fg: #eceeef;
   --color-code-inline-bg: #d8d8dc;
   --color-code-inline-fg: #52525b;
-  --color-code-title-bg: #52525b;
-  --color-code-title-fg: #eaebea;
-  --color-code-highlight: rgba(234, 235, 234, 0.12);
-  --color-code-divider: rgba(234, 235, 234, 0.16);
-  --shiki-dark: #eaebea;
+  --color-code-title-bg: #3f3f46;
+  --color-code-title-fg: #eceeef;
+  --color-code-highlight: rgba(236, 238, 239, 0.12);
+  --color-code-divider: rgba(236, 238, 239, 0.16);
+  --shiki-dark: #eceeef;
 
   /* Feedback Colors */
   --color-success: #3f3f46;
@@ -254,7 +255,8 @@
     --color-border: #62626a;
     --color-border-hover: #3f3f46;
     --color-divider: #94949a;
-    --color-accent: #252525;
-    --color-accent-hover: #252525;
+    --color-accent: #8f2044;
+    --color-accent-fill: #a6294d;
+    --color-accent-hover: #8f2044;
   }
 }

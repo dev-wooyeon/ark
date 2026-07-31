@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title">
+  <title id="title">10-step scale from #963B5E to #FF2262</title>
+  <rect width="1200" height="250" fill="#ECEEEF"/>
+  <style>
+    text { font-family: system-ui, sans-serif; fill: #252525; }
+    .label { font-size: 20px; font-weight: 700; }
+    .hex { font-size: 14px; font-weight: 650; }
+    .no { font-size: 13px; fill: #68686C; }
+  </style>
+  <text x="48" y="46" class="label">#963B5E → #FF2262 / 10 steps</text>
+  <g transform="translate(48 78)">
+    <g transform="translate(0 0)"><rect width="104" height="104" rx="12" fill="#963B5E"/><text x="0" y="132" class="no">01</text><text x="0" y="156" class="hex">#963B5E</text></g>
+    <g transform="translate(112 0)"><rect width="104" height="104" rx="12" fill="#A2385E"/><text x="0" y="132" class="no">02</text><text x="0" y="156" class="hex">#A2385E</text></g>
+    <g transform="translate(224 0)"><rect width="104" height="104" rx="12" fill="#AD355F"/><text x="0" y="132" class="no">03</text><text x="0" y="156" class="hex">#AD355F</text></g>
+    <g transform="translate(336 0)"><rect width="104" height="104" rx="12" fill="#B9335F"/><text x="0" y="132" class="no">04</text><text x="0" y="156" class="hex">#B9335F</text></g>
+    <g transform="translate(448 0)"><rect width="104" height="104" rx="12" fill="#C53060"/><text x="0" y="132" class="no">05</text><text x="0" y="156" class="hex">#C53060</text></g>
+    <g transform="translate(560 0)"><rect width="104" height="104" rx="12" fill="#D02D60"/><text x="0" y="132" class="no">06</text><text x="0" y="156" class="hex">#D02D60</text></g>
+    <g transform="translate(672 0)"><rect width="104" height="104" rx="12" fill="#DC2A61"/><text x="0" y="132" class="no">07</text><text x="0" y="156" class="hex">#DC2A61</text></g>
+    <g transform="translate(784 0)"><rect width="104" height="104" rx="12" fill="#E82861"/><text x="0" y="132" class="no">08</text><text x="0" y="156" class="hex">#E82861</text></g>
+    <g transform="translate(896 0)"><rect width="104" height="104" rx="12" fill="#F32562"/><text x="0" y="132" class="no">09</text><text x="0" y="156" class="hex">#F32562</text></g>
+    <g transform="translate(1008 0)"><rect width="104" height="104" rx="12" fill="#FF2262"/><text x="0" y="132" class="no">10</text><text x="0" y="156" class="hex">#FF2262</text></g>
+  </g>
+</svg>

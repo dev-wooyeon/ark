@@ -31,17 +31,18 @@ describe('Ark paper token definitions', () => {
     expect(tokensContent).toContain('--mobile-nav-focus-offset');
   });
 
-  it('uses the Graphite Ink palette instead of dark-mode overrides', () => {
-    expect(tokensContent).toContain('--color-bg-primary: #eaebea;');
+  it('uses the cool-paper and plum palette instead of dark-mode overrides', () => {
+    expect(tokensContent).toContain('--color-bg-primary: #eceeef;');
     expect(tokensContent).toContain('--color-text-primary: #252525;');
-    expect(tokensContent).toContain('--color-accent: #3f3f46;');
-    expect(tokensContent).toContain('--color-surface: #eaebea;');
+    expect(tokensContent).toContain('--color-accent: #a6294d;');
+    expect(tokensContent).toContain('--color-accent-fill: #d02d60;');
+    expect(tokensContent).toContain('--color-surface: #eceeef;');
     expect(tokensContent).not.toContain('.dark {');
   });
 
   it('reuses the accent token for mobile navigation focus', () => {
     expect(tokensContent).toContain(
-      '--mobile-nav-focus-ring: var(--color-accent);'
+      '--mobile-nav-focus-ring: var(--color-accent-fill);'
     );
   });
 });
