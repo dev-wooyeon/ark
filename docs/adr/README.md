@@ -72,6 +72,7 @@ ADR은 AI 협업 가이드와 별개의 문서다. 사람이 결정했든 AI가 
 | [0052](0052-use-repo-local-public-writing-review-workflow.md)                       | Accepted   | 공개 글 검토에 repo-local writing review workflow를 사용한다   |
 | [0053](0053-use-inline-table-of-contents-for-article-reading.md)                   | Accepted   | 글 읽기 흐름에 인라인 목차를 사용한다                         |
 | [0054](0054-adopt-cool-paper-and-plum-accent-palette.md)                            | Accepted   | 차가운 종이와 매화색 포인트 팔레트를 채택한다                 |
+| [0055](0055-pin-quality-runner-to-ubuntu-24-04.md) | Accepted | Quality CI 실행 환경을 Ubuntu 24.04로 고정한다 |
 
 ## 작성 조건
 
