@@ -1,0 +1,24 @@
+{
+  "title": "우아콘 2026 참석 후기",
+  "slug": "woowacon-2026",
+  "description": "9.81파크에서 IoT 업무를 하며 워크플로우와 플랫폼화를 고민하던 중 다녀온 우아콘 2026. 세션을 선택한 이유와 각 발표에서 얻은 생각을 정리했어요.",
+  "date": "2026-11-03",
+  "category": "Tech",
+  "contentType": "retrospective",
+  "visibility": "public",
+  "tags": ["WOOWACON", "Architecture", "AI", "Temporal", "Platform"],
+  "qualityReview": {
+    "philosophy": 4,
+    "design": 4,
+    "implementation": 3.5,
+    "brandFit": 4,
+    "clarity": 4,
+    "structure": 4,
+    "evidence": 3.5,
+    "usefulness": 4,
+    "originality": 4,
+    "polish": 4,
+    "reviewedAt": "2026-11-03",
+    "notes": "사용자 인터뷰와 현장 메모·사진을 대조해 공개 전 검토했다. 참석 동기, 세션별 실제 소감과 유보적인 판단을 해요체로 보존했다. 내부 진행 단계와 불확실한 prepared 상태명·성능 수치는 제외했다. 촬영 시각에 맞춘 사진 9장을 캡션 없이 사용한다. 기술 구현을 직접 검증한 글이 아닌 참관 후기다."
+  }
+}
