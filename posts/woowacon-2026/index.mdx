@@ -10,25 +10,47 @@ import Image from 'next/image';
 
 ## AI와 백엔드 세션을 골라 들은 하루
 
-<Image
-  src="/images/posts/woowacon-2026/01-venue-sign.jpeg"
-  alt="5층 행사장 방향을 알려주는 우아콘 안내 디스플레이"
-  width={768}
-  height={1024}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 480, height: 'auto' }}
-/>
+<div
+  role="region"
+  aria-label="우아콘 현장 사진"
+  tabIndex={0}
+  className="my-6 flex gap-3 overflow-x-auto rounded-lg pb-2 focus-visible:outline focus-visible:outline-2"
+>
+  <a
+    href="/images/posts/woowacon-2026/01-venue-sign.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 5층 행사장 방향을 알려주는 우아콘 안내 디스플레이"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/01-venue-sign.jpeg"
+      alt="5층 행사장 방향을 알려주는 우아콘 안내 디스플레이"
+      width={768}
+      height={1024}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+  <a
+    href="/images/posts/woowacon-2026/02-event-wall.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: “멈추지 않는 도시를 만드는 기술”이라는 문구가 적힌 우아콘 2026 현장"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/02-event-wall.jpeg"
+      alt="“멈추지 않는 도시를 만드는 기술”이라는 문구가 적힌 우아콘 2026 현장"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+</div>
 
 행사는 그랜드 인터컨티넨탈 서울 파르나스 5층에서 열렸어요. 코엑스 행사장을 찾아갈 때는 역에서부터 길을 헤맨 적이 있었는데, 이번에는 호텔 건물을 쉽게 찾았어요. 키오스크로 발권했고, 두 홀 사이 통로에는 테이블과 충전기가 있어 쉬어가기 편했어요.
-
-<Image
-  src="/images/posts/woowacon-2026/02-event-wall.jpeg"
-  alt="“멈추지 않는 도시를 만드는 기술”이라는 문구가 적힌 우아콘 2026 현장"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
 
 시간표를 보면서 워크플로우를 다룬 Temporal 세션과 상품·재고 통합 세션에 눈이 갔어요. 지금 고민하는 시스템 설계와 연결해서 들을 수 있을 것 같았거든요. AI를 실제 업무에 어떻게 활용하는지도 궁금해서 어드민과 콜봇 세션을 골랐어요.
 
@@ -42,136 +64,211 @@ import Image from 'next/image';
 | 15:50 | 해커톤 우승작을 실시간 콜봇으로: 하네스 엔지니어링          |
 | 16:50 | 같은 퀵커머스, 시스템은 두 벌? 장보기·쇼핑 뒤의 상품과 재고 |
 
+사진은 가로로 넘겨볼 수 있고, 누르면 원본이 열려요.
+
 첫 작문 세션은 들어갔다가 화장실에 다녀오는 사이 정원이 마감돼서 다시 들어가지 못했어요. 입구에서 인원을 관리하고 계셔서 아쉽게 발길을 돌렸어요. ㅠㅠ
 
-## 주문이 어디서 멈췄는지 한곳에서 볼 수 있을까요?
+## 이 주문 어디서 죽었어요? 배민주문 Temporal 전환기
 
-Temporal 전환기의 출발점은 운영팀의 질문이었어요. 주문이 어디서 멈췄는지 답하려면 주문팀, 중개시스템팀, 접수채널팀의 로그를 추적하고 대조해야 했어요. 각 시스템이 이벤트를 받아 자기 일을 처리하더라도, 주문 하나의 전체 진행 상황을 바로 설명하기는 어려웠어요.
+**내용 요약**
 
-실패한 이벤트를 다시 발행하는 일도 단순하지 않았어요. 소비처가 여러 곳이면 이미 처리한 곳에 어떤 영향을 줄지 함께 고려해야 해요. 실패를 발견하는 것과 안전하게 복구하는 것은 별개의 문제였어요.
+- 주문이 멈춘 지점을 찾으려면 주문팀, 중개시스템팀, 접수채널팀의 로그를 대조해야 했어요. 여러 소비처가 있는 이벤트를 다시 발행할 때는 이미 처리한 곳에 미칠 영향도 고려해야 했고요.
+- 주문의 진행 상태와 이력을 한곳에서 관리하기 위해 Temporal을 도입했어요. 직접 오케스트레이터를 만들 때 필요한 워커 장애 대응, 재시도, 취소, 보상, 동시성 제어도 선택의 배경이었어요.
+- 도입 뒤에도 DB I/O와 클러스터 구성, 실패 복구를 운영에 맞게 설계했어요. 특히 실패 원인이 해소됐을 때 주문 전체가 아닌 필요한 단계만 골라 재시도할 수 있도록 만들었어요.
+- 코드에서 진행 순서를 읽을 수 있도록, 외부 신호인 Signal은 상태 머신을 거쳐 상태를 바꾸고 실제 흐름은 Workflow 본문에서 다루도록 나눴어요.
 
-발표에서는 주문의 진행과 이력을 중앙에서 관리하기 위해 Temporal을 도입한 과정을 설명했어요. 직접 오케스트레이터를 만들면 워커 장애, 재시도, 취소, 보상, 동시성 제어를 모두 다뤄야 해요. 직접 만들었다면 이런 동작도 하나씩 구현해야 했겠죠.
+**느낀 점**
 
-도입 뒤에도 운영에 맞춘 설계는 필요했어요. DB I/O를 관측하고 클러스터별로 DB를 구성하는 문제도 있었지만, 특히 눈에 들어온 건 실패한 작업을 다시 처리하는 방법이었어요. 실패 원인이 사라졌다고 해서 주문 전체를 처음부터 실행할 수는 없잖아요. 발표팀은 실패했던 단계를 골라 다시 시도할 수 있는 복구 방식을 만들었어요.
+저도 레이스와 액티비티의 흐름을 설계하고 있어서, 각 단계가 어디까지 끝났는지 남기고 실패한 단계를 다시 처리할 수 있도록 구분한 점이 기억에 남았어요.
 
-흐름을 코드에 드러내는 작업도 필요했어요. 외부에서 들어오는 신호인 Signal은 상태 머신의 검증을 거쳐 상태를 바꾸고, 실제 진행 순서는 Workflow 본문에서 다루도록 정리한 거예요.
+실패 원인이 사라졌다고 해서 전체를 처음부터 실행할 수는 없잖아요. 어디까지 자동으로 재시도하고 언제 사람이 개입할지, 이미 끝난 작업과의 관계는 어떻게 다룰지 같은 정책도 많이 고민했을 것 같아요. 정상적인 실행 순서만큼 실패 이후의 흐름도 구체적으로 그려봐야겠다는 생각이 들었어요.
 
-저도 워크플로우의 흐름을 설계하고 있어서, 각 스텝을 독립적으로 실행하는 방식이 특히 기억에 남았어요. 전체를 한 트랜잭션으로 묶어 모두 성공하거나 모두 실패하게 만드는 방식과는 다른 고민이었거든요. 각 단계가 어디까지 끝났는지 남기고, 실패한 단계는 다시 처리할 수 있도록 구분하는 거죠.
+## 헤드리스 어드민: UI에서 AI로 환승한 어드민 이야기
 
-특히 실패한 스텝을 다시 처리할 수 있는 상태로 두고, 필요하면 수동으로 실행할 수 있다는 점이 기억에 남았어요. 어디까지 자동으로 재시도하고 언제 사람이 개입할지, 이미 끝난 작업과의 관계는 어떻게 다룰지 같은 정책도 많이 고민했을 것 같아요. 워크플로우를 설계할 때 정상적인 실행 순서만큼 실패 이후의 흐름도 구체적으로 그려봐야겠다는 생각이 들었어요.
+<div
+  role="region"
+  aria-label="헤드리스 어드민 사진"
+  tabIndex={0}
+  className="my-6 flex gap-3 overflow-x-auto rounded-lg pb-2 focus-visible:outline focus-visible:outline-2"
+>
+  <a
+    href="/images/posts/woowacon-2026/04-coupon-rules.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 할인 유형을 중심으로 여러 쿠폰 설정이 연결된 관계도"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/04-coupon-rules.jpeg"
+      alt="할인 유형을 중심으로 여러 쿠폰 설정이 연결된 관계도"
+      width={768}
+      height={1024}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+  <a
+    href="/images/posts/woowacon-2026/05-headless-admin.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 웹 UI를 AI로 바꾸면서 기존 폼 규칙과 서버 API를 사용하는 구조"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/05-headless-admin.jpeg"
+      alt="웹 UI를 AI로 바꾸면서 기존 폼 규칙과 서버 API를 사용하는 구조"
+      width={768}
+      height={1024}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+</div>
 
-## 대화로 쿠폰을 만들어도 검증은 필요해요
+**내용 요약**
 
-쿠폰 하나를 만들 때도 할인 유형, 적용 범위, 사용 조건처럼 정할 것이 많아요. 조건끼리 영향을 주기 시작하면 화면을 자주 쓰는 사람도 신경 쓸 일이 늘어나죠. 헤드리스 어드민 세션은 이렇게 복잡해진 쿠폰 관리 화면을 다뤘어요.
+- 쿠폰 관리 화면은 할인 유형, 적용 범위, 사용 조건과 그 사이의 관계로 복잡해졌어요. 발표에서는 화면을 고치는 대신 AI와 대화해 관리 작업을 수행하는 헤드리스 어드민을 시도했어요.
+- 폼의 입력 항목과 규칙을 JSON으로 구조화하고 기존 검증 규칙과 서버 API를 활용했어요. AI는 의도를 모으고 빠진 값을 되물으며 실행 전 확인을 받고, 스크립트는 입력 검증과 API 호출, 저장 결과 대조를 맡았어요.
+- 쿠폰 이름에는 15% 할인이라고 적었지만 실제 할인율은 10%로 설정한 사례도 있었어요. 각각의 입력 조건은 통과해도 내용은 어긋날 수 있는데, AI가 두 값을 함께 읽고 이를 짚어줬어요.
+- 간단한 작업이나 여러 쿠폰의 비교, 실수하면 안 되는 작업에는 기존 웹 UI도 계속 사용했어요.
 
-헤드리스 어드민은 화면을 조작하는 대신 AI와 대화하면서 관리 작업을 수행하는 방식이에요. 이 사례에서는 웹 어드민이 쓰던 규칙과 서버 API를 그대로 활용했어요. 사용자는 대화로 요청하고, 기존 로직이 그 요청을 검증하고 처리하는 거예요.
+**느낀 점**
 
-<Image
-  src="/images/posts/woowacon-2026/04-coupon-rules.jpeg"
-  alt="할인 유형을 중심으로 여러 쿠폰 설정이 연결된 관계도"
-  width={768}
-  height={1024}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 600, height: 'auto' }}
-/>
+우리 시스템에도 레거시 어드민이 있어서 더 관심이 갔어요. 저는 코드 에이전트 CLI를 코드를 작성하는 도구로만 봐왔는데, 시연에서는 그 도구로 기존 어드민 API를 호출해 쿠폰을 만들었어요.
 
-역할 분리가 분명했어요. AI는 사용자 의도를 모으고 빠진 필수 값을 되물어요. 실행 전에는 요약을 보여주고 확인받아요. 스크립트는 기존 규칙에 따라 입력을 검증하고, 검증을 통과한 값만 서버로 보내며, 생성 결과를 서버에 저장된 값과 대조해요.
+화면을 고치는 대신 기존 폼 규칙을 대화에서도 활용할 수 있게 한 발상이 인상적이었어요. 왜 헤드리스 어드민이 필요했는지 듣고 시연까지 보니, 익숙한 기능도 입력받는 방식을 바꾸면 다르게 활용할 수 있겠더라고요.
 
-<Image
-  src="/images/posts/woowacon-2026/05-headless-admin.jpeg"
-  alt="웹 UI를 AI로 바꾸면서 기존 폼 규칙과 서버 API를 사용하는 구조"
-  width={768}
-  height={1024}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 600, height: 'auto' }}
-/>
+## 해커톤 우승작을 실시간 콜봇으로: 하네스 엔지니어링
 
-쿠폰 이름에는 15% 할인이라고 써놓고, 실제 할인율은 10%로 설정한 사례도 있었어요. 이름과 할인율이 각각의 입력 조건을 만족하면 검증을 통과할 수 있지만, 고객에게 보여주는 내용과 실제 혜택은 달라져요. AI는 두 값을 함께 읽고 이 어긋남을 짚어줬어요. 각 입력값만 따로 검사해서는 놓칠 수 있는 문제였어요.
+<div
+  role="region"
+  aria-label="콜봇과 하네스 엔지니어링 사진"
+  tabIndex={0}
+  className="my-6 flex gap-3 overflow-x-auto rounded-lg pb-2 focus-visible:outline focus-visible:outline-2"
+>
+  <a
+    href="/images/posts/woowacon-2026/06-voice-agent.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 해커톤 당시 고객과 가게의 통화를 연결하던 음성 에이전트 구조"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/06-voice-agent.jpeg"
+      alt="해커톤 당시 고객과 가게의 통화를 연결하던 음성 에이전트 구조"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+  <a
+    href="/images/posts/woowacon-2026/07-custom-harness.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 사내 환경과 작업 방식에 맞춰 하네스를 직접 개발한 이유"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/07-custom-harness.jpeg"
+      alt="사내 환경과 작업 방식에 맞춰 하네스를 직접 개발한 이유"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+  <a
+    href="/images/posts/woowacon-2026/08-skill-routing.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 라우트 선택, 절차 실행, 검증, 재진입 판단으로 정리한 스킬 구조"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/08-skill-routing.jpeg"
+      alt="라우트 선택, 절차 실행, 검증, 재진입 판단으로 정리한 스킬 구조"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+  <a
+    href="/images/posts/woowacon-2026/09-goal-driven-agent.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 사람이 정한 목표를 에이전트가 작업으로 나누고 실행하는 흐름"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/09-goal-driven-agent.jpeg"
+      alt="사람이 정한 목표를 에이전트가 작업으로 나누고 실행하는 흐름"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+</div>
 
-그렇다고 웹 어드민을 없애지는 않았어요. 간단한 작업은 화면에서 바로 끝내는 편이 빠르고, 여러 쿠폰을 나란히 비교하는 일도 UI가 편했어요. 실수하면 안 되는 작업도 오랫동안 사용해 온 웹 UI에 남겨뒀다고 해요.
+**내용 요약**
 
-우리 시스템에도 레거시 어드민이 있어서 더 관심이 갔어요. 저는 코드 에이전트 CLI를 코드를 작성하는 도구로만 봐왔는데, 시연에서는 그 도구로 기존 어드민 API를 호출해 쿠폰을 만들었어요. 같은 기능을 두고도 도구의 쓰임을 다르게 보니, 화면에서 하던 일을 터미널에서 대화로 처리할 수 있다는 점이 인상적이었어요.
+- 메뉴 누락 문의를 받은 상담사는 고객의 주문을 특정하고, 고객을 대기시킨 뒤 가게에 확인 전화를 걸어 조치 방법을 확인했어요. 콜봇은 이렇게 고객과 가게의 두 통화를 오가는 업무에서 출발했어요.
+- 데모를 서비스로 발전시키는 과정과 함께, 콜봇을 개발하는 하네스도 다듬었어요. 하네스는 에이전트가 도구를 쓰고 작업을 이어가며 결과를 검증하도록 돕는 실행 환경이에요.
+- 같은 실수를 반복하지 않도록 기록과 의사결정을 애플리케이션 문서에 남겼어요. 서브 에이전트가 맥락을 다시 파악하는 비용을 줄이기 위해 역할을 줄이고, 메인 에이전트가 계획·구현과 루프 제어를 맡도록 정리했어요.
+- 스킬의 라우트 선택, 실행, 검증, 재시도 여부를 절차로 정리했어요. 사람이 정한 목표와 마일스톤을 작업으로 나누고, 여러 사람이 함께 일할 때의 작업 충돌을 막는 잠금도 다뤘어요.
 
-## 콜봇 데모를 서비스로 만드는 데 필요한 것들
+**느낀 점**
 
-콜봇 세션은 상담사가 고객과 가게의 두 통화를 오가며 처리하던 업무에서 출발했어요. 메뉴 누락 문의를 이해하고 주문을 특정한 뒤, 고객을 대기시키고 가게에 확인 전화를 걸어 조치 방법을 확인하는 흐름이에요. 도입 전 상담사가 어떤 일을 해야 했고, 콜봇을 붙인 뒤 그 흐름이 어떻게 달라지는지 설명해줘서 왜 이런 구조가 필요했는지 이해하기 쉬웠어요.
+이 세션에서는 기존 업무의 비효율적인 구간을 찾고 개선하려고 고군분투한 과정에 공감했어요. 실제 상담 업무가 어떻게 이뤄지는지 먼저 설명해줘서, 콜봇과 개발 환경을 왜 그렇게 바꿔갔는지 따라갈 수 있었어요.
 
-<Image
-  src="/images/posts/woowacon-2026/06-voice-agent.jpeg"
-  alt="해커톤 당시 고객과 가게의 통화를 연결하던 음성 에이전트 구조"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
+하네스를 설정하는 일도 문제를 정의하고 가설을 세운 뒤 실험하면서 다듬어가는 과정이었어요. 제게는 콜봇이라는 결과물과 함께, 상담사의 불편을 줄이려고 개발 방식까지 바꿔나간 이야기로 남았어요.
 
-발표에서는 데모를 실제 서비스로 발전시키는 과정과 함께, 콜봇을 개발하는 하네스의 변화도 소개했어요. 여기서 하네스는 에이전트가 도구를 쓰고, 작업을 이어가고, 결과를 검증하도록 돕는 실행 환경을 뜻해요. 발표팀은 기억, 비용, 제어, 목표, 협업의 문제를 겪으며 이 환경을 다듬었어요.
+## 같은 퀵커머스, 시스템은 두 벌? 장보기·쇼핑 뒤의 상품과 재고
 
-<Image
-  src="/images/posts/woowacon-2026/07-custom-harness.jpeg"
-  alt="사내 환경과 작업 방식에 맞춰 하네스를 직접 개발한 이유"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
+<div
+  role="region"
+  aria-label="상품과 재고 사진"
+  tabIndex={0}
+  className="my-6 flex gap-3 overflow-x-auto rounded-lg pb-2 focus-visible:outline focus-visible:outline-2"
+>
+  <a
+    href="/images/posts/woowacon-2026/10-product-inventory.jpeg"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="원본 보기: 통합 상품 시스템과 원천별 재고 원장을 읽기 전용 레이어로 연결한 구조"
+    className="block w-56 shrink-0 rounded-lg focus-visible:outline focus-visible:outline-2 sm:min-w-0 sm:flex-1"
+  >
+    <Image
+      src="/images/posts/woowacon-2026/10-product-inventory.jpeg"
+      alt="통합 상품 시스템과 원천별 재고 원장을 읽기 전용 레이어로 연결한 구조"
+      width={1024}
+      height={768}
+      sizes="(max-width: 640px) 224px, 320px"
+      className="!m-0 !h-40 !w-full rounded-lg object-contain sm:!h-48"
+    />
+  </a>
+</div>
 
-작업 중 내린 판단을 다음 실행에서도 활용하려면 기록을 남겨야 해요. 그런데 루프와 문서가 따로 움직이고, 언제 기록을 읽고 쓸지도 정해져 있지 않았다고 해요. 같은 실수를 막기 위한 기록과 의사결정을 애플리케이션의 문서 안에 남기는 방식이 소개됐어요.
+**내용 요약**
 
-서브 에이전트를 많이 두자 매번 맥락을 다시 파악하는 데도 비용이 들었어요. 발표팀은 역할을 줄이고 메인 에이전트가 계획·구현과 루프 제어를 맡도록 정리했어요. 작업 절차도 정리했어요. 아래 슬라이드처럼 먼저 라우트를 고르고, 해당 절차를 실행한 뒤 검증해요. 결과에 따라 다시 시도할지 다음 단계로 갈지 결정하는 흐름이에요.
+- 직매입 방식의 B마트와 외부 셀러가 입점하는 배민스토어의 상품을 “1P는 셀러가 하나뿐인 3P”라는 관점에서 하나의 도메인 모델로 통합했어요.
+- 판매처에 관계없이 유지되는 상품 속성을 카탈로그로 관리했어요. 예를 들어 1000ml와 1L를 같은 기준으로 다뤄야 함께 검색하고 비교할 수 있어요.
+- 지점별 상품 데이터는 본사와 다른 값만 따로 관리했어요. 지점 가격이 없으면 본사 가격을 따르므로 저장할 데이터는 줄지만, 읽을 때 적용할 값을 판단해야 해요.
+- 재고는 외부 셀러의 원장을 플랫폼이 모두 소유할 수 없어서 원천을 유지하고 조회를 통합하는 전시 재고 시스템을 선택했어요. 저는 화면의 빠른 조회와 주문 시의 정확한 재고 확인이라는 요구 차이도 함께 고려한 선택으로 이해했어요.
 
-<Image
-  src="/images/posts/woowacon-2026/08-skill-routing.jpeg"
-  alt="라우트 선택, 절차 실행, 검증, 재진입 판단으로 정리한 스킬 구조"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
-
-여러 사람이 함께 쓰려면 각자 작업을 빨리 끝내는 것만으로는 부족했어요. 같은 곳을 동시에 수정할 수도 있고, 개별 요구사항을 처리하다가 전체 목표를 놓칠 수도 있으니까요. 발표에서는 사람이 목표와 마일스톤을 정하면 에이전트가 요구사항과 작업으로 나누고, 작업을 시작할 때마다 현재 상태를 다시 읽는 흐름을 소개했어요. 작업 충돌을 막기 위한 잠금도 함께 다뤘고요.
-
-<Image
-  src="/images/posts/woowacon-2026/09-goal-driven-agent.jpeg"
-  alt="사람이 정한 목표를 에이전트가 작업으로 나누고 실행하는 흐름"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
-
-이 세션에서는 특정 도구나 문장보다 문제를 풀어가는 과정에 더 공감했어요. 하네스를 설정하는 일도 먼저 문제를 정의하고, 가설을 세운 뒤 실험하면서 다듬어가는 과정이었어요. 도구를 설정하는 방법만 들었으면 왜 그렇게 해야 하는지 이해하기 어려웠을 텐데, 실제 업무 흐름을 먼저 설명해준 덕분에 시행착오도 따라갈 수 있었어요.
-
-제게는 상담사의 불편을 해결하기 위해 계속 부딪혀본 이야기로 남았어요. 콜봇이라는 결과물 뒤에 운영 담당자가 겪던 어려움이 있었고, 그 어려움을 줄이려고 개발 방식까지 바꿔나갔다는 점이 인상적이었어요.
-
-## 상품은 합쳤지만 재고 원장은 남겨뒀어요
-
-마지막 세션에서는 B마트와 배민스토어의 상품·재고 시스템을 다뤘어요. 직매입과 외부 셀러 입점이라는 차이가 있지만, 상품은 하나의 도메인 모델로 통합했어요. 반면 재고는 원천을 그대로 두고 조회를 통합하는 전시 재고 시스템을 선택했어요.
-
-상품에서는 공통 기준을 만드는 일이 중요했어요. 우유의 용량이 한쪽에는 1000ml, 다른 쪽에는 1L로 기록돼 있다면 문자열만으로 같은 조건을 검색하기 어려워요. 판매처에 관계없이 유지되는 상품 속성을 카탈로그로 관리해야 함께 찾고 비교할 수 있어요.
-
-지점별 가격을 관리하는 예시도 이해하기 쉬웠어요. 본사 상품 100개의 가격을 바꿀 때 지점이 1만 개라면, 모든 지점이 값을 복제해서 가진 구조에서는 최대 100만 건을 바꿔야 해요. 대부분 본사 가격을 따르는데도요.
-
-그래서 공통값은 본사에 두고 지점에서 달라지는 값만 따로 관리해요. 지점 가격이 있으면 그 값을 쓰고, 없으면 본사 가격을 따르는 방식이죠. 저장할 데이터가 줄어드는 대신, 읽을 때 어느 값을 적용할지 판단해야 해요.
-
-재고는 소유권이 달랐어요. 외부 셀러의 재고 원장을 플랫폼이 모두 소유할 수 없으니 상품과 같은 방식으로 합치기 어려웠어요. 발표에서는 원천별 차이를 연결하면서 조회에 필요한 재고 정보를 제공하는 구조를 설명했어요.
-
-<Image
-  src="/images/posts/woowacon-2026/10-product-inventory.jpeg"
-  alt="통합 상품 시스템과 원천별 재고 원장을 읽기 전용 레이어로 연결한 구조"
-  width={1024}
-  height={768}
-  sizes="(max-width: 768px) 100vw, 800px"
-  style={{ width: '100%', maxWidth: 1024, height: 'auto' }}
-/>
+**느낀 점**
 
 이 세션에서 가장 기억에 남은 말은 “정말 같은가요, 닮았을 뿐인가요?”였어요.
 
-저도 데이터베이스를 설계하면서 역정규화를 시도했다가, 개념을 명확하게 정의하려면 결국 분리해야 한다는 결론에 도달한 적이 있어요. 이 질문을 먼저 들었다면 역정규화부터 시도하지는 않았을 것 같아요. ㅋㅋ 비슷하게 생긴 데이터를 합치기 전에 정말 같은 대상을 표현하는지부터 구분했을 테니까요.
+저도 액티비티의 흐름을 설계하면서 비슷한 고민을 했어요. 처음에는 레이스도 다른 액티비티와 함께 하나의 모델로 다루려고 했어요. 멀리서 보면 모두 고객 탑승과 체크인, 게임 시작, 진행, 종료, 기록이라는 흐름으로 보였거든요.
 
-특히 전시 재고 시스템을 설명하는 과정이 기억에 남았어요. 어떤 문제가 있었고 왜 이 개념이 필요했는지 차례로 설명해줘서, 저도 상품과 재고를 서로 다른 기준으로 다룬 이유를 이해할 수 있었어요. 저라면 어디서부터 구분했을까 하는 생각도 들었어요.
+그런데 레이스의 각 단계를 구체적으로 설계하니 다뤄야 할 것이 많았어요. 티켓 종류에 따른 동작과 시작 신호 제어, 정확한 기록을 위한 센서 시간값이 필요했어요. 구간별 데이터와 GPS, 실시간 데이터, 레이스 심사까지 들어가니 같은 이름의 단계 안에서도 처리해야 할 일이 달라졌어요.
 
-플랫폼화를 고민하다 보면 비슷한 것을 공통으로 묶고 싶어져요. 이번 사례를 듣고 나니 비슷해 보인다고 묶기 전에, 각 데이터가 무엇을 뜻하고 누가 책임지는지부터 확인해야겠다는 생각이 남았어요. 제가 설계하면서 돌아갔던 과정이 떠올라서 더 기억에 남았어요.
+결국 같은 프로젝트 안에서 운영하되, 레이스는 다른 액티비티와 의도적으로 분리했어요. 그 질문을 듣자 그때의 설계 과정이 떠올랐어요. 체크인과 시작, 종료라는 단계가 닮았다는 이유만으로 그 안의 요구사항까지 같다고 볼 수는 없었던 거죠.
+
+상품은 함께 다루고 재고는 경계를 남긴 이유를 듣고 나니, 제가 레이스를 분리했던 선택도 다시 생각해보게 됐어요. 공통으로 만들 수 있는 흐름과 각 액티비티가 직접 책임져야 할 제어를 어디서 나눌지, 다음 설계에서도 먼저 물어보고 싶어요.
 
 ## 우아콘을 다녀와서
 
@@ -183,6 +280,7 @@ Temporal 전환기의 출발점은 운영팀의 질문이었어요. 주문이 �
 
 함께 읽은 후기:
 
+- [fall031 — WOOWACON 2026 방문 후기](https://velog.io/@fall031/WOOWACON-2026-방문-후기)
 - [joona95 — 우아콘 2026 후기](https://velog.io/@joona95/우아콘-2026-후기)
 - [민이 — AI에게 맡길 일, 사람이 쥘 일](https://miniintern.com/happyfolio/snack/189)
 - [AOD — 우아콘 첫 참가 후기](https://velog.io/@gusehd502/WOOWACON-2026-우아콘-첫-참가-후기-현장에서-보고-느낀-것들)
